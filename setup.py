@@ -16,7 +16,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     install_requires=[
-
+        'helpers-yaml'
     ],
     python_requires='>=3.6',
 )
