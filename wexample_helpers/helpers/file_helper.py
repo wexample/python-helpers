@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional, Tuple
 
 from wexample_helpers.const.types import FileStringOrPath
 
@@ -15,6 +15,11 @@ def file_mode_octal_to_num(mode: Union[str, int]) -> int:
 
 def file_mode_num_to_octal(num: int) -> str:
     return str(oct(num)[-3:])
+
+
+def file_touch(path: str, times: Optional[Tuple[int, int]] = None) -> None:
+    with open(path, "a"):
+        os.utime(path, times)
 
 
 def file_validate_mode_octal(mode: Union[str, int]) -> bool:
