@@ -5,14 +5,19 @@ from typing import Union, Optional, Tuple
 from wexample_helpers.const.types import FileStringOrPath
 
 
-def file_change_mode_recursive(path: str, mode: int) -> None:
-    # Change permissions for the current path
-
+def file_change_mode(path: str, mode: int) -> None:
     try:
         if not os.path.islink(path):
-            os.chmod(path, mode)  # Change owner of the file/directory
+            os.chmod(path, mode)
     except FileNotFoundError:
         pass
+
+
+def file_change_mode_recursive(path: str, mode: int) -> None:
+    file_change_mode(
+        path=path,
+        mode=mode
+    )
 
     # If the path is a directory, loop through its contents and call the function recursively
     if os.path.isdir(path) and not os.path.islink(path):
