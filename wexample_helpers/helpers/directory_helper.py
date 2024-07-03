@@ -17,3 +17,13 @@ def directory_execute_inside(target_dir: str, callback: AnyCallable) -> Any:
     os.chdir(original_dir)
 
     return response
+
+
+def directory_get_base_name(path: str) -> str:
+    return os.path.basename(
+        os.path.normpath(path))
+
+
+def directory_get_parent_path(path: str) -> str:
+    return os.path.dirname(
+        os.path.normpath(path)) + os.sep
