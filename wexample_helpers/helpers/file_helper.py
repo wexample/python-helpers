@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Union, Optional, Tuple
+from typing import Union, Optional, Tuple, List
 
 from wexample_helpers.const.types import FileStringOrPath
 
@@ -11,6 +11,23 @@ def file_change_mode(path: str, mode: int) -> None:
             os.chmod(path, mode)
     except FileNotFoundError:
         pass
+
+
+def file_remove_file_if_exists(file: str) -> None:
+    if os.path.isfile(file) or os.path.islink(file):
+        os.remove(file)
+
+
+def file_list_subdirectories(path: str) -> List[str]:
+    subdirectories = []
+    for item in os.listdir(path):
+        item_path = os.path.join(path, item)
+        if os.path.isdir(item_path) and not item.startswith("."):
+            subdirectories.append(os.path.basename(item_path))
+
+    subdirectories.sort()
+
+    return subdirectories
 
 
 def file_change_mode_recursive(
@@ -27,7 +44,6 @@ def file_change_mode_recursive(
         for item in os.listdir(path):
             item_path = os.path.join(path, item)
             file_change_mode_recursive(item_path, mode, follow_symlinks)
-
 
 
 def file_read(file_path: str) -> str:
