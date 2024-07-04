@@ -1,9 +1,41 @@
 import copy
-from typing import Any, Optional
+from typing import Any, Optional, Dict, Union, cast
 
-from wexample_helpers.const.types import StringKeysMapping, StringKeysDict
+from wexample_helpers.const.types import StringKeysMapping, StringKeysDict, StringsList
 
 DICT_PATH_SEPARATOR_DEFAULT = "."
+DICT_ITEM_EXISTS_ACTION_ABORT = "abort"
+DICT_ITEM_EXISTS_ACTION_MERGE = "merge"
+DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
+
+
+def dict_set_item_by_path(
+    data: Dict[str, Any],
+    key: Union[str | StringsList],
+    value: Any,
+    when_exist: str = DICT_ITEM_EXISTS_ACTION_REPLACE,
+) -> None:
+    # Allow pre-split to escape non-separator dots, like in file names.
+    if isinstance(key, list):
+        keys = cast(StringsList, key)
+    else:
+        keys = key.split(".")
+
+    for k in keys[:-1]:
+        data = data.setdefault(k, {})
+
+    final_key = keys[-1]
+    if final_key in data and when_exist != DICT_ITEM_EXISTS_ACTION_REPLACE:
+        if when_exist == DICT_ITEM_EXISTS_ACTION_ABORT:
+            return
+        elif (
+            when_exist == DICT_ITEM_EXISTS_ACTION_MERGE
+            and isinstance(data[final_key], dict)
+            and isinstance(value, dict)
+        ):
+            data[final_key] = dict_merge(data[final_key], value)
+    else:
+        data[final_key] = value
 
 
 def dict_get_item_by_path(
