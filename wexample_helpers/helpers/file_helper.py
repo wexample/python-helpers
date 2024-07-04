@@ -13,23 +13,6 @@ def file_change_mode(path: str, mode: int) -> None:
         pass
 
 
-def file_remove_file_if_exists(file: str) -> None:
-    if os.path.isfile(file) or os.path.islink(file):
-        os.remove(file)
-
-
-def file_list_subdirectories(path: str) -> List[str]:
-    subdirectories = []
-    for item in os.listdir(path):
-        item_path = os.path.join(path, item)
-        if os.path.isdir(item_path) and not item.startswith("."):
-            subdirectories.append(os.path.basename(item_path))
-
-    subdirectories.sort()
-
-    return subdirectories
-
-
 def file_change_mode_recursive(
     path: str, mode: int, follow_symlinks: bool = True
 ) -> None:
@@ -46,29 +29,46 @@ def file_change_mode_recursive(
             file_change_mode_recursive(item_path, mode, follow_symlinks)
 
 
-def file_read(file_path: str) -> str:
-    with open(file_path, "r", encoding="utf-8") as file:
-        return file.read()
+def file_list_subdirectories(path: str) -> List[str]:
+    subdirectories = []
+    for item in os.listdir(path):
+        item_path = os.path.join(path, item)
+        if os.path.isdir(item_path) and not item.startswith("."):
+            subdirectories.append(os.path.basename(item_path))
 
+    subdirectories.sort()
 
-def file_resolve_path(path: FileStringOrPath) -> Path:
-    return path if path is Path else Path(path)
-
-
-def file_mode_octal_to_num(mode: Union[str, int]) -> int:
-    return int(mode, 8)
-
-
-def file_path_get_mode_num(path: Path) -> int:
-    return path.stat().st_mode & 0o777
+    return subdirectories
 
 
 def file_mode_num_to_octal(num: int) -> str:
     return str(oct(num)[-3:])
 
 
+def file_mode_octal_to_num(mode: Union[str, int]) -> int:
+    return int(mode, 8)
+
+
 def file_path_get_octal_mode(path: Path) -> str:
     return file_mode_num_to_octal(path.stat().st_mode)
+
+
+def file_path_get_mode_num(path: Path) -> int:
+    return path.stat().st_mode & 0o777
+
+
+def file_read(file_path: str) -> str:
+    with open(file_path, "r", encoding="utf-8") as file:
+        return file.read()
+
+
+def file_remove_file_if_exists(file: str) -> None:
+    if os.path.isfile(file) or os.path.islink(file):
+        os.remove(file)
+
+
+def file_resolve_path(path: FileStringOrPath) -> Path:
+    return path if path is Path else Path(path)
 
 
 def file_touch(path: str, times: Optional[Tuple[int, int]] = None) -> None:
