@@ -39,6 +39,10 @@ def file_mode_octal_to_num(mode: Union[str, int]) -> int:
     return int(mode, 8)
 
 
+def file_path_get_mode_num(path: Path) -> int:
+    return path.stat().st_mode & 0o777
+
+
 def file_mode_num_to_octal(num: int) -> str:
     return str(oct(num)[-3:])
 
