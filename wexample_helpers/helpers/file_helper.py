@@ -13,17 +13,21 @@ def file_change_mode(path: str, mode: int) -> None:
         pass
 
 
-def file_change_mode_recursive(path: str, mode: int) -> None:
+def file_change_mode_recursive(
+    path: str, mode: int, follow_symlinks: bool = True
+) -> None:
     file_change_mode(
         path=path,
         mode=mode
     )
 
-    # If the path is a directory, loop through its contents and call the function recursively
-    if os.path.isdir(path) and not os.path.islink(path):
+    # If the path is a directory (and not a symlink if follow_symlinks is False),
+    # loop through its contents and call the function recursively
+    if os.path.isdir(path) and (follow_symlinks or not os.path.islink(path)):
         for item in os.listdir(path):
             item_path = os.path.join(path, item)
-            file_change_mode_recursive(item_path, mode)
+            file_change_mode_recursive(item_path, mode, follow_symlinks)
+
 
 
 def file_read(file_path: str) -> str:

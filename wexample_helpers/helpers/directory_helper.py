@@ -27,3 +27,15 @@ def directory_get_base_name(path: str) -> str:
 def directory_get_parent_path(path: str) -> str:
     return os.path.dirname(
         os.path.normpath(path)) + os.sep
+
+
+def directory_empty_dir(dir_path: str) -> None:
+    # Iterate over each item in the directory
+    for item_name in os.listdir(dir_path):
+        # Construct the full path to the item
+        item_path = os.path.join(dir_path, item_name)
+        if os.path.isfile(item_path) or os.path.islink(item_path):
+            os.remove(item_path)  # Remove the file or link
+        elif os.path.isdir(item_path):
+            # Recursively remove the directory
+            shutil.rmtree(item_path)
