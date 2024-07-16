@@ -3,6 +3,7 @@ import shutil
 from typing import Any
 
 from wexample_helpers.const.types import AnyCallable
+from wexample_helpers.helpers.file_helper import file_read
 
 
 def directory_remove_tree_if_exists(directory: str) -> None:
@@ -39,3 +40,16 @@ def directory_empty_dir(dir_path: str) -> None:
         elif os.path.isdir(item_path):
             # Recursively remove the directory
             shutil.rmtree(item_path)
+
+
+def directory_aggregate_all_files(dir_path: str) -> str:
+    aggregated_content = ''
+
+    for root, dirs, files in os.walk(dir_path):
+        files.sort()
+        for file in files:
+            file_path = os.path.join(root, file)
+            if os.path.isfile(file_path):
+                aggregated_content += file_read(file_path) + os.linesep
+
+    return aggregated_content
