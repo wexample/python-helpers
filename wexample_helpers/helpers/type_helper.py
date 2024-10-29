@@ -15,9 +15,13 @@ def type_is_generic(type_value: Any) -> bool:
 
 
 def type_generic_value_is_valid(raw_value: Any, allowed_type: type) -> bool:
-    """Helper to recursively validate parameter types for generics like Dict, List, etc."""
+    """Helper to recursively validate parameter types for generics like Dict, List, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
+
+    # Validate Union type by checking if raw_value matches any of the types in the Union
+    if origin is Union:
+        return any(type_generic_value_is_valid(raw_value, arg) for arg in args)
 
     # Validate dictionary type with possible nested generics
     if origin is dict:
