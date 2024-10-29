@@ -9,6 +9,9 @@ from wexample_helpers.helpers.file_helper import file_resolve_path
 def git_is_init(path: FileStringOrPath) -> bool:
     path = file_resolve_path(path)
 
+    if not path.exists():
+        return False
+
     try:
         Repo(path)
         return True
