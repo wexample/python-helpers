@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Union, Callable, Tuple
 
-from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible
+from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible, type_value_is_valid
 
 
 class TestHelperType:
@@ -33,10 +33,12 @@ class TestHelperType:
         ]
 
         for type_ in should_be_true:
-            assert type_is_generic(type_), f"{type_} should be detected as a generic type"
+            assert type_is_generic(type_), \
+                f"{type_} should be detected as a generic type"
 
         for type_ in should_not_be_true:
-            assert not type_is_generic(type_), f"{type_} should NOT be detected as a generic type"
+            assert not type_is_generic(type_), \
+                f"{type_} should NOT be detected as a generic type"
 
     def test_type_is_compatibility(self):
         success_cases = [
@@ -73,9 +75,9 @@ class TestHelperType:
         ]
 
         for actual_type, expected_type in success_cases:
-            assert type_is_compatible(actual_type,
-                                      expected_type), f"Expected {actual_type} to be compatible with {expected_type}"
+            assert type_is_compatible(actual_type, expected_type), \
+                f"Expected {actual_type} to be compatible with {expected_type}"
 
         for actual_type, expected_type in failure_cases:
-            assert not type_is_compatible(actual_type,
-                                          expected_type), f"Expected {actual_type} to be incompatible with {expected_type}"
+            assert not type_is_compatible(actual_type, expected_type), \
+                f"Expected {actual_type} to be incompatible with {expected_type}"
