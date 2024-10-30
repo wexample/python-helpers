@@ -1,8 +1,6 @@
 from types import UnionType
-from typing import Any, List, Dict, Tuple, Union, get_origin, get_args, Type, Callable, get_type_hints, cast
+from typing import List, Dict, Tuple, Callable, get_type_hints, cast
 from typing import Any, Type, Union, get_origin, get_args
-
-from wexample_config.exception.option import InvalidOptionValueTypeException
 
 
 def type_is_generic(type_value: Any) -> bool:
@@ -25,7 +23,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     if allowed_type is Callable:
         if callable(value):
             return
-        raise InvalidOptionValueTypeException(
+        raise TypeError(
             f"Invalid type \"{type(value).__name__}\" for value, expected callable.")
 
     # Check if the raw value matches any allowed base type
@@ -49,7 +47,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                     ):
                         return
 
-                    raise InvalidOptionValueTypeException(
+                    raise TypeError(
                         f"Invalid return type in callable \"{value.__name__}\" for value: "
                         f"expected return type \"{return_type}\", but got \"{actual_return_type_hint}\"."
                     )
@@ -64,11 +62,12 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         return
 
     # If none of the checks passed, raise an exception
-    raise InvalidOptionValueTypeException(
+    raise TypeError(
         f"Invalid type \"{type(value).__name__}\" for value, "
         f"allowed types: {allowed_type}, "
         f"got: {str(value)}"
     )
+
 
 def type_generic_value_is_valid(raw_value: Any, allowed_type: Type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Tuple, and Union."""

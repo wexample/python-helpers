@@ -1,6 +1,9 @@
+from types import NoneType
 from typing import Any, Dict, List, Union, Callable, Tuple
 
-from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible
+import pytest
+
+from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible, type_validate_or_fail
 
 
 class TestHelperType:
@@ -81,3 +84,52 @@ class TestHelperType:
         for actual_type, expected_type in failure_cases:
             assert not type_is_compatible(actual_type, expected_type), \
                 f"Expected {actual_type} to be incompatible with {expected_type}"
+
+    def test_validation(self):
+        def _test_callable() -> bool:
+            return True
+
+        success_cases = [
+            ("str", Any),
+            (True, Any),
+            ("str", str),
+            (123, int),
+            (123.123, float),
+            (None, NoneType),
+            ([], list),
+            ([], List),
+            ({}, dict),
+            ({}, Dict),
+            ({"lorem": "ipsum"}, Dict[str, str]),
+            ({"lorem": 123}, Dict[str, int]),
+            ({}, Union[str, Dict[str, Any]]),
+            (_test_callable, Callable),
+            (_test_callable, Callable[..., Any]),
+            (_test_callable, Callable[..., bool]),
+        ]
+
+        failure_cases = [
+            (123, str),
+            ("123", int),
+            (None, int),
+            ({}, list),
+            ([], dict),
+            ({"lorem": 123}, Dict[str, str]),
+            (123, Union[str, Dict[str, Any]]),
+            (_test_callable, Callable[..., str]),
+        ]
+
+        # Success cases: should not raise exceptions
+        for value, expected_type in success_cases:
+            type_validate_or_fail(
+                value=value,
+                allowed_type=expected_type,
+            )
+
+        # Failure cases: should raise InvalidOptionValueTypeException
+        for value, expected_type in failure_cases:
+            with pytest.raises(TypeError):
+                type_validate_or_fail(
+                    value=value,
+                    allowed_type=expected_type,
+                )
