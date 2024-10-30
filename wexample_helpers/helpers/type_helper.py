@@ -36,8 +36,8 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
             return
         raise TypeError(
             f'\nInvalid type "{type(value).__name__}" for value:\n'
-            f'  expected callable\n'
-            f'  got: {type(value)}\n'
+            f"  expected callable\n"
+            f"  got: {type(value)}\n"
         )
 
     # Check if the raw value matches any allowed base type
