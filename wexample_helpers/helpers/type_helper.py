@@ -46,8 +46,11 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                 if args:
                     return_type = args[-1]
 
-                    type_hints = get_type_hints(value)
-                    actual_return_type_hint = type_hints.get("return", None)
+                    try:
+                        type_hints = get_type_hints(value, localns=locals())
+                        actual_return_type_hint = type_hints.get("return", None)
+                    except NameError as e:
+                        actual_return_type_hint = None
 
                     if actual_return_type_hint is None:
                         return
