@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Any, Dict, Union, Callable, Optional, Mapping, Set, Match
+from typing import Any, Callable, Dict, List, Mapping, Match, Optional, Set, Union
 
 AnyList = List[Any]
 StringKeysDict = Dict[str, Any]
