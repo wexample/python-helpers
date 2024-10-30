@@ -12,7 +12,7 @@ class HasShortClassNameClassMixin:
         suffix = cls.get_class_name_suffix()
 
         if suffix is not None and short_name.endswith(suffix):
-            return short_name[:-len(suffix)]
+            return short_name[: -len(suffix)]
 
         return short_name
 

@@ -1,4 +1,6 @@
-from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import HasShortClassNameClassMixin
+from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import (
+    HasShortClassNameClassMixin,
+)
 
 
 class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
