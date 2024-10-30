@@ -1,5 +1,5 @@
 from types import UnionType
-from typing import Any, List, Dict, Tuple, Union, get_origin, get_args, Type
+from typing import Any, List, Dict, Tuple, Union, get_origin, get_args, Type, Callable
 from typing import Any, Type, Union, get_origin, get_args
 
 
@@ -69,15 +69,28 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
     allowed_args = get_args(allowed_type)
     actual_args = get_args(actual_type)
 
-    # Case 1: If allowed_type is Any, it is compatible with any actual_type
+    # If allowed_type is Any, it is compatible with any actual_type
     if origin is Any:
         return True
 
-    # Case 2: Handle Union type for allowed_type
+    # Handle Union type for allowed_type
     if origin is Union:
         return any(type_is_compatible(actual_type, arg) for arg in allowed_args)
 
-    # Case 3: Handle dictionary type with possible nested generics
+    # Handle Callable type with possible nested generics
+    if issubclass(origin, Callable):
+        # Check if actual_type is also a Callable
+        if not issubclass(actual_origin, Callable):
+            return False
+        # If allowed_type is just Callable without specific args, consider it compatible with any Callable
+        if not allowed_args:
+            return True
+        # If allowed_type has specific args, compare return types (last element in allowed_args)
+        if len(allowed_args) == len(actual_args):
+            return type_is_compatible(actual_args[-1], allowed_args[-1])
+        return False
+
+    # Handle dictionary type with possible nested generics
     if origin is dict:
         if actual_origin is not dict:
             return False
@@ -87,7 +100,7 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
         return (type_is_compatible(actual_key_type, key_type) and
                 type_is_compatible(actual_value_type, value_type))
 
-    # Case 4: Handle list type with possible nested generics
+    # Handle list type with possible nested generics
     elif origin is list:
         if actual_origin is not list:
             return False
@@ -96,12 +109,12 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
         actual_item_type = actual_args[0] if actual_args else Any
         return type_is_compatible(actual_item_type, item_type)
 
-    # Case 5: Handle tuple type with possible nested generics
+    # Handle tuple type with possible nested generics
     elif origin is tuple:
         if actual_origin is not tuple or len(actual_args) != len(allowed_args):
             return False
         # Validate each item type in the tuple recursively
         return all(type_is_compatible(act, exp) for act, exp in zip(actual_args, allowed_args))
 
-    # Case 6: For other types, fall back to direct comparison
+    # For other types, fall back to direct comparison
     return actual_type == allowed_type
