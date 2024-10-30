@@ -1,4 +1,5 @@
-from typing import Any, List, Dict, Tuple, Union, get_origin, get_args
+from types import UnionType
+from typing import Any, List, Dict, Tuple, Union, get_origin, get_args, Type
 
 
 def type_is_generic(type_value: Any) -> bool:
@@ -14,7 +15,7 @@ def type_is_generic(type_value: Any) -> bool:
     return type_value in generic_types
 
 
-def type_generic_value_is_valid(raw_value: Any, allowed_type: type) -> bool:
+def type_generic_value_is_valid(raw_value: Any, allowed_type: Type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
