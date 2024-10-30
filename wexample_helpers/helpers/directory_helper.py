@@ -21,13 +21,11 @@ def directory_execute_inside(target_dir: str, callback: AnyCallable) -> Any:
 
 
 def directory_get_base_name(path: str) -> str:
-    return os.path.basename(
-        os.path.normpath(path))
+    return os.path.basename(os.path.normpath(path))
 
 
 def directory_get_parent_path(path: str) -> str:
-    return os.path.dirname(
-        os.path.normpath(path)) + os.sep
+    return os.path.dirname(os.path.normpath(path)) + os.sep
 
 
 def directory_empty_dir(dir_path: str) -> None:
@@ -55,14 +53,12 @@ def directory_list_files(dir_path: str) -> List[str]:
 
 
 def directory_aggregate_all_files_form_dir(dir_path: str) -> str:
-    return directory_aggregate_all_files(
-        directory_list_files(dir_path)
-    )
+    return directory_aggregate_all_files(directory_list_files(dir_path))
 
 
 def directory_aggregate_all_files(file_paths: List[str]) -> str:
     """Aggregate contents of the given list of file paths."""
-    aggregated_content = ''
+    aggregated_content = ""
     for file_path in file_paths:
         aggregated_content += file_read(file_path) + os.linesep
     return aggregated_content

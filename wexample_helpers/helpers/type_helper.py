@@ -1,6 +1,17 @@
 from types import UnionType
-from typing import List, Dict, Tuple, Callable, get_type_hints, cast
-from typing import Any, Type, Union, get_origin, get_args
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Tuple,
+    Type,
+    Union,
+    cast,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 
 def type_is_generic(type_value: Any) -> bool:
@@ -24,7 +35,8 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         if callable(value):
             return
         raise TypeError(
-            f"Invalid type \"{type(value).__name__}\" for value, expected callable.")
+            f'Invalid type "{type(value).__name__}" for value, expected callable.'
+        )
 
     # Check if the raw value matches any allowed base type
     if not type_is_generic(allowed_type):
@@ -35,7 +47,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                     return_type = args[-1]
 
                     type_hints = get_type_hints(value)
-                    actual_return_type_hint = type_hints.get('return', None)
+                    actual_return_type_hint = type_hints.get("return", None)
 
                     if actual_return_type_hint is None:
                         return
@@ -48,8 +60,8 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                         return
 
                     raise TypeError(
-                        f"Invalid return type in callable \"{value.__name__}\" for value: "
-                        f"expected return type \"{return_type}\", but got \"{actual_return_type_hint}\"."
+                        f'Invalid return type in callable "{value.__name__}" for value: '
+                        f'expected return type "{return_type}", but got "{actual_return_type_hint}".'
                     )
 
                 return
@@ -63,7 +75,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
     # If none of the checks passed, raise an exception
     raise TypeError(
-        f"Invalid type \"{type(value).__name__}\" for value, "
+        f'Invalid type "{type(value).__name__}" for value, '
         f"allowed types: {allowed_type}, "
         f"got: {str(value)}"
     )
@@ -87,9 +99,11 @@ def type_generic_value_is_valid(raw_value: Any, allowed_type: Type | UnionType) 
             return True
         # Validate key and value types recursively
         key_type, value_type = args if len(args) == 2 else (Any, Any)
-        return all(type_generic_value_is_valid(k, key_type)
-                   and type_generic_value_is_valid(v, value_type)
-                   for k, v in raw_value.items())
+        return all(
+            type_generic_value_is_valid(k, key_type)
+            and type_generic_value_is_valid(v, value_type)
+            for k, v in raw_value.items()
+        )
 
     # Validate list type with possible nested generics
     elif origin is list:
@@ -107,7 +121,11 @@ def type_generic_value_is_valid(raw_value: Any, allowed_type: Type | UnionType) 
         if not isinstance(raw_value, tuple) or (args and len(raw_value) != len(args)):
             return False
         # Validate each item in the tuple recursively
-        return all(type_generic_value_is_valid(item, arg) for item, arg in zip(raw_value, args) if args)
+        return all(
+            type_generic_value_is_valid(item, arg)
+            for item, arg in zip(raw_value, args)
+            if args
+        )
     elif origin is Any:
         return True
 
@@ -149,9 +167,12 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
             return False
         # Check compatibility for key and value types recursively
         key_type, value_type = allowed_args if len(allowed_args) == 2 else (Any, Any)
-        actual_key_type, actual_value_type = actual_args if len(actual_args) == 2 else (Any, Any)
-        return (type_is_compatible(actual_key_type, key_type) and
-                type_is_compatible(actual_value_type, value_type))
+        actual_key_type, actual_value_type = (
+            actual_args if len(actual_args) == 2 else (Any, Any)
+        )
+        return type_is_compatible(actual_key_type, key_type) and type_is_compatible(
+            actual_value_type, value_type
+        )
 
     # Handle list type with possible nested generics
     elif origin is list:
@@ -167,7 +188,9 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
         if actual_origin is not tuple or len(actual_args) != len(allowed_args):
             return False
         # Validate each item type in the tuple recursively
-        return all(type_is_compatible(act, exp) for act, exp in zip(actual_args, allowed_args))
+        return all(
+            type_is_compatible(act, exp) for act, exp in zip(actual_args, allowed_args)
+        )
 
     # For other types, fall back to direct comparison
     return actual_type == allowed_type

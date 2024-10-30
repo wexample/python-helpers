@@ -1,7 +1,6 @@
 from typing import Optional
 
-from git import Repo, InvalidGitRepositoryError, Remote
-
+from git import InvalidGitRepositoryError, Remote, Repo
 from wexample_helpers.const.types import FileStringOrPath
 from wexample_helpers.helpers.file_helper import file_resolve_path
 

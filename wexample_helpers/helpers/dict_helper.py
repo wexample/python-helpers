@@ -1,7 +1,7 @@
 import copy
-from typing import Any, Optional, Dict, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 
-from wexample_helpers.const.types import StringKeysMapping, StringKeysDict, StringsList
+from wexample_helpers.const.types import StringKeysDict, StringKeysMapping, StringsList
 
 DICT_PATH_SEPARATOR_DEFAULT = "."
 DICT_ITEM_EXISTS_ACTION_ABORT = "abort"
@@ -13,7 +13,7 @@ def dict_get_item_by_path(
     data: StringKeysMapping,
     key: str,
     default: Optional[Any] = None,
-    separator: str = DICT_PATH_SEPARATOR_DEFAULT
+    separator: str = DICT_PATH_SEPARATOR_DEFAULT,
 ) -> Any:
     # Split the key into its individual parts
     keys = key.split(separator)
@@ -29,9 +29,7 @@ def dict_get_item_by_path(
 
 
 def dict_has_item_by_path(
-    data: StringKeysMapping,
-    key: str,
-    separator: str = DICT_PATH_SEPARATOR_DEFAULT
+    data: StringKeysMapping, key: str, separator: str = DICT_PATH_SEPARATOR_DEFAULT
 ) -> bool:
     # Split the key into its individual parts
     keys = key.split(separator)
@@ -114,8 +112,7 @@ def dict_sort_values(
 
 
 def dict_get_first_missing_key(
-    dictionary: StringKeysMapping,
-    required_keys: StringsList
+    dictionary: StringKeysMapping, required_keys: StringsList
 ) -> str | None:
     for key in required_keys:
         if key not in dictionary:

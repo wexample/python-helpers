@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Union, Optional, Tuple, List
+from typing import List, Optional, Tuple, Union
 
 from wexample_helpers.const.types import FileStringOrPath
 
@@ -16,10 +16,7 @@ def file_change_mode(path: str, mode: int) -> None:
 def file_change_mode_recursive(
     path: str, mode: int, follow_symlinks: bool = True
 ) -> None:
-    file_change_mode(
-        path=path,
-        mode=mode
-    )
+    file_change_mode(path=path, mode=mode)
 
     # If the path is a directory (and not a symlink if follow_symlinks is False),
     # loop through its contents and call the function recursively
@@ -80,14 +77,14 @@ def file_validate_mode_octal(mode: Union[str, int]) -> bool:
     if len(mode) != 3:
         return False
     for char in mode:
-        if char not in '01234567':
+        if char not in "01234567":
             return False
     return True
 
 
 def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
     if not file_validate_mode_octal(mode):
-        raise Exception(f'Bad mode format {mode}')
+        raise Exception(f"Bad mode format {mode}")
     return True
 
 
