@@ -7,3 +7,7 @@ class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
         from wexample_helpers.helpers.string_helper import string_to_snake_case
 
         return string_to_snake_case(cls.get_short_class_name())
+
+    @classmethod
+    def get_name(cls) -> str:
+        return cls.get_snake_short_class_name()
