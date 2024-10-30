@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Union, Callable, Tuple
 
-from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible, type_value_is_valid
+from wexample_helpers.helpers.type_helper import type_is_generic, type_is_compatible
 
 
 class TestHelperType:
