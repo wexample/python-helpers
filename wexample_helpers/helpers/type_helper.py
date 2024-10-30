@@ -35,7 +35,9 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         if callable(value):
             return
         raise TypeError(
-            f'Invalid type "{type(value).__name__}" for value, expected callable.'
+            f'\nInvalid type "{type(value).__name__}" for value:\n'
+            f'  expected callable\n'
+            f'  got: {type(value)}\n'
         )
 
     # Check if the raw value matches any allowed base type
@@ -63,8 +65,9 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                         return
 
                     raise TypeError(
-                        f'Invalid return type in callable "{value.__name__}" for value: '
-                        f'expected return type "{return_type}", but got "{actual_return_type_hint}".'
+                        f'\nInvalid return type in callable "{type(value).__name__}" for value:\n'
+                        f'  expected return type "{return_type}"\n'
+                        f'  got: "{actual_return_type_hint}"\n'
                     )
 
                 return
@@ -78,9 +81,9 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
     # If none of the checks passed, raise an exception
     raise TypeError(
-        f'Invalid type "{type(value).__name__}" for value, '
-        f"allowed types: {allowed_type}, "
-        f"got: {str(value)}"
+        f'\nInvalid type "{type(value).__name__}" for value:\n'
+        f"   allowed types: {allowed_type}\n"
+        f"   got: {str(value)}\n"
     )
 
 
