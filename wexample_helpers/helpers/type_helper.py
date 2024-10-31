@@ -87,56 +87,69 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     )
 
 
-def type_generic_value_is_valid(raw_value: Any, allowed_type: Type | UnionType) -> bool:
-    """Helper to recursively validate parameter types for generics like Dict, List, Tuple, and Union."""
+def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> bool:
+    """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
 
-    # Validate Union type by checking if raw_value matches any of the types in the Union
+    # Validate Union type by checking if value matches any of the types in the Union
     if origin is Union:
-        return any(type_generic_value_is_valid(raw_value, arg) for arg in args)
+        return any(type_generic_value_is_valid(value, arg) for arg in args)
 
     # Validate dictionary type with possible nested generics
     if origin is dict:
-        if not isinstance(raw_value, dict):
+        if not isinstance(value, dict):
             return False
         # Accept empty dict
-        if not raw_value:
+        if not value:
             return True
         # Validate key and value types recursively
         key_type, value_type = args if len(args) == 2 else (Any, Any)
         return all(
             type_generic_value_is_valid(k, key_type)
             and type_generic_value_is_valid(v, value_type)
-            for k, v in raw_value.items()
+            for k, v in value.items()
         )
 
     # Validate list type with possible nested generics
     elif origin is list:
-        if not isinstance(raw_value, list):
+        if not isinstance(value, list):
             return False
         # Accept empty list
-        if not raw_value:
+        if not value:
             return True
         # Validate item type recursively
         item_type = args[0] if args else Any
-        return all(type_generic_value_is_valid(item, item_type) for item in raw_value)
+        return all(type_generic_value_is_valid(item, item_type) for item in value)
+
+    # Validate set type with possible nested generics
+    elif origin is set:
+        if not isinstance(value, set):
+            return False
+        # Accept empty set
+        if not value:
+            return True
+        # Validate item type recursively
+        item_type = args[0] if args else Any
+        return all(type_generic_value_is_valid(item, item_type) for item in value)
 
     # Validate tuple type with possible nested generics
     elif origin is tuple:
-        if not isinstance(raw_value, tuple) or (args and len(raw_value) != len(args)):
+        if not isinstance(value, tuple) or (args and len(value) != len(args)):
             return False
         # Validate each item in the tuple recursively
         return all(
             type_generic_value_is_valid(item, arg)
-            for item, arg in zip(raw_value, args)
+            for item, arg in zip(value, args)
             if args
         )
+
     elif origin is Any:
         return True
 
     # For any other types, fallback to isinstance check
-    return isinstance(raw_value, origin)
+    return isinstance(value, origin)
+
 
 
 def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
