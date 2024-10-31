@@ -1,5 +1,5 @@
 from types import NoneType
-from typing import Any, Callable, Dict, List, Tuple, Union, Type
+from typing import Any, Callable, Dict, List, Tuple, Union, Type, Optional, Set
 
 import pytest
 from wexample_helpers.helpers.type_helper import (
@@ -103,30 +103,68 @@ class TestHelperType:
             pass
 
         success_cases = [
+            # Basic types
             ("str", Any),
             (True, Any),
             ("str", str),
             (123, int),
             (123.123, float),
             (None, NoneType),
+
+            # Basic containers
             ([], list),
             ([], List),
             ({}, dict),
             ({}, Dict),
+
+            # Typed containers
+            (["item1", "item2"], List[str]),
+            ([1, 2, 3], List[int]),
             ({"lorem": "ipsum"}, Dict[str, str]),
             ({"lorem": 123}, Dict[str, int]),
-            ({}, Union[str, Dict[str, Any]]),
+            ([TestClassA(), TestClassB()], List[TestClassA]),
+
+            # Union and Optional
+            (None, Optional[str]),
+            ("hello", Union[str, int]),
+            (123, Union[str, int]),
+            ({"key": "value"}, Union[str, Dict[str, str]]),
+            (None, Union[str, NoneType]),
+            ("optional", Optional[str]),
+
+            # Callable
             (_test_callable, Callable),
             (_test_callable, Callable[..., Any]),
             (_test_callable, Callable[..., bool]),
+
+            # Tuples and Sets
+            ((1, "str"), Tuple[int, str]),
+            ({"apple", "banana"}, Set[str]),
+            ({1, 2, 3}, Set[int]),
+
+            # Nested types
+            ({"nested": {"key": "value"}}, Dict[str, Dict[str, str]]),
+            ([{"key": 1}, {"key": 2}], List[Dict[str, int]]),
+            (({"key": "value"}, 123), Tuple[Dict[str, str], int]),
+
+            # Classes and types
             (TestClassA(), TestClassA),
-            (TestClassB(), TestClassA),
+            (TestClassB(), TestClassA),  # Compatibility with superclass
             (TestClassB(), TestClassB),
+
+            # Class types
             (TestClassA, Type[TestClassA]),
             (TestClassB, Type[TestClassA]),
             (TestClassB, Type[TestClassB]),
             (TestClassA, Type),
             (TestClassB, Type),
+
+            # Nested Unions and Optionals
+            ({"key": "value"}, Union[Dict[str, str], List[str]]),
+            ([1, 2, 3], Union[List[int], Set[int]]),
+            ({"key": "value"}, Union[Dict[str, str], NoneType]),
+            (None, Union[Dict[str, str], NoneType]),
+            (123, Union[Optional[int], NoneType]),
         ]
 
         failure_cases = [
@@ -154,7 +192,7 @@ class TestHelperType:
                 allowed_type=expected_type,
             )
 
-        # Failure cases: should raise InvalidOptionValueTypeException
+        # Failure cases: should raise TypeError
         for value, expected_type in failure_cases:
             with pytest.raises(TypeError):
                 type_validate_or_fail(
