@@ -44,6 +44,16 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     if not type_is_generic(allowed_type):
         if isinstance(allowed_type, Callable):
             if isinstance(value, Callable):
+                # Type is probably not a meta type, i.e:
+                #   - allowed_type=Type[MyClass] will match value MyClass
+                #   - allowed_type=MyClass will not match value MyClass
+                if isinstance(allowed_type, type):
+                    raise TypeError(
+                        f'\nInvalid type "{type(value).__name__}" for value:\n'
+                        f"  expected type: {allowed_type.__name__}\n"
+                        f"  got: {type(value).__name__}\n"
+                    )
+
                 args = get_args(allowed_type)
                 if args:
                     return_type = args[-1]
@@ -51,13 +61,13 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                     try:
                         type_hints = get_type_hints(value, localns=locals())
                         actual_return_type_hint = type_hints.get("return", None)
-                    except NameError as e:
+                    except NameError:
                         actual_return_type_hint = None
 
                     if actual_return_type_hint is None:
                         return
 
-                    # # Handle generic types
+                    # Handle generic types
                     if type_is_compatible(
                         actual_type=cast(Type, actual_return_type_hint),
                         allowed_type=return_type,

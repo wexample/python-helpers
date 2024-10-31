@@ -165,6 +165,9 @@ class TestHelperType:
             ({"key": "value"}, Union[Dict[str, str], NoneType]),
             (None, Union[Dict[str, str], NoneType]),
             (123, Union[Optional[int], NoneType]),
+            (TestClassB(), Union[TestClassA, TestClassB]),
+            (TestClassB(), Union[TestClassA, str]),
+            (TestClassB, Union[Type[TestClassA], Type[TestClassB]]),
         ]
 
         failure_cases = [
@@ -211,6 +214,10 @@ class TestHelperType:
             # Tuple and Set mismatches
             ((1, "str"), Tuple[str, int]),  # Type order mismatch in Tuple
             ({"apple", 1}, Set[str]),  # Mixed types in Set
+            (TestClassA, Union[int, str, float]),
+            (TestClassA, Union[TestClassB]),
+            (TestClassA, TestClassB),
+            (TestClassA, TestClassA),
         ]
 
         # Success cases: should not raise exceptions
