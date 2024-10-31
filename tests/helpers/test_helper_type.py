@@ -168,21 +168,49 @@ class TestHelperType:
         ]
 
         failure_cases = [
+            # Type mismatches
             (123, str),
             ("123", int),
             (None, int),
+
+            # Container type mismatches
             ({}, list),
             ([], dict),
             ({"lorem": 123}, Dict[str, str]),
+
+            # Union mismatches
             (123, Union[str, Dict[str, Any]]),
+            ("not_callable", Callable[..., str]),
+
+            # Callable with incompatible signature
             (_test_callable, Callable[..., str]),
-            (TestClassA(), TestClassB),
+
+            # Class type mismatches
+            (TestClassA(), TestClassB),  # TestClassA instance is not compatible with TestClassB type
             (123, TestClassA),
             ("str", TestClassB),
-            (TestClassA(), Type[TestClassA]),
+
+            # Type mismatches for class types
+            (TestClassA(), Type[TestClassA]),  # TestClassA() is an instance, not a type
             (TestClassB(), Type),
+
+            # Non-type values for Type
             (123, Type),
             ("str", Type),
+
+            # Incorrect nested types
+            ([1, "str"], List[int]),
+            ({"key": 123}, Dict[str, str]),
+            ({"key": "value"}, List[Dict[str, str]]),  # Expecting List, got Dict
+            (["str"], Set[str]),  # List vs. Set
+
+            # Incorrect Optional and Union usage
+            (123, Optional[str]),  # Expecting str or None
+            (None, int),  # NoneType mismatch
+
+            # Tuple and Set mismatches
+            ((1, "str"), Tuple[str, int]),  # Type order mismatch in Tuple
+            ({"apple", 1}, Set[str]),  # Mixed types in Set
         ]
 
         # Success cases: should not raise exceptions
