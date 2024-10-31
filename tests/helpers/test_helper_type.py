@@ -1,5 +1,5 @@
 from types import NoneType
-from typing import Any, Callable, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union, Type
 
 import pytest
 from wexample_helpers.helpers.type_helper import (
@@ -96,6 +96,12 @@ class TestHelperType:
         def _test_callable() -> bool:
             return True
 
+        class TestClassA:
+            pass
+
+        class TestClassB(TestClassA):
+            pass
+
         success_cases = [
             ("str", Any),
             (True, Any),
@@ -113,6 +119,14 @@ class TestHelperType:
             (_test_callable, Callable),
             (_test_callable, Callable[..., Any]),
             (_test_callable, Callable[..., bool]),
+            (TestClassA(), TestClassA),
+            (TestClassB(), TestClassA),
+            (TestClassB(), TestClassB),
+            (TestClassA, Type[TestClassA]),
+            (TestClassB, Type[TestClassA]),
+            (TestClassB, Type[TestClassB]),
+            (TestClassA, Type),
+            (TestClassB, Type),
         ]
 
         failure_cases = [
@@ -124,6 +138,13 @@ class TestHelperType:
             ({"lorem": 123}, Dict[str, str]),
             (123, Union[str, Dict[str, Any]]),
             (_test_callable, Callable[..., str]),
+            (TestClassA(), TestClassB),
+            (123, TestClassA),
+            ("str", TestClassB),
+            (TestClassA(), Type[TestClassA]),
+            (TestClassB(), Type),
+            (123, Type),
+            ("str", Type),
         ]
 
         # Success cases: should not raise exceptions
