@@ -2,14 +2,15 @@ from types import NoneType
 from typing import Any, Callable, Dict, List, Tuple, Union, Type, Optional, Set
 
 import pytest
+
 from wexample_helpers.helpers.type_helper import (
     type_is_compatible,
     type_is_generic,
-    type_validate_or_fail,
 )
 
+from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
 
-class TestHelperType:
+class TestHelperType(AbstractTestHelpers):
     def test_type_is_generic(self):
         # Types that should be detected as generic
         should_be_true = [
@@ -102,135 +103,121 @@ class TestHelperType:
         class TestClassB(TestClassA):
             pass
 
-        success_cases = [
-            # Basic types
-            ("str", Any),
-            (True, Any),
-            ("str", str),
-            (123, int),
-            (123.123, float),
-            (None, NoneType),
+        self._test_type_validate_or_fail(
+            success_cases=[
+                # Basic types
+                ("str", Any),
+                (True, Any),
+                ("str", str),
+                (123, int),
+                (123.123, float),
+                (None, NoneType),
 
-            # Basic containers
-            ([], list),
-            ([], List),
-            ({}, dict),
-            ({}, Dict),
+                # Basic containers
+                ([], list),
+                ([], List),
+                ({}, dict),
+                ({}, Dict),
 
-            # Typed containers
-            (["item1", "item2"], List[str]),
-            ([1, 2, 3], List[int]),
-            ({"lorem": "ipsum"}, Dict[str, str]),
-            ({"lorem": 123}, Dict[str, int]),
-            ([TestClassA(), TestClassB()], List[TestClassA]),
+                # Typed containers
+                (["item1", "item2"], List[str]),
+                ([1, 2, 3], List[int]),
+                ({"lorem": "ipsum"}, Dict[str, str]),
+                ({"lorem": 123}, Dict[str, int]),
+                ([TestClassA(), TestClassB()], List[TestClassA]),
 
-            # Union and Optional
-            (None, Optional[str]),
-            ("hello", Union[str, int]),
-            (123, Union[str, int]),
-            ({"key": "value"}, Union[str, Dict[str, str]]),
-            (None, Union[str, NoneType]),
-            ("optional", Optional[str]),
+                # Union and Optional
+                (None, Optional[str]),
+                ("hello", Union[str, int]),
+                (123, Union[str, int]),
+                ({"key": "value"}, Union[str, Dict[str, str]]),
+                (None, Union[str, NoneType]),
+                ("optional", Optional[str]),
 
-            # Callable
-            (_test_callable, Callable),
-            (_test_callable, Callable[..., Any]),
-            (_test_callable, Callable[..., bool]),
+                # Callable
+                (_test_callable, Callable),
+                (_test_callable, Callable[..., Any]),
+                (_test_callable, Callable[..., bool]),
 
-            # Tuples and Sets
-            ((1, "str"), Tuple[int, str]),
-            ({"apple", "banana"}, Set[str]),
-            ({1, 2, 3}, Set[int]),
+                # Tuples and Sets
+                ((1, "str"), Tuple[int, str]),
+                ({"apple", "banana"}, Set[str]),
+                ({1, 2, 3}, Set[int]),
 
-            # Nested types
-            ({"nested": {"key": "value"}}, Dict[str, Dict[str, str]]),
-            ([{"key": 1}, {"key": 2}], List[Dict[str, int]]),
-            (({"key": "value"}, 123), Tuple[Dict[str, str], int]),
+                # Nested types
+                ({"nested": {"key": "value"}}, Dict[str, Dict[str, str]]),
+                ([{"key": 1}, {"key": 2}], List[Dict[str, int]]),
+                (({"key": "value"}, 123), Tuple[Dict[str, str], int]),
 
-            # Classes and types
-            (TestClassA(), TestClassA),
-            (TestClassB(), TestClassA),  # Compatibility with superclass
-            (TestClassB(), TestClassB),
+                # Classes and types
+                (TestClassA(), TestClassA),
+                (TestClassB(), TestClassA),  # Compatibility with superclass
+                (TestClassB(), TestClassB),
 
-            # Class types
-            (TestClassA, Type[TestClassA]),
-            (TestClassB, Type[TestClassA]),
-            (TestClassB, Type[TestClassB]),
-            (TestClassA, Type),
-            (TestClassB, Type),
+                # Class types
+                (TestClassA, Type[TestClassA]),
+                (TestClassB, Type[TestClassA]),
+                (TestClassB, Type[TestClassB]),
+                (TestClassA, Type),
+                (TestClassB, Type),
 
-            # Nested Unions and Optionals
-            ({"key": "value"}, Union[Dict[str, str], List[str]]),
-            ([1, 2, 3], Union[List[int], Set[int]]),
-            ({"key": "value"}, Union[Dict[str, str], NoneType]),
-            (None, Union[Dict[str, str], NoneType]),
-            (123, Union[Optional[int], NoneType]),
-            (TestClassB(), Union[TestClassA, TestClassB]),
-            (TestClassB(), Union[TestClassA, str]),
-            (TestClassB, Union[Type[TestClassA], Type[TestClassB]]),
-        ]
+                # Nested Unions and Optionals
+                ({"key": "value"}, Union[Dict[str, str], List[str]]),
+                ([1, 2, 3], Union[List[int], Set[int]]),
+                ({"key": "value"}, Union[Dict[str, str], NoneType]),
+                (None, Union[Dict[str, str], NoneType]),
+                (123, Union[Optional[int], NoneType]),
+                (TestClassB(), Union[TestClassA, TestClassB]),
+                (TestClassB(), Union[TestClassA, str]),
+                (TestClassB, Union[Type[TestClassA], Type[TestClassB]]),
+            ],
+            failure_cases=[
+                # Type mismatches
+                (123, str),
+                ("123", int),
+                (None, int),
 
-        failure_cases = [
-            # Type mismatches
-            (123, str),
-            ("123", int),
-            (None, int),
+                # Container type mismatches
+                ({}, list),
+                ([], dict),
+                ({"lorem": 123}, Dict[str, str]),
 
-            # Container type mismatches
-            ({}, list),
-            ([], dict),
-            ({"lorem": 123}, Dict[str, str]),
+                # Union mismatches
+                (123, Union[str, Dict[str, Any]]),
+                ("not_callable", Callable[..., str]),
 
-            # Union mismatches
-            (123, Union[str, Dict[str, Any]]),
-            ("not_callable", Callable[..., str]),
+                # Callable with incompatible signature
+                (_test_callable, Callable[..., str]),
 
-            # Callable with incompatible signature
-            (_test_callable, Callable[..., str]),
+                # Class type mismatches
+                (TestClassA(), TestClassB),  # TestClassA instance is not compatible with TestClassB type
+                (123, TestClassA),
+                ("str", TestClassB),
 
-            # Class type mismatches
-            (TestClassA(), TestClassB),  # TestClassA instance is not compatible with TestClassB type
-            (123, TestClassA),
-            ("str", TestClassB),
+                # Type mismatches for class types
+                (TestClassA(), Type[TestClassA]),  # TestClassA() is an instance, not a type
+                (TestClassB(), Type),
 
-            # Type mismatches for class types
-            (TestClassA(), Type[TestClassA]),  # TestClassA() is an instance, not a type
-            (TestClassB(), Type),
+                # Non-type values for Type
+                (123, Type),
+                ("str", Type),
 
-            # Non-type values for Type
-            (123, Type),
-            ("str", Type),
+                # Incorrect nested types
+                ([1, "str"], List[int]),
+                ({"key": 123}, Dict[str, str]),
+                ({"key": "value"}, List[Dict[str, str]]),  # Expecting List, got Dict
+                (["str"], Set[str]),  # List vs. Set
 
-            # Incorrect nested types
-            ([1, "str"], List[int]),
-            ({"key": 123}, Dict[str, str]),
-            ({"key": "value"}, List[Dict[str, str]]),  # Expecting List, got Dict
-            (["str"], Set[str]),  # List vs. Set
+                # Incorrect Optional and Union usage
+                (123, Optional[str]),  # Expecting str or None
+                (None, int),  # NoneType mismatch
 
-            # Incorrect Optional and Union usage
-            (123, Optional[str]),  # Expecting str or None
-            (None, int),  # NoneType mismatch
-
-            # Tuple and Set mismatches
-            ((1, "str"), Tuple[str, int]),  # Type order mismatch in Tuple
-            ({"apple", 1}, Set[str]),  # Mixed types in Set
-            (TestClassA, Union[int, str, float]),
-            (TestClassA, Union[TestClassB]),
-            (TestClassA, TestClassB),
-            (TestClassA, TestClassA),
-        ]
-
-        # Success cases: should not raise exceptions
-        for value, expected_type in success_cases:
-            type_validate_or_fail(
-                value=value,
-                allowed_type=expected_type,
-            )
-
-        # Failure cases: should raise TypeError
-        for value, expected_type in failure_cases:
-            with pytest.raises(TypeError):
-                type_validate_or_fail(
-                    value=value,
-                    allowed_type=expected_type,
-                )
+                # Tuple and Set mismatches
+                ((1, "str"), Tuple[str, int]),  # Type order mismatch in Tuple
+                ({"apple", 1}, Set[str]),  # Mixed types in Set
+                (TestClassA, Union[int, str, float]),
+                (TestClassA, Union[TestClassB]),
+                (TestClassA, TestClassB),
+                (TestClassA, TestClassA),
+            ]
+        )

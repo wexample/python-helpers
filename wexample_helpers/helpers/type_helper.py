@@ -35,9 +35,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         if callable(value):
             return
         raise TypeError(
-            f'\nInvalid type "{type(value).__name__}" for value:\n'
-            f"  expected callable\n"
-            f"  got: {type(value)}\n"
+            f'\nType Error in Callable Check:\n'
+            f'  Expected: callable\n'
+            f'  Received type "{type(value).__name__}"\n'
+            f'  Value provided: {value}\n'
         )
 
     # Check if the raw value matches any allowed base type
@@ -49,9 +50,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                 #   - allowed_type=MyClass will not match value MyClass
                 if isinstance(allowed_type, type):
                     raise TypeError(
-                        f'\nInvalid type "{type(value).__name__}" for value:\n'
-                        f"  expected type: {allowed_type.__name__}\n"
-                        f"  got: {type(value).__name__}\n"
+                        f'\nType Error in Base Type Match:\n'
+                        f'  Expected exact type: {allowed_type.__name__}\n'
+                        f'  Received type: {type(value).__name__}\n'
+                        f'  Value provided: {value}\n'
                     )
 
                 args = get_args(allowed_type)
@@ -75,9 +77,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                         return
 
                     raise TypeError(
-                        f'\nInvalid return type in callable "{type(value).__name__}" for value:\n'
-                        f'  expected return type "{return_type}"\n'
-                        f'  got: "{actual_return_type_hint}"\n'
+                        f'\nType Error in Callable Return Type:\n'
+                        f'  Expected callable "{type(value).__name__}" to return type "{return_type}"\n'
+                        f'  Actual return type: "{actual_return_type_hint}"\n'
+                        f'  Value provided: {value}\n'
                     )
 
                 return
