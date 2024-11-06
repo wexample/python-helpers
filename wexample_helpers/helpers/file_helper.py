@@ -91,3 +91,21 @@ def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
 def file_write(file_path: str, content: str) -> None:
     with open(file_path, "w") as f:
         f.write(content)
+
+
+def file_get_directories(path: str, recursive: bool = False) -> List[str]:
+    directories = []
+
+    if not recursive:
+        for entry in os.listdir(path):
+            full_path = os.path.join(path, entry)
+            if os.path.isdir(full_path):
+                directories.append(full_path)
+
+    else:
+        for root, dirs, files in os.walk(path):
+            for directory in dirs:
+                dir_path = os.path.join(root, directory)
+                directories.append(dir_path)
+
+    return directories
