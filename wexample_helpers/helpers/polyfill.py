@@ -1,7 +1,7 @@
-from typing import Any, List
+from typing import Any
 
 
-def import_dummy(classes: Any) -> None:
+def polyfill_import(classes: Any) -> None:
     """
     Fix this error, by importing classes for in a dummy method. These classes are actually not used anywhere :
     pydantic.errors.PydanticUserError: `ClassName` is not fully defined; you should define `Kernel`,
