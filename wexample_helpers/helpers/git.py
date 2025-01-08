@@ -2,7 +2,7 @@ from typing import Optional
 
 from git import InvalidGitRepositoryError, Remote, Repo
 from wexample_helpers.const.types import FileStringOrPath
-from wexample_helpers.helpers.file_helper import file_resolve_path
+from wexample_helpers.helpers.file import file_resolve_path
 
 
 def git_is_init(path: FileStringOrPath) -> bool:

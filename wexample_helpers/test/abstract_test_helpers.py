@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict, List, Tuple, Union, Type, Optional, Set
 
 import pytest
 
-from wexample_helpers.helpers.type_helper import (
+from wexample_helpers.helpers.type import (
     type_validate_or_fail,
 )
 

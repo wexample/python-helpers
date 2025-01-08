@@ -3,7 +3,7 @@ import shutil
 from typing import Any, List
 
 from wexample_helpers.const.types import AnyCallable
-from wexample_helpers.helpers.file_helper import file_read
+from wexample_helpers.helpers.file import file_read
 
 
 def directory_remove_tree_if_exists(directory: str) -> None:

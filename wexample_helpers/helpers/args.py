@@ -9,7 +9,7 @@ from wexample_helpers.const.types import (
     StringKeysDict,
     StringsList,
 )
-from wexample_helpers.helpers.string_helper import string_to_snake_case
+from wexample_helpers.helpers.type import string_to_snake_case
 
 
 def args_replace_one(
