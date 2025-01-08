@@ -1,8 +1,6 @@
 from types import NoneType
 from typing import Any, Callable, Dict, List, Tuple, Union, Type, Optional, Set
 
-import pytest
-
 from wexample_helpers.helpers.type import (
     type_is_compatible,
     type_is_generic,
