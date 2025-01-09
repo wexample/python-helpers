@@ -1,5 +1,6 @@
 import requests
 import time
+import os
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 from wexample_helpers.const.types import StringsList
@@ -12,7 +13,6 @@ from wexample_helpers.errors.gateway_connexion_error import GatewayConnectionErr
 class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
     # Base configuration
     base_url: str = Field(..., description="Base API URL")
-    api_keys: Dict[str, str] = Field(default=None, description="Required API keys")
     timeout: int = Field(default=30, description="Request timeout in seconds")
 
     # State
@@ -25,8 +25,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
 
     def model_post_init(self, *args, **kwargs):
         super().model_post_init(*args, **kwargs)
-        if self.api_keys is None:
-            self.api_keys = {}
         if self.default_headers is None:
             self.default_headers = {}
 
@@ -40,13 +38,13 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
     def connect(self) -> bool:
         """
         Establishes connection with the API.
-        Verifies that all required API keys are present.
+        Verifies that all required API keys are present in environment variables.
         """
         required_keys = self.get_expected_env_keys()
-        missing_keys = [key for key in required_keys if key not in self.api_keys]
+        missing_keys = [key for key in required_keys if not os.getenv(key)]
 
         if missing_keys:
-            raise GatewayAuthenticationError(f"Missing required API keys: {', '.join(missing_keys)}")
+            raise GatewayAuthenticationError(f"Missing required environment variables: {', '.join(missing_keys)}")
 
         if self.check_connection():
             self.connected = True
@@ -66,10 +64,28 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
 
     def get_expected_env_keys(self) -> StringsList:
         """
-        Returns the list of required API keys.
+        Returns the list of required environment variable keys.
         Should be overridden in child classes.
         """
         return []
+
+    def get_api_key(self, key_name: str) -> str:
+        """
+        Retrieves an API key from environment variables.
+
+        Args:
+            key_name: Name of the environment variable
+
+        Returns:
+            str: The API key value
+
+        Raises:
+            GatewayAuthenticationError: If the environment variable is not set
+        """
+        value = os.getenv(key_name)
+        if not value:
+            raise GatewayAuthenticationError(f"Environment variable '{key_name}' not found")
+        return value
 
     def _check_url(self, url: str) -> bool:
         """
@@ -95,7 +111,7 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
                 time.sleep(self.rate_limit_delay - elapsed)
         self.last_request_time = time.time()
 
-    async def make_request(
+    def make_request(
         self,
         method: str,
         endpoint: str,
@@ -127,17 +143,3 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
             return response
         except requests.exceptions.RequestException as e:
             raise GatewayError(f"Request failed: {str(e)}")
-
-    def set_api_key(self, key_name: str, key_value: str):
-        """
-        Sets an API key.
-        """
-        self.api_keys[key_name] = key_value
-
-    def get_api_key(self, key_name: str) -> str:
-        """
-        Retrieves an API key.
-        """
-        if key_name not in self.api_keys:
-            raise GatewayAuthenticationError(f"API key '{key_name}' not found")
-        return self.api_keys[key_name]
