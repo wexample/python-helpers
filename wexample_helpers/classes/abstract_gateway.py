@@ -36,10 +36,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
         return 'GatewayService'
 
     def connect(self) -> bool:
-        """
-        Establishes connection with the API.
-        Verifies that all required API keys are present in environment variables.
-        """
         required_keys = self.get_expected_env_keys()
         missing_keys = [key for key in required_keys if not os.getenv(key)]
 
@@ -53,44 +49,15 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
         raise GatewayConnectionError("Failed to connect to the API")
 
     def check_connection(self) -> bool:
-        """
-        Checks if the API is accessible.
-        Should be overridden in child classes for specific verification.
-        """
         try:
             return self._check_url(self.base_url)
         except Exception as e:
             return False
 
     def get_expected_env_keys(self) -> StringsList:
-        """
-        Returns the list of required environment variable keys.
-        Should be overridden in child classes.
-        """
         return []
 
-    def get_api_key(self, key_name: str) -> str:
-        """
-        Retrieves an API key from environment variables.
-
-        Args:
-            key_name: Name of the environment variable
-
-        Returns:
-            str: The API key value
-
-        Raises:
-            GatewayAuthenticationError: If the environment variable is not set
-        """
-        value = os.getenv(key_name)
-        if not value:
-            raise GatewayAuthenticationError(f"Environment variable '{key_name}' not found")
-        return value
-
     def _check_url(self, url: str) -> bool:
-        """
-        Checks if a URL is accessible.
-        """
         try:
             response = requests.get(
                 url,
@@ -102,9 +69,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
             return False
 
     def _handle_rate_limiting(self):
-        """
-        Handles basic rate limiting.
-        """
         if self.last_request_time is not None:
             elapsed = time.time() - self.last_request_time
             if elapsed < self.rate_limit_delay:
@@ -119,9 +83,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
         params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None
     ) -> requests.Response:
-        """
-        Utility method to make HTTP requests.
-        """
         if not self.connected:
             raise GatewayConnectionError("Gateway is not connected")
 
