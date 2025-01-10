@@ -11,9 +11,6 @@ class LocalFilePath(BaseModel):
         description="If True, verify path is a file. If False, verify it's a directory. If None, accept either."
     )
     
-    class Config:
-        arbitrary_types_allowed = True
-    
     @validator('path')
     def validate_path(cls, value: Union[str, Path], values: dict) -> Path:
         """Validate the path and convert to Path object if needed."""

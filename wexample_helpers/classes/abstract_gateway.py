@@ -29,9 +29,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, BaseModel):
         if self.default_headers is None:
             self.default_headers = {}
 
-    class Config:
-        arbitrary_types_allowed = True
-
     @classmethod
     def get_class_name_suffix(cls) -> Optional[str]:
         return 'GatewayService'
