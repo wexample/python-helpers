@@ -9,10 +9,10 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 from wexample_helpers.errors.gateway_authentication_error import GatewayAuthenticationError
 from wexample_helpers.errors.gateway_error import GatewayError
 from wexample_helpers.errors.gateway_connexion_error import GatewayConnectionError
-from wexample_prompt.mixins.with_io_manager import WithIoManager
+from wexample_prompt.mixins.with_required_io_manager import WithRequiredIoManager
 
 
-class AbstractGateway(HasSnakeShortClassNameClassMixin, WithIoManager, BaseModel):
+class AbstractGateway(HasSnakeShortClassNameClassMixin, WithRequiredIoManager, BaseModel):
     # Base configuration
     base_url: str = Field(..., description="Base API URL")
     timeout: int = Field(default=30, description="Request timeout in seconds")
