@@ -1,18 +1,17 @@
 import requests
 import time
-import os
 import logging
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 from wexample_helpers.const.types import StringsList
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import HasSnakeShortClassNameClassMixin
-from wexample_helpers.errors.gateway_authentication_error import GatewayAuthenticationError
+from wexample_helpers.classes.mixin.has_env_keys import HasEnvKeys
 from wexample_helpers.errors.gateway_error import GatewayError
 from wexample_helpers.errors.gateway_connexion_error import GatewayConnectionError
 from wexample_prompt.mixins.with_required_io_manager import WithRequiredIoManager
 
 
-class AbstractGateway(HasSnakeShortClassNameClassMixin, WithRequiredIoManager, BaseModel):
+class AbstractGateway(HasSnakeShortClassNameClassMixin, WithRequiredIoManager, HasEnvKeys, BaseModel):
     # Base configuration
     base_url: str = Field(..., description="Base API URL")
     timeout: int = Field(default=30, description="Request timeout in seconds")
@@ -35,13 +34,6 @@ class AbstractGateway(HasSnakeShortClassNameClassMixin, WithRequiredIoManager, B
         return 'GatewayService'
 
     def connect(self) -> bool:
-        required_keys = self.get_expected_env_keys()
-        missing_keys = [key for key in required_keys if not os.getenv(key)]
-
-        if missing_keys:
-            logging.error(f"[{self.__class__.__name__}] Authentication failed: Missing environment variables: {', '.join(missing_keys)}")
-            raise GatewayAuthenticationError(f"Missing required environment variables: {', '.join(missing_keys)}")
-
         logging.info(f"[{self.__class__.__name__}] Attempting connection to {self.base_url}")
         if self.check_connection():
             self.connected = True
