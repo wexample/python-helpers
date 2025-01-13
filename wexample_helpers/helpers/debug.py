@@ -1,5 +1,6 @@
 from typing import List, Optional, NamedTuple
-import os
+
+from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
 class TraceFrame(NamedTuple):
@@ -7,12 +8,13 @@ class TraceFrame(NamedTuple):
     lineno: int
     function: str
     code: Optional[str]
+    short_path: bool
 
     def __str__(self) -> str:
         # Format the base information
         base = (
             f"\n{'-' * 50}\n"
-            f"File     : {self.filename}\n"
+            f"File     : {cli_make_clickable_path(self.filename, short_title=self.short_path)}:{self.lineno}\n"
             f"Line     : {self.lineno}\n"
             f"Function : {self.function}"
         )
@@ -26,7 +28,7 @@ class TraceFrame(NamedTuple):
         return base
 
 
-def debug_trace(print_output: bool = True) -> Optional[List[TraceFrame]]:
+def debug_trace(print_output: bool = True, short_path: bool = True) -> Optional[List[TraceFrame]]:
     import inspect
     stack = []
 
@@ -35,7 +37,8 @@ def debug_trace(print_output: bool = True) -> Optional[List[TraceFrame]]:
             filename=frame.filename,
             lineno=frame.lineno,
             function=frame.function,
-            code=frame.code_context[0] if frame.code_context else None
+            code=frame.code_context[0] if frame.code_context else None,
+            short_path=short_path
         )
         stack.append(trace_frame)
 
@@ -45,8 +48,8 @@ def debug_trace(print_output: bool = True) -> Optional[List[TraceFrame]]:
     return stack
 
 
-def debug_trace_and_die() -> None:
-    result = debug_trace()
+def debug_trace_and_die(short_path: bool = True) -> None:
+    debug_trace(short_path=short_path)
     exit(1)
 
 
