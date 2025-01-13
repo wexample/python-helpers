@@ -1,4 +1,5 @@
 from typing import List, Optional, NamedTuple
+import os
 
 
 class TraceFrame(NamedTuple):
@@ -8,9 +9,20 @@ class TraceFrame(NamedTuple):
     code: Optional[str]
 
     def __str__(self) -> str:
-        base = f"{self.filename}:{self.lineno} in {self.function}"
+        # Format the base information
+        base = (
+            f"\n{'-' * 50}\n"
+            f"File     : {self.filename}\n"
+            f"Line     : {self.lineno}\n"
+            f"Function : {self.function}"
+        )
+
+        # Add code context if available
         if self.code:
-            return f"{base}\n  {self.code.strip()}"
+            code_section = (
+                f"\nCode     : {self.code.strip()}"
+            )
+            return f"{base}{code_section}"
         return base
 
 
