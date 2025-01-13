@@ -11,10 +11,11 @@ class TraceFrame(NamedTuple):
     short_path: bool
 
     def __str__(self) -> str:
+        path_with_line = f"{self.filename}:{self.lineno}"
         # Format the base information
         base = (
             f"\n{'-' * 50}\n"
-            f"File     : {cli_make_clickable_path(self.filename, short_title=self.short_path)}:{self.lineno}\n"
+            f"File     : {cli_make_clickable_path(path_with_line, short_title=self.short_path)}\n"
             f"Line     : {self.lineno}\n"
             f"Function : {self.function}"
         )
@@ -28,11 +29,12 @@ class TraceFrame(NamedTuple):
         return base
 
 
-def debug_trace(print_output: bool = True, short_path: bool = True) -> Optional[List[TraceFrame]]:
+def debug_trace(print_output: bool = True, short_path: bool = True, truncate_stack: int = 0) -> Optional[List[TraceFrame]]:
     import inspect
     stack = []
 
-    for frame in inspect.stack()[1:]:
+    # Inspect the stack and skip the first `truncate_stack` frames
+    for frame in inspect.stack()[1 + truncate_stack:]:
         trace_frame = TraceFrame(
             filename=frame.filename,
             lineno=frame.lineno,
@@ -42,16 +44,19 @@ def debug_trace(print_output: bool = True, short_path: bool = True) -> Optional[
         )
         stack.append(trace_frame)
 
+    # Reverse the stack to have the most recent call at the end
+    stack.reverse()
+
     if print_output:
         print('\n'.join(str(frame) for frame in stack))
         return None
     return stack
 
 
-def debug_trace_and_die(short_path: bool = True) -> None:
-    debug_trace(short_path=short_path)
+def debug_trace_and_die(short_path: bool = True, truncate_stack: int = 0) -> None:
+    debug_trace(short_path=short_path, truncate_stack=truncate_stack)
     exit(1)
 
 
 def dd() -> None:
-    debug_trace_and_die()
+    debug_trace_and_die(truncate_stack=2)
