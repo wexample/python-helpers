@@ -70,15 +70,6 @@ def debug_trace(
     truncate_stack: int = 0,
     exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None
 ) -> Optional[List["TraceFrame"]]:
-    """
-    Trace l'exécution du code avec différentes options de formatage des chemins.
-    
-    Args:
-        print_output: Si True, affiche la trace. Sinon, retourne les frames.
-        path_style: Style d'affichage des chemins ("full", "relative", "filename")
-        truncate_stack: Nombre de frames à ignorer au début de la stack
-        exception_info: Informations sur l'exception si applicable
-    """
     from wexample_helpers.helpers.trace import trace_format
 
     if exception_info and exception_info[2]:

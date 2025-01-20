@@ -10,7 +10,7 @@ class TraceFrame(NamedTuple):
     lineno: int
     function: str
     code: Optional[str]
-    path_style: DebugPathStyle = DebugPathStyle.RELATIVE
+    path_style: DebugPathStyle = DebugPathStyle.FULL
 
     def get_formatted_path(self) -> str:
         if self.path_style == DebugPathStyle.FULL:
