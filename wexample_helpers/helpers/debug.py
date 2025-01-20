@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 
 def get_traceback_frames(
     traceback: TracebackType,
-    path_style: DebugPathStyle = DebugPathStyle.FULL
+    path_style: DebugPathStyle = DebugPathStyle.FULL,
+    working_directory: Optional[str] = None
 ) -> List["TraceFrame"]:
     """Convert exception traceback frames to TraceFrame objects."""
     from wexample_helpers.classes.trace_frame import TraceFrame
@@ -34,7 +35,8 @@ def get_traceback_frames(
             lineno=current.tb_lineno,
             function=frame.f_code.co_name,
             code=code,
-            path_style=path_style
+            path_style=path_style,
+            working_directory=working_directory
         )
         frames.append(trace_frame)
         current = current.tb_next
@@ -44,7 +46,8 @@ def get_traceback_frames(
 
 def get_stack_frames(
     skip_frames: int = 0,
-    path_style: DebugPathStyle = DebugPathStyle.FULL
+    path_style: DebugPathStyle = DebugPathStyle.FULL,
+    working_directory: Optional[str] = None
 ) -> List["TraceFrame"]:
     """Convert stack frames to TraceFrame objects."""
     from wexample_helpers.classes.trace_frame import TraceFrame
@@ -56,7 +59,8 @@ def get_stack_frames(
             lineno=frame.lineno,
             function=frame.function,
             code=frame.code_context[0] if frame.code_context else None,
-            path_style=path_style
+            path_style=path_style,
+            working_directory=working_directory
         )
         frames.append(trace_frame)
 
@@ -68,14 +72,15 @@ def debug_trace(
     print_output: bool = True,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     truncate_stack: int = 0,
-    exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None
+    exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None,
+    working_directory: Optional[str] = None
 ) -> Optional[List["TraceFrame"]]:
     from wexample_helpers.helpers.trace import trace_format
 
     if exception_info and exception_info[2]:
-        frames = get_traceback_frames(exception_info[2], path_style)
+        frames = get_traceback_frames(exception_info[2], path_style, working_directory)
     else:
-        frames = get_stack_frames(truncate_stack, path_style)
+        frames = get_stack_frames(truncate_stack, path_style, working_directory)
 
     if print_output:
         print(trace_format(frames, exception_info))
@@ -83,10 +88,18 @@ def debug_trace(
     return frames
 
 
-def debug_trace_and_die(path_style: DebugPathStyle = DebugPathStyle.FULL, truncate_stack: int = 0) -> None:
-    debug_trace(path_style=path_style, truncate_stack=truncate_stack)
+def debug_trace_and_die(
+    path_style: DebugPathStyle = DebugPathStyle.FULL,
+    truncate_stack: int = 0,
+    working_directory: Optional[str] = None
+) -> None:
+    debug_trace(
+        path_style=path_style,
+        truncate_stack=truncate_stack,
+        working_directory=working_directory
+    )
     exit(1)
 
 
 def dd() -> None:
-    debug_trace_and_die(truncate_stack=2)
+    debug_trace_and_die(truncate_stack=2, working_directory=None)
