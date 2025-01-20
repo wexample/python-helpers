@@ -1,40 +1,20 @@
-from typing import List, Optional, NamedTuple
+import inspect
+from types import TracebackType
+from typing import List, Optional, TYPE_CHECKING
 
-from wexample_helpers.helpers.cli import cli_make_clickable_path
-
-
-class TraceFrame(NamedTuple):
-    filename: str
-    lineno: int
-    function: str
-    code: Optional[str]
-    short_path: bool
-
-    def __str__(self) -> str:
-        path_with_line = f"{self.filename}:{self.lineno}"
-        # Format the base information
-        base = (
-            f"\n{'-' * 50}\n"
-            f"File     : {cli_make_clickable_path(path_with_line, short_title=self.short_path)}\n"
-            f"Line     : {self.lineno}\n"
-            f"Function : {self.function}"
-        )
-
-        # Add code context if available
-        if self.code:
-            code_section = (
-                f"\nCode     : {self.code.strip()}"
-            )
-            return f"{base}{code_section}"
-        return base
+if TYPE_CHECKING:
+    from wexample_helpers.classes.trace_frame import TraceFrame
 
 
-def debug_trace(print_output: bool = True, short_path: bool = True, truncate_stack: int = 0) -> Optional[List[TraceFrame]]:
-    import inspect
-    stack = []
+def get_stack_frames(
+    skip_frames: int = 0,
+    short_path: bool = True
+) -> List["TraceFrame"]:
+    from wexample_helpers.classes.trace_frame import TraceFrame
 
-    # Inspect the stack and skip the first `truncate_stack` frames
-    for frame in inspect.stack()[1 + truncate_stack:]:
+    """Convert stack frames to TraceFrame objects."""
+    frames = []
+    for frame in inspect.stack()[1 + skip_frames:]:
         trace_frame = TraceFrame(
             filename=frame.filename,
             lineno=frame.lineno,
@@ -42,15 +22,31 @@ def debug_trace(print_output: bool = True, short_path: bool = True, truncate_sta
             code=frame.code_context[0] if frame.code_context else None,
             short_path=short_path
         )
-        stack.append(trace_frame)
+        frames.append(trace_frame)
 
-    # Reverse the stack to have the most recent call at the end
-    stack.reverse()
+    frames.reverse()
+    return frames
+
+
+def debug_trace(
+    print_output: bool = True,
+    short_path: bool = True,
+    truncate_stack: int = 0,
+    exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None
+) -> Optional[List["TraceFrame"]]:
+    from wexample_helpers.helpers.error import error_get_frames
+    from wexample_helpers.helpers.trace import trace_format
+
+    """Generate debug trace for either stack frames or exception traceback."""
+    if exception_info:
+        frames = error_get_frames(exception_info, short_path)
+    else:
+        frames = get_stack_frames(truncate_stack, short_path)
 
     if print_output:
-        print('\n'.join(str(frame) for frame in stack))
+        print(trace_format(frames, exception_info))
         return None
-    return stack
+    return frames
 
 
 def debug_trace_and_die(short_path: bool = True, truncate_stack: int = 0) -> None:
