@@ -37,7 +37,7 @@ def error_format(
     if not error:
         return
 
-    from wexample_helpers.helpers.trace import trace_print, trace_format
+    from wexample_helpers.helpers.trace import trace_format
     
     # Get frames from the exception traceback
     frames = trace_get_traceback_frames(
@@ -50,10 +50,7 @@ def error_format(
     if truncate_index != -1:
         frames = frames[:truncate_index]
     
-    # Format and print the error message first
-    error_type = type(error).__name__
-    error_message = str(error)
-    print(f"{error_type}: {error_message}")
-    
     # Then print the formatted traceback
     print(trace_format(frames))
+
+    print(f"{type(error).__name__}: {error}")
