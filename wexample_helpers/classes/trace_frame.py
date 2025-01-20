@@ -17,7 +17,9 @@ class TraceFrame(NamedTuple):
         """Get the path according to style and working directory."""
         path = self.filename
         if self.working_directory:
-            path = os.path.join(self.working_directory, os.path.basename(self.filename))
+            cwd = os.getcwd()
+            if path.startswith(cwd):
+                path = os.path.join(self.working_directory, os.path.relpath(path, cwd))
 
         if self.path_style == DebugPathStyle.FULL:
             return path
@@ -26,7 +28,7 @@ class TraceFrame(NamedTuple):
                 return os.path.relpath(path)
             except ValueError:
                 return path
-        else:  # FILENAME
+        else:
             return os.path.basename(path)
 
     def format_frame(self) -> str:
