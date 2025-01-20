@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from wexample_helpers.const.types import StringsList
 
@@ -39,3 +39,11 @@ class HasEnvKeys:
         import os
 
         return [key for key in required_keys if not os.environ.get(key)]
+
+    def get_env_parameter(self, key: str) -> Any:
+        import os
+
+        value = os.getenv(key)
+        if value is None:
+            raise ValueError(f'Environment variable "{key}" is not defined.')
+        return value
