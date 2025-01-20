@@ -3,7 +3,7 @@ from typing import Optional, List
 from wexample_helpers.classes.trace_frame import TraceFrame
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
-from wexample_helpers.helpers.debug import get_traceback_frames
+from wexample_helpers.helpers.trace import trace_get_traceback_frames
 
 
 def error_get_truncate_index(frames: List[TraceFrame], error: Exception) -> int:
@@ -40,7 +40,7 @@ def error_format(
     from wexample_helpers.helpers.trace import trace_print, trace_format
     
     # Get frames from the exception traceback
-    frames = get_traceback_frames(
+    frames = trace_get_traceback_frames(
         error.__traceback__,
         path_style=path_style,
         paths_map=paths_map
