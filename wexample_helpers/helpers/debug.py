@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 def get_traceback_frames(
     traceback: TracebackType,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    working_directory: Optional[str] = None
+    paths_map: Optional[dict] = None
 ) -> List["TraceFrame"]:
     """Convert exception traceback frames to TraceFrame objects."""
     from wexample_helpers.classes.trace_frame import TraceFrame
@@ -36,7 +36,7 @@ def get_traceback_frames(
             function=frame.f_code.co_name,
             code=code,
             path_style=path_style,
-            working_directory=working_directory
+            paths_map=paths_map
         )
         frames.append(trace_frame)
         current = current.tb_next
@@ -47,27 +47,27 @@ def get_traceback_frames(
 def debug_trace(
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     truncate_stack: int = 0,
-    working_directory: Optional[str] = None
+    paths_map: Optional[dict] = None
 ) -> None:
     trace_print(
         truncate_stack=truncate_stack,
         path_style=path_style,
-        working_directory=working_directory
+        paths_map=paths_map
     )
 
 
 def debug_trace_and_die(
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     truncate_stack: int = 0,
-    working_directory: Optional[str] = None
+    paths_map: Optional[dict] = None
 ) -> None:
     debug_trace(
         path_style=path_style,
         truncate_stack=truncate_stack,
-        working_directory=working_directory
+        paths_map=paths_map
     )
     exit(1)
 
 
 def dd() -> None:
-    debug_trace_and_die(truncate_stack=2, working_directory=None)
+    debug_trace_and_die(truncate_stack=2, paths_map=None)

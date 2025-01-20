@@ -11,15 +11,19 @@ class TraceFrame(NamedTuple):
     function: str
     code: Optional[str]
     path_style: DebugPathStyle = DebugPathStyle.FULL
-    working_directory: Optional[str] = None
+    paths_map: Optional[dict] = None
 
     def get_formatted_path(self) -> str:
-        """Get the path according to style and working directory."""
+        """Get the path according to style and paths mapping."""
         path = self.filename
-        if self.working_directory:
-            cwd = os.getcwd()
-            if path.startswith(cwd):
-                path = os.path.join(self.working_directory, os.path.relpath(path, cwd))
+        
+        if self.paths_map:
+            # Try to find a matching path in the mapping
+            for prod_path, local_path in self.paths_map.items():
+                if path.startswith(prod_path):
+                    # Replace the local path with the production path
+                    path = path.replace(prod_path, local_path, 1)
+                    break
 
         if self.path_style == DebugPathStyle.FULL:
             return path
