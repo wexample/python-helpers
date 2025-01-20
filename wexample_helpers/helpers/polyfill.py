@@ -10,3 +10,9 @@ def polyfill_import(classes: Any) -> None:
     to consider import as useless.
     """
     pass
+
+def polyfill_not_implemented_error() -> None:
+    import inspect
+
+    function_name = inspect.currentframe().f_back.f_code.co_name
+    raise NotImplementedError(f"{function_name} must be implemented by subclass")
