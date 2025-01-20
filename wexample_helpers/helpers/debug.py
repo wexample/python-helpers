@@ -34,14 +34,8 @@ def debug_trace(
     truncate_stack: int = 0,
     exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None
 ) -> Optional[List["TraceFrame"]]:
-    from wexample_helpers.helpers.error import error_get_frames
     from wexample_helpers.helpers.trace import trace_format
-
-    """Generate debug trace for either stack frames or exception traceback."""
-    if exception_info:
-        frames = error_get_frames(exception_info, short_path)
-    else:
-        frames = get_stack_frames(truncate_stack, short_path)
+    frames = get_stack_frames(truncate_stack, short_path)
 
     if print_output:
         print(trace_format(frames, exception_info))
