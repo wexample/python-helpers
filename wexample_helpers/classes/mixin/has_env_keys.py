@@ -1,4 +1,6 @@
-from typing import List, Mapping
+from typing import List
+
+from wexample_helpers.const.types import StringsList
 
 
 class HasEnvKeys:
@@ -24,19 +26,16 @@ class HasEnvKeys:
         Validates that all required environment variables are set.
         Raises MissingRequiredEnvVarError if any required variable is missing.
         """
-        required_keys = self.get_expected_env_keys()
-        env_registry = self._get_env_registry()
-        missing_keys = [key for key in required_keys if not env_registry.get(key)]
+        missing_keys = self._get_missing_env_keys(
+            self.get_expected_env_keys()
+        )
 
         if missing_keys:
             from wexample_helpers.errors.missing_required_env_var_error import MissingRequiredEnvVarError
 
             raise MissingRequiredEnvVarError(missing_keys)
 
-    def _get_env_registry(self) -> Mapping[str, str]:
-        """
-        Returns the environment registry to use for validation.
-        Can be overridden by child classes to use a different registry.
-        """
+    def _get_missing_env_keys(self, required_keys: StringsList) -> StringsList:
         import os
-        return os.environ
+
+        return [key for key in required_keys if not os.environ.get(key)]
