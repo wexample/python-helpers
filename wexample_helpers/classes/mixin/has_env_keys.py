@@ -1,5 +1,4 @@
-import os
-from typing import List
+from typing import List, Mapping
 
 
 class HasEnvKeys:
@@ -26,9 +25,18 @@ class HasEnvKeys:
         Raises MissingRequiredEnvVarError if any required variable is missing.
         """
         required_keys = self.get_expected_env_keys()
-        missing_keys = [key for key in required_keys if not os.getenv(key)]
+        env_registry = self._get_env_registry()
+        missing_keys = [key for key in required_keys if not env_registry.get(key)]
 
         if missing_keys:
             from wexample_helpers.errors.missing_required_env_var_error import MissingRequiredEnvVarError
 
             raise MissingRequiredEnvVarError(missing_keys)
+
+    def _get_env_registry(self) -> Mapping[str, str]:
+        """
+        Returns the environment registry to use for validation.
+        Can be overridden by child classes to use a different registry.
+        """
+        import os
+        return os.environ
