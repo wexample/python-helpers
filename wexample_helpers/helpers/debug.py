@@ -1,8 +1,8 @@
-import inspect
 from types import TracebackType
 from typing import List, Optional, TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+from wexample_helpers.helpers.trace import trace_print
 
 if TYPE_CHECKING:
     from wexample_helpers.classes.trace_frame import TraceFrame
@@ -44,48 +44,16 @@ def get_traceback_frames(
     return frames
 
 
-def get_stack_frames(
-    skip_frames: int = 0,
-    path_style: DebugPathStyle = DebugPathStyle.FULL,
-    working_directory: Optional[str] = None
-) -> List["TraceFrame"]:
-    """Convert stack frames to TraceFrame objects."""
-    from wexample_helpers.classes.trace_frame import TraceFrame
-
-    frames = []
-    for frame in inspect.stack()[1 + skip_frames:]:
-        trace_frame = TraceFrame(
-            filename=frame.filename,
-            lineno=frame.lineno,
-            function=frame.function,
-            code=frame.code_context[0] if frame.code_context else None,
-            path_style=path_style,
-            working_directory=working_directory
-        )
-        frames.append(trace_frame)
-
-    frames.reverse()
-    return frames
-
-
 def debug_trace(
-    print_output: bool = True,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     truncate_stack: int = 0,
-    exception_info: Optional[tuple[type[BaseException], BaseException, TracebackType]] = None,
     working_directory: Optional[str] = None
-) -> Optional[List["TraceFrame"]]:
-    from wexample_helpers.helpers.trace import trace_format
-
-    if exception_info and exception_info[2]:
-        frames = get_traceback_frames(exception_info[2], path_style, working_directory)
-    else:
-        frames = get_stack_frames(truncate_stack, path_style, working_directory)
-
-    if print_output:
-        print(trace_format(frames, exception_info))
-        return None
-    return frames
+) -> None:
+    trace_print(
+        truncate_stack=truncate_stack,
+        path_style=path_style,
+        working_directory=working_directory
+    )
 
 
 def debug_trace_and_die(
