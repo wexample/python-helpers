@@ -1,5 +1,5 @@
 import os
-from wexample_helpers.const.types import StringsList
+from typing import List
 
 
 class HasEnvKeys:
@@ -13,7 +13,7 @@ class HasEnvKeys:
         super().model_post_init(*args, **kwargs)
         self.validate_env_keys()
 
-    def get_expected_env_keys(self) -> StringsList:
+    def get_expected_env_keys(self) -> List[str]:
         """
         Returns a list of required environment variable keys.
         Should be overridden by child classes.
@@ -23,11 +23,12 @@ class HasEnvKeys:
     def validate_env_keys(self) -> None:
         """
         Validates that all required environment variables are set.
-        Raises ValueError if any required variable is missing.
+        Raises MissingRequiredEnvVarError if any required variable is missing.
         """
         required_keys = self.get_expected_env_keys()
         missing_keys = [key for key in required_keys if not os.getenv(key)]
 
         if missing_keys:
-            error_message = f"Missing required environment variables: {', '.join(missing_keys)}"
-            raise ValueError(error_message)
+            from wexample_helpers.errors.missing_required_env_var_error import MissingRequiredEnvVarError
+
+            raise MissingRequiredEnvVarError(missing_keys)
