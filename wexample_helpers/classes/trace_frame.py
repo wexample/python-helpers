@@ -1,5 +1,7 @@
+import os
 from typing import NamedTuple, Optional
 
+from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
@@ -8,14 +10,25 @@ class TraceFrame(NamedTuple):
     lineno: int
     function: str
     code: Optional[str]
-    short_path: bool
+    path_style: DebugPathStyle = DebugPathStyle.RELATIVE
+
+    def get_formatted_path(self) -> str:
+        if self.path_style == DebugPathStyle.FULL:
+            return self.filename
+        elif self.path_style == DebugPathStyle.RELATIVE:
+            try:
+                return os.path.relpath(self.filename)
+            except ValueError:
+                return self.filename
+        else:
+            return self.filename
 
     def format_frame(self) -> str:
         path_with_line = f"{self.filename}:{self.lineno}"
         # Format the base information
         base = (
             f"\n{'-' * 50}\n"
-            f"File     : {cli_make_clickable_path(path_with_line, short_title=self.short_path)}\n"
+            f"File     : {cli_make_clickable_path(path_with_line, short_title=self.get_formatted_path())}\n"
             f"Line     : {self.lineno}\n"
             f"Function : {self.function}"
         )
