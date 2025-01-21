@@ -1,4 +1,4 @@
-from typing import Union, List, TypeVar, Any
+from typing import Union, List, TypeVar, Any, Optional
 
 T = TypeVar('T', bound=type)
 
@@ -14,7 +14,10 @@ def polyfill_import(classes: Any, *args, **kwargs) -> None:
     pass
 
 
-def polyfill_register_global(classes: Union[T, List[T], tuple[T, ...]]) -> None:
+def polyfill_register_global(
+    classes: Union[T, list[T], tuple[T, ...]],
+    context: Optional[dict] = None
+) -> None:
     """
     Registers classes in the global namespace to fix Pydantic type resolution issues.
     This is particularly useful when Pydantic needs to resolve forward references or
@@ -34,12 +37,18 @@ def polyfill_register_global(classes: Union[T, List[T], tuple[T, ...]]) -> None:
     if not isinstance(classes, (list, tuple)):
         classes = [classes]
 
-    caller_globals = inspect.currentframe().f_back.f_globals
+    if context is None:
+        caller_frame = inspect.currentframe().f_back
+        if caller_frame is None:
+            raise RuntimeError("Unable to find calling frame")
+        context = caller_frame.f_globals
+
     for cls in classes:
         if not isinstance(cls, type):
             raise TypeError(f"Expected a class, got {type(cls)}")
         cls_name = cls.__name__
-        caller_globals[cls_name] = cls
+        context[cls_name] = cls
+
 
 
 def polyfill_not_implemented_error() -> None:
