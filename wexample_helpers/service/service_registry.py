@@ -40,8 +40,7 @@ class ServiceRegistry(Registry[Type[ServiceMixin]]):
         if service_class:
             # Rebuild model if it's a Pydantic model
             if hasattr(service_class, 'model_rebuild'):
-                from wexample_helpers.helpers.polyfill import polyfill_import_kernel_and_rebuild
-                polyfill_import_kernel_and_rebuild(service_class)
+                service_class.model_rebuild()
 
             # Create instance with kernel
             instance = service_class(**kwargs)
@@ -77,5 +76,5 @@ class ServiceRegistry(Registry[Type[ServiceMixin]]):
         return self._service_instances
 
     def all_classes_models_rebuild(self):
-        from wexample_helpers.helpers.polyfill import polyfill_import_kernel_and_rebuild
+        from src.helpers.polyfill import polyfill_import_kernel_and_rebuild
         polyfill_import_kernel_and_rebuild(list(self.all_classes()))

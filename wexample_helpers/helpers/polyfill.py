@@ -1,6 +1,4 @@
-from typing import Union, List, Type,TypeVar, Any
-
-from pydantic import BaseModel
+from typing import Union, List, TypeVar, Any
 
 T = TypeVar('T', bound=type)
 
@@ -42,23 +40,6 @@ def polyfill_register_global(classes: Union[T, List[T], tuple[T, ...]]) -> None:
             raise TypeError(f"Expected a class, got {type(cls)}")
         cls_name = cls.__name__
         caller_globals[cls_name] = cls
-
-
-def polyfill_import_kernel_and_rebuild(
-    pydantic_models: Union[Type[BaseModel], List[Type[BaseModel]]]
-) -> None:
-    # Fix import error.
-    from src.utils.kernel import Kernel
-    from wexample_app.utils.abstract_kernel import AbstractKernel
-
-    polyfill_register_global([Kernel, AbstractKernel])
-
-    # Handle both single model and list of models
-    if isinstance(pydantic_models, list):
-        for model in pydantic_models:
-            model.model_rebuild()
-    else:
-        pydantic_models.model_rebuild()
 
 
 def polyfill_not_implemented_error() -> None:
