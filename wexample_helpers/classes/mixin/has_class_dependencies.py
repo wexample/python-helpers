@@ -3,7 +3,7 @@ from typing_extensions import List, Any
 from wexample_helpers.helpers.polyfill import polyfill_register_global
 
 
-class HasClassDependencies(object):
+class HasClassDependencies:
     @classmethod
     def get_class_dependencies(cls) -> List[Any]:
         """
