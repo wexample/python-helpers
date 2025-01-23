@@ -59,6 +59,13 @@ def file_read(file_path: str) -> str:
         return file.read()
 
 
+def file_read_or_default(file_path: str, default: str = "") -> str:
+    try:
+        return file_read(file_path=file_path)
+    except Exception as e:
+        return default
+
+
 def file_remove_file_if_exists(file: str) -> None:
     if os.path.isfile(file) or os.path.islink(file):
         os.remove(file)
