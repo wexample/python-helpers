@@ -18,7 +18,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = []
+dependencies = [
+    "pip-tools",
+    "pydantic",
+    "pytest",
+]
 
 [project.readme]
 file = "README.md"
