@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional, List, Type
 
-from src.utils.service.registry import Registry
+from wexample_helpers.service.registry import Registry
 
 
 class RegistryContainerMixin:

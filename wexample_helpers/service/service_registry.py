@@ -1,7 +1,7 @@
 from typing import Dict, Type, Optional, List, Any
 
-from src.utils.service.registry import Registry
 from wexample_app.utils.service.service_mixin import ServiceMixin
+from wexample_helpers.service.registry import Registry
 
 
 class ServiceRegistry(Registry[Type[ServiceMixin]]):
