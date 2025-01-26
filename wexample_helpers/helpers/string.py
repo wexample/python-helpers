@@ -43,3 +43,18 @@ def string_remove_prefix(string: str, prefix: str) -> str:
     :return: String with prefix removed if found at start
     """
     return re.sub(f'^{re.escape(prefix)}', '', string)
+
+
+def string_replace_params(text: str, params: dict) -> str:
+    """
+    Replace parameters in a text string with values from a dictionary.
+    Each parameter in the text should be in the format %param_name%.
+    Example:
+        text = "Hello %name%, you are %age% years old"
+        params = {"name": "John", "age": "30"}
+        result = "Hello John, you are 30 years old"
+    """
+    result = text
+    for key, value in params.items():
+        result = result.replace(f'%{key}%', str(value))
+    return result
