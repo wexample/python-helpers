@@ -31,6 +31,3 @@ def debug_trace_and_die(
     )
     exit(1)
 
-
-def dd() -> None:
-    debug_trace_and_die(truncate_stack=2, paths_map=None)
