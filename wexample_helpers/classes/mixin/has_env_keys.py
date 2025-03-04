@@ -6,14 +6,6 @@ from wexample_helpers.const.types import StringsList
 class HasEnvKeys:
     """Mixin class to handle environment variables validation."""
 
-    def model_post_init(self, *args, **kwargs):
-        """
-        Validate environment variables right after initialization.
-        This method is called by Pydantic after the model is initialized.
-        """
-        super().model_post_init(*args, **kwargs)
-        self.validate_env_keys()
-
     def get_expected_env_keys(self) -> List[str]:
         """
         Returns a list of required environment variable keys.
@@ -21,7 +13,7 @@ class HasEnvKeys:
         """
         return []
 
-    def validate_env_keys(self) -> None:
+    def _validate_env_keys(self) -> None:
         """
         Validates that all required environment variables are set.
         Raises MissingRequiredEnvVarError if any required variable is missing.
