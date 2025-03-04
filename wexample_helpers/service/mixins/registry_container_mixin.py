@@ -31,7 +31,7 @@ class RegistryContainerMixin:
             registry.register_multiple(items)
         else:
             for item in items:
-                if hasattr(item, 'get_name'):
+                if hasattr(item, 'get_snake_short_class_name'):
                     key = item.get_snake_short_class_name()
                 else:
                     key = item.__name__
