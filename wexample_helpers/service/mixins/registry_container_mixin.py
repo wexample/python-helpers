@@ -18,12 +18,13 @@ class RegistryContainerMixin:
             self._registries[registry_name] = (self._get_registry_class_type())(container=self)
         return self._registries[registry_name]
 
-    def register_item(self, registry_name: str, key: str, item: Any) -> None:
+    def register_item(self, registry_name: str, key: str, item: Any) -> Registry:
         """Register an item in a specific registry."""
         registry = self.get_registry(registry_name)
         registry.register(key, item)
+        return registry
 
-    def register_items(self, registry_name: str, items: List[Any]) -> None:
+    def register_items(self, registry_name: str, items: List[Any]) -> Registry:
         """Register multiple items at once in a specific registry."""
         registry = self.get_registry(registry_name)
         if hasattr(registry, 'register_multiple'):
@@ -35,6 +36,7 @@ class RegistryContainerMixin:
                 else:
                     key = item.__name__
                 registry.register(key, item)
+        return registry
 
     def get_item(self, registry_name: str, key: str, **kwargs) -> Optional[Any]:
         """Retrieve an item from a specific registry by its key."""
