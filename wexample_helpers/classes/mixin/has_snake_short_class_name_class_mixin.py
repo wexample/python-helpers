@@ -1,3 +1,5 @@
+from typing import Optional
+
 from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import (
     HasShortClassNameClassMixin,
 )
@@ -9,6 +11,13 @@ class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
         from wexample_helpers.helpers.string import string_to_snake_case
 
         return string_to_snake_case(cls.get_short_class_name())
+
+    @classmethod
+    def get_snake_class_name_suffix(cls) -> Optional[str]:
+        from wexample_helpers.helpers.string import string_to_snake_case
+
+        suffix = cls.get_class_name_suffix()
+        return string_to_snake_case(suffix) if suffix is not None else None
 
     @classmethod
     def get_name(cls) -> str:
