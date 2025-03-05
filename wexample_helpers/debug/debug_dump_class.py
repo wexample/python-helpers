@@ -1,7 +1,9 @@
+import inspect
 from typing import Dict, Optional, Set, Type
 
 from wexample_helpers.const.colors import Colors
 from wexample_helpers.debug.abstract_debug import AbstractDebug
+from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
 class DebugDumpClass(AbstractDebug):
@@ -28,7 +30,8 @@ class DebugDumpClass(AbstractDebug):
             "type": "class",
             "name": cls.__name__,
             "module": cls.__module__,
-            "depth": self.depth
+            "depth": self.depth,
+            "source_file": inspect.getfile(cls)
         }
 
         # Collect attributes
@@ -62,6 +65,9 @@ class DebugDumpClass(AbstractDebug):
         class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
         if data['module'] != "__main__":
             class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
+        if "source_file" in data:
+            clickable_path = cli_make_clickable_path(data['source_file'])
+            class_info += f" {Colors.YELLOW}[{clickable_path}]{Colors.RESET}"
         print(class_info)
 
         # Print attributes

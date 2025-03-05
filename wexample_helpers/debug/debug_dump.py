@@ -1,18 +1,28 @@
 import inspect
-from typing import Any, Dict, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
-from wexample_helpers.const.colors import Colors
 from wexample_helpers.debug.abstract_debug import AbstractDebug
-
+from wexample_helpers.const.colors import Colors
+from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 class DebugDump(AbstractDebug):
     def __init__(self, obj: Any, max_depth: int = 100):
         self.obj = obj
         self.max_depth = max_depth
+        self.current_depth = 0
+        # Get caller frame info
+        frame = inspect.currentframe()
+        caller = frame.f_back if frame else None
+        self.caller_info = inspect.getframeinfo(caller) if caller else None
         super().__init__()
-
+        
     def collect_data(self) -> None:
         self.data = self._collect_data(self.obj)
+        if self.caller_info:
+            self.data["dump_location"] = {
+                "file": self.caller_info.filename,
+                "line": self.caller_info.lineno
+            }
 
     def _collect_data(self, obj: Any, depth: int = 0, seen: Optional[Set[int]] = None) -> Dict:
         if seen is None:
@@ -96,6 +106,8 @@ class DebugDump(AbstractDebug):
             class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
             if data['module'] != "__main__":
                 class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
+            if "source_file" in data:
+                class_info += f" {Colors.YELLOW}[{data['source_file']}]{Colors.RESET}"
             print(class_info)
             
             if "attributes" in data:
@@ -108,7 +120,13 @@ class DebugDump(AbstractDebug):
             return
             
         if "instance_of" in data:
-            print(f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}")
+            instance_info = f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}"
+            if "dump_location" in data:
+                location = data['dump_location']
+                clickable_path = cli_make_clickable_path(location['file'])
+                instance_info += f" {Colors.YELLOW}[Dumped at {clickable_path}:{location['line']}]{Colors.RESET}"
+            print(instance_info)
+            
             if "class_data" in data:
                 self._print_data(data["class_data"], indent + "  ")
             
