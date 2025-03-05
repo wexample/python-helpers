@@ -1,4 +1,3 @@
-from datetime import datetime
 from wexample_helpers.test.classes.pydantic_inheritance_main import PydanticInheritanceMain
 from wexample_helpers.debug.debug_dump import DebugDump
 
