@@ -1,8 +1,10 @@
 import unittest
-from wexample_helpers.test.classes.simple_class import SimpleObject
+
 
 class TestSimpleObject(unittest.TestCase):
     def test_instance_creation(self):
+        from wexample_helpers.test.classes.simple_class import SimpleObject
+
         obj1 = SimpleObject()
         self.assertIsInstance(obj1, SimpleObject)
         self.assertEqual(obj1.name, "default")

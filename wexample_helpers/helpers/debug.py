@@ -2,14 +2,19 @@ import inspect
 from typing import Any
 from typing import Optional, TYPE_CHECKING
 
-from colorama import Fore, Style
-
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.helpers.trace import trace_print
 
 if TYPE_CHECKING:
     pass
 
+# ANSI color codes
+class Colors:
+    BLUE = '\033[34m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    RESET = '\033[0m'
+    BRIGHT = '\033[1m'
 
 def debug_trace(
         path_style: DebugPathStyle = DebugPathStyle.FULL,
@@ -45,40 +50,40 @@ def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> N
         _seen = set()
 
     if _depth > max_depth:
-        print(f"{' ' * _depth}{Fore.YELLOW}[Max depth reached]{Style.RESET_ALL}")
+        print(f"{' ' * _depth}{Colors.YELLOW}[Max depth reached]{Colors.RESET}")
         return
 
     obj_id = id(obj)
     if obj_id in _seen and not isinstance(obj, (int, float, str, bool)):
-        print(f"{' ' * _depth}{Fore.YELLOW}[Circular reference]{Style.RESET_ALL}")
+        print(f"{' ' * _depth}{Colors.YELLOW}[Circular reference]{Colors.RESET}")
         return
     _seen.add(obj_id)
 
     indent = ' ' * _depth
     obj_type = type(obj).__name__
 
-    type_str = f"{Fore.BLUE}{obj_type}{Style.RESET_ALL}"
+    type_str = f"{Colors.BLUE}{obj_type}{Colors.RESET}"
 
     if obj is None:
-        print(f"{indent}{type_str}: {Style.BRIGHT}None{Style.RESET_ALL}")
+        print(f"{indent}{type_str}: {Colors.BRIGHT}None{Colors.RESET}")
 
     elif isinstance(obj, (int, float, str, bool)):
-        print(f"{indent}{type_str}: {Fore.GREEN}{repr(obj)}{Style.RESET_ALL}")
+        print(f"{indent}{type_str}: {Colors.GREEN}{repr(obj)}{Colors.RESET}")
 
     elif isinstance(obj, (list, tuple)):
         print(f"{indent}{type_str} ({len(obj)} elements):")
         for i, item in enumerate(obj):
-            print(f"{indent}  {Style.BRIGHT}[{i}]{Style.RESET_ALL} →")
+            print(f"{indent}  {Colors.BRIGHT}[{i}]{Colors.RESET} →")
             debug_dump(item, max_depth, _depth + 4, _seen)
 
     elif isinstance(obj, dict):
         print(f"{indent}{type_str} ({len(obj)} elements):")
         for key, value in obj.items():
-            print(f"{indent}  {Style.BRIGHT}{repr(key)}{Style.RESET_ALL} →")
+            print(f"{indent}  {Colors.BRIGHT}{repr(key)}{Colors.RESET} →")
             debug_dump(value, max_depth, _depth + 4, _seen)
 
     elif inspect.isfunction(obj) or inspect.ismethod(obj):
-        print(f"{indent}{type_str}: {Fore.GREEN}{obj.__name__}{Style.RESET_ALL}")
+        print(f"{indent}{type_str}: {Colors.GREEN}{obj.__name__}{Colors.RESET}")
 
     else:
         print(f"{indent}{type_str}:")
@@ -88,10 +93,10 @@ def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> N
 
         if attributes:
             for name, value in attributes.items():
-                print(f"{indent}  {Style.BRIGHT}{name}{Style.RESET_ALL} →")
+                print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
                 debug_dump(value, max_depth, _depth + 4, _seen)
         else:
-            print(f"{indent}  {Fore.YELLOW}[No public attribute]{Style.RESET_ALL}")
+            print(f"{indent}  {Colors.YELLOW}[No public attribute]{Colors.RESET}")
 
 
 def debug_dump_and_die(*args, **kwargs) -> None:
@@ -99,8 +104,29 @@ def debug_dump_and_die(*args, **kwargs) -> None:
     exit()
 
 
-def dd(*args, **kwargs) -> None:
-    debug_dump_and_die(*args, **kwargs)
+def debug_class_info(cls_or_obj, title: str = None) -> None:
+    """
+    Print detailed information about a class or object.
+    """
+    target_class = cls_or_obj if isinstance(cls_or_obj, type) else type(cls_or_obj)
+
+    if title:
+        print(f"\n=== {title} ===")
+
+    print(f"Class: {target_class.__name__}")
+    print(f"Module: {target_class.__module__}")
+    print("\nMRO (Method Resolution Order):")
+    for i, cls in enumerate(target_class.__mro__):
+        print(f"  {i}. {cls.__module__}.{cls.__name__}")
+
+    print("\nBases:")
+    for base in target_class.__bases__:
+        print(f"  - {base.__module__}.{base.__name__}")
+
+    print("\nAttributes and Methods:")
+    for name, value in target_class.__dict__.items():
+        if not name.startswith('__'):
+            print(f"  - {name}: {type(value)}")
 
 
 def debug_breakpoint(message: str = None) -> None:
@@ -115,3 +141,7 @@ def debug_breakpoint(message: str = None) -> None:
 
     import pdb
     pdb.set_trace()
+
+
+def dd(*args, **kwargs) -> None:
+    debug_dump_and_die(*args, **kwargs)
