@@ -45,6 +45,48 @@ def debug_trace_and_die(
     exit(1)
 
 
+def _format_class_hierarchy(cls, depth=0, seen=None):
+    if seen is None:
+        seen = set()
+    
+    if cls in seen:
+        return f"{' ' * depth}{Colors.YELLOW}↻ {cls.__name__} (circular){Colors.RESET}"
+    seen.add(cls)
+    
+    result = []
+    class_info = f"{' ' * depth}{Colors.BLUE}→ {cls.__name__}{Colors.RESET}"
+    
+    # Add module info
+    if cls.__module__ != "__main__":
+        class_info += f" {Colors.GREEN}({cls.__module__}){Colors.RESET}"
+    
+    result.append(class_info)
+    
+    # Add attributes
+    attrs = {name: value for name, value in cls.__dict__.items() 
+            if not name.startswith('__') and not callable(value)}
+    if attrs:
+        for name, value in attrs.items():
+            result.append(f"{' ' * (depth + 2)}{Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{repr(value)}{Colors.RESET}")
+    
+    # Recursively process base classes
+    for base in cls.__bases__:
+        if base is not object:  # Skip the base object class
+            result.extend(_format_class_hierarchy(base, depth + 4, seen.copy()))
+    
+    return "\n".join(result)
+
+def debug_class_info(cls_or_obj, title: str = None) -> None:
+    """
+    Print detailed information about a class or object with improved hierarchy visualization.
+    """
+    target_class = cls_or_obj if isinstance(cls_or_obj, type) else type(cls_or_obj)
+
+    if title:
+        print(f"\n{Colors.BRIGHT}=== {title} ==={Colors.RESET}")
+
+    print(_format_class_hierarchy(target_class))
+
 def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> None:
     if _seen is None:
         _seen = set()
@@ -60,8 +102,25 @@ def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> N
     _seen.add(obj_id)
 
     indent = ' ' * _depth
-    obj_type = type(obj).__name__
+    
+    if inspect.isclass(obj):
+        print(_format_class_hierarchy(obj, _depth))
+        return
+    
+    if hasattr(obj, '__class__') and not isinstance(obj, (int, float, str, bool, list, tuple, dict)):
+        print(f"{indent}{Colors.BLUE}Instance of {obj.__class__.__name__}{Colors.RESET}")
+        print(_format_class_hierarchy(obj.__class__, _depth + 2))
+        
+        instance_attrs = {name: value for name, value in inspect.getmembers(obj)
+                        if not name.startswith('_') and not callable(value)}
+        if instance_attrs:
+            print(f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}")
+            for name, value in instance_attrs.items():
+                print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
+                debug_dump(value, max_depth, _depth + 4, _seen)
+        return
 
+    obj_type = type(obj).__name__
     type_str = f"{Colors.BLUE}{obj_type}{Colors.RESET}"
 
     if obj is None:
@@ -102,31 +161,6 @@ def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> N
 def debug_dump_and_die(*args, **kwargs) -> None:
     debug_dump(*args, **kwargs)
     exit()
-
-
-def debug_class_info(cls_or_obj, title: str = None) -> None:
-    """
-    Print detailed information about a class or object.
-    """
-    target_class = cls_or_obj if isinstance(cls_or_obj, type) else type(cls_or_obj)
-
-    if title:
-        print(f"\n=== {title} ===")
-
-    print(f"Class: {target_class.__name__}")
-    print(f"Module: {target_class.__module__}")
-    print("\nMRO (Method Resolution Order):")
-    for i, cls in enumerate(target_class.__mro__):
-        print(f"  {i}. {cls.__module__}.{cls.__name__}")
-
-    print("\nBases:")
-    for base in target_class.__bases__:
-        print(f"  - {base.__module__}.{base.__name__}")
-
-    print("\nAttributes and Methods:")
-    for name, value in target_class.__dict__.items():
-        if not name.startswith('__'):
-            print(f"  - {name}: {type(value)}")
 
 
 def debug_breakpoint(message: str = None) -> None:
