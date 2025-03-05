@@ -69,8 +69,18 @@ class DebugDump(AbstractDebug):
                 "source_file": inspect.getfile(obj.__class__)
             }
 
-            # Collect instance attributes
+            # Collect instance attributes and properties
             attrs = {}
+            for name, value in obj.__class__.__dict__.items():
+                if isinstance(value, property):
+                    attrs[name] = {
+                        "type": "property",
+                        "has_getter": value.fget is not None,
+                        "has_setter": value.fset is not None,
+                        "has_deleter": value.fdel is not None
+                    }
+                    
+            # Collect regular attributes
             for name, value in obj.__dict__.items():
                 if not name.startswith('__'):
                     attrs[name] = self._collect_data(value, depth + 1, seen.copy())

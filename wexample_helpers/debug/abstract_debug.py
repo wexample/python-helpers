@@ -69,12 +69,23 @@ class AbstractDebug(ABC):
         visibility = self._get_attribute_visibility(name)
         value_type = value.get('type', 'unknown')
         
-        return (
-            f"{indent}  {Colors.BRIGHT}{name}:{Colors.RESET}\n"
-            f"{indent}    {Colors.BLUE}type:{Colors.RESET} {value_type}\n"
-            f"{indent}    {Colors.BLUE}visibility:{Colors.RESET} {visibility}\n"
-            f"{indent}    {Colors.BLUE}value:{Colors.RESET} {Colors.GREEN}{value.get('value', '')}{Colors.RESET}"
-        )
+        result = [
+            f"{indent}  {Colors.BRIGHT}{name}:{Colors.RESET}",
+            f"{indent}    {Colors.BLUE}type:{Colors.RESET} {value_type}",
+            f"{indent}    {Colors.BLUE}visibility:{Colors.RESET} {visibility}"
+        ]
+        
+        if value_type == "property":
+            if value.get("has_getter"):
+                result.append(f"{indent}    {Colors.BLUE}getter:{Colors.RESET} yes")
+            if value.get("has_setter"):
+                result.append(f"{indent}    {Colors.BLUE}setter:{Colors.RESET} yes")
+            if value.get("has_deleter"):
+                result.append(f"{indent}    {Colors.BLUE}deleter:{Colors.RESET} yes")
+        else:
+            result.append(f"{indent}    {Colors.BLUE}value:{Colors.RESET} {Colors.GREEN}{value.get('value', '')}{Colors.RESET}")
+            
+        return "\n".join(result)
 
     def _print_data(self, data: Dict, indent: str = "") -> None:
         """Print debug data with consistent formatting."""
