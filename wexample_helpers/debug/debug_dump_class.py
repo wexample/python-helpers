@@ -54,38 +54,38 @@ class DebugDumpClass(AbstractDebug):
         return result
 
     def print(self) -> None:
-        self._print_hierarchy(self.data)
+        super().print()
 
-    def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
-        class_info = f"{indent}{Colors.BLUE}→ {name}{Colors.RESET}"
-        if module != "__main__":
-            class_info += f" {Colors.GREEN}({module}){Colors.RESET}"
-        return class_info
+    # def _print_hierarchy(self, data: Dict, indent: str = "") -> None:
+    #     if data.get("type") == "circular":
+    #         print(f"{indent}{Colors.YELLOW}↻ {data['name']} (circular){Colors.RESET}")
+    #         return
 
-    def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
-        clickable_path = cli_make_clickable_path(path)
-        if line is not None:
-            clickable_path += f":{line}"
-        return f"{indent}    {Colors.YELLOW}File: {clickable_path}{Colors.RESET}"
-
-    def _print_hierarchy(self, data: Dict, indent: str = "") -> None:
-        if data.get("type") == "circular":
-            print(f"{indent}{Colors.YELLOW}↻ {data['name']} (circular){Colors.RESET}")
-            return
-
-        # Print class name and module
-        print(self._format_class_name(data['name'], data['module'], indent))
+    #     # Print class name and module
+    #     print(self._format_class_name(data['name'], data['module'], indent))
         
-        # Print source file on next line
-        if "source_file" in data:
-            print(self._format_file_path(data['source_file'], None, indent))
+    #     # Print source file on next line
+    #     if "source_file" in data:
+    #         print(self._format_file_path(data['source_file'], None, indent))
 
-        # Print attributes
-        if "attributes" in data:
-            for name, value in data["attributes"].items():
-                print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{value}{Colors.RESET}")
+    #     # Print attributes
+    #     if "attributes" in data:
+    #         for name, value in data["attributes"].items():
+    #             print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{value}{Colors.RESET}")
 
-        # Print base classes
-        if "bases" in data:
-            for base in data["bases"]:
-                self._print_hierarchy(base, indent + "    ")
+    #     # Print bases
+    #     if "bases" in data:
+    #         for base in data["bases"]:
+    #             self._print_hierarchy(base, indent + "  ")
+
+    # def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
+    #     class_info = f"{indent}{Colors.BLUE}→ {name}{Colors.RESET}"
+    #     if module != "__main__":
+    #         class_info += f" {Colors.GREEN}({module}){Colors.RESET}"
+    #     return class_info
+
+    # def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
+    #     clickable_path = cli_make_clickable_path(path)
+    #     if line is not None:
+    #         clickable_path += f":{line}"
+    #     return f"{indent}    {Colors.YELLOW}File: {clickable_path}{Colors.RESET}"
