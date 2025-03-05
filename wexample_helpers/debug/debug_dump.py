@@ -121,12 +121,11 @@ class DebugDump(AbstractDebug):
             return
             
         if "instance_of" in data:
-            instance_info = f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}"
+            print(f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}")
             if "dump_location" in data:
                 location = data['dump_location']
                 clickable_path = cli_make_clickable_path(location['file'])
-                instance_info += f" {Colors.YELLOW}[Dumped at {clickable_path}:{location['line']}]{Colors.RESET}"
-            print(instance_info)
+                print(f"{indent}    {Colors.YELLOW}File: {clickable_path}:{location['line']}{Colors.RESET}")
             
             if "class_data" in data:
                 self._print_data(data["class_data"], indent + "  ")

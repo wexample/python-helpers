@@ -61,14 +61,16 @@ class DebugDumpClass(AbstractDebug):
             print(f"{indent}{Colors.YELLOW}↻ {data['name']} (circular){Colors.RESET}")
             return
 
-        # Print class info
+        # Print class name and module
         class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
         if data['module'] != "__main__":
             class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
+        print(class_info)
+        
+        # Print source file on next line
         if "source_file" in data:
             clickable_path = cli_make_clickable_path(data['source_file'])
-            class_info += f" {Colors.YELLOW}[{clickable_path}]{Colors.RESET}"
-        print(class_info)
+            print(f"{indent}    {Colors.YELLOW}File: {clickable_path}{Colors.RESET}")
 
         # Print attributes
         if "attributes" in data:
