@@ -28,71 +28,74 @@ class DebugDump(AbstractDebug):
         if seen is None:
             seen = set()
 
-        if depth > self.max_depth:
+        # Check for max depth
+        if depth >= self.max_depth:
             return {"type": "max_depth"}
 
+        # Get object id for circular reference detection
         obj_id = id(obj)
-        if obj_id in seen and not isinstance(obj, (int, float, str, bool)):
+        if obj_id in seen:
             return {"type": "circular"}
         seen.add(obj_id)
 
-        result = {
-            "type": type(obj).__name__,
-            "depth": depth
-        }
-
-        if inspect.isclass(obj):
-            from wexample_helpers.debug.debug_dump_class import DebugDumpClass
-            class_dump = DebugDumpClass(obj, depth)
-            class_dump.collect_data()
-            result["class_data"] = class_dump.data
-
-        elif hasattr(obj, '__class__') and not isinstance(obj, (int, float, str, bool, list, tuple, dict)):
-            from wexample_helpers.debug.debug_dump_class import DebugDumpClass
-            result["instance_of"] = obj.__class__.__name__
-            class_dump = DebugDumpClass(obj.__class__, depth + 2)
-            class_dump.collect_data()
-            result["class_data"] = class_dump.data
-
-            instance_attrs = {
-                name: self._collect_data(value, depth + 4, seen.copy())
-                for name, value in inspect.getmembers(obj)
-                if not name.startswith('_') and not callable(value)
+        # Handle different types of objects
+        if isinstance(obj, (str, int, float, bool)):
+            return {
+                "type": type(obj).__name__,
+                "value": repr(obj)
             }
-            result["attributes"] = instance_attrs
-
-        elif isinstance(obj, (int, float, str, bool)):
-            result["value"] = repr(obj)
-
-        elif isinstance(obj, (list, tuple)):
-            result["elements"] = [
-                self._collect_data(item, depth + 4, seen.copy())
-                for item in obj
-            ]
-
+        elif isinstance(obj, (list, tuple, set)):
+            return {
+                "type": type(obj).__name__,
+                "elements": [self._collect_data(item, depth + 1, seen.copy()) for item in obj]
+            }
         elif isinstance(obj, dict):
-            result["items"] = [
-                {
-                    "key": repr(key),
-                    "value": self._collect_data(value, depth + 4, seen.copy())
-                }
-                for key, value in obj.items()
-            ]
+            return {
+                "type": "dict",
+                "items": [
+                    {
+                        "key": self._collect_data(key, depth + 1, seen.copy()),
+                        "value": self._collect_data(value, depth + 1, seen.copy())
+                    }
+                    for key, value in obj.items()
+                ]
+            }
+        else:
+            # Handle class instance
+            class_data = {
+                "type": "class",
+                "name": obj.__class__.__name__,
+                "module": obj.__class__.__module__,
+                "source_file": inspect.getfile(obj.__class__)
+            }
 
-        elif inspect.isfunction(obj) or inspect.ismethod(obj):
-            result["name"] = obj.__name__
+            # Collect instance attributes
+            attrs = {}
+            for name, value in obj.__dict__.items():
+                if not name.startswith('__'):
+                    attrs[name] = self._collect_data(value, depth + 1, seen.copy())
 
-        return result
+            return {
+                "instance_of": obj.__class__.__name__,
+                "class_data": class_data,
+                "attributes": attrs
+            }
 
     def print(self) -> None:
         self._print_data(self.data)
 
-    def _format_instance_name(self, instance_name: str, indent: str = "") -> str:
-        return f"{indent}{Colors.BLUE}Instance of {instance_name}{Colors.RESET}"
+    def _format_class_name(self, class_name: str, module_name: str, indent: str = "") -> str:
+        class_info = f"{indent}{Colors.BLUE}→ {class_name}{Colors.RESET}"
+        if module_name != "__main__":
+            class_info += f" {Colors.GREEN}({module_name}){Colors.RESET}"
+        return class_info
 
     def _format_file_path(self, file_path: str, line_number: int = None, indent: str = "") -> str:
         clickable_path = cli_make_clickable_path(file_path)
         return f"{indent}    {Colors.YELLOW}File: {clickable_path}:{line_number}{Colors.RESET}"
+
+    def _format_instance_name(self, instance_name: str, indent: str = "") -> str:
+        return f"{indent}{Colors.BLUE}Instance of {instance_name}{Colors.RESET}"
 
     def _format_attributes_header(self, indent: str = "") -> str:
         return f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}"
@@ -113,14 +116,10 @@ class DebugDump(AbstractDebug):
             return
             
         if data_type == "class":
-            class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
-            if data['module'] != "__main__":
-                class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
+            print(self._format_class_name(data['name'], data['module'], indent))
             if "source_file" in data:
-                clickable_path = cli_make_clickable_path(data['source_file'])
-                class_info += f" {Colors.YELLOW}[{clickable_path}]{Colors.RESET}"
-            print(class_info)
-            
+                print(self._format_file_path(data['source_file'], None, indent))
+                
             if "attributes" in data:
                 for name, value in data["attributes"].items():
                     print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{value}{Colors.RESET}")
@@ -145,9 +144,6 @@ class DebugDump(AbstractDebug):
                     print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
                     self._print_data(value, indent + "    ")
                     
-        elif "class_data" in data:
-            self._print_data(data["class_data"], indent)
-            
         elif "value" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}")
             
@@ -162,6 +158,3 @@ class DebugDump(AbstractDebug):
             for item in data["items"]:
                 print(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
                 self._print_data(item["value"], indent + "    ")
-                
-        elif "name" in data:
-            print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['name']}{Colors.RESET}")
