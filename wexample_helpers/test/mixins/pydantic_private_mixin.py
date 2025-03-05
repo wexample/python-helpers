@@ -1,15 +1,14 @@
 from datetime import datetime
 from typing import Dict, Any
 
-from pydantic import PrivateAttr
-
 
 class PydanticPrivateMixin:
-    """Mixin providing private Pydantic attributes without inheriting from BaseModel."""
+    """Mixin providing private attributes template for Pydantic classes."""
 
-    _created_at: datetime = PrivateAttr(default_factory=datetime.now)
-    _metadata: Dict[str, Any] = PrivateAttr(default_factory=dict)
-    _secret_key: str = PrivateAttr(default="default-key")
+    def __init__(self):
+        self._created_at = datetime.now()
+        self._metadata = {}
+        self._secret_key = "default-key"
 
     def get_metadata(self) -> Dict[str, Any]:
         """Safe access to private metadata."""

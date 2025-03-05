@@ -9,6 +9,9 @@ class PydanticInheritanceModel(PydanticFieldsMixin, PydanticPrivateMixin, BaseMo
     priority: int = Field(default=0, ge=0, le=100, description="Priority level (0-100)")
     
     def __init__(self, **data):
-        super().__init__(**data)
+        BaseModel.__init__(self, **data)
+        PydanticPrivateMixin.__init__(self)
+        PydanticFieldsMixin.__init__(self)
+
         # Initialize any mixin-specific stuff if needed
         self._metadata["initialized_at"] = self._created_at
