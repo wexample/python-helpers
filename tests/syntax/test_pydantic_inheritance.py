@@ -13,10 +13,28 @@ def test_pydantic_inheritance():
         priority=50
     )
     
-    # Add some metadata using the safe method
-    instance.set_metadata("custom_key", "custom_value")
+    # Test public fields
+    assert instance.name == "test_instance"
+    assert instance.tags == ["test", "debug"]
+    assert instance.description == "A test instance"
+    assert instance.version == "1.0.0"  # Overridden from BaseMixin
+    assert instance.enabled is True
+    assert instance.priority == 50
     
-    # Debug dump the instance to see how our debug handles the complex inheritance
+    # Test environment from config
+    assert instance.environment == "production"
+    
+    # Test private fields
+    assert instance.created_at is not None
+    metadata = instance.get_metadata()
+    assert isinstance(metadata, dict)
+    
+    # Add some metadata and verify
+    instance.set_metadata("custom_key", "custom_value")
+    updated_metadata = instance.get_metadata()
+    assert updated_metadata["custom_key"] == "custom_value"
+    
+    # Debug dump the instance
     print("\nInstance Debug:")
     dump = DebugDump(instance)
     dump.execute()
