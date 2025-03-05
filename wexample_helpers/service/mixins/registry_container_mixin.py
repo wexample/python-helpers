@@ -11,12 +11,16 @@ class RegistryContainerMixin:
         """Get the type of registry to use. Must be overridden by child classes."""
         return Registry
 
-    def get_registry(self, name: str) -> Registry:
+    def get_registry(self, name: str, registry_class_type: Optional[Type[Registry]] = None) -> Registry:
         """Get a registry by its name."""
         registry_name = f"_{name}_registry"
         if registry_name not in self._registries:
-            self._registries[registry_name] = (self._get_registry_class_type())(container=self)
+            return self.set_registry(name, registry_class_type)
         return self._registries[registry_name]
+
+    def set_registry(self, name: str, registry_class_type: Optional[Type[Registry]] = None) -> Registry:
+        self._registries[name] = (registry_class_type or self._get_registry_class_type())(container=self)
+        return self._registries[name]
 
     def register_item(self, registry_name: str, key: str, item: Any) -> Registry:
         """Register an item in a specific registry."""
