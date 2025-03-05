@@ -56,21 +56,29 @@ class DebugDumpClass(AbstractDebug):
     def print(self) -> None:
         self._print_hierarchy(self.data)
 
+    def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
+        class_info = f"{indent}{Colors.BLUE}→ {name}{Colors.RESET}"
+        if module != "__main__":
+            class_info += f" {Colors.GREEN}({module}){Colors.RESET}"
+        return class_info
+
+    def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
+        clickable_path = cli_make_clickable_path(path)
+        if line is not None:
+            clickable_path += f":{line}"
+        return f"{indent}    {Colors.YELLOW}File: {clickable_path}{Colors.RESET}"
+
     def _print_hierarchy(self, data: Dict, indent: str = "") -> None:
         if data.get("type") == "circular":
             print(f"{indent}{Colors.YELLOW}↻ {data['name']} (circular){Colors.RESET}")
             return
 
         # Print class name and module
-        class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
-        if data['module'] != "__main__":
-            class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
-        print(class_info)
+        print(self._format_class_name(data['name'], data['module'], indent))
         
         # Print source file on next line
         if "source_file" in data:
-            clickable_path = cli_make_clickable_path(data['source_file'])
-            print(f"{indent}    {Colors.YELLOW}File: {clickable_path}{Colors.RESET}")
+            print(self._format_file_path(data['source_file'], None, indent))
 
         # Print attributes
         if "attributes" in data:

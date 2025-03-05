@@ -87,6 +87,16 @@ class DebugDump(AbstractDebug):
     def print(self) -> None:
         self._print_data(self.data)
 
+    def _format_instance_name(self, instance_name: str, indent: str = "") -> str:
+        return f"{indent}{Colors.BLUE}Instance of {instance_name}{Colors.RESET}"
+
+    def _format_file_path(self, file_path: str, line_number: int = None, indent: str = "") -> str:
+        clickable_path = cli_make_clickable_path(file_path)
+        return f"{indent}    {Colors.YELLOW}File: {clickable_path}:{line_number}{Colors.RESET}"
+
+    def _format_attributes_header(self, indent: str = "") -> str:
+        return f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}"
+
     def _print_data(self, data: Dict, indent: str = "") -> None:
         if not isinstance(data, dict):
             print(f"{indent}{Colors.YELLOW}[Invalid data structure]{Colors.RESET}")
@@ -121,17 +131,16 @@ class DebugDump(AbstractDebug):
             return
             
         if "instance_of" in data:
-            print(f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}")
+            print(self._format_instance_name(data['instance_of'], indent))
             if "dump_location" in data:
                 location = data['dump_location']
-                clickable_path = cli_make_clickable_path(location['file'])
-                print(f"{indent}    {Colors.YELLOW}File: {clickable_path}:{location['line']}{Colors.RESET}")
+                print(self._format_file_path(location['file'], location['line'], indent))
             
             if "class_data" in data:
                 self._print_data(data["class_data"], indent + "  ")
             
             if "attributes" in data:
-                print(f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}")
+                print(self._format_attributes_header(indent))
                 for name, value in data["attributes"].items():
                     print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
                     self._print_data(value, indent + "    ")
