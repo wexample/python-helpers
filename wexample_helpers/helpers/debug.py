@@ -50,7 +50,7 @@ def _format_class_hierarchy(cls, depth=0, seen=None):
         seen = set()
     
     if cls in seen:
-        return f"{' ' * depth}{Colors.YELLOW}↻ {cls.__name__} (circular){Colors.RESET}"
+        return [f"{' ' * depth}{Colors.YELLOW}↻ {cls.__name__} (circular){Colors.RESET}"]
     seen.add(cls)
     
     result = []
@@ -74,7 +74,7 @@ def _format_class_hierarchy(cls, depth=0, seen=None):
         if base is not object:  # Skip the base object class
             result.extend(_format_class_hierarchy(base, depth + 4, seen.copy()))
     
-    return "\n".join(result)
+    return result
 
 def debug_class_info(cls_or_obj, title: str = None) -> None:
     """
@@ -85,7 +85,8 @@ def debug_class_info(cls_or_obj, title: str = None) -> None:
     if title:
         print(f"\n{Colors.BRIGHT}=== {title} ==={Colors.RESET}")
 
-    print(_format_class_hierarchy(target_class))
+    for line in _format_class_hierarchy(target_class):
+        print(line)
 
 def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> None:
     if _seen is None:
@@ -103,14 +104,19 @@ def debug_dump(obj: Any, max_depth: int = 100, _depth: int = 0, _seen=None) -> N
 
     indent = ' ' * _depth
     
+    # If it's a class, use debug_class_info
     if inspect.isclass(obj):
-        print(_format_class_hierarchy(obj, _depth))
+        for line in _format_class_hierarchy(obj, _depth):
+            print(line)
         return
     
+    # For custom class instance
     if hasattr(obj, '__class__') and not isinstance(obj, (int, float, str, bool, list, tuple, dict)):
         print(f"{indent}{Colors.BLUE}Instance of {obj.__class__.__name__}{Colors.RESET}")
-        print(_format_class_hierarchy(obj.__class__, _depth + 2))
+        for line in _format_class_hierarchy(obj.__class__, _depth + 2):
+            print(line)
         
+        # Display instance attributes
         instance_attrs = {name: value for name, value in inspect.getmembers(obj)
                         if not name.startswith('_') and not callable(value)}
         if instance_attrs:

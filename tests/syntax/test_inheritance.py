@@ -15,15 +15,13 @@ class TestInheritance(unittest.TestCase):
         
         # Test child instance creation and inheritance
         self.assertIsInstance(child, ChildClass)
-        self.assertIsInstance(child, ParentClass)  # Should also be instance of parent
+        self.assertIsInstance(child, ParentClass)  # Should also be an instance of parent
         self.assertEqual(child.child_value, "custom_child")
         self.assertEqual(child.parent_value, "inherited_parent")
         
         # Debug output tests
         debug_dump(ParentClass)
-        
         debug_dump(ChildClass)
-        
         debug_dump(parent)
-        
         debug_dump(child)
+        exit()
