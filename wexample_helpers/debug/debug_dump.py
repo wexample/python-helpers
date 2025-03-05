@@ -1,6 +1,6 @@
 import inspect
 from typing import Any, Dict, List, Optional, Set
-
+from datetime import datetime
 from wexample_helpers.debug.abstract_debug import AbstractDebug
 from wexample_helpers.const.colors import Colors
 from wexample_helpers.helpers.cli import cli_make_clickable_path
@@ -44,6 +44,11 @@ class DebugDump(AbstractDebug):
                 "type": type(obj).__name__,
                 "value": repr(obj)
             }
+        elif isinstance(obj, datetime):
+            return {
+                "type": "datetime",
+                "value": obj.isoformat()
+            }
         elif isinstance(obj, (list, tuple, set)):
             return {
                 "type": type(obj).__name__,
@@ -61,35 +66,43 @@ class DebugDump(AbstractDebug):
                 ]
             }
         else:
-            # Handle class instance
-            class_data = {
-                "type": "class",
-                "name": obj.__class__.__name__,
-                "module": obj.__class__.__module__,
-                "source_file": inspect.getfile(obj.__class__)
-            }
+            try:
+                # Handle class instance
+                class_data = {
+                    "type": "class",
+                    "name": obj.__class__.__name__,
+                    "module": obj.__class__.__module__,
+                    "source_file": inspect.getfile(obj.__class__)
+                }
 
-            # Collect instance attributes and properties
-            attrs = {}
-            for name, value in obj.__class__.__dict__.items():
-                if isinstance(value, property):
-                    attrs[name] = {
-                        "type": "property",
-                        "has_getter": value.fget is not None,
-                        "has_setter": value.fset is not None,
-                        "has_deleter": value.fdel is not None
-                    }
-                    
-            # Collect regular attributes
-            for name, value in obj.__dict__.items():
-                if not name.startswith('__'):
-                    attrs[name] = self._collect_data(value, depth + 1, seen.copy())
+                # Collect instance attributes and properties
+                attrs = {}
+                for name, value in obj.__class__.__dict__.items():
+                    if isinstance(value, property):
+                        attrs[name] = {
+                            "type": "property",
+                            "has_getter": value.fget is not None,
+                            "has_setter": value.fset is not None,
+                            "has_deleter": value.fdel is not None
+                        }
+                
+                # Collect regular attributes
+                if hasattr(obj, '__dict__'):
+                    for name, value in obj.__dict__.items():
+                        if not name.startswith('__'):
+                            attrs[name] = self._collect_data(value, depth + 1, seen.copy())
 
-            return {
-                "instance_of": obj.__class__.__name__,
-                "class_data": class_data,
-                "attributes": attrs
-            }
+                return {
+                    "instance_of": obj.__class__.__name__,
+                    "class_data": class_data,
+                    "attributes": attrs
+                }
+            except (AttributeError, TypeError):
+                # Fallback for objects that can't be introspected
+                return {
+                    "type": type(obj).__name__,
+                    "value": str(obj)
+                }
 
     def print(self) -> None:
         self._print_data(self.data)
