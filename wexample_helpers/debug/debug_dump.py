@@ -107,7 +107,8 @@ class DebugDump(AbstractDebug):
             if data['module'] != "__main__":
                 class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
             if "source_file" in data:
-                class_info += f" {Colors.YELLOW}[{data['source_file']}]{Colors.RESET}"
+                clickable_path = cli_make_clickable_path(data['source_file'])
+                class_info += f" {Colors.YELLOW}[{clickable_path}]{Colors.RESET}"
             print(class_info)
             
             if "attributes" in data:
