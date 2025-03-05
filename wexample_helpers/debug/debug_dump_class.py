@@ -25,6 +25,7 @@ class DebugDumpClass(AbstractDebug):
         seen.add(cls)
 
         result = {
+            "type": "class",
             "name": cls.__name__,
             "module": cls.__module__,
             "depth": self.depth

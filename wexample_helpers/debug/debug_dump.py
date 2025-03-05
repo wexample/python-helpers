@@ -78,41 +78,63 @@ class DebugDump(AbstractDebug):
         self._print_data(self.data)
 
     def _print_data(self, data: Dict, indent: str = "") -> None:
-        if data["type"] == "max_depth":
+        if not isinstance(data, dict):
+            print(f"{indent}{Colors.YELLOW}[Invalid data structure]{Colors.RESET}")
+            return
+
+        data_type = data.get("type", "unknown")
+            
+        if data_type == "max_depth":
             print(f"{indent}{Colors.YELLOW}[Max depth reached]{Colors.RESET}")
             return
-
-        if data["type"] == "circular":
+            
+        if data_type == "circular":
             print(f"{indent}{Colors.YELLOW}[Circular reference]{Colors.RESET}")
             return
-
+            
+        if data_type == "class":
+            class_info = f"{indent}{Colors.BLUE}→ {data['name']}{Colors.RESET}"
+            if data['module'] != "__main__":
+                class_info += f" {Colors.GREEN}({data['module']}){Colors.RESET}"
+            print(class_info)
+            
+            if "attributes" in data:
+                for name, value in data["attributes"].items():
+                    print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{value}{Colors.RESET}")
+                    
+            if "bases" in data:
+                for base in data["bases"]:
+                    self._print_data(base, indent + "    ")
+            return
+            
         if "instance_of" in data:
             print(f"{indent}{Colors.BLUE}Instance of {data['instance_of']}{Colors.RESET}")
-            self._print_data(data["class_data"], indent + "  ")
-
+            if "class_data" in data:
+                self._print_data(data["class_data"], indent + "  ")
+            
             if "attributes" in data:
                 print(f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}")
                 for name, value in data["attributes"].items():
                     print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
                     self._print_data(value, indent + "    ")
-
+                    
         elif "class_data" in data:
             self._print_data(data["class_data"], indent)
-
+            
         elif "value" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}")
-
+            
         elif "elements" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['elements'])} elements):")
             for i, element in enumerate(data["elements"]):
                 print(f"{indent}  {Colors.BRIGHT}[{i}]{Colors.RESET} →")
                 self._print_data(element, indent + "    ")
-
+                
         elif "items" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):")
             for item in data["items"]:
                 print(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
                 self._print_data(item["value"], indent + "    ")
-
+                
         elif "name" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['name']}{Colors.RESET}")

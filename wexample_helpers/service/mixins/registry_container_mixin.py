@@ -15,7 +15,7 @@ class RegistryContainerMixin:
         """Get a registry by its name."""
         registry_name = f"_{name}_registry"
         if registry_name not in self._registries:
-            return self.set_registry(name, registry_class_type)
+            return self.set_registry(registry_name, registry_class_type)
         return self._registries[registry_name]
 
     def set_registry(self, name: str, registry_class_type: Optional[Type[Registry]] = None) -> Registry:
