@@ -13,8 +13,8 @@ def test_pydantic_inheritance():
         priority=50
     )
     
-    # Add some metadata
-    instance._metadata["custom_key"] = "custom_value"
+    # Add some metadata using the safe method
+    instance.set_metadata("custom_key", "custom_value")
     
     # Debug dump the instance to see how our debug handles the complex inheritance
     print("\nInstance Debug:")

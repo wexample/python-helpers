@@ -6,8 +6,10 @@ class PydanticInheritanceMain(PydanticInheritanceConfig, PydanticInheritanceMode
     """Main class demonstrating multiple inheritance with Pydantic and mixins."""
     
     def __init__(self, **data):
-        PydanticInheritanceConfig.__init__(self, environment=data.pop("environment", "development"))
+        # Initialize Pydantic model first to setup private attributes
         PydanticInheritanceModel.__init__(self, **data)
+        # Then initialize config
+        PydanticInheritanceConfig.__init__(self, environment=data.get("environment", "development"))
     
     def get_full_state(self) -> Dict[str, Any]:
         """Get the complete state combining all inherited properties."""
