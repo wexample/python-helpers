@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from wexample_helpers.const.colors import Colors
 from wexample_helpers.helpers.cli import cli_make_clickable_path
 import os
-from typing import Dict, Any
+from typing import Dict
 
 class AbstractDebug(ABC):
     def __init__(self):
@@ -56,6 +56,26 @@ class AbstractDebug(ABC):
         """Format attributes section header."""
         return f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}"
 
+    def _get_attribute_visibility(self, name: str) -> str:
+        """Get attribute visibility based on name."""
+        if name.startswith('__'):
+            return "private"
+        elif name.startswith('_'):
+            return "protected"
+        return "public"
+
+    def _format_attribute_value(self, name: str, value: Dict, indent: str = "") -> str:
+        """Format attribute value in a clean YAML-like format."""
+        visibility = self._get_attribute_visibility(name)
+        value_type = value.get('type', 'unknown')
+        
+        return (
+            f"{indent}  {Colors.BRIGHT}{name}:{Colors.RESET}\n"
+            f"{indent}    {Colors.BLUE}type:{Colors.RESET} {value_type}\n"
+            f"{indent}    {Colors.BLUE}visibility:{Colors.RESET} {visibility}\n"
+            f"{indent}    {Colors.BLUE}value:{Colors.RESET} {Colors.GREEN}{value.get('value', '')}{Colors.RESET}"
+        )
+
     def _print_data(self, data: Dict, indent: str = "") -> None:
         """Print debug data with consistent formatting."""
         if not isinstance(data, dict):
@@ -79,7 +99,7 @@ class AbstractDebug(ABC):
                 
             if "attributes" in data:
                 for name, value in data["attributes"].items():
-                    print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET}: {Colors.GREEN}{value}{Colors.RESET}")
+                    print(self._format_attribute_value(name, value, indent))
                     
             if "bases" in data:
                 for base in data["bases"]:
@@ -98,8 +118,7 @@ class AbstractDebug(ABC):
             if "attributes" in data:
                 print(self._format_attributes_header(indent))
                 for name, value in data["attributes"].items():
-                    print(f"{indent}  {Colors.BRIGHT}{name}{Colors.RESET} →")
-                    self._print_data(value, indent + "    ")
+                    print(self._format_attribute_value(name, value, indent))
                     
         elif "value" in data:
             print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}")
