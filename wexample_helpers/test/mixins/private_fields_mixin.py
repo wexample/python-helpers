@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import Dict, Any
 
 
-class PydanticPrivateMixin:
-    """Mixin providing private attributes template for Pydantic classes."""
+class PrivateFieldsMixin:
+    """Mixin providing private attributes template."""
     _metadata: Dict[str, str]
     _created_at: datetime
     _secret_key: str = "default-key"

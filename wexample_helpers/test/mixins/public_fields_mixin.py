@@ -1,8 +1,9 @@
 from typing import Optional, List
+from .base_mixin import BaseMixin
 
 
-class PydanticFieldsMixin:
-    """Mixin providing public Pydantic fields without inheriting from BaseModel."""
+class PublicFieldsMixin(BaseMixin):
+    """Mixin providing public fields template."""
 
     name: str
     tags: List[str]
