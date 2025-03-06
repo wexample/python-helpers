@@ -33,12 +33,9 @@ def error_format(
     error: Optional[Exception] = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: Optional[dict] = None,
-) -> None:
-    if not error:
-        return
-
+) -> str:
     from wexample_helpers.helpers.trace import trace_format
-    
+
     # Get frames from the exception traceback
     frames = trace_get_traceback_frames(
         error.__traceback__,
@@ -51,6 +48,4 @@ def error_format(
         frames = frames[:truncate_index]
     
     # Then print the formatted traceback
-    print(trace_format(frames))
-
-    print(f"{type(error).__name__}: {error}")
+    return f"{trace_format(frames)}\n{type(error).__name__}: {error}"

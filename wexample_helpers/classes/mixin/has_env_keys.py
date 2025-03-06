@@ -8,6 +8,9 @@ class HasEnvKeys:
 
     env_config: Dict[str, str | None] = {}
 
+    def __init__(self, **kwargs) -> None:
+        self.env_config = {}
+
     def get_expected_env_keys(self) -> List[str]:
         """
         Returns a list of required environment variable keys.
