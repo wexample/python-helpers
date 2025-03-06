@@ -15,7 +15,7 @@ def test_unique_base_model():
         value=100,
         description="Custom description"
     )
-    
+
     # Test invalid inheritance
     with pytest.raises(MultipleBaseModelInheritanceError):
         # This will try to create an invalid class
