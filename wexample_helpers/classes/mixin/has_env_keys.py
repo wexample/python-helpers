@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from wexample_helpers.const.types import StringsList
 
@@ -51,3 +51,14 @@ class HasEnvKeys:
         """
         self.env_config = env_dict
         self._validate_env_keys()
+
+    def get_env_parameter(self, key: str) -> Any:
+        from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
+
+        if not key in self.env_config:
+            raise KeyNotFoundError(
+                message=f'Environment variable is not defined',
+                key=key,
+                available_keys=list(self.env_config.keys())
+            )
+        return self.env_config[key]
