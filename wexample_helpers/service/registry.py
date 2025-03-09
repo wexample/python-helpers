@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional, TypeVar, Generic
+from typing import Dict, Any, Optional, TypeVar, Generic, List
 
 from pydantic import BaseModel
 
@@ -28,3 +28,6 @@ class Registry(BaseModel, Generic[RegistrableType]):
     def has(self, key: str) -> bool:
         """Check if an item exists in the registry."""
         return key in self._items
+
+    def all_keys(self) -> List[str]:
+        return list(self._items.keys())
