@@ -18,8 +18,8 @@ def json_load_if_valid(path: str) -> Any | bool:
     return False
 
 
-def json_parse_if_valid(json_data: str) -> Any | bool:
+def json_parse_if_valid(json_data: str, default: any = False) -> Any | bool:
     try:
         return json.loads(json_data)
     except json.JSONDecodeError:
-        return False
+        return default
