@@ -5,114 +5,134 @@ from typing import List, Optional, Tuple, Union
 from wexample_helpers.const.types import FileStringOrPath
 
 
-def file_change_mode(path: str, mode: int) -> None:
+def file_change_mode(path: Union[str, Path], mode: int) -> None:
+    """
+    Change file permissions for a path, ignoring symlinks and missing files.
+    """
     try:
-        if not os.path.islink(path):
-            os.chmod(path, mode)
+        if not os.path.islink(str(path)):
+            os.chmod(str(path), mode)
     except FileNotFoundError:
         pass
 
 
 def file_change_mode_recursive(
-    path: str, mode: int, follow_symlinks: bool = True
+        path: Union[str, Path], mode: int, follow_symlinks: bool = True
 ) -> None:
-    file_change_mode(path=path, mode=mode)
+    """
+    Recursively change mode for files and directories under path.
 
-    # If the path is a directory (and not a symlink if follow_symlinks is False),
-    # loop through its contents and call the function recursively
-    if os.path.isdir(path) and (follow_symlinks or not os.path.islink(path)):
-        for item in os.listdir(path):
-            item_path = os.path.join(path, item)
-            file_change_mode_recursive(item_path, mode, follow_symlinks)
+    :param path: Root path to change mode.
+    :param mode: Permission bits to apply.
+    :param follow_symlinks: If False, skip symlinked directories.
+    """
+    file_change_mode(path, mode)
+    if os.path.isdir(str(path)) and (follow_symlinks or not os.path.islink(str(path))):
+        for item in os.listdir(str(path)):
+            file_change_mode_recursive(os.path.join(str(path), item), mode, follow_symlinks)
 
 
-def file_list_subdirectories(path: str) -> List[str]:
-    subdirectories = []
-    for item in os.listdir(path):
-        item_path = os.path.join(path, item)
-        if os.path.isdir(item_path) and not item.startswith("."):
-            subdirectories.append(os.path.basename(item_path))
-
-    subdirectories.sort()
-
-    return subdirectories
+def file_list_subdirectories(path: Union[str, Path]) -> List[str]:
+    """
+    List immediate subdirectory names (excluding hidden) under a given path.
+    """
+    base = Path(path)
+    subdirs = [p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith('.')]
+    return sorted(subdirs)
 
 
 def file_mode_num_to_octal(num: int) -> str:
-    return str(oct(num)[-3:])
+    """Convert numeric mode (e.g. st_mode) to a three-digit octal string."""
+    return oct(num & 0o777)[-3:]
 
 
 def file_mode_octal_to_num(mode: Union[str, int]) -> int:
-    return int(mode, 8)
+    """Convert octal mode string (e.g. '755') to its numeric value."""
+    return int(str(mode), 8)
 
 
 def file_path_get_octal_mode(path: Path) -> str:
+    """Get the octal permission string for a Path object."""
     return file_mode_num_to_octal(path.stat().st_mode)
 
 
 def file_path_get_mode_num(path: Path) -> int:
+    """Get the numeric permission bits for a Path object."""
     return path.stat().st_mode & 0o777
 
 
-def file_read(file_path: str) -> str:
-    with open(file_path, "r", encoding="utf-8") as file:
-        return file.read()
+def file_read(file_path: Union[str, Path]) -> str:
+    """Read file content as UTF-8 text."""
+    return Path(file_path).read_text(encoding='utf-8')
 
 
-def file_read_or_default(file_path: str, default: str = "") -> str:
+def file_read_or_default(file_path: Union[str, Path], default: str = "") -> str:
+    """Read file content or return default on any error."""
     try:
-        return file_read(file_path=file_path)
-    except Exception as e:
+        return file_read(file_path)
+    except Exception:
         return default
 
 
-def file_remove_file_if_exists(file: str) -> None:
-    if os.path.isfile(file) or os.path.islink(file):
-        os.remove(file)
+def file_remove_if_exists(path: Union[str, Path]) -> None:
+    """Remove a file or symlink if it exists."""
+    p = Path(path)
+    if p.is_file() or p.is_symlink():
+        p.unlink()
 
 
 def file_resolve_path(path: FileStringOrPath) -> Path:
-    return path if path is Path else Path(path)
+    """Resolve a FileStringOrPath to a pathlib.Path object."""
+    return path if isinstance(path, Path) else Path(path)
 
 
-def file_touch(path: str, times: Optional[Tuple[int, int]] = None) -> None:
-    with open(path, "a"):
-        os.utime(path, times)
+def file_touch(path: Union[str, Path], times: Optional[Tuple[int, int]] = None) -> None:
+    """Create file if missing and update its access and modification times."""
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open('a'):
+        os.utime(p, times)
 
 
 def file_validate_mode_octal(mode: Union[str, int]) -> bool:
-    if len(mode) != 3:
-        return False
-    for char in mode:
-        if char not in "01234567":
-            return False
-    return True
+    """Validate that mode is a three-digit octal string or int."""
+    m = str(mode)
+    return len(m) == 3 and all(ch in '01234567' for ch in m)
 
 
 def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
+    """Validate octal mode or raise Exception."""
     if not file_validate_mode_octal(mode):
-        raise Exception(f"Bad mode format {mode}")
+        raise ValueError(f"Bad mode format {mode!r}")
     return True
 
 
-def file_write(file_path: str, content: str) -> None:
-    with open(file_path, "w") as f:
-        f.write(content)
+def file_write(file_path: Union[str, Path], content: str, encoding: str = 'utf-8') -> None:
+    """Write content to file, overwriting if it exists."""
+    p = Path(file_path)
+    p.write_text(content, encoding=encoding)
 
 
-def file_get_directories(path: str, recursive: bool = False) -> List[str]:
-    directories = []
+def file_write_ensure(
+        file_path: FileStringOrPath,
+        content: str,
+        encoding: str = 'utf-8'
+) -> None:
+    """
+    Write content to file, creating parent directories if needed.
 
+    :param file_path: Destination file path.
+    :param content: Text content to write.
+    :param encoding: Text encoding.
+    """
+    p = file_resolve_path(file_path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(content, encoding=encoding)
+
+
+def file_get_directories(path: Union[str, Path], recursive: bool = False) -> List[str]:
+    """Get directories under path, optionally recursively."""
+    base = Path(path)
     if not recursive:
-        for entry in os.listdir(path):
-            full_path = os.path.join(path, entry)
-            if os.path.isdir(full_path):
-                directories.append(full_path)
-
-    else:
-        for root, dirs, files in os.walk(path):
-            for directory in dirs:
-                dir_path = os.path.join(root, directory)
-                directories.append(dir_path)
-
-    return directories
+        return [str(p) for p in base.iterdir() if p.is_dir()]
+    return [str(p) for p in base.rglob('*') if p.is_dir()]
