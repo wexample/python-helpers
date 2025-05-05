@@ -13,7 +13,7 @@ from wexample_helpers.helpers.file import (
     file_path_get_octal_mode,
     file_path_get_mode_num,
     file_read,
-    file_remove_file_if_exists,
+    file_remove_if_exists,
     file_resolve_path,
     file_touch,
     file_validate_mode_octal,
@@ -101,13 +101,13 @@ def test_file_read_write(temp_dir: Path) -> None:
     assert file_read(str(file_path)) == content
 
 
-def test_file_remove_file_if_exists(temp_file: Path) -> None:
+def test_file_remove_if_exists(temp_file: Path) -> None:
     assert temp_file.exists()
-    file_remove_file_if_exists(str(temp_file))
+    file_remove_if_exists(str(temp_file))
     assert not temp_file.exists()
     
     # Test with non-existent file (should not raise)
-    file_remove_file_if_exists("/non/existent/file")
+    file_remove_if_exists("/non/existent/file")
 
 
 def test_file_resolve_path() -> None:
