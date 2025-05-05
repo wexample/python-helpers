@@ -9,7 +9,7 @@ from wexample_helpers.helpers.directory import (
     directory_get_parent_path,
     directory_empty_dir,
     directory_list_files,
-    directory_aggregate_all_files_form_dir,
+    directory_aggregate_all_files_from_dir,
     directory_aggregate_all_files,
 )
 
@@ -121,7 +121,7 @@ def test_directory_aggregate_all_files(temp_dir):
     assert aggregated == expected_content
 
 
-def test_directory_aggregate_all_files_form_dir(temp_dir):
+def test_directory_aggregate_all_files_from_dir(temp_dir):
     # Create test files with known content
     files = [
         (os.path.join(temp_dir, "file1.txt"), "content1\n"),
@@ -132,6 +132,6 @@ def test_directory_aggregate_all_files_form_dir(temp_dir):
         with open(file_path, "w") as f:
             f.write(content)
     
-    aggregated = directory_aggregate_all_files_form_dir(temp_dir)
+    aggregated = directory_aggregate_all_files_from_dir(temp_dir)
     expected_content = "content1\n\ncontent2\n\n"
     assert aggregated == expected_content
