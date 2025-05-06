@@ -41,11 +41,8 @@ def test_directory_remove_tree_if_exists(temp_dir):
 def test_directory_execute_inside(temp_dir):
     original_dir = os.getcwd()
     
-    def test_callback():
-        return os.getcwd()
-    
-    result = directory_execute_inside(temp_dir, test_callback)
-    assert result == temp_dir
+    with directory_execute_inside(temp_dir):
+        assert os.getcwd() == temp_dir
     assert os.getcwd() == original_dir
 
 
