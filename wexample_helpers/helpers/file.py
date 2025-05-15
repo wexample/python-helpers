@@ -66,7 +66,7 @@ def file_read(file_path: Union[str, Path]) -> str:
     return Path(file_path).read_text(encoding='utf-8')
 
 
-def file_read_or_default(file_path: Union[str, Path], default: str = "") -> str:
+def file_read_or_default(file_path: Union[str, Path], default: Optional[str] = "") -> Optional[str]:
     """Read file content or return default on any error."""
     try:
         return file_read(file_path)
