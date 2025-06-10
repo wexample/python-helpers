@@ -1,7 +1,5 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
-
 from wexample_app.exception.abstract_exception import ExceptionData
 
 
