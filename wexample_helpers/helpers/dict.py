@@ -2,6 +2,7 @@ import copy
 from typing import Any, Dict, Optional, Union, cast
 
 from wexample_helpers.const.types import StringKeysDict, StringKeysMapping, StringsList
+from collections.abc import Mapping, Sequence
 
 DICT_PATH_SEPARATOR_DEFAULT = "."
 DICT_ITEM_EXISTS_ACTION_ABORT = "abort"
@@ -10,18 +11,22 @@ DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 
 def dict_get_item_by_path(
-    data: StringKeysMapping,
+    data: Any,
     key: str,
     default: Optional[Any] = None,
     separator: str = DICT_PATH_SEPARATOR_DEFAULT,
 ) -> Any:
-    # Split the key into its individual parts
-    keys = key.split(separator)
-
-    # Traverse the data dictionary using the key parts
-    for k in keys:
-        if k in data:
+    for k in key.split(separator):
+        if isinstance(data, Mapping) and k in data:
             data = data[k]
+
+        elif isinstance(data, Sequence) and k.isdigit():
+            idx = int(k)
+            if -len(data) <= idx < len(data):
+                data = data[idx]
+            else:
+                return default
+
         else:
             return default
 
