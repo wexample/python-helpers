@@ -64,3 +64,7 @@ def string_truncate(text: str, limit: int) -> str:
     if len(text) > limit:
         return text[:limit - 3] + "..."
     return text
+
+
+def string_render_boolean(boolean: bool) -> str:
+    return 'True' if boolean else 'False'
