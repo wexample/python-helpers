@@ -52,10 +52,13 @@ class HasEnvKeys:
         self.env_config = env_dict
         self._validate_env_keys()
 
-    def get_env_parameter(self, key: str) -> Any:
+    def get_env_parameter(self, key: str, default: Any = None) -> Any:
         from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
         if not key in self.env_config:
+            if default is not None:
+                return default
+            
             raise KeyNotFoundError(
                 message=f'Environment variable is not defined',
                 key=key,
