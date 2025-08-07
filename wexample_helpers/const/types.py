@@ -8,7 +8,7 @@ StringsDict = Dict[str, str]
 StringsList = List[str]
 SetList = Set[str]
 StringsMatch = Match[str]
-BasicInlineValue = str | int | float | bool | None
+BasicInlineValue = str | int | float | bool | type(None)
 BasicValue = BasicInlineValue | AnyList | StringKeysDict
 
 AnyCallable = Callable[..., Any]
