@@ -58,3 +58,9 @@ def string_replace_params(text: str, params: dict) -> str:
     for key, value in params.items():
         result = result.replace(f'%{key}%', str(value))
     return result
+
+
+def string_truncate(text: str, limit: int) -> str:
+    if len(text) > limit:
+        return text[:limit - 3] + "..."
+    return text
