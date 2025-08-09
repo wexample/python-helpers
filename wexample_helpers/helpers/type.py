@@ -13,6 +13,8 @@ from typing import (
     get_type_hints,
 )
 
+from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+
 
 def type_is_generic(type_value: Any) -> bool:
     """Detects if a given type is a generic type like List, Dict, Union"""
@@ -93,10 +95,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         return
 
     # If none of the checks passed, raise an exception
-    raise TypeError(
-        f'\nInvalid type "{type(value).__name__}" for value:\n'
-        f"   allowed types: {allowed_type}\n"
-        f"   got: {str(value)}\n"
+    raise NotAllowedVariableTypeException(
+        variable_type=type(value).__name__,
+        variable_value=value,
+        allowed_types=[allowed_type]
     )
 
 
@@ -226,3 +228,17 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
 
     # For other types, fall back to direct comparison
     return actual_type == allowed_type
+
+def type_to_name(t: Any) -> str:
+    # Accept python types, strings, and mypy UnionType
+    if isinstance(t, str):
+        return t
+    if isinstance(t, type):
+        return t.__name__
+    if isinstance(t, UnionType):
+        # Convert "A | B" style if possible
+        try:
+            return " | ".join(type_to_name(it) for it in t.items)
+        except Exception:
+            return str(t)
+    return str(t)

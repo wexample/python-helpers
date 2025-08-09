@@ -1,6 +1,4 @@
-from typing import List, Optional, Type, Any
-
-from mypy.types import UnionType
+from typing import List, Optional, Any
 
 from wexample_helpers.exception.not_allowed_item_exception import NotAllowedItemException
 
@@ -11,20 +9,32 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
 
     def __init__(
             self,
-            variable_type: str,
+            variable_type: Any,
             variable_value: Any,
-            allowed_types: List[Type | UnionType] = None,
+            allowed_types: Optional[List[Any]] = None,
             cause: Optional[Exception] = None,
             previous: Optional[Exception] = None
     ):
-        from helper.string import string_truncate
-        types_str = "', '".join(allowed_types)
+        from wexample_helpers.helpers.string import string_truncate
+        from wexample_helpers.helpers.type import type_to_name
+
+        # Normalize variable_type for display
+        var_type_name = type_to_name(variable_type)
+
+        # Normalize allowed types for message and payload
+        allowed_types = allowed_types or []
+        allowed_type_names = [type_to_name(t) for t in allowed_types]
+        types_str = ", ".join(allowed_type_names) if allowed_type_names else "<none>"
 
         super().__init__(
             item_type='type',
-            item_value=variable_type,
-            allowed_values=allowed_types,
+            item_value=var_type_name,
+            allowed_values=allowed_type_names,
             cause=cause,
             previous=previous,
-            message=f"Unexpected variable of type {variable_type} (value: \"{string_truncate(variable_value, 40)}\"). Allowed types are {types_str}"
+            message=(
+                f"Invalid variable type '{var_type_name}' for value "
+                f"{string_truncate(variable_value, 40)!r}. "
+                f"Allowed types: {types_str}."
+            )
         )

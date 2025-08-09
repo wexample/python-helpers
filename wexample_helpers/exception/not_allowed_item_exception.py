@@ -20,11 +20,12 @@ class NotAllowedItemException(AbstractException, NotAllowedItemMixin):
             item_value: Optional[str] = None,
             allowed_values: List[str] = None,
             cause: Optional[Exception] = None,
-            previous: Optional[Exception] = None
+            previous: Optional[Exception] = None,
+            message: Optional[str] = None
     ):
         if allowed_values is None:
             allowed_values = []
-            
+
         # Create structured data using Pydantic model
         data_model = NotAllowedItemData(
             item_type=item_type,
@@ -40,7 +41,7 @@ class NotAllowedItemException(AbstractException, NotAllowedItemMixin):
         self.is_missing = item_value is None
 
         # Generate message using the mixin method
-        message = self.format_not_allowed_item_message(
+        message = message or self.format_not_allowed_item_message(
             item_type=item_type,
             item_value=item_value,
             allowed_values=allowed_values
