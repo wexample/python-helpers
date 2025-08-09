@@ -36,11 +36,11 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     if allowed_type is Callable:
         if callable(value):
             return
-        raise TypeError(
-            f'\nType Error in Callable Check:\n'
-            f'  Expected: callable\n'
-            f'  Received type "{type(value).__name__}"\n'
-            f'  Value provided: {value}\n'
+        # Not a callable where one was expected
+        raise NotAllowedVariableTypeException(
+            variable_type=type(value).__name__,
+            variable_value=value,
+            allowed_types=["callable"],
         )
 
     # Check if the raw value matches any allowed base type
@@ -51,11 +51,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                 #   - allowed_type=Type[MyClass] will match value MyClass
                 #   - allowed_type=MyClass will not match value MyClass
                 if isinstance(allowed_type, type):
-                    raise TypeError(
-                        f'\nType Error in Base Type Match:\n'
-                        f'  Expected exact type: {allowed_type.__name__}\n'
-                        f'  Received type: {type(value).__name__}\n'
-                        f'  Value provided: {value}\n'
+                    raise NotAllowedVariableTypeException(
+                        variable_type=type(value).__name__,
+                        variable_value=value,
+                        allowed_types=[allowed_type],
                     )
 
                 args = get_args(allowed_type)
@@ -78,11 +77,10 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
                     ):
                         return
 
-                    raise TypeError(
-                        f'\nType Error in Callable Return Type:\n'
-                        f'  Expected callable "{type(value).__name__}" to return type "{return_type}"\n'
-                        f'  Actual return type: "{actual_return_type_hint}"\n'
-                        f'  Value provided: {value}\n'
+                    raise NotAllowedVariableTypeException(
+                        variable_type=str(actual_return_type_hint),
+                        variable_value=value,
+                        allowed_types=[return_type],
                     )
 
                 return
