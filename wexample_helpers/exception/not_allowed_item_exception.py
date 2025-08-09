@@ -1,11 +1,11 @@
 from typing import List, Optional
 
-from wexample_helpers.exception.abstract_exception import AbstractException
+from wexample_helpers.exception.undefined_exception import UndefinedException
 from wexample_helpers.exception.mixin.not_allowed_item_mixin import NotAllowedItemMixin
 from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData
 
 
-class NotAllowedItemException(AbstractException, NotAllowedItemMixin):
+class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
     """Base exception for cases where an item is not allowed or not provided.
     
     This exception should be used when:

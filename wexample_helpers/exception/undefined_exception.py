@@ -10,7 +10,7 @@ class ExceptionData(BaseModel):
     pass
 
 
-class AbstractException(Exception):
+class UndefinedException(Exception):
     """Base exception class for all application exceptions.
     
     Provides enhanced functionality including:
@@ -51,7 +51,7 @@ class AbstractException(Exception):
 
         return result
 
-    def with_data(self, **kwargs) -> 'AbstractException':
+    def with_data(self, **kwargs) -> 'UndefinedException':
         """Add additional data to the exception."""
         self.data.update(kwargs)
         return self
