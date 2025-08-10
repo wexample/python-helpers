@@ -3,19 +3,22 @@ import shutil
 from contextlib import contextmanager
 from typing import Any, Callable, List
 
+from wexample_file.const.types import PathOrString
+from wexample_file.helpers.path import path_wrap
 from wexample_helpers.helpers.file import file_read
 
 AnyCallable = Callable[..., Any]
 
 
-def directory_remove_tree_if_exists(directory: str) -> None:
+def directory_remove_tree_if_exists(directory: PathOrString) -> None:
     """Remove a directory and all its contents if it exists."""
-    if os.path.exists(directory):
-        shutil.rmtree(directory)
+    p = path_wrap(directory)
+    if p.exists():
+        shutil.rmtree(p)
 
 
 @contextmanager
-def directory_execute_inside(target_dir: str):
+def directory_execute_inside(target_dir: PathOrString):
     """
     Context manager to execute code inside a specific directory.
 
@@ -24,46 +27,51 @@ def directory_execute_inside(target_dir: str):
             # code here
     """
     original_dir = os.getcwd()
-    os.chdir(target_dir)
+    p = path_wrap(target_dir)
+    os.chdir(p)
     try:
         yield
     finally:
         os.chdir(original_dir)
 
 
-def directory_execute_inside_fn(target_dir: str, callback: AnyCallable) -> Any:
+def directory_execute_inside_fn(target_dir: PathOrString, callback: AnyCallable) -> Any:
     """Execute a callback inside the target directory and return its result."""
     with directory_execute_inside(target_dir):
         return callback()
 
 
-def directory_get_base_name(path: str) -> str:
+def directory_get_base_name(path: PathOrString) -> str:
     """Return the base name of a path (last component)."""
-    return os.path.basename(os.path.normpath(path))
+    p = path_wrap(path)
+    return os.path.basename(os.path.normpath(os.fspath(p)))
 
 
-def directory_get_parent_path(path: str) -> str:
+def directory_get_parent_path(path: PathOrString) -> str:
     """Return the parent directory path with trailing separator."""
-    parent = os.path.dirname(os.path.normpath(path))
+    p = path_wrap(path)
+    parent = os.path.dirname(os.path.normpath(os.fspath(p)))
     return parent + os.sep if parent else os.sep
 
 
-def directory_empty_dir(dir_path: str) -> None:
+def directory_empty_dir(dir_path: PathOrString) -> None:
     """Remove all contents within a directory, but keep the directory itself."""
-    if not os.path.isdir(dir_path):
-        raise NotADirectoryError(f"{dir_path!r} is not a directory.")
-    for item in os.listdir(dir_path):
-        item_path = os.path.join(dir_path, item)
+    p = path_wrap(dir_path)
+    if not p.is_dir():
+        raise NotADirectoryError(f"{p!r} is not a directory.")
+    for item in os.listdir(p):
+        item_path = os.path.join(p, item)
         if os.path.isdir(item_path) and not os.path.islink(item_path):
             shutil.rmtree(item_path)
         else:
             os.remove(item_path)
 
 
-def directory_list_files(dir_path: str) -> List[str]:
+def directory_list_files(dir_path: PathOrString) -> List[str]:
     """List all files in directory and subdirectories, sorted alphabetically."""
+    p = path_wrap(dir_path)
     file_paths: List[str] = []
-    for root, _, files in os.walk(dir_path):
+    for root, _, files in os.walk(p):
         for file in sorted(files):
             full_path = os.path.join(root, file)
             if os.path.isfile(full_path):
@@ -71,11 +79,11 @@ def directory_list_files(dir_path: str) -> List[str]:
     return file_paths
 
 
-def directory_aggregate_all_files(file_paths: List[str]) -> str:
+def directory_aggregate_all_files(file_paths: List[PathOrString]) -> str:
     """Aggregate contents of the given list of file paths."""
-    return os.linesep.join(file_read(fp) for fp in file_paths)
+    return os.linesep.join(file_read(os.fspath(path_wrap(fp))) for fp in file_paths)
 
 
-def directory_aggregate_all_files_from_dir(dir_path: str) -> str:
+def directory_aggregate_all_files_from_dir(dir_path: PathOrString) -> str:
     """Aggregate contents of all files in a directory and its subdirectories."""
     return directory_aggregate_all_files(directory_list_files(dir_path))
