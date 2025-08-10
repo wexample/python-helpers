@@ -1,10 +1,10 @@
 import os
 import shutil
+from pathlib import Path
 from contextlib import contextmanager
 from typing import Any, Callable, List
 
 from wexample_file.const.types import PathOrString
-from wexample_file.helpers.path import path_wrap
 from wexample_helpers.helpers.file import file_read
 
 AnyCallable = Callable[..., Any]
@@ -12,7 +12,7 @@ AnyCallable = Callable[..., Any]
 
 def directory_remove_tree_if_exists(directory: PathOrString) -> None:
     """Remove a directory and all its contents if it exists."""
-    p = path_wrap(directory)
+    p = Path(directory)
     if p.exists():
         shutil.rmtree(p)
 
@@ -27,7 +27,7 @@ def directory_execute_inside(target_dir: PathOrString):
             # code here
     """
     original_dir = os.getcwd()
-    p = path_wrap(target_dir)
+    p = Path(target_dir)
     os.chdir(p)
     try:
         yield
@@ -43,20 +43,20 @@ def directory_execute_inside_fn(target_dir: PathOrString, callback: AnyCallable)
 
 def directory_get_base_name(path: PathOrString) -> str:
     """Return the base name of a path (last component)."""
-    p = path_wrap(path)
+    p = Path(path)
     return os.path.basename(os.path.normpath(os.fspath(p)))
 
 
 def directory_get_parent_path(path: PathOrString) -> str:
     """Return the parent directory path with trailing separator."""
-    p = path_wrap(path)
+    p = Path(path)
     parent = os.path.dirname(os.path.normpath(os.fspath(p)))
     return parent + os.sep if parent else os.sep
 
 
 def directory_empty_dir(dir_path: PathOrString) -> None:
     """Remove all contents within a directory, but keep the directory itself."""
-    p = path_wrap(dir_path)
+    p = Path(dir_path)
     if not p.is_dir():
         raise NotADirectoryError(f"{p!r} is not a directory.")
     for item in os.listdir(p):
@@ -69,7 +69,7 @@ def directory_empty_dir(dir_path: PathOrString) -> None:
 
 def directory_list_files(dir_path: PathOrString) -> List[str]:
     """List all files in directory and subdirectories, sorted alphabetically."""
-    p = path_wrap(dir_path)
+    p = Path(dir_path)
     file_paths: List[str] = []
     for root, _, files in os.walk(p):
         for file in sorted(files):
@@ -81,7 +81,7 @@ def directory_list_files(dir_path: PathOrString) -> List[str]:
 
 def directory_aggregate_all_files(file_paths: List[PathOrString]) -> str:
     """Aggregate contents of the given list of file paths."""
-    return os.linesep.join(file_read(os.fspath(path_wrap(fp))) for fp in file_paths)
+    return os.linesep.join(file_read(os.fspath(Path(fp))) for fp in file_paths)
 
 
 def directory_aggregate_all_files_from_dir(dir_path: PathOrString) -> str:
