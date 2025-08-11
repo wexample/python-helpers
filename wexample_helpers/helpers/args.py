@@ -8,7 +8,7 @@ from wexample_helpers.const.types import (
     BasicValue,
     StringKeysDict,
     StringsList,
-    BasicInlineValue,
+    Scalar,
 )
 from wexample_helpers.helpers.string import string_to_snake_case
 
@@ -126,7 +126,7 @@ def args_is_basic_value(value: Any) -> bool:
     Check if the value is compatible with basic YAML types
     """
 
-    if isinstance(value, BasicInlineValue):
+    if isinstance(value, Scalar):
         return True
 
     elif isinstance(value, list):

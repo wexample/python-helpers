@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Match, Optional, Set, TypedDict, Union
+from typing import Any, Callable, Dict, List, Mapping, Match, Optional, Set, TypedDict, Union, TypeAlias, Sequence
 
 AnyList = List[Any]
 StringKeysDict = Dict[str, Any]
@@ -8,14 +8,15 @@ StringsDict = Dict[str, str]
 StringsList = List[str]
 SetList = Set[str]
 StringsMatch = Match[str]
-BasicInlineValue = str | int | float | bool | type(None)
-BasicValue = BasicInlineValue | AnyList | StringKeysDict
+Scalar = str | int | float | bool | None
+BasicValue = Scalar | AnyList | StringKeysDict
+StructuredData: TypeAlias = Scalar | Sequence['StructuredData'] | Mapping[str, 'StructuredData']
 
 AnyCallable = Callable[..., Any]
 Args = Any
 DecoratedCallable = Callable[..., AnyCallable]
 Kwargs = Any
-ResponsePrintType = Optional[BasicInlineValue | StringKeysDict | AnyList]
+ResponsePrintType = Optional[Scalar | StringKeysDict | AnyList]
 StringMessageParameters = StringKeysDict
 
 FileStringOrPath = Union[str, Path]
