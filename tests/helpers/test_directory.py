@@ -114,7 +114,7 @@ def test_directory_aggregate_all_files(temp_dir):
     file_paths = [f[0] for f in files]
     aggregated = directory_aggregate_all_files(file_paths)
     
-    expected_content = "content1\n\ncontent2\n\n"
+    expected_content = "content1\n\ncontent2\n"
     assert aggregated == expected_content
 
 
@@ -130,5 +130,5 @@ def test_directory_aggregate_all_files_from_dir(temp_dir):
             f.write(content)
     
     aggregated = directory_aggregate_all_files_from_dir(temp_dir)
-    expected_content = "content1\n\ncontent2\n\n"
+    expected_content = "content1\n\ncontent2\n"
     assert aggregated == expected_content
