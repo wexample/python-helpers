@@ -16,6 +16,22 @@ from typing import (
 from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
 
 
+def type_is_isinstance(value: Any, allowed_type: Any) -> bool:
+    """Like isinstance but never raises TypeError; returns False instead."""
+    try:
+        return isinstance(value, allowed_type)
+    except TypeError:
+        return False
+
+
+def _safe_issubclass(a: Any, b: Any) -> bool:
+    """Like issubclass but never raises TypeError; returns False instead."""
+    try:
+        return issubclass(a, b)
+    except TypeError:
+        return False
+
+
 def type_is_generic(type_value: Any) -> bool:
     """Detects if a given type is a generic type like List, Dict, Union"""
 
@@ -45,7 +61,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
     # Check if the raw value matches any allowed base type
     if not type_is_generic(allowed_type):
-        if isinstance(allowed_type, Callable):
+        if type_is_isinstance(allowed_type, Callable):
             if isinstance(value, Callable):
                 # Type is probably not a meta type, i.e:
                 #   - allowed_type=Type[MyClass] will match value MyClass
@@ -85,7 +101,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
                 return
         # Explicit check for simple types without get_origin
-        elif isinstance(value, allowed_type):
+        elif type_is_isinstance(value, allowed_type):
             return
 
     # Handle generic types
@@ -161,7 +177,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> b
         return True
 
     # For any other types, fallback to isinstance check
-    return isinstance(value, origin)
+    return type_is_isinstance(value, origin)
 
 
 
@@ -181,9 +197,9 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
         return any(type_is_compatible(actual_type, arg) for arg in allowed_args)
 
     # Handle Callable type with possible nested generics
-    if issubclass(origin, Callable):
+    if _safe_issubclass(origin, Callable):
         # Check if actual_type is also a Callable
-        if not issubclass(actual_origin, Callable):
+        if not _safe_issubclass(actual_origin, Callable):
             return False
         # If allowed_type is just Callable without specific args, consider it compatible with any Callable
         if not allowed_args:
