@@ -1,13 +1,11 @@
 import inspect
-from typing import Dict, Optional, Set, Type
+from typing import Dict, Optional, Set, Any
 
-from wexample_helpers.const.colors import Colors
 from wexample_helpers.debug.abstract_debug import AbstractDebug
-from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
 class DebugDumpClass(AbstractDebug):
-    def __init__(self, cls: Type, depth: int = 0):
+    def __init__(self, cls: Any, depth: int = 0):
         self.cls = cls
         self.depth = depth
         super().__init__()
@@ -15,14 +13,14 @@ class DebugDumpClass(AbstractDebug):
     def collect_data(self) -> None:
         self.data = self._collect_hierarchy(self.cls)
 
-    def _collect_hierarchy(self, cls: Type, seen: Optional[Set[int]] = None) -> Dict:
+    def _collect_hierarchy(self, cls: Any, seen: Optional[Set[int]] = None) -> Dict:
         if seen is None:
             seen = set()
 
         # Normalize input to a class object if an instance is provided
         cls_obj = cls if inspect.isclass(cls) else cls.__class__
 
-        # Use id-based tracking to avoid hashability issues
+        # Use id-based tracking to avoid hash issues
         key = id(cls_obj)
         if key in seen:
             return {
