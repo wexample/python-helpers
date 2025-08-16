@@ -14,12 +14,11 @@ class AbstractDebug(ABC):
     def collect_data(self) -> None:
         """Collect debug data"""
         pass
-    
-    @abstractmethod
+
     def print(self) -> None:
         """Print debug data"""
-        pass
-    
+        self._print_data(self.data)
+
     def execute(self) -> None:
         """Execute the debug operation"""
         self.print()
@@ -146,6 +145,3 @@ class AbstractDebug(ABC):
                 print(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
                 self._print_data(item["value"], indent + "    ")
 
-    def print(self) -> None:
-        """Print debug data"""
-        self._print_data(self.data)
