@@ -13,14 +13,24 @@ class DebugBreakpoint(AbstractDebug):
         # No data collection needed for breakpoint
         pass
 
-    def print(self) -> None:
+    def print(self, silent: bool = False):
+        lines = []
         if self.message:
-            print(f"\n Debug breakpoint: {self.message}")
-            print("Commands:")
-            print("  p variable  : Print variable")
-            print("  n          : Next line")
-            print("  c          : Continue execution")
-            print("  q          : Quit")
-            print("  h          : Help (more commands)")
+            lines.append(f"\n Debug breakpoint: {self.message}")
+        lines.extend([
+            "Commands:",
+            "  p variable  : Print variable",
+            "  n          : Next line",
+            "  c          : Continue execution",
+            "  q          : Quit",
+            "  h          : Help (more commands)",
+        ])
 
+        text = "\n".join(lines)
+
+        if not silent:
+            return text
+
+        if text:
+            print(text)
         pdb.set_trace()

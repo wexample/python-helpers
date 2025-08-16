@@ -84,5 +84,5 @@ class DebugDumpClass(AbstractDebug):
 
         return result
 
-    def print(self) -> None:
-        super().print()
+    def print(self, silent: bool = False):
+        return super().print(silent=silent)

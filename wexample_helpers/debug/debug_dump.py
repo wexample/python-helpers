@@ -103,6 +103,3 @@ class DebugDump(AbstractDebug):
                     "type": type(obj).__name__,
                     "value": str(obj)
                 }
-
-    def print(self) -> None:
-        self._print_data(self.data)

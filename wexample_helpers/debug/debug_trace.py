@@ -23,11 +23,11 @@ class DebugTrace(AbstractDebug):
         # No data collection needed for trace
         pass
 
-    def print(self) -> None:
-        if self.message:
-            print(f"\n {self.message}")
+    def print(self, silent: bool = False):
+        if not silent:
+            print(silent)
 
-        trace_print(
+        return trace_print(
             truncate_stack=self.truncate_stack,
             path_style=self.path_style,
             paths_map=self.paths_map

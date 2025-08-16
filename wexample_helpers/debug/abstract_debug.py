@@ -15,9 +15,17 @@ class AbstractDebug(ABC):
         """Collect debug data"""
         pass
 
-    def print(self) -> None:
-        """Print debug data"""
-        self._print_data(self.data)
+    def print(self, silent: bool = False) -> str:
+        """Print debug data, or return it as text if return_text is True."""
+        lines = self._render_data(self.data)
+        text = "\n".join(lines)
+        if not silent:
+            print(text)
+        return text
+
+    def render(self) -> str:
+        """Return the formatted debug output as a string without printing."""
+        return "\n".join(self._render_data(self.data))
 
     def execute(self) -> None:
         """Execute the debug operation"""
@@ -86,62 +94,64 @@ class AbstractDebug(ABC):
             
         return "\n".join(result)
 
-    def _print_data(self, data: Dict, indent: str = "") -> None:
-        """Print debug data with consistent formatting."""
+    def _render_data(self, data: Dict, indent: str = "") -> list[str]:
+        """Build the debug output as a list of lines (no printing)."""
+        lines: list[str] = []
         if not isinstance(data, dict):
-            print(f"{indent}{Colors.YELLOW}[Invalid data structure]{Colors.RESET}")
-            return
+            lines.append(f"{indent}{Colors.YELLOW}[Invalid data structure]{Colors.RESET}")
+            return lines
 
         data_type = data.get("type", "unknown")
-            
+
         if data_type == "max_depth":
-            print(f"{indent}{Colors.YELLOW}[Max depth reached]{Colors.RESET}")
-            return
-            
+            lines.append(f"{indent}{Colors.YELLOW}[Max depth reached]{Colors.RESET}")
+            return lines
+
         if data_type == "circular":
-            print(f"{indent}{Colors.YELLOW}[Circular reference]{Colors.RESET}")
-            return
-            
+            lines.append(f"{indent}{Colors.YELLOW}[Circular reference]{Colors.RESET}")
+            return lines
+
         if data_type == "class":
-            print(self._format_class_name(data['name'], data['module'], indent))
+            lines.append(self._format_class_name(data['name'], data['module'], indent))
             if "source_file" in data:
-                print(self._format_file_path(data['source_file'], None, indent))
-                
+                lines.append(self._format_file_path(data['source_file'], None, indent))
+
             if "attributes" in data:
                 for name, value in data["attributes"].items():
-                    print(self._format_attribute_value(name, value, indent))
-                    
+                    lines.append(self._format_attribute_value(name, value, indent))
+
             if "bases" in data:
                 for base in data["bases"]:
-                    self._print_data(base, indent + "    ")
-            return
-            
+                    lines.extend(self._render_data(base, indent + "    "))
+            return lines
+
         if "instance_of" in data:
-            print(self._format_instance_name(data['instance_of'], indent))
+            lines.append(self._format_instance_name(data['instance_of'], indent))
             if "dump_location" in data:
                 location = data['dump_location']
-                print(self._format_file_path(location['file'], location['line'], indent))
-            
-            if "class_data" in data:
-                self._print_data(data["class_data"], indent + "  ")
-            
-            if "attributes" in data:
-                print(self._format_attributes_header(indent))
-                for name, value in data["attributes"].items():
-                    print(self._format_attribute_value(name, value, indent))
-                    
-        elif "value" in data:
-            print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}")
-            
-        elif "elements" in data:
-            print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['elements'])} elements):")
-            for i, element in enumerate(data["elements"]):
-                print(f"{indent}  {Colors.BRIGHT}[{i}]{Colors.RESET} →")
-                self._print_data(element, indent + "    ")
-                
-        elif "items" in data:
-            print(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):")
-            for item in data["items"]:
-                print(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
-                self._print_data(item["value"], indent + "    ")
+                lines.append(self._format_file_path(location['file'], location['line'], indent))
 
+            if "class_data" in data:
+                lines.extend(self._render_data(data["class_data"], indent + "  "))
+
+            if "attributes" in data:
+                lines.append(self._format_attributes_header(indent))
+                for name, value in data["attributes"].items():
+                    lines.append(self._format_attribute_value(name, value, indent))
+
+        elif "value" in data:
+            lines.append(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}")
+
+        elif "elements" in data:
+            lines.append(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['elements'])} elements):")
+            for i, element in enumerate(data["elements"]):
+                lines.append(f"{indent}  {Colors.BRIGHT}[{i}]{Colors.RESET} →")
+                lines.extend(self._render_data(element, indent + "    "))
+
+        elif "items" in data:
+            lines.append(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):")
+            for item in data["items"]:
+                lines.append(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
+                lines.extend(self._render_data(item["value"], indent + "    "))
+
+        return lines
