@@ -40,9 +40,9 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
             if item == "__pydantic_private__":
                 cls_name = type(self).__name__
                 msg = (
-                    f"{cls_name} is not fully initialized by Pydantic: missing '__pydantic_private__'.\n"
+                    f"{cls_name} is not fully initialized by Pydantic.'.\n"
                     "This typically happens when a mixin defines __init__ and is initialized before BaseModel.\n"
-                    "Fix: in your class __init__, call BaseModel.__init__(self, **kwargs) first, then your mixins;\n"
+                    "Fix: in your class __init__, call ExtendedBaseModel.__init__(self, **kwargs) first, then your mixins;\n"
                     "or move mixin initialization logic to a post-init hook."
                 )
                 raise AttributeError(msg) from None
