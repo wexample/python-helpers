@@ -1,15 +1,53 @@
+import inspect
+from typing import NoReturn, Optional
+from typing import get_origin, ClassVar
+
+from pydantic.fields import FieldInfo
+
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
 from wexample_helpers.classes.unique_base_model import UniqueBaseModel
-from typing import NoReturn, Optional
-import inspect
 
 
 class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
+    def __init_subclass__(cls, **kwargs):  # type: ignore[override]
+        super().__init_subclass__(**kwargs)
+        annotations = cls.__dict__.get('__annotations__', {}) or {}
+
+        for name, anno in annotations.items():
+            if name.startswith('__'):
+                continue
+            # Skip ClassVars (not model fields)
+            if get_origin(anno) is ClassVar:
+                continue
+            # Skip private attrs and dunder
+            if name.startswith('_'):
+                continue
+
+            # Only enforce on fields declared in this class body
+            has_local_default = name in cls.__dict__
+            default = cls.__dict__.get(name, ...)
+
+            # Must be declared with Field(...)
+            if not isinstance(default, FieldInfo):
+                raise TypeError(
+                    (
+                        f"{cls.__name__}.{name}: fields must use Field(..., description=...) — "
+                        f"found plain default or missing Field."
+                    )
+                )
+
+            # Must have a non-empty description
+            desc = getattr(default, 'description', None)
+            if not desc or not str(desc).strip():
+                raise TypeError(
+                    f"{cls.__name__}.{name}: Field must include a non-empty description"
+                )
+
     @classmethod
     def __raise_not_implemented_error(
-        cls,
-        method: Optional[str] = None,
-        message: Optional[str] = None,
+            cls,
+            method: Optional[str] = None,
+            message: Optional[str] = None,
     ) -> NoReturn:
         """Convenience to raise a standardized NotImplementedError.
 
@@ -52,9 +90,9 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
 
     @classmethod
     def _raise_not_implemented_error(
-        cls,
-        method: Optional[str] = None,
-        message: Optional[str] = None,
+            cls,
+            method: Optional[str] = None,
+            message: Optional[str] = None,
     ) -> NoReturn:
         """Public-friendly alias without name mangling.
 
