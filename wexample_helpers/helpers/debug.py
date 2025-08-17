@@ -3,8 +3,8 @@ from typing import Any, Optional
 from wexample_helpers.debug.debug_breakpoint import DebugBreakpoint
 from wexample_helpers.debug.debug_dump import DebugDump
 from wexample_helpers.debug.debug_dump_class import DebugDumpClass
-from wexample_helpers.debug.debug_trace import DebugTrace
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+from wexample_helpers.helpers.trace import trace_print
 
 
 def debug_trace(
@@ -12,11 +12,12 @@ def debug_trace(
         truncate_stack: int = 0,
         paths_map: Optional[dict] = None
 ) -> None:
-    DebugTrace(
+    # Delegate to trace helpers that use the new exception/trace classes
+    trace_print(
         path_style=path_style,
         truncate_stack=truncate_stack,
-        paths_map=paths_map
-    ).execute()
+        paths_map=paths_map,
+    )
 
 
 def debug_trace_and_die(
@@ -25,12 +26,13 @@ def debug_trace_and_die(
         paths_map: Optional[dict] = None,
         message: str = None
 ) -> None:
-    DebugTrace(
+    if message:
+        print(message)
+    debug_trace(
         path_style=path_style,
         truncate_stack=truncate_stack,
         paths_map=paths_map,
-        message=message
-    ).execute()
+    )
     exit(1)
 
 
