@@ -33,3 +33,6 @@ text = "MIT"
 
 [project.urls]
 homepage = "https://github.com/wexample/python-helpers"
+
+[project.entry-points.pytest11]
+wexample-helpers = "wexample_helpers.test.plugin.runtest_makereport"
