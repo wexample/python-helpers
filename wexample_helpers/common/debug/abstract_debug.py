@@ -42,8 +42,8 @@ class AbstractDebug(ABC):
         return path
         
     def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
-        """Format class name with module."""
-        result = f"{indent}{Colors.BLUE}→ {name}{Colors.RESET}"
+        """Format class name with module. Use a distinct color for classes."""
+        result = f"{indent}{Colors.MAGENTA}→ {name}{Colors.RESET}"
         if module != "__main__":
             result += f" {Colors.GREEN}({module}){Colors.RESET}"
         return result
@@ -56,8 +56,8 @@ class AbstractDebug(ABC):
         return f"{indent}    {Colors.YELLOW}File: {clickable_path}{line_info}{Colors.RESET}"
         
     def _format_instance_name(self, name: str, indent: str = "") -> str:
-        """Format instance name."""
-        return f"{indent}{Colors.BLUE}Instance of {name}{Colors.RESET}"
+        """Format instance name with distinct class color."""
+        return f"{indent}{Colors.MAGENTA}Instance of {name}{Colors.RESET}"
         
     def _format_attributes_header(self, indent: str = "") -> str:
         """Format attributes section header."""
@@ -93,6 +93,22 @@ class AbstractDebug(ABC):
             result.append(f"{indent}    {Colors.BLUE}value:{Colors.RESET} {Colors.GREEN}{value.get('value', '')}{Colors.RESET}")
             
         return "\n".join(result)
+
+    def _inline_data(self, data: Dict) -> str:
+        """Render a compact, one-line representation of a data node (used for dict keys)."""
+        if not isinstance(data, dict):
+            return str(data)
+        # Prefer explicit value if present (already repr for primitives)
+        if "value" in data:
+            return data["value"]
+        # Class/instance labels
+        if data.get("type") == "class" and "name" in data:
+            return data["name"]
+        if "instance_of" in data:
+            return data["instance_of"]
+        # Fallback to type name
+        t = data.get("type")
+        return t if t is not None else str(data)
 
     def _render_data(self, data: Dict, indent: str = "") -> list[str]:
         """Build the debug output as a list of lines (no printing)."""
@@ -151,7 +167,8 @@ class AbstractDebug(ABC):
         elif "items" in data:
             lines.append(f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):")
             for item in data["items"]:
-                lines.append(f"{indent}  {Colors.BRIGHT}{item['key']}{Colors.RESET} →")
+                key_inline = self._inline_data(item["key"])
+                lines.append(f"{indent}  {Colors.BRIGHT}{key_inline}{Colors.RESET} →")
                 lines.extend(self._render_data(item["value"], indent + "    "))
 
         return lines
