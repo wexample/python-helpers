@@ -2,8 +2,8 @@ import unittest
 from wexample_helpers.test.classes.first_parent import FirstParent
 from wexample_helpers.test.classes.second_parent import SecondParent
 from wexample_helpers.test.classes.multiple_child import MultipleChild
-from wexample_helpers.debug.debug_dump import DebugDump
-from wexample_helpers.debug.debug_dump_class import DebugDumpClass
+from wexample_helpers.common.debug.debug_dump import DebugDump
+from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
 
 class TestMultipleInheritance(unittest.TestCase):
     def test_multiple_inheritance(self):

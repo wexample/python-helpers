@@ -1,5 +1,5 @@
 from wexample_helpers.test.classes.property_class import PropertyClass
-from wexample_helpers.debug.debug_dump import DebugDump
+from wexample_helpers.common.debug.debug_dump import DebugDump
 
 def test_property_class():
     # Create instance

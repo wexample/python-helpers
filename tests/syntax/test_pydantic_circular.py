@@ -1,6 +1,6 @@
 from typing import Type
 
-from wexample_helpers.debug.debug_dump import DebugDump
+from wexample_helpers.common.debug.debug_dump import DebugDump
 from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import AdvancedKernel
 from wexample_helpers.test.classes.pydantic_circular_base_kernel import BaseKernel
 

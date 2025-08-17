@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from wexample_helpers.errors.multiple_base_model_inheritance_error import MultipleBaseModelInheritanceError
 from wexample_helpers.test.classes.unique_base_model_child import UniqueBaseModelChild
-from wexample_helpers.debug.debug_dump import DebugDump
+from wexample_helpers.common.debug.debug_dump import DebugDump
 
 
 def test_unique_base_model():
