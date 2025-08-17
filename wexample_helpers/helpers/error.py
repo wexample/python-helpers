@@ -1,14 +1,15 @@
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 
-from wexample_helpers.classes.trace_frame import TraceFrame
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
-from wexample_helpers.helpers.trace import trace_get_traceback_frames
+
+if TYPE_CHECKING:
+    from wexample_helpers.classes.trace_frame import TraceFrame
 
 
-def error_get_truncate_index(frames: List[TraceFrame], error: Exception) -> int:
+def error_get_truncate_index(frames: List["TraceFrame"], error: Exception) -> int:
     """Returns the index where to truncate the trace based on error type. Returns -1 if no truncation needed."""
     error_module = error.__class__.__module__
+    from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
 
     for rule_type in ErrorTruncateRules:
         if error_module.startswith(rule_type.module_prefix):
@@ -30,11 +31,11 @@ def error_get_truncate_index(frames: List[TraceFrame], error: Exception) -> int:
 
 
 def error_format(
-    error: Optional[Exception] = None,
-    path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None,
+        error: Optional[Exception] = None,
+        path_style: DebugPathStyle = DebugPathStyle.FULL,
+        paths_map: Optional[dict] = None,
 ) -> str:
-    from wexample_helpers.helpers.trace import trace_format
+    from wexample_helpers.helpers.trace import trace_format, trace_get_traceback_frames
 
     # Get frames from the exception traceback
     frames = trace_get_traceback_frames(
@@ -43,9 +44,9 @@ def error_format(
         paths_map=paths_map
     )
     truncate_index = error_get_truncate_index(frames, error)
-    
+
     if truncate_index != -1:
         frames = frames[:truncate_index]
-    
+
     # Then print the formatted traceback
     return f"{trace_format(frames)}\n{type(error).__name__}: {error}"
