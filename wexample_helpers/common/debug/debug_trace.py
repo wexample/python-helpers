@@ -2,20 +2,18 @@ from typing import Optional, Dict
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.helpers.trace import trace_print, trace_get_frames, trace_format
+from wexample_helpers.helpers.trace import trace_get_frames, trace_format
 
 
 class DebugTrace(AbstractDebug):
     def __init__(
             self,
             path_style: DebugPathStyle = DebugPathStyle.FULL,
-            truncate_stack: int = 0,
             paths_map: Optional[Dict] = None,
             message: Optional[str] = None,
             show_internal: bool = False,
     ):
         self.path_style = path_style
-        self.truncate_stack = truncate_stack
         self.paths_map = paths_map
         self.message = message
         self.show_internal = show_internal
@@ -28,18 +26,16 @@ class DebugTrace(AbstractDebug):
     def print(self, silent: bool = False):
         if silent:
             # Build text without printing
-            effective_skip = self.truncate_stack + (0 if self.show_internal else 1)
             frames = trace_get_frames(
-                skip_frames=effective_skip,
+                skip_frames=(1 if not self.show_internal else None),
                 path_style=self.path_style,
                 paths_map=self.paths_map,
             )
             return trace_format(frames)
 
         # Print by formatting frames directly to honor truncate_stack and show_internal
-        effective_skip = self.truncate_stack + (0 if self.show_internal else 1)
         frames = trace_get_frames(
-            skip_frames=effective_skip,
+            skip_frames=(1 if not self.show_internal else None),
             path_style=self.path_style,
             paths_map=self.paths_map,
         )
