@@ -48,12 +48,12 @@ class TraceCollector:
     @staticmethod
     def from_stack(
         *,
-        skip_frames: int = 0,
+        skip_frames: Optional[int] = None,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
         paths_map: Optional[Dict[str, str]] = None,
     ) -> List[ExceptionFrame]:
         frames: List[ExceptionFrame] = []
-        for frame in inspect.stack()[1 + skip_frames:]:
+        for frame in inspect.stack()[(skip_frames + 1 if skip_frames is not None else 0):]:
             frames.append(
                 ExceptionFrame(
                     filename=frame.filename,

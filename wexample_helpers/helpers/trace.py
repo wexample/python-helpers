@@ -13,13 +13,15 @@ from wexample_helpers.common.exception.formatter import TraceFormatter
 
 def trace_print(
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    truncate_stack: int = 0,
-    paths_map: Optional[dict] = None
+    paths_map: Optional[dict] = None,
+    show_internal: bool = False,
 ) -> None:
+    # By default, hide the helper frame (this function) to show user code as the top frame.
+    # When show_internal=True, display every frame including helper internals.
     print(
         trace_format(
             trace_get_frames(
-                skip_frames=truncate_stack,
+                skip_frames=(1 if show_internal is False else None),
                 path_style=path_style,
                 paths_map=paths_map,
             )
@@ -41,13 +43,13 @@ def trace_get_traceback_frames(
 
 
 def trace_get_frames(
-    skip_frames: int = 0,
+    skip_frames: Optional[int] = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: Optional[dict] = None
 ) -> List["TraceFrame"]:
     """Convert stack frames to TraceFrame objects."""
     return TraceCollector.from_stack(
-        skip_frames=skip_frames,
+        skip_frames=(skip_frames + 1) if (skip_frames is not None) else None,
         path_style=path_style,
         paths_map=paths_map,
     )
