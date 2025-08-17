@@ -10,6 +10,20 @@ class UniqueBaseModel(BaseModel):
     BaseModel is present. If multiple BaseModel-derived classes are detected, a
     MultipleBaseModelInheritanceError is raised.
 
+    Why this exists (rationale):
+    - Multiple inheritance with several BaseModel-derived parents can lead to
+      Method Resolution Order (MRO) ambiguities and subtle bugs in field merging,
+      validators, model config and generics (Pydantic v1/v2). These issues are
+      often hard to diagnose because they only appear at runtime on specific paths.
+    - In team projects, enforcing a single BaseModel ancestor provides a clear rule
+      that prevents accidental pattern drift and “magic” behaviour when models
+      evolve and mixins get reused.
+
+    Recommended patterns instead of multi-inheritance of BaseModel:
+    - Prefer composition or utility mixins that DO NOT inherit from BaseModel.
+    - Share validators or constraints via Annotated types / helper functions.
+    - Extract common config/logic into standalone helpers or a single shared base.
+
     This class is abstract and cannot be instantiated directly.
     """
 
