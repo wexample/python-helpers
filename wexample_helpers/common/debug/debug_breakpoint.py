@@ -28,9 +28,11 @@ class DebugBreakpoint(AbstractDebug):
 
         text = "\n".join(lines)
 
-        if not silent:
+        if silent:
+            # In silent mode, do not start pdb; return the helper text instead
             return text
 
         if text:
             print(text)
         pdb.set_trace()
+        return ""

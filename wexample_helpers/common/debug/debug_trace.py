@@ -2,7 +2,7 @@ from typing import Optional, Dict
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.helpers.trace import trace_print
+from wexample_helpers.helpers.trace import trace_print, trace_get_frames, trace_format
 
 
 class DebugTrace(AbstractDebug):
@@ -11,12 +11,14 @@ class DebugTrace(AbstractDebug):
             path_style: DebugPathStyle = DebugPathStyle.FULL,
             truncate_stack: int = 0,
             paths_map: Optional[Dict] = None,
-            message: Optional[str] = None
+            message: Optional[str] = None,
+            show_internal: bool = False,
     ):
         self.path_style = path_style
         self.truncate_stack = truncate_stack
         self.paths_map = paths_map
         self.message = message
+        self.show_internal = show_internal
         super().__init__()
 
     def collect_data(self) -> None:
@@ -24,11 +26,24 @@ class DebugTrace(AbstractDebug):
         pass
 
     def print(self, silent: bool = False):
-        if not silent:
-            print(silent)
+        if silent:
+            # Build text without printing
+            effective_skip = self.truncate_stack + (0 if self.show_internal else 1)
+            frames = trace_get_frames(
+                skip_frames=effective_skip,
+                path_style=self.path_style,
+                paths_map=self.paths_map,
+            )
+            return trace_format(frames)
 
-        return trace_print(
-            truncate_stack=self.truncate_stack,
+        # Print by formatting frames directly to honor truncate_stack and show_internal
+        effective_skip = self.truncate_stack + (0 if self.show_internal else 1)
+        frames = trace_get_frames(
+            skip_frames=effective_skip,
             path_style=self.path_style,
-            paths_map=self.paths_map
+            paths_map=self.paths_map,
         )
+        text = trace_format(frames)
+        if text:
+            print(text)
+        return ""
