@@ -41,6 +41,7 @@ class ExceptionHandler:
         *,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
         paths_map: Optional[Dict[str, str]] = None,
+        hide_magic_frames: bool = False,
     ) -> str:
         frames = TraceCollector.from_traceback(
             error.__traceback__,
@@ -51,6 +52,13 @@ class ExceptionHandler:
         truncate_index = self._get_truncate_index(frames, error)
         if truncate_index != -1:
             frames = frames[:truncate_index]
+
+        if hide_magic_frames and frames:
+            # Trim trailing magic/dunder frames (e.g., __getattr__) so the last
+            # displayed frame points to user code call site rather than internals.
+            magic_names = {"__getattr__"}
+            while frames and frames[-1].function in magic_names:
+                frames = frames[:-1]
 
         return f"{self.formatter.format(frames)}\n{type(error).__name__}: {error}"
 
