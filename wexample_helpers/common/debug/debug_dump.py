@@ -1,9 +1,9 @@
 import inspect
-from typing import Any, Dict, List, Optional, Set
 from datetime import datetime
-from wexample_helpers.debug.abstract_debug import AbstractDebug
-from wexample_helpers.const.colors import Colors
-from wexample_helpers.helpers.cli import cli_make_clickable_path
+from typing import Any, Dict, Optional, Set
+
+from wexample_helpers.common.debug.abstract_debug import AbstractDebug
+
 
 class DebugDump(AbstractDebug):
     def __init__(self, obj: Any, max_depth: int = 100):
@@ -15,7 +15,7 @@ class DebugDump(AbstractDebug):
         caller = frame.f_back if frame else None
         self.caller_info = inspect.getframeinfo(caller) if caller else None
         super().__init__()
-        
+
     def collect_data(self) -> None:
         self.data = self._collect_data(self.obj)
         if self.caller_info:
@@ -85,7 +85,7 @@ class DebugDump(AbstractDebug):
                             "has_setter": value.fset is not None,
                             "has_deleter": value.fdel is not None
                         }
-                
+
                 # Collect regular attributes
                 if hasattr(obj, '__dict__'):
                     for name, value in obj.__dict__.items():

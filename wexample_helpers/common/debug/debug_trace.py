@@ -1,6 +1,6 @@
 from typing import Optional, Dict
 
-from wexample_helpers.debug.abstract_debug import AbstractDebug
+from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.helpers.trace import trace_print
 

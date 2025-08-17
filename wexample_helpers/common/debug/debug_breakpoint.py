@@ -1,7 +1,7 @@
 import pdb
 from typing import Optional
 
-from wexample_helpers.debug.abstract_debug import AbstractDebug
+from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
 
 class DebugBreakpoint(AbstractDebug):

@@ -1,8 +1,8 @@
 from typing import Any, Optional
 
-from wexample_helpers.debug.debug_breakpoint import DebugBreakpoint
-from wexample_helpers.debug.debug_dump import DebugDump
-from wexample_helpers.debug.debug_dump_class import DebugDumpClass
+from wexample_helpers.common.debug.debug_breakpoint import DebugBreakpoint
+from wexample_helpers.common.debug.debug_dump import DebugDump
+from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.helpers.trace import trace_print
 

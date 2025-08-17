@@ -1,7 +1,7 @@
 import inspect
 from typing import Dict, Optional, Set, Any
 
-from wexample_helpers.debug.abstract_debug import AbstractDebug
+from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
 
 class DebugDumpClass(AbstractDebug):
