@@ -27,16 +27,20 @@ def test_error_format_contains_exception_and_frames():
         _raise_nested()
     except Exception as e:  # noqa: PIE786
         out = error_format(e, path_style=DebugPathStyle.FULL)
+    # Strip ANSI CSI and OSC 8 hyperlinks that may wrap the file path
+    ansi_csi = re.compile(r"\x1B\[[0-9;]*[A-Za-z]")
+    osc8 = re.compile(r"\x1B\]8;;.*?\x1B\\")
+    out_clean = ansi_csi.sub("", osc8.sub("", out))
 
     # Should end with the exception message
     assert out.strip().endswith("ValueError: boom")
 
     # Should contain at least one formatted frame header
-    assert "File     :" in out
-    assert "Function :" in out
+    assert "File     :" in out_clean
+    assert "Function :" in out_clean
 
     # Contains this test function name
-    assert "test_error_format_contains_exception_and_frames" in out
+    assert "test_error_format_contains_exception_and_frames" in out_clean
 
     # Contains path with a colon and line number pattern
-    assert re.search(r":\d+\nLine\s+:\s+\d+", out) is not None
+    assert re.search(r":\d+\nLine\s+:\s+\d+", out_clean) is not None
