@@ -54,10 +54,12 @@ class ExceptionHandler:
             frames = frames[:truncate_index]
 
         if hide_magic_frames and frames:
-            # Trim trailing magic/dunder frames (e.g., __getattr__) so the last
-            # displayed frame points to user code call site rather than internals.
-            magic_names = {"__getattr__"}
-            while frames and frames[-1].function in magic_names:
+            # Trim trailing dunder frames (names starting and ending with '__') so the
+            # last displayed frame points to user code call site rather than internals.
+            def _is_dunder(name: str) -> bool:
+                return len(name) >= 4 and name.startswith("__") and name.endswith("__")
+
+            while frames and _is_dunder(frames[-1].function):
                 frames = frames[:-1]
 
         return f"{self.formatter.format(frames)}\n{type(error).__name__}: {error}"
