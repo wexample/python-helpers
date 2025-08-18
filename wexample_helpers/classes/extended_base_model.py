@@ -44,22 +44,23 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
                 )
 
     @classmethod
-    def __raise_not_implemented_error(
+    def _raise_not_implemented_error(
             cls,
             method: Optional[str] = None,
             message: Optional[str] = None,
     ) -> NoReturn:
         """Convenience to raise a standardized NotImplementedError.
 
-        Usage in would-be abstract methods:
+        Usage in would-be abstract/class methods:
 
-            def do_work(self):
-                self.__class__.__raise_not_implemented_error()
+            @classmethod
+            def get_example_class(cls):
+                cls._raise_not_implemented_error()
 
         or, from instance methods:
 
             def do_work(self):
-                type(self).__raise_not_implemented_error()
+                type(self)._raise_not_implemented_error()
 
         The method name is inferred from the caller if not provided.
         """
@@ -88,15 +89,4 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
             cls_name = type(self).__name__
             raise AttributeError(f"{cls_name} has no attribute '{item}'") from None
 
-    @classmethod
-    def _raise_not_implemented_error(
-            cls,
-            method: Optional[str] = None,
-            message: Optional[str] = None,
-    ) -> NoReturn:
-        """Public-friendly alias without name mangling.
-
-        Prefer this helper when calling from subclasses to avoid double-underscore
-        name-mangling issues.
-        """
-        cls.__raise_not_implemented_error(method=method, message=message)
+    
