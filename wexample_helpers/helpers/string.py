@@ -68,3 +68,27 @@ def string_truncate(text: str, limit: int) -> str:
 
 def string_render_boolean(boolean: bool) -> str:
     return 'True' if boolean else 'False'
+
+
+def string_generate_lorem_ipsum(length: int = 100) -> str:
+    if length <= 0:
+        return ""
+
+    base = (
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    )
+
+    text = (base + " ") * ((length // (len(base) + 1)) + 1)
+
+    cut = text[:length].rstrip()
+
+    if len(cut) == length and length < len(text) and not cut.endswith((" ", ".", ",", "!", "?", ";", ":")):
+        last_space = cut.rfind(" ")
+        if last_space > 0:
+            cut = cut[:last_space]
+
+    return cut.strip()
