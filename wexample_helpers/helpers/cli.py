@@ -1,7 +1,8 @@
 from typing import Union, Type, Any
+from wexample_file.const.types import PathOrString
 
 
-def cli_make_clickable_path(path: str, short_title: Union[bool, str] = False) -> str:
+def cli_make_clickable_path(path: PathOrString, short_title: Union[bool, str] = False) -> str:
     from pathlib import Path
 
     if isinstance(short_title, str):
