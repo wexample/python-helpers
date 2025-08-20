@@ -1,23 +1,35 @@
+import pathlib
 from typing import Optional, Type, List, Dict
 
 from typing_extensions import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from pathlib import Path
+    pass
 
 
-def module_load(file_path: "Path"):
+def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> Type:
     import importlib
-    import os
 
-    module_name = os.path.splitext(os.path.basename(file_path))[0]
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    """Load a class by name from a python module file path."""
+    if not file_path.exists():
+        raise FileNotFoundError(f"Module file not found: {file_path}")
+
+    module_name = f"wex_dynamic_{abs(hash(str(file_path)))}"
+    spec = importlib.util.spec_from_file_location(module_name, str(file_path))
     if spec is None or spec.loader is None:
-        raise ImportError(f"Unable to create spec for {file_path}")
+        raise ImportError(f"Cannot create a spec for module: {file_path}")
 
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    spec.loader.exec_module(module)  # type: ignore[attr-defined]
+
+    try:
+        cls = getattr(module, class_name)
+    except AttributeError as e:
+        raise ImportError(
+            f"Class '{class_name}' not found in module '{file_path}'."
+        ) from e
+
+    return cls
 
 
 def module_collect_classes(
