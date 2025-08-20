@@ -19,9 +19,9 @@ def debug_trace(
 
 
 def debug_trace_and_die(
+        message: str = None,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
         paths_map: Optional[dict] = None,
-        message: str = None
 ) -> None:
     if message:
         print(message)
