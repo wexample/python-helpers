@@ -1,8 +1,9 @@
+import os
 from abc import ABC, abstractmethod
+from typing import Dict
+
 from wexample_helpers.const.colors import Colors
 from wexample_helpers.helpers.cli import cli_make_clickable_path
-import os
-from typing import Dict
 
 
 class AbstractDebug(ABC):

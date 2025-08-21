@@ -1,5 +1,5 @@
 import pathlib
-from typing import Type, List, Dict, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 from typing_extensions import TYPE_CHECKING
 
@@ -67,10 +67,10 @@ def module_collect_classes(
 
 def module_are_same(a: Any, b: Any) -> bool:
     """Determine if two class definition are the same class definition"""
+    import hashlib
     import inspect
     import os
     import sys
-    import hashlib
 
     if a is b:
         return True

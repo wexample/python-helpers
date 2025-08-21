@@ -1,7 +1,7 @@
 import os
 import shutil
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Any, Callable, List
 
 from wexample_file.const.types import PathOrString

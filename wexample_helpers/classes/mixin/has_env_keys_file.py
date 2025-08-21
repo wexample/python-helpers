@@ -11,7 +11,7 @@ class HasEnvKeysFile(HasEnvKeys):
         Args:
             file_path: Path to the .env file
         """
-        from dotenv import load_dotenv, dotenv_values
+        from dotenv import dotenv_values, load_dotenv
 
         load_dotenv(file_path)
         self.env_config.update(dotenv_values(file_path))

@@ -1,10 +1,12 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
 from pydantic import Field
+
 from .pydantic_circular_service import Service
 
 if TYPE_CHECKING:
-    from .pydantic_circular_base_kernel import BaseKernel
     from .pydantic_circular_advanced_kernel import AdvancedKernel
+    from .pydantic_circular_base_kernel import BaseKernel
 
 
 class AdvancedService(Service):

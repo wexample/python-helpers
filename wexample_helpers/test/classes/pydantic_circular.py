@@ -1,4 +1,5 @@
-from typing import Optional, ForwardRef
+from typing import ForwardRef, Optional
+
 from pydantic import BaseModel, Field, PrivateAttr
 
 # Forward references for circular dependencies

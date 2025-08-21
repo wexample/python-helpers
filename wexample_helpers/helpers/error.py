@@ -1,4 +1,4 @@
-from typing import Optional, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 

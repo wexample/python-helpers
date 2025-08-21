@@ -1,12 +1,9 @@
-from wexample_helpers.helpers.dict import (
-    dict_get_item_by_path,
-    dict_has_item_by_path,
-    dict_merge,
-    dict_remove_item_by_path,
-    dict_set_item_by_path,
-    dict_sort_values,
-    dict_get_first_missing_key,
-)
+from wexample_helpers.helpers.dict import (dict_get_first_missing_key,
+                                           dict_get_item_by_path,
+                                           dict_has_item_by_path, dict_merge,
+                                           dict_remove_item_by_path,
+                                           dict_set_item_by_path,
+                                           dict_sort_values)
 
 
 def test_dict_get_item_by_path():

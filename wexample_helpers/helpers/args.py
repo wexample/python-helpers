@@ -3,13 +3,8 @@ import inspect
 import re
 from typing import Any, Dict, Iterable, List, Optional, Union, cast
 
-from wexample_helpers.const.types import (
-    AnyCallable,
-    BasicValue,
-    StringKeysDict,
-    StringsList,
-    Scalar,
-)
+from wexample_helpers.const.types import (AnyCallable, BasicValue, Scalar,
+                                          StringKeysDict, StringsList)
 from wexample_helpers.helpers.string import string_to_snake_case
 
 

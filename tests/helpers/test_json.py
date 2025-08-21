@@ -1,9 +1,7 @@
-from wexample_helpers.helpers.json import (
-    json_load,
-    json_load_if_valid,
-    json_parse_if_valid,
-)
 import json
+
+from wexample_helpers.helpers.json import (json_load, json_load_if_valid,
+                                           json_parse_if_valid)
 
 
 def test_json_parse_if_valid():

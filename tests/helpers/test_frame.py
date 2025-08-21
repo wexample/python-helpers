@@ -6,8 +6,10 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 HELPERS_PATH = os.path.join(PROJECT_ROOT, "pip", "helpers")
 sys.path.insert(0, HELPERS_PATH)
 
-from wexample_helpers.common.exception.frame import ExceptionFrame  # type: ignore  # noqa: E402
-from wexample_helpers.enums.debug_path_style import DebugPathStyle  # type: ignore  # noqa: E402
+from wexample_helpers.common.exception.frame import \
+    ExceptionFrame  # type: ignore  # noqa: E402
+from wexample_helpers.enums.debug_path_style import \
+    DebugPathStyle  # type: ignore  # noqa: E402
 
 
 def test_exception_frame_formatting_full_and_filename(tmp_path):

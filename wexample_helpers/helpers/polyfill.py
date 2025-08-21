@@ -1,4 +1,4 @@
-from typing import Union, List, TypeVar, Any, Optional
+from typing import Any, List, Optional, TypeVar, Union
 
 T = TypeVar("T", bound=type)
 

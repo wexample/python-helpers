@@ -1,8 +1,8 @@
-from typing import Optional, Dict
+from typing import Dict, Optional
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.helpers.trace import trace_get_frames, trace_format
+from wexample_helpers.helpers.trace import trace_format, trace_get_frames
 
 
 class DebugTrace(AbstractDebug):

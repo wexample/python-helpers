@@ -1,4 +1,5 @@
-from wexample_helpers.helpers.html import html_remove_tags, html_split_prompt_parts
+from wexample_helpers.helpers.html import (html_remove_tags,
+                                           html_split_prompt_parts)
 
 
 def test_html_remove_tags():

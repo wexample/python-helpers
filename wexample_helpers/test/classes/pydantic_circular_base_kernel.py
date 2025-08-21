@@ -1,5 +1,7 @@
 from typing import Optional, Type
+
 from pydantic import BaseModel, Field, PrivateAttr
+
 from .pydantic_circular_service import Service
 
 

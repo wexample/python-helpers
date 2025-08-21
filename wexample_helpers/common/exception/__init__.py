@@ -1,6 +1,6 @@
-from .frame import ExceptionFrame
 from .collector import TraceCollector
 from .formatter import TraceFormatter
+from .frame import ExceptionFrame
 from .handler import ExceptionHandler
 
 __all__ = [

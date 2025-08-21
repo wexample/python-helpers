@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional, List, Type
+from typing import Any, Dict, List, Optional, Type
 
 from wexample_helpers.service.registry import Registry
 

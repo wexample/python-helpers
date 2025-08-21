@@ -1,8 +1,5 @@
-from wexample_helpers.helpers.array import (
-    array_replace_value,
-    array_swap,
-    array_unique,
-)
+from wexample_helpers.helpers.array import (array_replace_value, array_swap,
+                                            array_unique)
 
 
 def test_array_replace_value():

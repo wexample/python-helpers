@@ -1,8 +1,7 @@
-from typing import List, Optional, Any
+from typing import Any, List, Optional
 
-from wexample_helpers.exception.not_allowed_item_exception import (
-    NotAllowedItemException,
-)
+from wexample_helpers.exception.not_allowed_item_exception import \
+    NotAllowedItemException
 
 
 class NotAllowedVariableTypeException(NotAllowedItemException):

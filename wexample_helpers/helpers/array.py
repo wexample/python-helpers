@@ -1,4 +1,4 @@
-from typing import Any, List, Sequence, Optional
+from typing import Any, List, Optional, Sequence
 
 
 def array_replace_value(

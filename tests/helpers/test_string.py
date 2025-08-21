@@ -1,4 +1,5 @@
-from wexample_helpers.helpers.string import string_to_kebab_case, string_to_snake_case
+from wexample_helpers.helpers.string import (string_to_kebab_case,
+                                             string_to_snake_case)
 
 
 def test_string_to_kebab_case():

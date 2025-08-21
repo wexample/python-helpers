@@ -1,7 +1,9 @@
 from typing import Type
+
 from pydantic import Field
-from .pydantic_circular_base_kernel import BaseKernel
+
 from .pydantic_circular_advanced_service import AdvancedService
+from .pydantic_circular_base_kernel import BaseKernel
 
 
 class AdvancedKernel(BaseKernel):

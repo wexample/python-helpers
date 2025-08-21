@@ -1,21 +1,9 @@
 from types import UnionType
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Tuple,
-    Type,
-    Union,
-    cast,
-    get_args,
-    get_origin,
-    get_type_hints,
-)
+from typing import (Any, Callable, Dict, List, Tuple, Type, Union, cast,
+                    get_args, get_origin, get_type_hints)
 
-from wexample_helpers.exception.not_allowed_variable_type_exception import (
-    NotAllowedVariableTypeException,
-)
+from wexample_helpers.exception.not_allowed_variable_type_exception import \
+    NotAllowedVariableTypeException
 
 
 def type_is_isinstance(value: Any, allowed_type: Any) -> bool:

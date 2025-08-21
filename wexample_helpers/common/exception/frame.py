@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional, Dict
 import os
+from dataclasses import dataclass
+from typing import Dict, Optional
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 from wexample_helpers.helpers.cli import cli_make_clickable_path

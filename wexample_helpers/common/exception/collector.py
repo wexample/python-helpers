@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from types import TracebackType
-from typing import List, Optional, Dict
 import inspect
+from types import TracebackType
+from typing import Dict, List, Optional
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+
 from .frame import ExceptionFrame
 
 

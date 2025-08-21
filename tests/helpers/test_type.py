@@ -1,11 +1,7 @@
 from types import NoneType
-from typing import Any, Callable, Dict, List, Tuple, Union, Type, Optional, Set
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
 
-from wexample_helpers.helpers.type import (
-    type_is_compatible,
-    type_is_generic,
-)
-
+from wexample_helpers.helpers.type import type_is_compatible, type_is_generic
 from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
 
 

@@ -1,16 +1,11 @@
-from wexample_helpers.helpers.args import (
-    args_replace_one,
-    args_push_one,
-    args_shift_one,
-    args_split_arg_array,
-    args_convert_dict_to_snake_dict,
-    args_parse_dict,
-    args_parse_list,
-    args_parse_list_or_strings_list,
-    args_parse_one,
-    args_is_basic_value,
-    args_in_function,
-)
+from wexample_helpers.helpers.args import (args_convert_dict_to_snake_dict,
+                                           args_in_function,
+                                           args_is_basic_value,
+                                           args_parse_dict, args_parse_list,
+                                           args_parse_list_or_strings_list,
+                                           args_parse_one, args_push_one,
+                                           args_replace_one, args_shift_one,
+                                           args_split_arg_array)
 
 
 def test_args_replace_one():

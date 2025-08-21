@@ -7,8 +7,8 @@ class HasLogHandler:
             logger_name: Name of the logger to capture
             callback: Function to call with each log line
         """
-        import logging
         import io
+        import logging
         from contextlib import contextmanager
 
         @contextmanager

@@ -1,17 +1,13 @@
 import os
-import pytest
-import tempfile
 import shutil
+import tempfile
+
+import pytest
 from wexample_helpers.helpers.directory import (
-    directory_remove_tree_if_exists,
-    directory_execute_inside,
-    directory_get_base_name,
-    directory_get_parent_path,
-    directory_empty_dir,
-    directory_list_files,
-    directory_aggregate_all_files_from_dir,
-    directory_aggregate_all_files,
-)
+    directory_aggregate_all_files, directory_aggregate_all_files_from_dir,
+    directory_empty_dir, directory_execute_inside, directory_get_base_name,
+    directory_get_parent_path, directory_list_files,
+    directory_remove_tree_if_exists)
 
 
 @pytest.fixture

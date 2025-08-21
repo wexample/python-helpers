@@ -34,8 +34,7 @@ class UniqueBaseModel(BaseModel):
             1 for base in cls.__bases__ if issubclass(base, BaseModel)
         )
         if base_model_count > 1:
-            from wexample_helpers.errors.multiple_base_model_inheritance_error import (
-                MultipleBaseModelInheritanceError,
-            )
+            from wexample_helpers.errors.multiple_base_model_inheritance_error import \
+                MultipleBaseModelInheritanceError
 
             raise MultipleBaseModelInheritanceError(cls)

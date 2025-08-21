@@ -1,26 +1,22 @@
 import os
 import stat
-import pytest
 from pathlib import Path
 from typing import Generator
 
-from wexample_helpers.helpers.file import (
-    file_change_mode,
-    file_change_mode_recursive,
-    file_list_subdirectories,
-    file_mode_num_to_octal,
-    file_mode_octal_to_num,
-    file_path_get_octal_mode,
-    file_path_get_mode_num,
-    file_read,
-    file_remove_if_exists,
-    file_resolve_path,
-    file_touch,
-    file_validate_mode_octal,
-    file_validate_mode_octal_or_fail,
-    file_write,
-    file_get_directories,
-)
+import pytest
+from wexample_helpers.helpers.file import (file_change_mode,
+                                           file_change_mode_recursive,
+                                           file_get_directories,
+                                           file_list_subdirectories,
+                                           file_mode_num_to_octal,
+                                           file_mode_octal_to_num,
+                                           file_path_get_mode_num,
+                                           file_path_get_octal_mode, file_read,
+                                           file_remove_if_exists,
+                                           file_resolve_path, file_touch,
+                                           file_validate_mode_octal,
+                                           file_validate_mode_octal_or_fail,
+                                           file_write)
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import os
-import sys
 import re
+import sys
 
 # Ensure local helpers are importable
 CURRENT_DIR = os.path.dirname(__file__)
@@ -8,8 +8,10 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 HELPERS_PATH = os.path.join(PROJECT_ROOT, "pip", "helpers")
 sys.path.insert(0, HELPERS_PATH)
 
-from wexample_helpers.helpers.error import error_format  # type: ignore  # noqa: E402
-from wexample_helpers.enums.debug_path_style import DebugPathStyle  # type: ignore  # noqa: E402
+from wexample_helpers.enums.debug_path_style import \
+    DebugPathStyle  # type: ignore  # noqa: E402
+from wexample_helpers.helpers.error import \
+    error_format  # type: ignore  # noqa: E402
 
 
 def _raise_nested():

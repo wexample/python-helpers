@@ -1,5 +1,5 @@
 import inspect
-from typing import Dict, Optional, Set, Any
+from typing import Any, Dict, Optional, Set
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
