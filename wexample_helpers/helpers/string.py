@@ -25,13 +25,14 @@ def string_append_missing_lines(lines: List[str], content: str) -> str:
 
     if lines_to_add:
         # Ensure the content ends with a newline before appending new lines
-        if content and not content.endswith('\n'):
-            content += '\n'
+        content = string_ensure_end_with_new_line(content)
         # Add the missing lines
         content += '\n'.join(lines_to_add) + '\n'
 
     return content
 
+def string_ensure_end_with_new_line(text: str) -> str:
+    return text if text.endswith("\n") else text + "\n"
 
 def string_remove_prefix(string: str, prefix: str) -> str:
     """
