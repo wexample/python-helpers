@@ -6,7 +6,7 @@ from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
 
 class DebugDump(AbstractDebug):
-    def __init__(self, obj: Any, max_depth: int = 100):
+    def __init__(self, obj: Any, max_depth: int = 100) -> None:
         self.obj = obj
         self.max_depth = max_depth
         self.current_depth = 0

@@ -2,7 +2,7 @@ from wexample_helpers.common.debug.debug_dump import DebugDump
 from wexample_helpers.test.classes.property_class import PropertyClass
 
 
-def test_property_class():
+def test_property_class() -> None:
     # Create instance
     instance = PropertyClass()
 

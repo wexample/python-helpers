@@ -10,9 +10,10 @@ class AbstractTestHelpers(ABC):
         self,
         success_cases: list[Tuple[Any, Any]] = None,
         failure_cases: list[Tuple[Any, Any]] = None,
-    ):
-        from wexample_helpers.exception.not_allowed_variable_type_exception import \
-            NotAllowedVariableTypeException
+    ) -> None:
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
 
         # Success cases: should not raise exceptions
         for value, expected_type in success_cases or []:

@@ -18,7 +18,7 @@ def directory_remove_tree_if_exists(directory: PathOrString) -> None:
 
 
 @contextmanager
-def directory_execute_inside(target_dir: PathOrString):
+def directory_execute_inside(target_dir: PathOrString) -> None:
     """
     Context manager to execute code inside a specific directory.
 

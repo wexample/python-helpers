@@ -6,7 +6,7 @@ from wexample_helpers.test.classes.simple_class import SimpleClass
 
 
 class TestSimpleObject(unittest.TestCase):
-    def test_simple_object(self):
+    def test_simple_object(self) -> None:
         # Test instance creation with default values
         obj1 = SimpleClass()
         self.assertIsInstance(obj1, SimpleClass)

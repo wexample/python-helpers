@@ -10,7 +10,7 @@ class PydanticInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin, BaseModel)
     enabled: bool = Field(default=True, description="Whether the instance is enabled")
     priority: int = Field(default=0, ge=0, le=100, description="Priority level (0-100)")
 
-    def __init__(self, **data):
+    def __init__(self, **data) -> None:
         BaseModel.__init__(self, **data)
         PrivateFieldsMixin.__init__(self)
         PublicFieldsMixin.__init__(self)

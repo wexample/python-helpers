@@ -9,7 +9,7 @@ class PrivateFieldsMixin:
     _created_at: datetime
     _secret_key: str = "default-key"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._created_at = datetime.now()
         self._metadata = {}
 

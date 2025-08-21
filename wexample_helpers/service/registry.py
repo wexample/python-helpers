@@ -37,7 +37,7 @@ class Registry(BaseModel, Generic[RegistrableType]):
     def all_keys(self) -> List[str]:
         return list(self._items.keys())
 
-    def _raise_error_if_expected(self, key: str, item: Any):
+    def _raise_error_if_expected(self, key: str, item: Any) -> None:
         if item is None and self._fail_if_missing:
             available_keys = self.all_keys()
             raise KeyError(

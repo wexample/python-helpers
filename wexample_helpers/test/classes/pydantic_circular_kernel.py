@@ -14,7 +14,7 @@ class Kernel(BaseModel):
     # Private service instance
     _service: Optional[Service] = PrivateAttr(default=None)
 
-    def __init__(self, **data):
+    def __init__(self, **data) -> None:
         super().__init__(**data)
         # Create and initialize service
         self._service = Service(name=f"{self.name}_service")

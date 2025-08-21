@@ -8,23 +8,23 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 HELPERS_PATH = os.path.join(PROJECT_ROOT, "pip", "helpers")
 sys.path.insert(0, HELPERS_PATH)
 
-from wexample_helpers.enums.debug_path_style import \
-    DebugPathStyle  # type: ignore  # noqa: E402
-from wexample_helpers.helpers.error import \
-    error_format  # type: ignore  # noqa: E402
+from wexample_helpers.enums.debug_path_style import (  # type: ignore  # noqa: E402
+    DebugPathStyle,
+)
+from wexample_helpers.helpers.error import error_format  # type: ignore  # noqa: E402
 
 
-def _raise_nested():
-    def inner():
+def _raise_nested() -> None:
+    def inner() -> None:
         raise ValueError("boom")
 
-    def middle():
+    def middle() -> None:
         inner()
 
     middle()
 
 
-def test_error_format_contains_exception_and_frames():
+def test_error_format_contains_exception_and_frames() -> None:
     try:
         _raise_nested()
     except Exception as e:  # noqa: PIE786

@@ -1,7 +1,8 @@
 from typing import Any, List, Optional
 
-from wexample_helpers.exception.not_allowed_item_exception import \
-    NotAllowedItemException
+from wexample_helpers.exception.not_allowed_item_exception import (
+    NotAllowedItemException,
+)
 
 
 class NotAllowedVariableTypeException(NotAllowedItemException):
@@ -16,7 +17,7 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
         allowed_types: Optional[List[Any]] = None,
         cause: Optional[Exception] = None,
         previous: Optional[Exception] = None,
-    ):
+    ) -> None:
         from wexample_helpers.helpers.string import string_truncate
         from wexample_helpers.helpers.type import type_to_name
 

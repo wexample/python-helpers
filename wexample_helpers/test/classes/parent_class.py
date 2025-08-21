@@ -1,5 +1,5 @@
 class ParentClass:
-    def __init__(self, parent_value="parent_default"):
+    def __init__(self, parent_value="parent_default") -> None:
         self.parent_value = parent_value
         self._protected_value = "protected"
 

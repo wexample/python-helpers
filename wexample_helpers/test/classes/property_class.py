@@ -1,9 +1,9 @@
 class PropertyClass:
-    def __init__(self):
+    def __init__(self) -> None:
         self._value = None
 
     @property
-    def value(self):
+    def value(self) -> None:
         """Get the value."""
         return self._value
 

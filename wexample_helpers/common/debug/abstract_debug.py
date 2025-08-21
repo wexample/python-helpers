@@ -7,7 +7,7 @@ from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
 class AbstractDebug(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.data = None
         self.cwd = os.getcwd()
         self.collect_data()

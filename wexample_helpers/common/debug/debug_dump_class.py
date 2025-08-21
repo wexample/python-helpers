@@ -5,7 +5,7 @@ from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
 
 class DebugDumpClass(AbstractDebug):
-    def __init__(self, cls: Any, depth: int = 0):
+    def __init__(self, cls: Any, depth: int = 0) -> None:
         self.cls = cls
         self.depth = depth
         super().__init__()

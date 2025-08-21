@@ -1,5 +1,5 @@
 class SecondParent:
-    def __init__(self, second_value="default_second"):
+    def __init__(self, second_value="default_second") -> None:
         self.second_value = second_value
 
     def second_method(self):

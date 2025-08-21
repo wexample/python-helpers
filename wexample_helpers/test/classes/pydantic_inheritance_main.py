@@ -7,7 +7,7 @@ from .pydantic_inheritance_model import PydanticInheritanceModel
 class PydanticInheritanceMain(PydanticInheritanceConfig, PydanticInheritanceModel):
     """Main class demonstrating multiple inheritance with Pydantic and mixins."""
 
-    def __init__(self, **data):
+    def __init__(self, **data) -> None:
         # Initialize Pydantic model first to setup private attributes
         PydanticInheritanceModel.__init__(self, **data)
         # Then initialize config

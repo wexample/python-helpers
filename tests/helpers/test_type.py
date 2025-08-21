@@ -6,7 +6,7 @@ from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
 
 
 class TestHelperType(AbstractTestHelpers):
-    def test_type_is_generic(self):
+    def test_type_is_generic(self) -> None:
         # Types that should be detected as generic
         should_be_true = [
             list,
@@ -44,7 +44,7 @@ class TestHelperType(AbstractTestHelpers):
                 type_
             ), f"{type_} should NOT be detected as a generic type"
 
-    def test_type_is_compatibility(self):
+    def test_type_is_compatibility(self) -> None:
         success_cases = [
             (str, Any),
             (bool, Any),
@@ -88,7 +88,7 @@ class TestHelperType(AbstractTestHelpers):
                 actual_type, expected_type
             ), f"Expected {actual_type} to be incompatible with {expected_type}"
 
-    def test_validation(self):
+    def test_validation(self) -> bool:
         def _test_callable() -> bool:
             return True
 

@@ -1,7 +1,7 @@
 class PydanticInheritanceConfig:
     """Simple configuration class with a basic property."""
 
-    def __init__(self, environment: str = "development"):
+    def __init__(self, environment: str = "development") -> None:
         self._environment = environment
 
     @property

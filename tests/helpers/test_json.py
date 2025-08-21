@@ -1,10 +1,13 @@
 import json
 
-from wexample_helpers.helpers.json import (json_load, json_load_if_valid,
-                                           json_parse_if_valid)
+from wexample_helpers.helpers.json import (
+    json_load,
+    json_load_if_valid,
+    json_parse_if_valid,
+)
 
 
-def test_json_parse_if_valid():
+def test_json_parse_if_valid() -> None:
     # Test valid JSON string
     assert json_parse_if_valid('{"key": "value"}') == {"key": "value"}
     assert json_parse_if_valid("[1, 2, 3]") == [1, 2, 3]
@@ -22,7 +25,7 @@ def test_json_parse_if_valid():
     assert json_parse_if_valid(complex_json) == expected
 
 
-def test_json_load_if_valid(tmp_path):
+def test_json_load_if_valid(tmp_path) -> None:
     # Create test files
     valid_json_file = tmp_path / "valid.json"
     invalid_json_file = tmp_path / "invalid.json"
@@ -43,7 +46,7 @@ def test_json_load_if_valid(tmp_path):
     assert json_load_if_valid(str(nonexistent_file)) is False
 
 
-def test_json_load(tmp_path):
+def test_json_load(tmp_path) -> None:
     # Create test file
     test_file = tmp_path / "test.json"
     test_data = {

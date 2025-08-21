@@ -2,8 +2,7 @@ import copy
 from collections.abc import Mapping, Sequence
 from typing import Any, Dict, Optional, Union, cast
 
-from wexample_helpers.const.types import (StringKeysDict, StringKeysMapping,
-                                          StringsList)
+from wexample_helpers.const.types import StringKeysDict, StringKeysMapping, StringsList
 
 DICT_PATH_SEPARATOR_DEFAULT = "."
 DICT_ITEM_EXISTS_ACTION_ABORT = "abort"

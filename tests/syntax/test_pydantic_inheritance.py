@@ -1,9 +1,10 @@
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_inheritance_main import \
-    PydanticInheritanceMain
+from wexample_helpers.test.classes.pydantic_inheritance_main import (
+    PydanticInheritanceMain,
+)
 
 
-def test_pydantic_inheritance():
+def test_pydantic_inheritance() -> None:
     # Create instance with various properties
     instance = PydanticInheritanceMain(
         environment="production",

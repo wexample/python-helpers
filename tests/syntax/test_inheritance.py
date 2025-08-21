@@ -7,7 +7,7 @@ from wexample_helpers.test.classes.parent_class import ParentClass
 
 
 class TestInheritance(unittest.TestCase):
-    def test_inheritance(self):
+    def test_inheritance(self) -> None:
         # Test instance creation
         parent = ParentClass(parent_value="custom_parent")
         child = ChildClass(child_value="custom_child", parent_value="inherited_parent")

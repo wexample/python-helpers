@@ -26,8 +26,9 @@ class HasEnvKeys:
         missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:
-            from wexample_helpers.errors.missing_required_env_var_error import \
-                MissingRequiredEnvVarError
+            from wexample_helpers.errors.missing_required_env_var_error import (
+                MissingRequiredEnvVarError,
+            )
 
             raise MissingRequiredEnvVarError(missing_keys)
 
@@ -52,8 +53,7 @@ class HasEnvKeys:
         self._validate_env_keys()
 
     def get_env_parameter(self, key: str, default: Any = None) -> Any:
-        from wexample_helpers.errors.key_not_found_error import \
-            KeyNotFoundError
+        from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
         if not key in self.env_config:
             if default is not None:

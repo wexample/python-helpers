@@ -8,7 +8,7 @@ class MultipleChild(FirstParent, SecondParent):
         child_value="default_child",
         first_value="inherited_first",
         second_value="inherited_second",
-    ):
+    ) -> None:
         FirstParent.__init__(self, first_value)
         SecondParent.__init__(self, second_value)
         self.child_value = child_value

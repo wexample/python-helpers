@@ -8,7 +8,7 @@ from wexample_helpers.test.classes.second_parent import SecondParent
 
 
 class TestMultipleInheritance(unittest.TestCase):
-    def test_multiple_inheritance(self):
+    def test_multiple_inheritance(self) -> None:
         # Test instance creation with default values
         child = MultipleChild()
         self.assertIsInstance(child, MultipleChild)

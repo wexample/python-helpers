@@ -30,7 +30,7 @@ class UndefinedException(Exception):
         data: Optional[Dict[str, Any]] = None,
         cause: Optional[Exception] = None,
         previous: Optional[Exception] = None,
-    ):
+    ) -> None:
         self.message = message
         self.data = data or {}
         self.cause = cause

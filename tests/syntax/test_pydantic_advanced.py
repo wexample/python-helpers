@@ -1,11 +1,10 @@
 from datetime import datetime
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_advanced import (PydanticAdvanced,
-                                                             Status)
+from wexample_helpers.test.classes.pydantic_advanced import PydanticAdvanced, Status
 
 
-def test_pydantic_advanced():
+def test_pydantic_advanced() -> None:
     # Create an instance with various data types
     instance = PydanticAdvanced(
         id="test123",

@@ -1,8 +1,7 @@
-from wexample_helpers.helpers.array import (array_replace_value, array_swap,
-                                            array_unique)
+from wexample_helpers.helpers.array import array_replace_value, array_swap, array_unique
 
 
-def test_array_replace_value():
+def test_array_replace_value() -> None:
     # Test with numbers
     assert array_replace_value([1, 2, 1, 3], 1, 4) == [4, 2, 4, 3]
 
@@ -10,7 +9,7 @@ def test_array_replace_value():
     assert array_replace_value(["a", "b", "a"], "a", "c") == ["c", "b", "c"]
 
 
-def test_array_swap():
+def test_array_swap() -> None:
     # Test with numbers
     array = [1, 2]
     assert array_swap(array, False) == [1, 2]
@@ -21,7 +20,7 @@ def test_array_swap():
     assert array_swap(array, True) == ["b", "a"]
 
 
-def test_array_unique():
+def test_array_unique() -> None:
     # Test with numbers
     assert sorted(array_unique([1, 2, 2, 3, 1])) == [1, 2, 3]
 

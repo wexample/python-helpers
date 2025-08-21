@@ -12,7 +12,7 @@ class HasClassDependencies:
         return []
 
     @classmethod
-    def import_dependencies_and_rebuild(cls):
+    def import_dependencies_and_rebuild(cls) -> None:
         import sys
 
         polyfill_register_global(

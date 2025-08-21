@@ -7,7 +7,7 @@ from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 
 
 class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
-    def __init_subclass__(cls, **kwargs):  # type: ignore[override]
+    def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         super().__init_subclass__(**kwargs)
         annotations = cls.__dict__.get("__annotations__", {}) or {}
 

@@ -1,10 +1,10 @@
 from typing import Type
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import \
-    AdvancedKernel
-from wexample_helpers.test.classes.pydantic_circular_base_kernel import \
-    BaseKernel
+from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import (
+    AdvancedKernel,
+)
+from wexample_helpers.test.classes.pydantic_circular_base_kernel import BaseKernel
 
 
 def _test_kernel_service(kernel_class: Type, kernel_name: str):
@@ -28,12 +28,12 @@ def _test_kernel_service(kernel_class: Type, kernel_name: str):
     return kernel
 
 
-def test_pydantic_circular():
+def test_pydantic_circular() -> None:
     """Test basic kernel circular reference."""
     _test_kernel_service(BaseKernel, "test_kernel")
 
 
-def test_pydantic_circular_advanced():
+def test_pydantic_circular_advanced() -> None:
     """Test advanced kernel with inheritance."""
     kernel = _test_kernel_service(AdvancedKernel, "advanced_kernel")
 

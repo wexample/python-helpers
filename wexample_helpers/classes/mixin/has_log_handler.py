@@ -12,7 +12,7 @@ class HasLogHandler:
         from contextlib import contextmanager
 
         @contextmanager
-        def log_handler():
+        def log_handler() -> None:
             # Create a custom handler to capture log messages
             log_capture = io.StringIO()
 

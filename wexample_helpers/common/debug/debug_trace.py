@@ -12,7 +12,7 @@ class DebugTrace(AbstractDebug):
         paths_map: Optional[Dict] = None,
         message: Optional[str] = None,
         show_internal: bool = False,
-    ):
+    ) -> None:
         self.path_style = path_style
         self.paths_map = paths_map
         self.message = message

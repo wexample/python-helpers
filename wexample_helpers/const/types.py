@@ -1,6 +1,18 @@
 from pathlib import Path
-from typing import (Any, Callable, Dict, List, Mapping, Match, Optional,
-                    Sequence, Set, TypeAlias, TypedDict, Union)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    Match,
+    Optional,
+    Sequence,
+    Set,
+    TypeAlias,
+    TypedDict,
+    Union,
+)
 
 AnyList = List[Any]
 StringKeysDict = Dict[str, Any]
