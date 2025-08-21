@@ -8,6 +8,7 @@ from wexample_helpers.helpers.type import (
 
 from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
 
+
 class TestHelperType(AbstractTestHelpers):
     def test_type_is_generic(self):
         # Types that should be detected as generic
@@ -110,20 +111,17 @@ class TestHelperType(AbstractTestHelpers):
                 (123, int),
                 (123.123, float),
                 (None, NoneType),
-
                 # Basic containers
                 ([], list),
                 ([], List),
                 ({}, dict),
                 ({}, Dict),
-
                 # Typed containers
                 (["item1", "item2"], List[str]),
                 ([1, 2, 3], List[int]),
                 ({"lorem": "ipsum"}, Dict[str, str]),
                 ({"lorem": 123}, Dict[str, int]),
                 ([TestClassA(), TestClassB()], List[TestClassA]),
-
                 # Union and Optional
                 (None, Optional[str]),
                 ("hello", Union[str, int]),
@@ -131,34 +129,28 @@ class TestHelperType(AbstractTestHelpers):
                 ({"key": "value"}, Union[str, Dict[str, str]]),
                 (None, Union[str, NoneType]),
                 ("optional", Optional[str]),
-
                 # Callable
                 (_test_callable, Callable),
                 (_test_callable, Callable[..., Any]),
                 (_test_callable, Callable[..., bool]),
-
                 # Tuples and Sets
                 ((1, "str"), Tuple[int, str]),
                 ({"apple", "banana"}, Set[str]),
                 ({1, 2, 3}, Set[int]),
-
                 # Nested types
                 ({"nested": {"key": "value"}}, Dict[str, Dict[str, str]]),
                 ([{"key": 1}, {"key": 2}], List[Dict[str, int]]),
                 (({"key": "value"}, 123), Tuple[Dict[str, str], int]),
-
                 # Classes and types
                 (TestClassA(), TestClassA),
                 (TestClassB(), TestClassA),  # Compatibility with superclass
                 (TestClassB(), TestClassB),
-
                 # Class types
                 (TestClassA, Type[TestClassA]),
                 (TestClassB, Type[TestClassA]),
                 (TestClassB, Type[TestClassB]),
                 (TestClassA, Type),
                 (TestClassB, Type),
-
                 # Nested Unions and Optionals
                 ({"key": "value"}, Union[Dict[str, str], List[str]]),
                 ([1, 2, 3], Union[List[int], Set[int]]),
@@ -174,42 +166,39 @@ class TestHelperType(AbstractTestHelpers):
                 (123, str),
                 ("123", int),
                 (None, int),
-
                 # Container type mismatches
                 ({}, list),
                 ([], dict),
                 ({"lorem": 123}, Dict[str, str]),
-
                 # Union mismatches
                 (123, Union[str, Dict[str, Any]]),
                 ("not_callable", Callable[..., str]),
-
                 # Callable with incompatible signature
                 (_test_callable, Callable[..., str]),
-
                 # Class type mismatches
-                (TestClassA(), TestClassB),  # TestClassA instance is not compatible with TestClassB type
+                (
+                    TestClassA(),
+                    TestClassB,
+                ),  # TestClassA instance is not compatible with TestClassB type
                 (123, TestClassA),
                 ("str", TestClassB),
-
                 # Type mismatches for class types
-                (TestClassA(), Type[TestClassA]),  # TestClassA() is an instance, not a type
+                (
+                    TestClassA(),
+                    Type[TestClassA],
+                ),  # TestClassA() is an instance, not a type
                 (TestClassB(), Type),
-
                 # Non-type values for Type
                 (123, Type),
                 ("str", Type),
-
                 # Incorrect nested types
                 ([1, "str"], List[int]),
                 ({"key": 123}, Dict[str, str]),
                 ({"key": "value"}, List[Dict[str, str]]),  # Expecting List, got Dict
                 (["str"], Set[str]),  # List vs. Set
-
                 # Incorrect Optional and Union usage
                 (123, Optional[str]),  # Expecting str or None
                 (None, int),  # NoneType mismatch
-
                 # Tuple and Set mismatches
                 ((1, "str"), Tuple[str, int]),  # Type order mismatch in Tuple
                 ({"apple", 1}, Set[str]),  # Mixed types in Set
@@ -217,5 +206,5 @@ class TestHelperType(AbstractTestHelpers):
                 (TestClassA, Union[TestClassB]),
                 (TestClassA, TestClassB),
                 (TestClassA, TestClassA),
-            ]
+            ],
         )

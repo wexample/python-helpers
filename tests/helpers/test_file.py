@@ -55,7 +55,7 @@ def test_file_change_mode_recursive(temp_dir: Path) -> None:
 
     mode = 0o755
     file_change_mode_recursive(str(temp_dir), mode)
-    
+
     assert stat.S_IMODE(subdir.stat().st_mode) == mode
     assert stat.S_IMODE((subdir / "file1.txt").stat().st_mode) == mode
     assert stat.S_IMODE((temp_dir / "file2.txt").stat().st_mode) == mode
@@ -75,7 +75,7 @@ def test_file_list_subdirectories(temp_dir: Path) -> None:
 def test_file_mode_conversions() -> None:
     # Test num to octal
     assert file_mode_num_to_octal(0o644) == "644"
-    
+
     # Test octal to num (string input)
     assert file_mode_octal_to_num("644") == 0o644
     # Test octal to num (int input should be treated as string)
@@ -84,7 +84,7 @@ def test_file_mode_conversions() -> None:
 
 def test_file_path_mode_operations(temp_file: Path) -> None:
     os.chmod(temp_file, 0o644)
-    
+
     assert file_path_get_octal_mode(temp_file) == "644"
     assert file_path_get_mode_num(temp_file) == 0o644
 
@@ -92,11 +92,11 @@ def test_file_path_mode_operations(temp_file: Path) -> None:
 def test_file_read_write(temp_dir: Path) -> None:
     file_path = temp_dir / "test.txt"
     content = "Hello, World!"
-    
+
     # Test write
     file_write(str(file_path), content)
     assert file_path.read_text() == content
-    
+
     # Test read
     assert file_read(str(file_path)) == content
 
@@ -105,7 +105,7 @@ def test_file_remove_if_exists(temp_file: Path) -> None:
     assert temp_file.exists()
     file_remove_if_exists(str(temp_file))
     assert not temp_file.exists()
-    
+
     # Test with non-existent file (should not raise)
     file_remove_if_exists("/non/existent/file")
 
@@ -113,7 +113,7 @@ def test_file_remove_if_exists(temp_file: Path) -> None:
 def test_file_resolve_path() -> None:
     path_str = "/test/path"
     path_obj = Path("/test/path")
-    
+
     assert file_resolve_path(path_str) == Path(path_str)
     assert file_resolve_path(path_obj) == path_obj
 
@@ -135,7 +135,7 @@ def test_file_validate_mode_octal() -> None:
 
 def test_file_validate_mode_octal_or_fail() -> None:
     assert file_validate_mode_octal_or_fail("644")
-    
+
     with pytest.raises(Exception):
         file_validate_mode_octal_or_fail("999")
 
@@ -145,15 +145,15 @@ def test_file_get_directories(temp_dir: Path) -> None:
     dir1 = temp_dir / "dir1"
     dir2 = temp_dir / "dir2"
     subdir = dir1 / "subdir"
-    
+
     for d in [dir1, dir2, subdir]:
         d.mkdir()
-    
+
     # Test non-recursive
     dirs = file_get_directories(str(temp_dir))
     assert len(dirs) == 2
     assert all(os.path.basename(d) in ["dir1", "dir2"] for d in dirs)
-    
+
     # Test recursive
     dirs = file_get_directories(str(temp_dir), recursive=True)
     assert len(dirs) == 3

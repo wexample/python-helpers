@@ -58,9 +58,11 @@ def test_args_convert_dict_to_snake_dict():
     result = args_convert_dict_to_snake_dict(input_dict)
     assert result == {"camel_case": 1, "pascal_case": 2}
 
+
 def test_args_parse_dict():
     assert args_parse_dict('{"key": "value"}') == {"key": "value"}
     assert args_parse_dict("invalid") == {}
+
 
 def test_args_parse_list_or_strings_list():
     assert args_parse_list_or_strings_list("[1, 2, 3]") == [1, 2, 3]
@@ -71,11 +73,13 @@ def test_args_parse_list():
     assert args_parse_list("[1, 2, 3]") == [1, 2, 3]
     assert args_parse_list("[a, b, c]") == []  # Invalid list returns empty
 
+
 def test_args_parse_one():
     assert args_parse_one("123") == 123
     assert args_parse_one("true") == "true"  # String, not boolean
     assert args_parse_one('{"key": "value"}') == {"key": "value"}
     assert args_parse_one("") is None
+
 
 def test_args_is_basic_value():
     # Test simple types
@@ -92,7 +96,9 @@ def test_args_is_basic_value():
     # Test non-basic values
     class TestClass:
         pass
+
     assert args_is_basic_value(TestClass()) is False
+
 
 def test_args_in_function():
     def test_func(arg1, arg2=None):

@@ -1,4 +1,3 @@
-
 from wexample_helpers.helpers.dict import (
     dict_get_item_by_path,
     dict_has_item_by_path,
@@ -35,7 +34,7 @@ def test_dict_remove_item_by_path():
     data = {"a": {"b": {"c": 1, "d": 2}}}
     dict_remove_item_by_path(data, "a.b.c")
     assert data == {"a": {"b": {"d": 2}}}
-    
+
     # Test removing non-existent path
     dict_remove_item_by_path(data, "x.y.z")
     assert data == {"a": {"b": {"d": 2}}}
@@ -45,11 +44,9 @@ def test_dict_set_item_by_path():
     data = {}
     dict_set_item_by_path(data, "a.b.c", 1)
     assert data == {"a": {"b": {"c": 1}}}
-    
+
     # Test merge behavior
-    dict_set_item_by_path(
-        data, "a.b", {"d": 2}, when_exist="merge"
-    )
+    dict_set_item_by_path(data, "a.b", {"d": 2}, when_exist="merge")
     assert data == {"a": {"b": {"c": 1, "d": 2}}}
 
 

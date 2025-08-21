@@ -1,17 +1,22 @@
-from wexample_helpers.helpers.json import json_load, json_load_if_valid, json_parse_if_valid
+from wexample_helpers.helpers.json import (
+    json_load,
+    json_load_if_valid,
+    json_parse_if_valid,
+)
 import json
+
 
 def test_json_parse_if_valid():
     # Test valid JSON string
     assert json_parse_if_valid('{"key": "value"}') == {"key": "value"}
-    assert json_parse_if_valid('[1, 2, 3]') == [1, 2, 3]
+    assert json_parse_if_valid("[1, 2, 3]") == [1, 2, 3]
 
     # Test invalid JSON string
-    assert json_parse_if_valid('{invalid}') is False
-    assert json_parse_if_valid('[1, 2,]') is False
+    assert json_parse_if_valid("{invalid}") is False
+    assert json_parse_if_valid("[1, 2,]") is False
 
     # Test empty string
-    assert json_parse_if_valid('') is False
+    assert json_parse_if_valid("") is False
 
     # Test complex nested structure
     complex_json = '{"array": [1, 2, {"nested": "value"}], "number": 42}'
@@ -28,7 +33,7 @@ def test_json_load_if_valid(tmp_path):
     # Write valid JSON
     valid_json_file.write_text('{"test": "data"}')
     # Write invalid JSON
-    invalid_json_file.write_text('{invalid}')
+    invalid_json_file.write_text("{invalid}")
 
     # Test valid JSON file
     assert json_load_if_valid(str(valid_json_file)) == {"test": "data"}
@@ -47,7 +52,7 @@ def test_json_load(tmp_path):
         "string": "value",
         "number": 42,
         "array": [1, 2, 3],
-        "nested": {"key": "value"}
+        "nested": {"key": "value"},
     }
 
     # Write test data

@@ -13,11 +13,11 @@ def test_polyfill_register_global():
     # Test with multiple classes
     class Class1:
         pass
-    
+
     class Class2:
         pass
-    
+
     polyfill_register_global([Class1, Class2])
-    
+
     # The function should always return None
     assert polyfill_register_global(DummyClass) is None
