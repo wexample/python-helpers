@@ -3,15 +3,21 @@ from typing import Optional
 
 from wexample_helpers.const.types import (
     StringsList,
-    VersionDescriptor, UPGRADE_TYPE_MINOR, UPGRADE_TYPE_MAJOR,
-    UPGRADE_TYPE_INTERMEDIATE, UPGRADE_TYPE_ALPHA, UPGRADE_TYPE_BETA,
-    UPGRADE_TYPE_DEV, UPGRADE_TYPE_RC, UPGRADE_TYPE_NIGHTLY,
-    UPGRADE_TYPE_SNAPSHOT
+    VersionDescriptor,
+    UPGRADE_TYPE_MINOR,
+    UPGRADE_TYPE_MAJOR,
+    UPGRADE_TYPE_INTERMEDIATE,
+    UPGRADE_TYPE_ALPHA,
+    UPGRADE_TYPE_BETA,
+    UPGRADE_TYPE_DEV,
+    UPGRADE_TYPE_RC,
+    UPGRADE_TYPE_NIGHTLY,
+    UPGRADE_TYPE_SNAPSHOT,
 )
 
 
 def is_greater_than(
-        first: VersionDescriptor, second: VersionDescriptor, true_if_equal: bool = False
+    first: VersionDescriptor, second: VersionDescriptor, true_if_equal: bool = False
 ) -> bool:
     keys_to_check: StringsList = [
         "major",
@@ -53,6 +59,7 @@ def version_join(version: VersionDescriptor, add_build: bool | str = False) -> s
             output += f"+build.{add_build}"
         else:
             import datetime
+
             output += f"+build." + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     return output
@@ -111,10 +118,10 @@ def version_parse(version: str) -> VersionDescriptor | None:
 
 
 def version_increment(
-        version: str,
-        type: str = UPGRADE_TYPE_MINOR,
-        increment: int = 1,
-        build: bool | str = False,
+    version: str,
+    type: str = UPGRADE_TYPE_MINOR,
+    increment: int = 1,
+    build: bool | str = False,
 ) -> str:
     version_dict = version_parse(version)
     if not version_dict:

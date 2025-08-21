@@ -17,14 +17,16 @@ class DebugBreakpoint(AbstractDebug):
         lines = []
         if self.message:
             lines.append(f"\n Debug breakpoint: {self.message}")
-        lines.extend([
-            "Commands:",
-            "  p variable  : Print variable",
-            "  n          : Next line",
-            "  c          : Continue execution",
-            "  q          : Quit",
-            "  h          : Help (more commands)",
-        ])
+        lines.extend(
+            [
+                "Commands:",
+                "  p variable  : Print variable",
+                "  n          : Next line",
+                "  c          : Continue execution",
+                "  q          : Quit",
+                "  h          : Help (more commands)",
+            ]
+        )
 
         text = "\n".join(lines)
 

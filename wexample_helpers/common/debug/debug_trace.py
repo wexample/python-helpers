@@ -7,11 +7,11 @@ from wexample_helpers.helpers.trace import trace_get_frames, trace_format
 
 class DebugTrace(AbstractDebug):
     def __init__(
-            self,
-            path_style: DebugPathStyle = DebugPathStyle.FULL,
-            paths_map: Optional[Dict] = None,
-            message: Optional[str] = None,
-            show_internal: bool = False,
+        self,
+        path_style: DebugPathStyle = DebugPathStyle.FULL,
+        paths_map: Optional[Dict] = None,
+        message: Optional[str] = None,
+        show_internal: bool = False,
     ):
         self.path_style = path_style
         self.paths_map = paths_map

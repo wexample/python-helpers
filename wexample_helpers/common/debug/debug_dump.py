@@ -21,10 +21,12 @@ class DebugDump(AbstractDebug):
         if self.caller_info:
             self.data["dump_location"] = {
                 "file": self.caller_info.filename,
-                "line": self.caller_info.lineno
+                "line": self.caller_info.lineno,
             }
 
-    def _collect_data(self, obj: Any, depth: int = 0, seen: Optional[Set[int]] = None) -> Dict:
+    def _collect_data(
+        self, obj: Any, depth: int = 0, seen: Optional[Set[int]] = None
+    ) -> Dict:
         if seen is None:
             seen = set()
 
@@ -40,19 +42,15 @@ class DebugDump(AbstractDebug):
 
         # Handle different types of objects
         if isinstance(obj, (str, int, float, bool)):
-            return {
-                "type": type(obj).__name__,
-                "value": repr(obj)
-            }
+            return {"type": type(obj).__name__, "value": repr(obj)}
         elif isinstance(obj, datetime):
-            return {
-                "type": "datetime",
-                "value": obj.isoformat()
-            }
+            return {"type": "datetime", "value": obj.isoformat()}
         elif isinstance(obj, (list, tuple, set)):
             return {
                 "type": type(obj).__name__,
-                "elements": [self._collect_data(item, depth + 1, seen.copy()) for item in obj]
+                "elements": [
+                    self._collect_data(item, depth + 1, seen.copy()) for item in obj
+                ],
             }
         elif isinstance(obj, dict):
             return {
@@ -60,10 +58,10 @@ class DebugDump(AbstractDebug):
                 "items": [
                     {
                         "key": self._collect_data(key, depth + 1, seen.copy()),
-                        "value": self._collect_data(value, depth + 1, seen.copy())
+                        "value": self._collect_data(value, depth + 1, seen.copy()),
                     }
                     for key, value in obj.items()
-                ]
+                ],
             }
         else:
             try:
@@ -72,7 +70,7 @@ class DebugDump(AbstractDebug):
                     "type": "class",
                     "name": obj.__class__.__name__,
                     "module": obj.__class__.__module__,
-                    "source_file": inspect.getfile(obj.__class__)
+                    "source_file": inspect.getfile(obj.__class__),
                 }
 
                 # Collect instance attributes and properties
@@ -83,23 +81,22 @@ class DebugDump(AbstractDebug):
                             "type": "property",
                             "has_getter": value.fget is not None,
                             "has_setter": value.fset is not None,
-                            "has_deleter": value.fdel is not None
+                            "has_deleter": value.fdel is not None,
                         }
 
                 # Collect regular attributes
-                if hasattr(obj, '__dict__'):
+                if hasattr(obj, "__dict__"):
                     for name, value in obj.__dict__.items():
-                        if not name.startswith('__'):
-                            attrs[name] = self._collect_data(value, depth + 1, seen.copy())
+                        if not name.startswith("__"):
+                            attrs[name] = self._collect_data(
+                                value, depth + 1, seen.copy()
+                            )
 
                 return {
                     "instance_of": obj.__class__.__name__,
                     "class_data": class_data,
-                    "attributes": attrs
+                    "attributes": attrs,
                 }
             except (AttributeError, TypeError):
                 # Fallback for objects that can't be introspected
-                return {
-                    "type": type(obj).__name__,
-                    "value": str(obj)
-                }
+                return {"type": type(obj).__name__, "value": str(obj)}

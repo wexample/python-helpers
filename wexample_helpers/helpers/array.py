@@ -19,7 +19,10 @@ def array_swap(two_items_array: List[Any], do_swap: bool) -> List[Any]:
 def array_unique(array: Sequence[Any]) -> List[Any]:
     return list(set(array))
 
-def array_dict_get_by(key: str, value: Any, list_of_dicts: List[dict]) -> Optional[dict]:
+
+def array_dict_get_by(
+    key: str, value: Any, list_of_dicts: List[dict]
+) -> Optional[dict]:
     """
     Retrieve a dictionary from a list of dictionaries based on a specific key-value pair.
 

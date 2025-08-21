@@ -25,7 +25,7 @@ class DebugDumpClass(AbstractDebug):
         if key in seen:
             return {
                 "type": "circular",
-                "name": getattr(cls_obj, "__name__", str(cls_obj))
+                "name": getattr(cls_obj, "__name__", str(cls_obj)),
             }
         seen.add(key)
 
@@ -40,13 +40,13 @@ class DebugDumpClass(AbstractDebug):
             "name": getattr(cls_obj, "__name__", str(cls_obj)),
             "module": getattr(cls_obj, "__module__", "<unknown>"),
             "depth": self.depth,
-            "source_file": source_file
+            "source_file": source_file,
         }
 
         # Collect attributes in a schema compatible with AbstractDebug._format_attribute_value
         attrs = {}
         for name, value in cls_obj.__dict__.items():
-            if name.startswith('__'):
+            if name.startswith("__"):
                 continue
             # Properties
             if isinstance(value, property):

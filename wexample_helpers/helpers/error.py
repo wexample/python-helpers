@@ -17,9 +17,9 @@ def error_get_truncate_index(frames: List["TraceFrame"], error: Exception) -> in
 
 
 def error_format(
-        error: Optional[Exception] = None,
-        path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[dict] = None,
+    error: Optional[Exception] = None,
+    path_style: DebugPathStyle = DebugPathStyle.FULL,
+    paths_map: Optional[dict] = None,
 ) -> str:
     handler = ExceptionHandler()
     # Then print the formatted traceback using the new handler

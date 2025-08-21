@@ -16,7 +16,9 @@ class ExceptionHandler:
     def __init__(self, formatter: Optional[TraceFormatter] = None) -> None:
         self.formatter = formatter or TraceFormatter()
 
-    def _get_truncate_index(self, frames: List[ExceptionFrame], error: Exception) -> int:
+    def _get_truncate_index(
+        self, frames: List[ExceptionFrame], error: Exception
+    ) -> int:
         error_module = error.__class__.__module__
         for rule_type in ErrorTruncateRules:
             if error_module.startswith(rule_type.module_prefix):
@@ -28,10 +30,15 @@ class ExceptionHandler:
                 for i, frame in enumerate(frames):
                     filename = frame.filename
 
-                    if rule.truncate_after_module and rule.truncate_after_module in filename:
+                    if (
+                        rule.truncate_after_module
+                        and rule.truncate_after_module in filename
+                    ):
                         return i + 1
 
-                    if rule.truncate_after_file and filename.endswith(rule.truncate_after_file):
+                    if rule.truncate_after_file and filename.endswith(
+                        rule.truncate_after_file
+                    ):
                         return i + 1
         return -1
 

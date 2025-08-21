@@ -4,6 +4,7 @@ from typing import Dict, Any
 
 class PrivateFieldsMixin:
     """Mixin providing private attributes template."""
+
     _metadata: Dict[str, Any]
     _created_at: datetime
     _secret_key: str = "default-key"

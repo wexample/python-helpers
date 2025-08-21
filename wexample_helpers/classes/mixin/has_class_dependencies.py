@@ -17,7 +17,6 @@ class HasClassDependencies:
         import sys
 
         polyfill_register_global(
-            cls.get_class_dependencies(),
-            vars(sys.modules[cls.__module__])
+            cls.get_class_dependencies(), vars(sys.modules[cls.__module__])
         )
         cls.model_rebuild()

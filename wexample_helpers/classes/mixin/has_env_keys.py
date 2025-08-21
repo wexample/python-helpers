@@ -23,12 +23,12 @@ class HasEnvKeys:
         Validates that all required environment variables are set.
         Raises MissingRequiredEnvVarError if any required variable is missing.
         """
-        missing_keys = self._get_missing_env_keys(
-            self.get_expected_env_keys()
-        )
+        missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:
-            from wexample_helpers.errors.missing_required_env_var_error import MissingRequiredEnvVarError
+            from wexample_helpers.errors.missing_required_env_var_error import (
+                MissingRequiredEnvVarError,
+            )
 
             raise MissingRequiredEnvVarError(missing_keys)
 
@@ -58,10 +58,10 @@ class HasEnvKeys:
         if not key in self.env_config:
             if default is not None:
                 return default
-            
+
             raise KeyNotFoundError(
-                message=f'Environment variable is not defined',
+                message=f"Environment variable is not defined",
                 key=key,
-                available_keys=list(self.env_config.keys())
+                available_keys=list(self.env_config.keys()),
             )
         return self.env_config[key]

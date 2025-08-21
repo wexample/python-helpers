@@ -11,16 +11,16 @@ from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
     def __init_subclass__(cls, **kwargs):  # type: ignore[override]
         super().__init_subclass__(**kwargs)
-        annotations = cls.__dict__.get('__annotations__', {}) or {}
+        annotations = cls.__dict__.get("__annotations__", {}) or {}
 
         for name, anno in annotations.items():
-            if name.startswith('__'):
+            if name.startswith("__"):
                 continue
             # Skip ClassVars (not model fields)
             if get_origin(anno) is ClassVar:
                 continue
             # Skip private attrs and dunder
-            if name.startswith('_'):
+            if name.startswith("_"):
                 continue
 
             # Only enforce on fields declared in this class body
@@ -37,7 +37,7 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
                 )
 
             # Must have a non-empty description
-            desc = getattr(default, 'description', None)
+            desc = getattr(default, "description", None)
             if not desc or not str(desc).strip():
                 raise TypeError(
                     f"{cls.__name__}.{name}: Field must include a non-empty description"
@@ -45,9 +45,9 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
 
     @classmethod
     def _raise_not_implemented_error(
-            cls,
-            method: Optional[str] = None,
-            message: Optional[str] = None,
+        cls,
+        method: Optional[str] = None,
+        message: Optional[str] = None,
     ) -> NoReturn:
         """Convenience to raise a standardized NotImplementedError.
 
@@ -69,7 +69,9 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
                 method = inspect.stack()[1].function
             except Exception:
                 method = "<unknown>"
-        raise NotImplementedError(message or f"{cls.__name__}.{method} must be implemented by subclass")
+        raise NotImplementedError(
+            message or f"{cls.__name__}.{method} must be implemented by subclass"
+        )
 
     def __getattr__(self, item):
         try:
@@ -88,5 +90,3 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
 
             cls_name = type(self).__name__
             raise AttributeError(f"{cls_name} has no attribute '{item}'") from None
-
-    

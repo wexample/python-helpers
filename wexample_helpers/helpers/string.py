@@ -27,12 +27,14 @@ def string_append_missing_lines(lines: List[str], content: str) -> str:
         # Ensure the content ends with a newline before appending new lines
         content = string_ensure_end_with_new_line(content)
         # Add the missing lines
-        content += '\n'.join(lines_to_add) + '\n'
+        content += "\n".join(lines_to_add) + "\n"
 
     return content
 
+
 def string_ensure_end_with_new_line(text: str) -> str:
     return text if text.endswith("\n") else text + "\n"
+
 
 def string_remove_prefix(string: str, prefix: str) -> str:
     """
@@ -43,7 +45,7 @@ def string_remove_prefix(string: str, prefix: str) -> str:
     :param prefix: The prefix to remove
     :return: String with prefix removed if found at start
     """
-    return re.sub(f'^{re.escape(prefix)}', '', string)
+    return re.sub(f"^{re.escape(prefix)}", "", string)
 
 
 def string_replace_params(text: str, params: dict) -> str:
@@ -57,18 +59,18 @@ def string_replace_params(text: str, params: dict) -> str:
     """
     result = text
     for key, value in params.items():
-        result = result.replace(f'%{key}%', str(value))
+        result = result.replace(f"%{key}%", str(value))
     return result
 
 
 def string_truncate(text: str, limit: int) -> str:
     if len(text) > limit:
-        return text[:limit - 3] + "..."
+        return text[: limit - 3] + "..."
     return text
 
 
 def string_render_boolean(boolean: bool) -> str:
-    return 'True' if boolean else 'False'
+    return "True" if boolean else "False"
 
 
 def string_generate_lorem_ipsum(length: int = 100) -> str:
@@ -87,7 +89,11 @@ def string_generate_lorem_ipsum(length: int = 100) -> str:
 
     cut = text[:length].rstrip()
 
-    if len(cut) == length and length < len(text) and not cut.endswith((" ", ".", ",", "!", "?", ";", ":")):
+    if (
+        len(cut) == length
+        and length < len(text)
+        and not cut.endswith((" ", ".", ",", "!", "?", ";", ":"))
+    ):
         last_space = cut.rfind(" ")
         if last_space > 0:
             cut = cut[:last_space]

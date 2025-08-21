@@ -18,7 +18,7 @@ def file_change_mode(path: PathOrString, mode: int) -> None:
 
 
 def file_change_mode_recursive(
-        path: PathOrString, mode: int, follow_symlinks: bool = True
+    path: PathOrString, mode: int, follow_symlinks: bool = True
 ) -> None:
     """
     Recursively change mode for files and directories under path.
@@ -30,7 +30,9 @@ def file_change_mode_recursive(
     file_change_mode(path, mode)
     if os.path.isdir(str(path)) and (follow_symlinks or not os.path.islink(str(path))):
         for item in os.listdir(str(path)):
-            file_change_mode_recursive(os.path.join(str(path), item), mode, follow_symlinks)
+            file_change_mode_recursive(
+                os.path.join(str(path), item), mode, follow_symlinks
+            )
 
 
 def file_list_subdirectories(path: PathOrString) -> List[str]:
@@ -38,7 +40,9 @@ def file_list_subdirectories(path: PathOrString) -> List[str]:
     List immediate subdirectory names (excluding hidden) under a given path.
     """
     base = Path(path)
-    subdirs = [p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith('.')]
+    subdirs = [
+        p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")
+    ]
     return sorted(subdirs)
 
 
@@ -64,10 +68,12 @@ def file_path_get_mode_num(path: Path) -> int:
 
 def file_read(file_path: PathOrString) -> str:
     """Read file content as UTF-8 text."""
-    return Path(file_path).read_text(encoding='utf-8')
+    return Path(file_path).read_text(encoding="utf-8")
 
 
-def file_read_or_default(file_path: PathOrString, default: Optional[str] = "") -> Optional[str]:
+def file_read_or_default(
+    file_path: PathOrString, default: Optional[str] = ""
+) -> Optional[str]:
     """Read file content or return default on any error."""
     try:
         return file_read(file_path)
@@ -91,14 +97,14 @@ def file_touch(path: PathOrString, times: Optional[Tuple[int, int]] = None) -> N
     """Create file if missing and update its access and modification times."""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
-    with p.open('a'):
+    with p.open("a"):
         os.utime(p, times)
 
 
 def file_validate_mode_octal(mode: Union[str, int]) -> bool:
     """Validate that mode is a three-digit octal string or int."""
     m = str(mode)
-    return len(m) == 3 and all(ch in '01234567' for ch in m)
+    return len(m) == 3 and all(ch in "01234567" for ch in m)
 
 
 def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
@@ -108,16 +114,14 @@ def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
     return True
 
 
-def file_write(file_path: PathOrString, content: str, encoding: str = 'utf-8') -> None:
+def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -> None:
     """Write content to file, overwriting if it exists."""
     p = Path(file_path)
     p.write_text(content, encoding=encoding)
 
 
 def file_write_ensure(
-        file_path: FileStringOrPath,
-        content: str,
-        encoding: str = 'utf-8'
+    file_path: FileStringOrPath, content: str, encoding: str = "utf-8"
 ) -> None:
     """
     Write content to file, creating parent directories if needed.
@@ -136,4 +140,4 @@ def file_get_directories(path: PathOrString, recursive: bool = False) -> List[st
     base = Path(path)
     if not recursive:
         return [str(p) for p in base.iterdir() if p.is_dir()]
-    return [str(p) for p in base.rglob('*') if p.is_dir()]
+    return [str(p) for p in base.rglob("*") if p.is_dir()]

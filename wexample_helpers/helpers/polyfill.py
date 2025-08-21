@@ -1,6 +1,6 @@
 from typing import Union, List, TypeVar, Any, Optional
 
-T = TypeVar('T', bound=type)
+T = TypeVar("T", bound=type)
 
 
 def polyfill_import(classes: Any, *args, **kwargs) -> None:
@@ -15,8 +15,7 @@ def polyfill_import(classes: Any, *args, **kwargs) -> None:
 
 
 def polyfill_register_global(
-    classes: Union[T, list[T], tuple[T, ...]],
-    context: Optional[dict] = None
+    classes: Union[T, list[T], tuple[T, ...]], context: Optional[dict] = None
 ) -> None:
     """
     Registers classes in the global namespace to fix Pydantic type resolution issues.
@@ -48,7 +47,6 @@ def polyfill_register_global(
             raise TypeError(f"Expected a class, got {type(cls)}")
         cls_name = cls.__name__
         context[cls_name] = cls
-
 
 
 def polyfill_not_implemented_error() -> None:

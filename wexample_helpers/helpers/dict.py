@@ -54,7 +54,7 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
     Recursively merge multiple dictionaries.
     If a key exists in multiple dictionaries, the values are merged recursively.
     The function can take any number of dictionary arguments.
-    
+
     Note: Only keys of type str are supported; values are Any.
     """
     result: StringKeysDict = {}

@@ -13,7 +13,9 @@ from typing import (
     get_type_hints,
 )
 
-from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+from wexample_helpers.exception.not_allowed_variable_type_exception import (
+    NotAllowedVariableTypeException,
+)
 
 
 def type_is_isinstance(value: Any, allowed_type: Any) -> bool:
@@ -112,7 +114,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     raise NotAllowedVariableTypeException(
         variable_type=type(value).__name__,
         variable_value=value,
-        allowed_types=[allowed_type]
+        allowed_types=[allowed_type],
     )
 
 
@@ -180,7 +182,6 @@ def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> b
     return type_is_isinstance(value, origin)
 
 
-
 def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
     """Check if actual_type is compatible with allowed_type for generics like Dict, List, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
@@ -242,6 +243,7 @@ def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
 
     # For other types, fall back to direct comparison
     return actual_type == allowed_type
+
 
 def type_to_name(t: Any) -> str:
     # Accept python types, strings, and mypy UnionType

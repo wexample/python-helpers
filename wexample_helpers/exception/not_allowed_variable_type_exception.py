@@ -1,19 +1,22 @@
 from typing import List, Optional, Any
 
-from wexample_helpers.exception.not_allowed_item_exception import NotAllowedItemException
+from wexample_helpers.exception.not_allowed_item_exception import (
+    NotAllowedItemException,
+)
 
 
 class NotAllowedVariableTypeException(NotAllowedItemException):
     """A specific exception for bad variables types"""
+
     error_code: str = "NOT_ALLOWED_VARIABLE_TYPE"
 
     def __init__(
-            self,
-            variable_type: Any,
-            variable_value: Any,
-            allowed_types: Optional[List[Any]] = None,
-            cause: Optional[Exception] = None,
-            previous: Optional[Exception] = None
+        self,
+        variable_type: Any,
+        variable_value: Any,
+        allowed_types: Optional[List[Any]] = None,
+        cause: Optional[Exception] = None,
+        previous: Optional[Exception] = None,
     ):
         from wexample_helpers.helpers.string import string_truncate
         from wexample_helpers.helpers.type import type_to_name
@@ -27,7 +30,7 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
         types_str = ", ".join(allowed_type_names) if allowed_type_names else "<none>"
 
         super().__init__(
-            item_type='type',
+            item_type="type",
             item_value=var_type_name,
             allowed_values=allowed_type_names,
             cause=cause,
@@ -36,5 +39,5 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
                 f"Invalid variable type '{var_type_name}' for value "
                 f"{string_truncate(str(variable_value), 40)!r}. "
                 f"Allowed types: {types_str}."
-            )
+            ),
         )

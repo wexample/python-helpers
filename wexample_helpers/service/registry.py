@@ -2,11 +2,12 @@ from typing import Dict, Any, Optional, TypeVar, Generic, List
 
 from pydantic import BaseModel
 
-RegistrableType = TypeVar('RegistrableType')
+RegistrableType = TypeVar("RegistrableType")
 
 
 class Registry(BaseModel, Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
+
     _items: Dict[str, RegistrableType] = {}
     _fail_if_missing: bool = True
     container: Any
@@ -39,5 +40,6 @@ class Registry(BaseModel, Generic[RegistrableType]):
     def _raise_error_if_expected(self, key: str, item: Any):
         if item is None and self._fail_if_missing:
             available_keys = self.all_keys()
-            raise KeyError(f"Item not found in registry: {key}. Available keys: {available_keys}")
-
+            raise KeyError(
+                f"Item not found in registry: {key}. Available keys: {available_keys}"
+            )

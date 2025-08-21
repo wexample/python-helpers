@@ -32,7 +32,7 @@ def trace_print(
 def trace_get_traceback_frames(
     traceback: TracebackType,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None
+    paths_map: Optional[dict] = None,
 ) -> List["TraceFrame"]:
     """Convert exception traceback frames to TraceFrame objects."""
     return TraceCollector.from_traceback(
@@ -45,7 +45,7 @@ def trace_get_traceback_frames(
 def trace_get_frames(
     skip_frames: Optional[int] = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None
+    paths_map: Optional[dict] = None,
 ) -> List["TraceFrame"]:
     """Convert stack frames to TraceFrame objects."""
     return TraceCollector.from_stack(
@@ -55,8 +55,6 @@ def trace_get_frames(
     )
 
 
-def trace_format(
-    traceback_frames: List["TraceFrame"]
-) -> str:
+def trace_format(traceback_frames: List["TraceFrame"]) -> str:
     """Format a list of TraceFrame objects and optional exception information."""
     return TraceFormatter().format(traceback_frames)

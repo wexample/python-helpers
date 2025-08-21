@@ -2,21 +2,19 @@ def ansi_strip(text: str) -> str:
     """Remove ANSI escape sequences (CSI) from the text using shared constants."""
 
     from wexample_helpers.const.ansi import CSI_RE
-    return CSI_RE.sub('', text)
+
+    return CSI_RE.sub("", text)
 
 
 def ansi_strip_osc(text: str) -> str:
     from wexample_helpers.const.ansi import OSC8_RE
-    text = OSC8_RE.sub('', text)
+
+    text = OSC8_RE.sub("", text)
     return text
 
 
 def ansi_strip_invisible(text: str) -> str:
-    return ansi_strip(
-        text=ansi_strip_osc(
-            text=text
-        )
-    )
+    return ansi_strip(text=ansi_strip_osc(text=text))
 
 
 def ansi_display_width(text: str) -> int:
@@ -32,7 +30,7 @@ def ansi_display_width(text: str) -> int:
     return sum(max(wcwidth(ch), 0) for ch in visible)
 
 
-def ansi_center(text: str, width: int, fillchar: str = ' ') -> str:
+def ansi_center(text: str, width: int, fillchar: str = " ") -> str:
     """Center text by visible width.
 
     Padding is added outside of any ANSI/OSC sequences in `text` by
@@ -47,6 +45,7 @@ def ansi_center(text: str, width: int, fillchar: str = ' ') -> str:
     left = (width - w) // 2
     right = width - w - left
     return (fillchar * left) + text + (fillchar * right)
+
 
 def ansi_truncate_visible(text: str, max_width: int) -> str:
     if max_width <= 0:
@@ -63,6 +62,7 @@ def ansi_truncate_visible(text: str, max_width: int) -> str:
         # Use a tiny buffer check to avoid recomputing from scratch each time
         # but keep it simple and robust.
         from wcwidth import wcwidth as _wcw
+
         w = _wcw(ch)
         if w is None:
             w = 0

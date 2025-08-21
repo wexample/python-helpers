@@ -11,9 +11,7 @@ class NotAllowedItemMixin:
 
     @staticmethod
     def format_not_allowed_item_message(
-            item_type: str,
-            item_value: Optional[str],
-            allowed_values: List[str]
+        item_type: str, item_value: Optional[str], allowed_values: List[str]
     ) -> str:
         """Format an error message for an item that is not allowed or not provided.
 
@@ -40,9 +38,7 @@ class NotAllowedItemMixin:
 
     @staticmethod
     def get_not_allowed_item_data(
-            item_type: str,
-            item_value: Optional[str],
-            allowed_values: List[str]
+        item_type: str, item_value: Optional[str], allowed_values: List[str]
     ) -> dict:
         """Get structured data for a not allowed item exception.
 
@@ -58,5 +54,5 @@ class NotAllowedItemMixin:
             "item_type": item_type,
             "item_value": item_value,
             "allowed_values": allowed_values,
-            "is_missing": item_value is None
+            "is_missing": item_value is None,
         }

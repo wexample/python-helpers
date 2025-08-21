@@ -32,12 +32,12 @@ class HasLogHandler:
                 # Process captured logs
                 log_output = log_capture.getvalue()
                 if log_output:
-                    for line in log_output.strip().split('\n'):
+                    for line in log_output.strip().split("\n"):
                         if line:
                             callback(line)
 
                 # Clean up: remove the handler and restore the original log level
                 logger.removeHandler(handler)
                 logger.setLevel(original_level)
-                
+
         return log_handler()

@@ -1,5 +1,18 @@
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Match, Optional, Set, TypedDict, Union, TypeAlias, Sequence
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    Match,
+    Optional,
+    Set,
+    TypedDict,
+    Union,
+    TypeAlias,
+    Sequence,
+)
 
 AnyList = List[Any]
 StringKeysDict = Dict[str, Any]
@@ -10,7 +23,9 @@ SetList = Set[str]
 StringsMatch = Match[str]
 Scalar = str | int | float | bool | None
 BasicValue = Scalar | AnyList | StringKeysDict
-StructuredData: TypeAlias = Scalar | Sequence['StructuredData'] | Mapping[str, 'StructuredData']
+StructuredData: TypeAlias = (
+    Scalar | Sequence["StructuredData"] | Mapping[str, "StructuredData"]
+)
 
 AnyCallable = Callable[..., Any]
 Args = Any

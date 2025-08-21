@@ -7,7 +7,7 @@ class HasEnvKeysFile(HasEnvKeys):
     def _init_env_file(self, file_path: str) -> None:
         """
         Load environment variables from a file and validate them.
-        
+
         Args:
             file_path: Path to the .env file
         """

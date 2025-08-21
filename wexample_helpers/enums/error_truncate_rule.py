@@ -7,7 +7,7 @@ class ErrorTruncateRule:
         self,
         truncate_after_module: Optional[str] = None,
         truncate_after_file: Optional[str] = None,
-        truncate_stack_count: Optional[int] = None
+        truncate_stack_count: Optional[int] = None,
     ):
         self.truncate_after_module = truncate_after_module
         self.truncate_after_file = truncate_after_file

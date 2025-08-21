@@ -2,7 +2,9 @@ from typing import Union, Type, Any
 from wexample_file.const.types import PathOrString
 
 
-def cli_make_clickable_path(path: PathOrString, short_title: Union[bool, str] = False) -> str:
+def cli_make_clickable_path(
+    path: PathOrString, short_title: Union[bool, str] = False
+) -> str:
     from pathlib import Path
 
     if isinstance(short_title, str):
@@ -22,7 +24,7 @@ def cli_argument_convert_value(value: str, target_type: Type) -> Any:
     Convert an argument value to the target type.
     """
     if target_type == bool:
-        return value.lower() in ('true', 'yes', 'y', '1')
+        return value.lower() in ("true", "yes", "y", "1")
     elif target_type == int:
         return int(value)
     elif target_type == float:
@@ -31,7 +33,7 @@ def cli_argument_convert_value(value: str, target_type: Type) -> Any:
         return value
     elif target_type == list:
         # Assume comma-separated values
-        return [item.strip() for item in value.split(',')]
+        return [item.strip() for item in value.split(",")]
     else:
         # For custom types, try to use the constructor
         return target_type(value)

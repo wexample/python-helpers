@@ -25,7 +25,7 @@ class TraceCollector:
             code = None
             if frame.f_code.co_filename != "<string>":
                 try:
-                    with open(frame.f_code.co_filename, 'r') as f:
+                    with open(frame.f_code.co_filename, "r") as f:
                         lines = f.readlines()
                         if 0 <= current.tb_lineno - 1 < len(lines):
                             code = lines[current.tb_lineno - 1]
@@ -53,7 +53,9 @@ class TraceCollector:
         paths_map: Optional[Dict[str, str]] = None,
     ) -> List[ExceptionFrame]:
         frames: List[ExceptionFrame] = []
-        for frame in inspect.stack()[(skip_frames + 1 if skip_frames is not None else 0):]:
+        for frame in inspect.stack()[
+            (skip_frames + 1 if skip_frames is not None else 0) :
+        ]:
             frames.append(
                 ExceptionFrame(
                     filename=frame.filename,

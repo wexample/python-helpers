@@ -33,9 +33,7 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> Typ
 
 
 def module_collect_classes(
-        module,
-        base_class: Optional[Type] = None,
-        skip_prefixes: Optional[List[str]] = None
+    module, base_class: Optional[Type] = None, skip_prefixes: Optional[List[str]] = None
 ) -> Dict[str, Type]:
     import inspect
 
@@ -68,7 +66,7 @@ def module_collect_classes(
 
 
 def module_are_same(a: Any, b: Any) -> bool:
-    """ Determine if two class definition are the same class definition"""
+    """Determine if two class definition are the same class definition"""
     import inspect
     import os
     import sys
@@ -80,7 +78,11 @@ def module_are_same(a: Any, b: Any) -> bool:
     if not isinstance(a, type) or not isinstance(b, type):
         return False
 
-    def class_signature(c: type) -> Tuple[Optional[str], Optional[str], Optional[int], Optional[str], Optional[str]]:
+    def class_signature(
+        c: type,
+    ) -> Tuple[
+        Optional[str], Optional[str], Optional[int], Optional[str], Optional[str]
+    ]:
         mod_name = getattr(c, "__module__", None)
         qualname = getattr(c, "__qualname__", None)
 
@@ -113,13 +115,32 @@ def module_are_same(a: Any, b: Any) -> bool:
     a_src_file, a_mod_file, a_lineno, a_hash, a_qual = a_sig
     b_src_file, b_mod_file, b_lineno, b_hash, b_qual = b_sig
 
-    if a_src_file and b_src_file and a_src_file == b_src_file and a_qual == b_qual and a_hash and b_hash and a_hash == b_hash:
+    if (
+        a_src_file
+        and b_src_file
+        and a_src_file == b_src_file
+        and a_qual == b_qual
+        and a_hash
+        and b_hash
+        and a_hash == b_hash
+    ):
         return True
 
-    if a_mod_file and b_mod_file and a_mod_file == b_mod_file and a_qual == b_qual and a_hash and b_hash and a_hash == b_hash:
+    if (
+        a_mod_file
+        and b_mod_file
+        and a_mod_file == b_mod_file
+        and a_qual == b_qual
+        and a_hash
+        and b_hash
+        and a_hash == b_hash
+    ):
         return True
 
-    if getattr(a, "__module__", None) == getattr(b, "__module__", None) and a_qual == b_qual:
+    if (
+        getattr(a, "__module__", None) == getattr(b, "__module__", None)
+        and a_qual == b_qual
+    ):
         return True
 
     return False
