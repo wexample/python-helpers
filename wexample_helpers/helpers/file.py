@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
+from wexample_file.const.types import PathOrString
 from wexample_helpers.const.types import FileStringOrPath
 
 
-def file_change_mode(path: Union[str, Path], mode: int) -> None:
+def file_change_mode(path: PathOrString, mode: int) -> None:
     """
     Change file permissions for a path, ignoring symlinks and missing files.
     """
@@ -17,7 +18,7 @@ def file_change_mode(path: Union[str, Path], mode: int) -> None:
 
 
 def file_change_mode_recursive(
-        path: Union[str, Path], mode: int, follow_symlinks: bool = True
+        path: PathOrString, mode: int, follow_symlinks: bool = True
 ) -> None:
     """
     Recursively change mode for files and directories under path.
@@ -32,7 +33,7 @@ def file_change_mode_recursive(
             file_change_mode_recursive(os.path.join(str(path), item), mode, follow_symlinks)
 
 
-def file_list_subdirectories(path: Union[str, Path]) -> List[str]:
+def file_list_subdirectories(path: PathOrString) -> List[str]:
     """
     List immediate subdirectory names (excluding hidden) under a given path.
     """
@@ -61,12 +62,12 @@ def file_path_get_mode_num(path: Path) -> int:
     return path.stat().st_mode & 0o777
 
 
-def file_read(file_path: Union[str, Path]) -> str:
+def file_read(file_path: PathOrString) -> str:
     """Read file content as UTF-8 text."""
     return Path(file_path).read_text(encoding='utf-8')
 
 
-def file_read_or_default(file_path: Union[str, Path], default: Optional[str] = "") -> Optional[str]:
+def file_read_or_default(file_path: PathOrString, default: Optional[str] = "") -> Optional[str]:
     """Read file content or return default on any error."""
     try:
         return file_read(file_path)
@@ -74,7 +75,7 @@ def file_read_or_default(file_path: Union[str, Path], default: Optional[str] = "
         return default
 
 
-def file_remove_if_exists(path: Union[str, Path]) -> None:
+def file_remove_if_exists(path: PathOrString) -> None:
     """Remove a file or symlink if it exists."""
     p = Path(path)
     if p.is_file() or p.is_symlink():
@@ -86,7 +87,7 @@ def file_resolve_path(path: FileStringOrPath) -> Path:
     return path if isinstance(path, Path) else Path(path)
 
 
-def file_touch(path: Union[str, Path], times: Optional[Tuple[int, int]] = None) -> None:
+def file_touch(path: PathOrString, times: Optional[Tuple[int, int]] = None) -> None:
     """Create file if missing and update its access and modification times."""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -107,7 +108,7 @@ def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
     return True
 
 
-def file_write(file_path: Union[str, Path], content: str, encoding: str = 'utf-8') -> None:
+def file_write(file_path: PathOrString, content: str, encoding: str = 'utf-8') -> None:
     """Write content to file, overwriting if it exists."""
     p = Path(file_path)
     p.write_text(content, encoding=encoding)
@@ -130,7 +131,7 @@ def file_write_ensure(
     p.write_text(content, encoding=encoding)
 
 
-def file_get_directories(path: Union[str, Path], recursive: bool = False) -> List[str]:
+def file_get_directories(path: PathOrString, recursive: bool = False) -> List[str]:
     """Get directories under path, optionally recursively."""
     base = Path(path)
     if not recursive:
