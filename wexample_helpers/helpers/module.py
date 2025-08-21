@@ -1,5 +1,5 @@
 import pathlib
-from typing import Optional, Type, List, Dict
+from typing import Type, List, Dict, Any, Optional, Tuple
 
 from typing_extensions import TYPE_CHECKING
 
@@ -65,3 +65,61 @@ def module_collect_classes(
         collected[name] = obj
 
     return collected
+
+
+def module_are_same(a: Any, b: Any) -> bool:
+    """ Determine if two class definition are the same class definition"""
+    import inspect
+    import os
+    import sys
+    import hashlib
+
+    if a is b:
+        return True
+
+    if not isinstance(a, type) or not isinstance(b, type):
+        return False
+
+    def class_signature(c: type) -> Tuple[Optional[str], Optional[str], Optional[int], Optional[str], Optional[str]]:
+        mod_name = getattr(c, "__module__", None)
+        qualname = getattr(c, "__qualname__", None)
+
+        try:
+            src_file = inspect.getsourcefile(c) or inspect.getfile(c)
+        except TypeError:
+            src_file = None
+        if src_file:
+            src_file = os.path.realpath(src_file)
+
+        try:
+            src_lines, lineno = inspect.getsourcelines(c)
+            src_hash = hashlib.sha1("".join(src_lines).encode("utf-8")).hexdigest()
+        except (OSError, TypeError):
+            lineno = None
+            src_hash = None
+
+        mod_file = None
+        if mod_name and mod_name in sys.modules:
+            mod = sys.modules[mod_name]
+            mod_file = getattr(mod, "__file__", None)
+            if mod_file:
+                mod_file = os.path.realpath(mod_file)
+
+        return (src_file, mod_file, lineno, src_hash, qualname)
+
+    a_sig = class_signature(a)
+    b_sig = class_signature(b)
+
+    a_src_file, a_mod_file, a_lineno, a_hash, a_qual = a_sig
+    b_src_file, b_mod_file, b_lineno, b_hash, b_qual = b_sig
+
+    if a_src_file and b_src_file and a_src_file == b_src_file and a_qual == b_qual and a_hash and b_hash and a_hash == b_hash:
+        return True
+
+    if a_mod_file and b_mod_file and a_mod_file == b_mod_file and a_qual == b_qual and a_hash and b_hash and a_hash == b_hash:
+        return True
+
+    if getattr(a, "__module__", None) == getattr(b, "__module__", None) and a_qual == b_qual:
+        return True
+
+    return False
