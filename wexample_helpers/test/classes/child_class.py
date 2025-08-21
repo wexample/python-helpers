@@ -2,7 +2,9 @@ from wexample_helpers.test.classes.parent_class import ParentClass
 
 
 class ChildClass(ParentClass):
-    def __init__(self, child_value="child_default", parent_value="parent_default") -> None:
+    def __init__(
+        self, child_value="child_default", parent_value="parent_default"
+    ) -> None:
         super().__init__(parent_value=parent_value)
         self.child_value = child_value
 
