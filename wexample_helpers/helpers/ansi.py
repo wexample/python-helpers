@@ -47,3 +47,29 @@ def ansi_center(text: str, width: int, fillchar: str = ' ') -> str:
     left = (width - w) // 2
     right = width - w - left
     return (fillchar * left) + text + (fillchar * right)
+
+def ansi_truncate_visible(text: str, max_width: int) -> str:
+    if max_width <= 0:
+        return ""
+    if ansi_display_width(text) <= max_width:
+        return text
+    plain = ansi_strip_invisible(text)
+    # Truncate plain text by visible width using wcwidth logic indirectly
+    # via ansi_display_width on progressive accumulation.
+    out_chars = []
+    current = 0
+    for ch in plain:
+        # Compute width if we add this char
+        # Use a tiny buffer check to avoid recomputing from scratch each time
+        # but keep it simple and robust.
+        from wcwidth import wcwidth as _wcw
+        w = _wcw(ch)
+        if w is None:
+            w = 0
+        if w < 0:
+            w = 0
+        if current + w > max_width:
+            break
+        out_chars.append(ch)
+        current += w
+    return "".join(out_chars)
