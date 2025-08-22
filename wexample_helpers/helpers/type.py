@@ -106,7 +106,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
         elif type_is_isinstance(value, allowed_type):
             return
 
-    # Handle generic types
+    # Handle generic types (includes Union/| and Type[...])
     if type_generic_value_is_valid(value, allowed_type):
         return
 
@@ -123,9 +123,35 @@ def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> b
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
 
-    # Validate Union type by checking if value matches any of the types in the Union
-    if origin is Union:
+    # Validate Union (supports typing.Union and PEP 604 | operator which yields types.UnionType)
+    if origin is Union or origin is UnionType:
         return any(type_generic_value_is_valid(value, arg) for arg in args)
+
+    # Handle Type[T] annotations: we expect "value" to be a class, and it must be a subclass of T
+    if origin is type:
+        # If no parameter provided, accept any class
+        if not args:
+            return isinstance(value, type)
+
+        param = args[0]
+
+        # value must be a class object to satisfy Type[...]
+        if not isinstance(value, type):
+            return False
+
+        # Type[Any] accepts any class
+        if param is Any:
+            return True
+
+        # If param itself is a Union of classes, accept if value is subclass of any
+        param_origin = get_origin(param) or param
+        if param_origin is Union or param_origin is UnionType:
+            res = any(_safe_issubclass(value, p) for p in get_args(param))
+            return res
+
+        # Normal Type[SomeClass]
+        res = _safe_issubclass(value, param_origin)
+        return res
 
     # Validate dictionary type with possible nested generics
     if origin is dict:
