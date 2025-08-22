@@ -16,14 +16,14 @@ class Service(BaseModel):
     enabled: bool = Field(default=True)
 
     # Private reference to parent
-    _kernel: Optional["Kernel"] = PrivateAttr(default=None)
+    _kernel: Kernel | None = PrivateAttr(default=None)
 
     def initialize(self, kernel: Kernel) -> None:
         """Initialize the service with its parent kernel."""
         self._kernel = kernel
 
     @property
-    def kernel(self) -> Optional["Kernel"]:
+    def kernel(self) -> Kernel | None:
         """Get the parent kernel."""
         return self._kernel
 

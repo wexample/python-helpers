@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class HasTwoStepInit:
     is_setup: bool = False
 

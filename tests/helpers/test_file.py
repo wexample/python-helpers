@@ -26,13 +26,13 @@ from wexample_helpers.helpers.file import (
 
 
 @pytest.fixture
-def temp_dir(tmp_path: Path) -> Generator[Path, None, None]:
+def temp_dir(tmp_path: Path) -> Generator[Path]:
     """Fixture providing a temporary directory."""
     yield tmp_path
 
 
 @pytest.fixture
-def temp_file(temp_dir: Path) -> Generator[Path, None, None]:
+def temp_file(temp_dir: Path) -> Generator[Path]:
     """Fixture providing a temporary file."""
     file_path = temp_dir / "test.txt"
     file_path.write_text("test content")

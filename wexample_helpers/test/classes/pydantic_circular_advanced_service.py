@@ -18,11 +18,11 @@ class AdvancedService(Service):
     config: dict = Field(default_factory=dict)
 
     @property
-    def advanced_kernel(self) -> Optional["AdvancedKernel"]:
+    def advanced_kernel(self) -> AdvancedKernel | None:
         """Get the parent kernel as AdvancedKernel."""
         return self.kernel  # type: ignore
 
     @property
-    def base_kernel(self) -> Optional["BaseKernel"]:
+    def base_kernel(self) -> BaseKernel | None:
         """Access parent kernel as base type."""
         return self.kernel

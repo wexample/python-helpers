@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class BaseMixin:
     """Base mixin with common properties."""
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class NotAllowedItemMixin:
     """Mixin for exceptions related to items that are not allowed in a list of allowed items.
 

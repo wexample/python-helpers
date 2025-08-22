@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class PropertyClass:
     def __init__(self) -> None:
         self._value = None

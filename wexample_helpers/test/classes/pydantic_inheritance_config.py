@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class PydanticInheritanceConfig:
     """Simple configuration class with a basic property."""
 
