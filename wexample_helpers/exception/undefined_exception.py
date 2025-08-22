@@ -59,7 +59,7 @@ class UndefinedException(Exception):
 
         return result
 
-    def with_data(self, **kwargs) -> "UndefinedException":
+    def with_data(self, **kwargs) -> UndefinedException:
         """Add additional data to the exception."""
         self.data.update(kwargs)
         return self

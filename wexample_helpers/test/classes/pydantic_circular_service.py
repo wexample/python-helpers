@@ -17,7 +17,7 @@ class Service(BaseModel):
     # Private reference to parent
     _kernel: Optional["Kernel"] = PrivateAttr(default=None)
 
-    def initialize(self, kernel: "Kernel") -> None:
+    def initialize(self, kernel: Kernel) -> None:
         """Initialize the service with its parent kernel."""
         self._kernel = kernel
 
