@@ -1,9 +1,9 @@
 import os
 import shutil
+from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, List
-from collections.abc import Callable
 
 from wexample_file.const.types import PathOrString
 from wexample_helpers.helpers.file import file_read

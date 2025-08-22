@@ -1,10 +1,11 @@
 from typing import Any, List
+
 from wexample_helpers.helpers.polyfill import polyfill_register_global
 
 
 class HasClassDependencies:
     @classmethod
-    def get_class_dependencies(cls) -> List[Any]:
+    def get_class_dependencies(cls) -> list[Any]:
         """
         Return a list of class dependencies, basically the classes used by properties which are only defined for type checking, with quotes,
         this function can be used to import dependencies before rebuilding class

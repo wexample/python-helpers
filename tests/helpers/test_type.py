@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from types import NoneType
 from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
-from collections.abc import Callable
 
 from wexample_helpers.helpers.type import type_is_compatible, type_is_generic
 from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers

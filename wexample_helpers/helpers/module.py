@@ -1,7 +1,5 @@
 import pathlib
-from typing import Any, Dict, List, Optional, Tuple, Type
-
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Type
 
 if TYPE_CHECKING:
     pass
@@ -80,9 +78,7 @@ def module_are_same(a: Any, b: Any) -> bool:
 
     def class_signature(
         c: type,
-    ) -> tuple[
-        str | None, str | None, int | None, str | None, str | None
-    ]:
+    ) -> tuple[str | None, str | None, int | None, str | None, str | None]:
         mod_name = getattr(c, "__module__", None)
         qualname = getattr(c, "__qualname__", None)
 

@@ -3,9 +3,7 @@ from typing import Any, Type, Union
 from wexample_file.const.types import PathOrString
 
 
-def cli_make_clickable_path(
-    path: PathOrString, short_title: bool | str = False
-) -> str:
+def cli_make_clickable_path(path: PathOrString, short_title: bool | str = False) -> str:
     from pathlib import Path
 
     if isinstance(short_title, str):

@@ -1,8 +1,8 @@
 import ast
 import inspect
 import re
-from typing import Any, Dict, List, Optional, Union, cast
 from collections.abc import Iterable
+from typing import Any, Dict, List, Optional, Union, cast
 
 from wexample_helpers.const.types import (
     AnyCallable,
@@ -27,9 +27,7 @@ def args_replace_one(
     return previous
 
 
-def args_push_one(
-    arg_list: list[str], arg_name: str, value: Any | None = None
-) -> None:
+def args_push_one(arg_list: list[str], arg_name: str, value: Any | None = None) -> None:
     arg_list.append(f"--{arg_name}")
 
     if value is not None:
@@ -60,9 +58,7 @@ def args_shift_one(
     return None
 
 
-def args_split_arg_array(
-    arg: str | Iterable[str], separator: str = ","
-) -> StringsList:
+def args_split_arg_array(arg: str | Iterable[str], separator: str = ",") -> StringsList:
     if not arg:
         return []
 

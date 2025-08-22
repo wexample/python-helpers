@@ -90,8 +90,8 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
                     # Handle generic types
                     if type_is_compatible(
-                        actual_type=cast(Type, actual_return_type_hint),
-                        allowed_type=return_type,
+                            actual_type=cast(Type, actual_return_type_hint),
+                            allowed_type=return_type,
                     ):
                         return
 

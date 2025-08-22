@@ -1,5 +1,5 @@
-from typing import Any, List, Optional
 from collections.abc import Sequence
+from typing import Any, List, Optional
 
 
 def array_replace_value(
@@ -21,9 +21,7 @@ def array_unique(array: Sequence[Any]) -> list[Any]:
     return list(set(array))
 
 
-def array_dict_get_by(
-    key: str, value: Any, list_of_dicts: list[dict]
-) -> dict | None:
+def array_dict_get_by(key: str, value: Any, list_of_dicts: list[dict]) -> dict | None:
     """
     Retrieve a dictionary from a list of dictionaries based on a specific key-value pair.
 

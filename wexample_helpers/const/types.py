@@ -1,4 +1,6 @@
+from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
+from re import Match
 from typing import (
     Any,
     Dict,
@@ -9,8 +11,6 @@ from typing import (
     TypedDict,
     Union,
 )
-from collections.abc import Callable, Mapping, Sequence
-from re import Match
 
 AnyList = list[Any]
 StringKeysDict = dict[str, Any]

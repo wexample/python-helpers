@@ -1,7 +1,7 @@
 import os
 import stat
-from pathlib import Path
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 from wexample_helpers.helpers.file import (
