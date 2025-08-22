@@ -1,18 +1,18 @@
 from collections.abc import Callable
-import pytest
 from types import NoneType
 from typing import Any, Optional, Union
 
-from wexample_helpers.helpers.type import (
-    type_is_compatible,
-    type_is_generic,
-    type_validate_or_fail,
-    type_to_name,
-)
-from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
+import pytest
 from wexample_helpers.exception.not_allowed_variable_type_exception import (
     NotAllowedVariableTypeException,
 )
+from wexample_helpers.helpers.type import (
+    type_is_compatible,
+    type_is_generic,
+    type_to_name,
+    type_validate_or_fail,
+)
+from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
 
 
 class TestHelperType(AbstractTestHelpers):
@@ -116,7 +116,7 @@ class TestHelperType(AbstractTestHelpers):
         def annotated_bad() -> str:
             return "nope"
 
-        def no_annotations():
+        def no_annotations() -> int:
             return 1
 
         # Accept when return type matches
