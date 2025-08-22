@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import inspect
-from typing import ClassVar, NoReturn, get_origin
+from typing import ClassVar, Final, NoReturn, get_origin, get_type_hints
 
 from pydantic.fields import FieldInfo
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
@@ -11,20 +11,36 @@ from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
     def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         super().__init_subclass__(**kwargs)
-        annotations = cls.__dict__.get("__annotations__", {}) or {}
+        # Only names declared in this class body (avoid inherited ones)
+        local_annotations = cls.__dict__.get("__annotations__", {}) or {}
+        # Resolve annotations with include_extras=True so ClassVar/Final are visible
+        try:
+            resolved_hints = get_type_hints(cls, include_extras=True)
+        except Exception:
+            # Fallback: use local string/raw annotations if resolution fails
+            resolved_hints = {}
 
-        for name, anno in annotations.items():
+        for name, raw_anno in local_annotations.items():
             if name.startswith("__"):
                 continue
-            # Skip ClassVars (not model fields)
-            if get_origin(anno) is ClassVar:
+            # Determine the effective annotation (resolved if available)
+            anno = resolved_hints.get(name, raw_anno)
+
+            # Robustly skip ClassVar / Final (constants, not model fields), even if anno is a string
+            origin = get_origin(anno)
+            raw_s = raw_anno if isinstance(raw_anno, str) else ""
+            if (
+                origin is ClassVar
+                or origin is Final
+                or raw_s.strip().startswith("ClassVar")
+                or raw_s.strip().startswith("Final")
+            ):
                 continue
             # Skip private attrs and dunder
             if name.startswith("_"):
                 continue
 
             # Only enforce on fields declared in this class body
-            has_local_default = name in cls.__dict__
             default = cls.__dict__.get(name, ...)
 
             # Must be declared with Field(...)
