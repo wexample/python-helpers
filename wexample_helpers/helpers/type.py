@@ -1,11 +1,7 @@
+from collections.abc import Callable
 from types import UnionType
 from typing import (
     Any,
-    Callable,
-    Dict,
-    List,
-    Tuple,
-    Type,
     Union,
     cast,
     get_args,
@@ -38,7 +34,7 @@ def type_is_generic(type_value: Any) -> bool:
     """Detects if a given type is a generic type like List, Dict, Union"""
 
     # Set of known generic types for quick membership testing
-    generic_types = {list, dict, tuple, List, Dict, Tuple, Union}
+    generic_types = {list, dict, tuple, Union}
 
     # Extract the base type of type_value using get_origin, or use type_value itself if get_origin is None
     type_value = get_origin(type_value) or type_value
@@ -47,7 +43,7 @@ def type_is_generic(type_value: Any) -> bool:
     return type_value in generic_types
 
 
-def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
+def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
     if allowed_type is Any:
         return
 
@@ -90,8 +86,8 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
 
                     # Handle generic types
                     if type_is_compatible(
-                            actual_type=cast(Type, actual_return_type_hint),
-                            allowed_type=return_type,
+                        actual_type=cast(type, actual_return_type_hint),
+                        allowed_type=return_type,
                     ):
                         return
 
@@ -118,7 +114,7 @@ def type_validate_or_fail(value: Any, allowed_type: Type | UnionType) -> None:
     )
 
 
-def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> bool:
+def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
@@ -208,7 +204,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: Type | UnionType) -> b
     return type_is_isinstance(value, origin)
 
 
-def type_is_compatible(actual_type: Type, allowed_type: Type) -> bool:
+def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
     """Check if actual_type is compatible with allowed_type for generics like Dict, List, Tuple, and Union."""
     origin = get_origin(allowed_type) or allowed_type
     actual_origin = get_origin(actual_type) or actual_type
