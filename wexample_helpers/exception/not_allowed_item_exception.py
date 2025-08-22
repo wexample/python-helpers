@@ -18,11 +18,11 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
     def __init__(
         self,
         item_type: str,
-        item_value: Optional[str] = None,
-        allowed_values: List[str] = None,
-        cause: Optional[Exception] = None,
-        previous: Optional[Exception] = None,
-        message: Optional[str] = None,
+        item_value: str | None = None,
+        allowed_values: list[str] = None,
+        cause: Exception | None = None,
+        previous: Exception | None = None,
+        message: str | None = None,
     ) -> None:
         if allowed_values is None:
             allowed_values = []

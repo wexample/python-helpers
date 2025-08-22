@@ -1,7 +1,8 @@
 import ast
 import inspect
 import re
-from typing import Any, Dict, Iterable, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Union, cast
+from collections.abc import Iterable
 
 from wexample_helpers.const.types import (
     AnyCallable,
@@ -14,11 +15,11 @@ from wexample_helpers.helpers.string import string_to_snake_case
 
 
 def args_replace_one(
-    arg_list: List[str],
+    arg_list: list[str],
     arg_name: str,
-    value: Optional[Any] = None,
+    value: Any | None = None,
     is_flag: bool = False,
-) -> Optional[str | bool]:
+) -> str | bool | None:
     previous = args_shift_one(arg_list=arg_list, arg_name=arg_name, is_flag=is_flag)
 
     args_push_one(arg_list=arg_list, arg_name=arg_name, value=value)
@@ -27,7 +28,7 @@ def args_replace_one(
 
 
 def args_push_one(
-    arg_list: List[str], arg_name: str, value: Optional[Any] = None
+    arg_list: list[str], arg_name: str, value: Any | None = None
 ) -> None:
     arg_list.append(f"--{arg_name}")
 
@@ -36,8 +37,8 @@ def args_push_one(
 
 
 def args_shift_one(
-    arg_list: List[str], arg_name: str, is_flag: bool = False
-) -> Optional[str | bool]:
+    arg_list: list[str], arg_name: str, is_flag: bool = False
+) -> str | bool | None:
     """
     Alter arg list by removing arg names and returning arg value.
     Take arg name without dash, and remove args with any count of prefixed dashes.
@@ -60,7 +61,7 @@ def args_shift_one(
 
 
 def args_split_arg_array(
-    arg: Union[str, Iterable[str]], separator: str = ","
+    arg: str | Iterable[str], separator: str = ","
 ) -> StringsList:
     if not arg:
         return []
@@ -77,7 +78,7 @@ def args_split_arg_array(
         return [item.strip() for item in arg]
 
 
-def args_convert_dict_to_snake_dict(input_dict: Dict[str, Any]) -> Dict[str, Any]:
+def args_convert_dict_to_snake_dict(input_dict: dict[str, Any]) -> dict[str, Any]:
     return {string_to_snake_case(key): value for key, value in input_dict.items()}
 
 
@@ -108,7 +109,7 @@ def args_parse_list(arg: str) -> StringsList:
     return cast(StringsList, arg_list)
 
 
-def args_parse_one(argument: str, default: Optional[Any] = None) -> BasicValue:
+def args_parse_one(argument: str, default: Any | None = None) -> BasicValue:
     if argument is None or argument == "":
         return default
 

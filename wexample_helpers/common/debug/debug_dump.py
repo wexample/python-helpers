@@ -25,8 +25,8 @@ class DebugDump(AbstractDebug):
             }
 
     def _collect_data(
-        self, obj: Any, depth: int = 0, seen: Optional[Set[int]] = None
-    ) -> Dict:
+        self, obj: Any, depth: int = 0, seen: set[int] | None = None
+    ) -> dict:
         if seen is None:
             seen = set()
 

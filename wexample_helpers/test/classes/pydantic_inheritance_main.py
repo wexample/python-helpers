@@ -15,7 +15,7 @@ class PydanticInheritanceMain(PydanticInheritanceConfig, PydanticInheritanceMode
             self, environment=data.get("environment", "development")
         )
 
-    def get_full_state(self) -> Dict[str, Any]:
+    def get_full_state(self) -> dict[str, Any]:
         """Get the complete state combining all inherited properties."""
         return {
             "environment": self.environment,

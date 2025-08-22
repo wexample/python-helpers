@@ -66,8 +66,8 @@ def version_join(version: VersionDescriptor, add_build: bool | str = False) -> s
 
 
 def version_parse(version: str) -> VersionDescriptor | None:
-    pre_build_number: Optional[int] = None
-    pre_build_type: Optional[str] = None
+    pre_build_number: int | None = None
+    pre_build_type: str | None = None
 
     try:
         # Handle 1.0.0-beta.1+build.1234

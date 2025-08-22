@@ -7,7 +7,7 @@ from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import (
 from wexample_helpers.test.classes.pydantic_circular_base_kernel import BaseKernel
 
 
-def _test_kernel_service(kernel_class: Type, kernel_name: str):
+def _test_kernel_service(kernel_class: type, kernel_name: str):
     """Test kernel and service circular reference."""
     # Create a kernel which will automatically create its service
     kernel = kernel_class(name=kernel_name, debug=True)

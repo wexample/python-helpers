@@ -13,6 +13,6 @@ class AdvancedKernel(BaseKernel):
     features: list[str] = Field(default_factory=list)
 
     @classmethod
-    def get_service_class(cls) -> Type[AdvancedService]:
+    def get_service_class(cls) -> type[AdvancedService]:
         """Override to use AdvancedService."""
         return AdvancedService

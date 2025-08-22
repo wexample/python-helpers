@@ -7,6 +7,6 @@ class NotAllowedItemData(ExceptionData):
     """Data model for exceptions related to not allowed items."""
 
     item_type: str
-    item_value: Optional[str] = None
-    allowed_values: List[str] = []
+    item_value: str | None = None
+    allowed_values: list[str] = []
     is_missing: bool = False

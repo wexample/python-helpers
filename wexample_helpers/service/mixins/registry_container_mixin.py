@@ -6,14 +6,14 @@ from wexample_helpers.service.registry import Registry
 class RegistryContainerMixin:
     """Abstract container for managing multiple registries of any type."""
 
-    _registries: Dict[str, Registry] = {}
+    _registries: dict[str, Registry] = {}
 
-    def _get_registry_class_type(self) -> Type[Registry]:
+    def _get_registry_class_type(self) -> type[Registry]:
         """Get the type of registry to use. Must be overridden by child classes."""
         return Registry
 
     def get_registry(
-        self, name: str, registry_class_type: Optional[Type[Registry]] = None
+        self, name: str, registry_class_type: type[Registry] | None = None
     ) -> Registry:
         """Get a registry by its name."""
         registry_name = f"_{name}_registry"
@@ -22,7 +22,7 @@ class RegistryContainerMixin:
         return self._registries[registry_name]
 
     def set_registry(
-        self, name: str, registry_class_type: Optional[Type[Registry]] = None
+        self, name: str, registry_class_type: type[Registry] | None = None
     ) -> Registry:
         self._registries[name] = (
             registry_class_type or self._get_registry_class_type()
@@ -35,7 +35,7 @@ class RegistryContainerMixin:
         registry.register(key, item)
         return registry
 
-    def register_items(self, registry_name: str, items: List[Any]) -> Registry:
+    def register_items(self, registry_name: str, items: list[Any]) -> Registry:
         """Register multiple items at once in a specific registry."""
         registry = self.get_registry(registry_name)
         for item in items:
@@ -46,7 +46,7 @@ class RegistryContainerMixin:
             registry.register(key, item)
         return registry
 
-    def get_item(self, registry_name: str, key: str, **kwargs) -> Optional[Any]:
+    def get_item(self, registry_name: str, key: str, **kwargs) -> Any | None:
         """Retrieve an item from a specific registry by its key."""
         registry = self.get_registry(registry_name)
         return registry.get(key, **kwargs)

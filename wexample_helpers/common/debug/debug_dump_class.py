@@ -13,7 +13,7 @@ class DebugDumpClass(AbstractDebug):
     def collect_data(self) -> None:
         self.data = self._collect_hierarchy(self.cls)
 
-    def _collect_hierarchy(self, cls: Any, seen: Optional[Set[int]] = None) -> Dict:
+    def _collect_hierarchy(self, cls: Any, seen: set[int] | None = None) -> dict:
         if seen is None:
             seen = set()
 

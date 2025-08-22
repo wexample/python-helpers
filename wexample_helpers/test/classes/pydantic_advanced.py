@@ -17,14 +17,14 @@ class PydanticAdvanced(BaseModel):
     # Private attributes (using PrivateAttr)
     _secret_key: str = PrivateAttr(default="private")
     _created_at: datetime = PrivateAttr(default_factory=datetime.now)
-    _internal_notes: List[str] = PrivateAttr(default_factory=list)
+    _internal_notes: list[str] = PrivateAttr(default_factory=list)
 
     # Public fields
     id: str = Field(description="Unique identifier")
     status: Status = Field(default=Status.PENDING)
 
     # Complex types
-    metadata: Dict[str, Union[str, int, bool]] = Field(
+    metadata: dict[str, str | int | bool] = Field(
         default_factory=dict, description="Arbitrary metadata"
     )
 
@@ -47,11 +47,11 @@ class PydanticAdvanced(BaseModel):
 
     # Custom property with getter and setter
     @property
-    def notes(self) -> List[str]:
+    def notes(self) -> list[str]:
         return self._internal_notes.copy()
 
     @notes.setter
-    def notes(self, value: List[str]) -> None:
+    def notes(self, value: list[str]) -> None:
         self._internal_notes = [note.strip() for note in value]
 
     model_config = {"arbitrary_types_allowed": True}

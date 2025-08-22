@@ -44,8 +44,8 @@ class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
     @classmethod
     def _raise_not_implemented_error(
         cls,
-        method: Optional[str] = None,
-        message: Optional[str] = None,
+        method: str | None = None,
+        message: str | None = None,
     ) -> NoReturn:
         """Convenience to raise a standardized NotImplementedError.
 

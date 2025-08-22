@@ -4,7 +4,7 @@ from typing import List
 class KeyNotFoundError(Exception):
     """Exception raised when a key is not found in a list of available keys."""
 
-    def __init__(self, message: str, key: str, available_keys: List[str]) -> None:
+    def __init__(self, message: str, key: str, available_keys: list[str]) -> None:
         """
         Initialize the exception with the missing key and available keys.
 

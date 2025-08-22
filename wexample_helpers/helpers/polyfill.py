@@ -15,7 +15,7 @@ def polyfill_import(classes: Any, *args, **kwargs) -> None:
 
 
 def polyfill_register_global(
-    classes: Union[T, list[T], tuple[T, ...]], context: Optional[dict] = None
+    classes: T | list[T] | tuple[T, ...], context: dict | None = None
 ) -> None:
     """
     Registers classes in the global namespace to fix Pydantic type resolution issues.

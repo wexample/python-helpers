@@ -5,7 +5,7 @@ from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
 
 class DebugBreakpoint(AbstractDebug):
-    def __init__(self, message: Optional[str] = None) -> None:
+    def __init__(self, message: str | None = None) -> None:
         self.message = message
         super().__init__()
 

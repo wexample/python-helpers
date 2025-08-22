@@ -8,7 +8,7 @@ from wexample_helpers.helpers.trace import trace_print
 
 
 def debug_trace(
-    path_style: DebugPathStyle = DebugPathStyle.FULL, paths_map: Optional[dict] = None
+    path_style: DebugPathStyle = DebugPathStyle.FULL, paths_map: dict | None = None
 ) -> None:
     # Delegate to trace helpers that use the new exception/trace classes
     trace_print(
@@ -20,7 +20,7 @@ def debug_trace(
 def debug_trace_and_die(
     message: str = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None,
+    paths_map: dict | None = None,
 ) -> None:
     if message:
         print(message)

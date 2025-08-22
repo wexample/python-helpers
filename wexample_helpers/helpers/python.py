@@ -2,7 +2,7 @@ import re
 from typing import Optional
 
 
-def python_get_return_type_from_annotations(func) -> Optional[str]:
+def python_get_return_type_from_annotations(func) -> str | None:
     if not hasattr(func, "__annotations__") or "return" not in func.__annotations__:
         return None
 
@@ -13,7 +13,7 @@ def python_get_return_type_from_annotations(func) -> Optional[str]:
     return str(return_annotation).replace("typing.", "")
 
 
-def python_get_return_type_from_docstring(docstring: Optional[str]) -> Optional[str]:
+def python_get_return_type_from_docstring(docstring: str | None) -> str | None:
     if not docstring:
         return None
 

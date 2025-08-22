@@ -27,9 +27,9 @@ class UndefinedException(Exception):
     def __init__(
         self,
         message: str,
-        data: Optional[Dict[str, Any]] = None,
-        cause: Optional[Exception] = None,
-        previous: Optional[Exception] = None,
+        data: dict[str, Any] | None = None,
+        cause: Exception | None = None,
+        previous: Exception | None = None,
     ) -> None:
         self.message = message
         self.data = data or {}
@@ -43,7 +43,7 @@ class UndefinedException(Exception):
         )
         super().__init__(self.message)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert exception to dictionary for serialization."""
         result = {
             "error_code": self.error_code,

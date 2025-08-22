@@ -12,7 +12,7 @@ class Kernel(BaseModel):
     debug: bool = Field(default=False)
 
     # Private service instance
-    _service: Optional[Service] = PrivateAttr(default=None)
+    _service: Service | None = PrivateAttr(default=None)
 
     def __init__(self, **data) -> None:
         super().__init__(**data)

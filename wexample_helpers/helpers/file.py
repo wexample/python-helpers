@@ -35,7 +35,7 @@ def file_change_mode_recursive(
             )
 
 
-def file_list_subdirectories(path: PathOrString) -> List[str]:
+def file_list_subdirectories(path: PathOrString) -> list[str]:
     """
     List immediate subdirectory names (excluding hidden) under a given path.
     """
@@ -51,7 +51,7 @@ def file_mode_num_to_octal(num: int) -> str:
     return oct(num & 0o777)[-3:]
 
 
-def file_mode_octal_to_num(mode: Union[str, int]) -> int:
+def file_mode_octal_to_num(mode: str | int) -> int:
     """Convert octal mode string (e.g. '755') to its numeric value."""
     return int(str(mode), 8)
 
@@ -72,8 +72,8 @@ def file_read(file_path: PathOrString) -> str:
 
 
 def file_read_or_default(
-    file_path: PathOrString, default: Optional[str] = ""
-) -> Optional[str]:
+    file_path: PathOrString, default: str | None = ""
+) -> str | None:
     """Read file content or return default on any error."""
     try:
         return file_read(file_path)
@@ -93,7 +93,7 @@ def file_resolve_path(path: FileStringOrPath) -> Path:
     return path if isinstance(path, Path) else Path(path)
 
 
-def file_touch(path: PathOrString, times: Optional[Tuple[int, int]] = None) -> None:
+def file_touch(path: PathOrString, times: tuple[int, int] | None = None) -> None:
     """Create file if missing and update its access and modification times."""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -101,13 +101,13 @@ def file_touch(path: PathOrString, times: Optional[Tuple[int, int]] = None) -> N
         os.utime(p, times)
 
 
-def file_validate_mode_octal(mode: Union[str, int]) -> bool:
+def file_validate_mode_octal(mode: str | int) -> bool:
     """Validate that mode is a three-digit octal string or int."""
     m = str(mode)
     return len(m) == 3 and all(ch in "01234567" for ch in m)
 
 
-def file_validate_mode_octal_or_fail(mode: Union[str, int]) -> bool:
+def file_validate_mode_octal_or_fail(mode: str | int) -> bool:
     """Validate octal mode or raise Exception."""
     if not file_validate_mode_octal(mode):
         raise ValueError(f"Bad mode format {mode!r}")
@@ -135,7 +135,7 @@ def file_write_ensure(
     p.write_text(content, encoding=encoding)
 
 
-def file_get_directories(path: PathOrString, recursive: bool = False) -> List[str]:
+def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
     """Get directories under path, optionally recursively."""
     base = Path(path)
     if not recursive:

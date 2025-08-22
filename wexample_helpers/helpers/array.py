@@ -1,13 +1,14 @@
-from typing import Any, List, Optional, Sequence
+from typing import Any, List, Optional
+from collections.abc import Sequence
 
 
 def array_replace_value(
     array: Sequence[Any], search: Any, replacement: Any
-) -> List[Any]:
+) -> list[Any]:
     return [replacement if value == search else value for value in array]
 
 
-def array_swap(two_items_array: List[Any], do_swap: bool) -> List[Any]:
+def array_swap(two_items_array: list[Any], do_swap: bool) -> list[Any]:
     if do_swap:
         two_items_array.reverse()
 
@@ -16,13 +17,13 @@ def array_swap(two_items_array: List[Any], do_swap: bool) -> List[Any]:
     return two_items_array
 
 
-def array_unique(array: Sequence[Any]) -> List[Any]:
+def array_unique(array: Sequence[Any]) -> list[Any]:
     return list(set(array))
 
 
 def array_dict_get_by(
-    key: str, value: Any, list_of_dicts: List[dict]
-) -> Optional[dict]:
+    key: str, value: Any, list_of_dicts: list[dict]
+) -> dict | None:
     """
     Retrieve a dictionary from a list of dictionaries based on a specific key-value pair.
 

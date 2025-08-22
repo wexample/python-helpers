@@ -1,25 +1,23 @@
 from pathlib import Path
 from typing import (
     Any,
-    Callable,
     Dict,
     List,
-    Mapping,
-    Match,
     Optional,
-    Sequence,
     Set,
     TypeAlias,
     TypedDict,
     Union,
 )
+from collections.abc import Callable, Mapping, Sequence
+from re import Match
 
-AnyList = List[Any]
-StringKeysDict = Dict[str, Any]
+AnyList = list[Any]
+StringKeysDict = dict[str, Any]
 StringKeysMapping = Mapping[str, Any]
-StringsDict = Dict[str, str]
-StringsList = List[str]
-SetList = Set[str]
+StringsDict = dict[str, str]
+StringsList = list[str]
+SetList = set[str]
 StringsMatch = Match[str]
 Scalar = str | int | float | bool | None
 BasicValue = Scalar | AnyList | StringKeysDict
@@ -51,8 +49,8 @@ VERSION_PRE_BUILD_NUMBER: int = 0
 
 
 class VersionDescriptor(TypedDict):
-    major: Optional[int]
-    intermediate: Optional[int]
-    minor: Optional[int]
-    pre_build_type: Optional[str]
-    pre_build_number: Optional[int]
+    major: int | None
+    intermediate: int | None
+    minor: int | None
+    pre_build_type: str | None
+    pre_build_number: int | None

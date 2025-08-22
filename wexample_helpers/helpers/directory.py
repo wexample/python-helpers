@@ -2,7 +2,8 @@ import os
 import shutil
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable, List
+from typing import Any, List
+from collections.abc import Callable
 
 from wexample_file.const.types import PathOrString
 from wexample_helpers.helpers.file import file_read
@@ -67,10 +68,10 @@ def directory_empty_dir(dir_path: PathOrString) -> None:
             os.remove(item_path)
 
 
-def directory_list_files(dir_path: PathOrString) -> List[str]:
+def directory_list_files(dir_path: PathOrString) -> list[str]:
     """List all files in directory and subdirectories, sorted alphabetically."""
     p = Path(dir_path)
-    file_paths: List[str] = []
+    file_paths: list[str] = []
     for root, _, files in os.walk(p):
         for file in sorted(files):
             full_path = os.path.join(root, file)
@@ -79,7 +80,7 @@ def directory_list_files(dir_path: PathOrString) -> List[str]:
     return file_paths
 
 
-def directory_aggregate_all_files(file_paths: List[PathOrString]) -> str:
+def directory_aggregate_all_files(file_paths: list[PathOrString]) -> str:
     """Aggregate contents of the given list of file paths."""
     return os.linesep.join(file_read(os.fspath(Path(fp))) for fp in file_paths)
 

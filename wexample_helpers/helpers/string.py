@@ -16,7 +16,7 @@ def string_to_snake_case(text: str) -> str:
     return str(re.sub(r"\W+", "_", s3))
 
 
-def string_append_missing_lines(lines: List[str], content: str) -> str:
+def string_append_missing_lines(lines: list[str], content: str) -> str:
     # Split the current content into lines
     current_lines = content.splitlines()
 

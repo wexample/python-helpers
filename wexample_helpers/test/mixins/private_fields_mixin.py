@@ -5,7 +5,7 @@ from typing import Any, Dict
 class PrivateFieldsMixin:
     """Mixin providing private attributes template."""
 
-    _metadata: Dict[str, Any]
+    _metadata: dict[str, Any]
     _created_at: datetime
     _secret_key: str = "default-key"
 
@@ -13,7 +13,7 @@ class PrivateFieldsMixin:
         self._created_at = datetime.now()
         self._metadata = {}
 
-    def get_metadata(self) -> Dict[str, Any]:
+    def get_metadata(self) -> dict[str, Any]:
         """Safe access to private metadata."""
         return self._metadata.copy()
 

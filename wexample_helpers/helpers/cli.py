@@ -4,7 +4,7 @@ from wexample_file.const.types import PathOrString
 
 
 def cli_make_clickable_path(
-    path: PathOrString, short_title: Union[bool, str] = False
+    path: PathOrString, short_title: bool | str = False
 ) -> str:
     from pathlib import Path
 
@@ -20,7 +20,7 @@ def cli_make_clickable_path(
     return f"\033]8;;file://{path}\033\\{display_text}\033]8;;\033\\"
 
 
-def cli_argument_convert_value(value: str, target_type: Type) -> Any:
+def cli_argument_convert_value(value: str, target_type: type) -> Any:
     """
     Convert an argument value to the target type.
     """

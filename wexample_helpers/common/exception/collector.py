@@ -17,20 +17,20 @@ class TraceCollector:
         traceback: TracebackType,
         *,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[Dict[str, str]] = None,
-    ) -> List[ExceptionFrame]:
-        frames: List[ExceptionFrame] = []
+        paths_map: dict[str, str] | None = None,
+    ) -> list[ExceptionFrame]:
+        frames: list[ExceptionFrame] = []
         current = traceback
         while current is not None:
             frame = current.tb_frame
             code = None
             if frame.f_code.co_filename != "<string>":
                 try:
-                    with open(frame.f_code.co_filename, "r") as f:
+                    with open(frame.f_code.co_filename) as f:
                         lines = f.readlines()
                         if 0 <= current.tb_lineno - 1 < len(lines):
                             code = lines[current.tb_lineno - 1]
-                except (IOError, IndexError):
+                except (OSError, IndexError):
                     pass
 
             frames.append(
@@ -49,11 +49,11 @@ class TraceCollector:
     @staticmethod
     def from_stack(
         *,
-        skip_frames: Optional[int] = None,
+        skip_frames: int | None = None,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[Dict[str, str]] = None,
-    ) -> List[ExceptionFrame]:
-        frames: List[ExceptionFrame] = []
+        paths_map: dict[str, str] | None = None,
+    ) -> list[ExceptionFrame]:
+        frames: list[ExceptionFrame] = []
         for frame in inspect.stack()[
             (skip_frames + 1 if skip_frames is not None else 0) :
         ]:

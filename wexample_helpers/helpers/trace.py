@@ -13,7 +13,7 @@ from wexample_helpers.common.exception.formatter import TraceFormatter
 
 def trace_print(
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None,
+    paths_map: dict | None = None,
     show_internal: bool = False,
 ) -> None:
     # By default, hide the helper frame (this function) to show user code as the top frame.
@@ -32,8 +32,8 @@ def trace_print(
 def trace_get_traceback_frames(
     traceback: TracebackType,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None,
-) -> List["TraceFrame"]:
+    paths_map: dict | None = None,
+) -> list["TraceFrame"]:
     """Convert exception traceback frames to TraceFrame objects."""
     return TraceCollector.from_traceback(
         traceback,
@@ -43,10 +43,10 @@ def trace_get_traceback_frames(
 
 
 def trace_get_frames(
-    skip_frames: Optional[int] = None,
+    skip_frames: int | None = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
-    paths_map: Optional[dict] = None,
-) -> List["TraceFrame"]:
+    paths_map: dict | None = None,
+) -> list["TraceFrame"]:
     """Convert stack frames to TraceFrame objects."""
     return TraceCollector.from_stack(
         skip_frames=(skip_frames + 1) if (skip_frames is not None) else None,
@@ -55,6 +55,6 @@ def trace_get_frames(
     )
 
 
-def trace_format(traceback_frames: List["TraceFrame"]) -> str:
+def trace_format(traceback_frames: list["TraceFrame"]) -> str:
     """Format a list of TraceFrame objects and optional exception information."""
     return TraceFormatter().format(traceback_frames)

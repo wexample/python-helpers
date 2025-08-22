@@ -1,4 +1,4 @@
-from typing_extensions import Any, List
+from typing import Any, List
 from wexample_helpers.helpers.polyfill import polyfill_register_global
 
 

@@ -12,8 +12,8 @@ class PydanticClass(BaseModel):
     count: int = Field(default=0, description="Counter value")
 
     # Optional fields
-    description: Optional[str] = Field(default=None, description="Optional description")
-    tags: List[str] = Field(default_factory=list, description="List of tags")
+    description: str | None = Field(default=None, description="Optional description")
+    tags: list[str] = Field(default_factory=list, description="List of tags")
 
     # Field with validators
     created_at: datetime = Field(

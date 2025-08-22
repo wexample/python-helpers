@@ -13,7 +13,7 @@ DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 def dict_get_item_by_path(
     data: Any,
     key: str,
-    default: Optional[Any] = None,
+    default: Any | None = None,
     separator: str = DICT_PATH_SEPARATOR_DEFAULT,
 ) -> Any:
     for k in key.split(separator):
@@ -74,7 +74,7 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
     return result
 
 
-def dict_remove_item_by_path(data: Dict[str, Any], key: str) -> None:
+def dict_remove_item_by_path(data: dict[str, Any], key: str) -> None:
     keys = key.split(".")
     for k in keys[:-1]:
         if k not in data or not isinstance(data[k], dict):
@@ -85,8 +85,8 @@ def dict_remove_item_by_path(data: Dict[str, Any], key: str) -> None:
 
 
 def dict_set_item_by_path(
-    data: Dict[str, Any],
-    key: Union[str | StringsList],
+    data: dict[str, Any],
+    key: str | StringsList,
     value: Any,
     when_exist: str = DICT_ITEM_EXISTS_ACTION_REPLACE,
 ) -> None:
@@ -114,7 +114,7 @@ def dict_set_item_by_path(
 
 
 def dict_sort_values(
-    dictionary: StringKeysMapping, key: Optional[Any] = None
+    dictionary: StringKeysMapping, key: Any | None = None
 ) -> StringKeysDict:
     return {
         k: v for k, v in sorted(dictionary.items(), key=key or (lambda item: item[1]))

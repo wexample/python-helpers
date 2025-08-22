@@ -12,7 +12,7 @@ class BaseKernel(BaseModel):
     debug: bool = Field(default=False)
 
     # Private service instance
-    _service: Optional[Service] = PrivateAttr(default=None)
+    _service: Service | None = PrivateAttr(default=None)
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
@@ -26,6 +26,6 @@ class BaseKernel(BaseModel):
         return self._service
 
     @classmethod
-    def get_service_class(cls) -> Type[Service]:
+    def get_service_class(cls) -> type[Service]:
         """Get the service class to instantiate. Can be overridden by subclasses."""
         return Service

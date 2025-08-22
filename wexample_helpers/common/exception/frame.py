@@ -13,9 +13,9 @@ class ExceptionFrame:
     filename: str
     lineno: int
     function: str
-    code: Optional[str]
+    code: str | None
     path_style: DebugPathStyle = DebugPathStyle.FULL
-    paths_map: Optional[Dict[str, str]] = None
+    paths_map: dict[str, str] | None = None
 
     def get_formatted_path(self) -> str:
         path = self.filename

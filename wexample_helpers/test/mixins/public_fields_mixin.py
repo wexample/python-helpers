@@ -7,6 +7,6 @@ class PublicFieldsMixin(BaseMixin):
     """Mixin providing public fields template."""
 
     name: str
-    tags: List[str]
-    description: Optional[str]
+    tags: list[str]
+    description: str | None
     version: str = "1.0.0"

@@ -8,7 +8,7 @@ RegistrableType = TypeVar("RegistrableType")
 class Registry(BaseModel, Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
 
-    _items: Dict[str, RegistrableType] = {}
+    _items: dict[str, RegistrableType] = {}
     _fail_if_missing: bool = True
     container: Any
 
@@ -16,7 +16,7 @@ class Registry(BaseModel, Generic[RegistrableType]):
         """Register an item in the registry."""
         self._items[key] = item
 
-    def get(self, key: str, **kwargs) -> Optional[RegistrableType]:
+    def get(self, key: str, **kwargs) -> RegistrableType | None:
         """
         Retrieve an item by its key.
         Additional kwargs can be used by child classes.
@@ -26,7 +26,7 @@ class Registry(BaseModel, Generic[RegistrableType]):
 
         return item
 
-    def get_all(self) -> Dict[str, RegistrableType]:
+    def get_all(self) -> dict[str, RegistrableType]:
         """Get all items in the registry."""
         return self._items
 
@@ -34,7 +34,7 @@ class Registry(BaseModel, Generic[RegistrableType]):
         """Check if an item exists in the registry."""
         return key in self._items
 
-    def all_keys(self) -> List[str]:
+    def all_keys(self) -> list[str]:
         return list(self._items.keys())
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:

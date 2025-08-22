@@ -9,8 +9,8 @@ class DebugTrace(AbstractDebug):
     def __init__(
         self,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[Dict] = None,
-        message: Optional[str] = None,
+        paths_map: dict | None = None,
+        message: str | None = None,
         show_internal: bool = False,
     ) -> None:
         self.path_style = path_style

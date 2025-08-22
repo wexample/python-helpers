@@ -73,7 +73,7 @@ class AbstractDebug(ABC):
             return "protected"
         return "public"
 
-    def _format_attribute_value(self, name: str, value: Dict, indent: str = "") -> str:
+    def _format_attribute_value(self, name: str, value: dict, indent: str = "") -> str:
         """Format attribute value in a clean YAML-like format."""
         visibility = self._get_attribute_visibility(name)
         value_type = value.get("type", "unknown")
@@ -98,7 +98,7 @@ class AbstractDebug(ABC):
 
         return "\n".join(result)
 
-    def _inline_data(self, data: Dict) -> str:
+    def _inline_data(self, data: dict) -> str:
         """Render a compact, one-line representation of a data node (used for dict keys)."""
         if not isinstance(data, dict):
             return str(data)
@@ -114,7 +114,7 @@ class AbstractDebug(ABC):
         t = data.get("type")
         return t if t is not None else str(data)
 
-    def _render_data(self, data: Dict, indent: str = "") -> list[str]:
+    def _render_data(self, data: dict, indent: str = "") -> list[str]:
         """Build the debug output as a list of lines (no printing)."""
         lines: list[str] = []
         if not isinstance(data, dict):

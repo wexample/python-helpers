@@ -13,11 +13,11 @@ from .frame import ExceptionFrame
 class ExceptionHandler:
     """High-level API to format exceptions with truncation rules and path handling."""
 
-    def __init__(self, formatter: Optional[TraceFormatter] = None) -> None:
+    def __init__(self, formatter: TraceFormatter | None = None) -> None:
         self.formatter = formatter or TraceFormatter()
 
     def _get_truncate_index(
-        self, frames: List[ExceptionFrame], error: Exception
+        self, frames: list[ExceptionFrame], error: Exception
     ) -> int:
         error_module = error.__class__.__module__
         for rule_type in ErrorTruncateRules:
@@ -47,7 +47,7 @@ class ExceptionHandler:
         error: Exception,
         *,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[Dict[str, str]] = None,
+        paths_map: dict[str, str] | None = None,
         hide_magic_frames: bool = False,
     ) -> str:
         frames = TraceCollector.from_traceback(
@@ -75,7 +75,7 @@ class ExceptionHandler:
         self,
         *,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: Optional[Dict[str, str]] = None,
+        paths_map: dict[str, str] | None = None,
         skip_frames: int = 0,
     ) -> str:
         frames = TraceCollector.from_stack(

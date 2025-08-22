@@ -6,12 +6,12 @@ from wexample_helpers.const.types import StringsList
 class HasEnvKeys:
     """Base mixin for environment variable validation."""
 
-    env_config: Dict[str, str | None] = {}
+    env_config: dict[str, str | None] = {}
 
     def __init__(self, **kwargs) -> None:
         self.env_config = {}
 
-    def get_expected_env_keys(self) -> List[str]:
+    def get_expected_env_keys(self) -> list[str]:
         """
         Returns a list of required environment variable keys.
         Should be overridden by child classes.
@@ -42,7 +42,7 @@ class HasEnvKeys:
                 missing.append(key)
         return missing
 
-    def _init_env(self, env_dict: Dict[str, str]) -> None:
+    def _init_env(self, env_dict: dict[str, str]) -> None:
         """
         Initialize environment values from an external source.
 

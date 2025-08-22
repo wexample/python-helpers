@@ -1,13 +1,13 @@
 import pathlib
 from typing import Any, Dict, List, Optional, Tuple, Type
 
-from typing_extensions import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     pass
 
 
-def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> Type:
+def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
     import importlib
 
     """Load a class by name from a python module file path."""
@@ -33,8 +33,8 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> Typ
 
 
 def module_collect_classes(
-    module, base_class: Optional[Type] = None, skip_prefixes: Optional[List[str]] = None
-) -> Dict[str, Type]:
+    module, base_class: type | None = None, skip_prefixes: list[str] | None = None
+) -> dict[str, type]:
     import inspect
 
     """
@@ -49,7 +49,7 @@ def module_collect_classes(
         Dictionary of class name to class object.
     """
     module_name = module.__name__
-    collected: Dict[str, Type] = {}
+    collected: dict[str, type] = {}
 
     for name, obj in inspect.getmembers(module, inspect.isclass):
         if obj.__module__ != module_name:
@@ -80,8 +80,8 @@ def module_are_same(a: Any, b: Any) -> bool:
 
     def class_signature(
         c: type,
-    ) -> Tuple[
-        Optional[str], Optional[str], Optional[int], Optional[str], Optional[str]
+    ) -> tuple[
+        str | None, str | None, int | None, str | None, str | None
     ]:
         mod_name = getattr(c, "__module__", None)
         qualname = getattr(c, "__qualname__", None)

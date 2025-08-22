@@ -3,7 +3,7 @@ from typing import Optional
 
 class HasShortClassNameClassMixin:
     @classmethod
-    def get_class_name_suffix(cls) -> Optional[str]:
+    def get_class_name_suffix(cls) -> str | None:
         return None
 
     @classmethod
