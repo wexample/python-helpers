@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, List, Optional
+from typing import Any
 
 
 def array_replace_value(

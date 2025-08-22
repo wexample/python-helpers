@@ -1,5 +1,4 @@
 import re
-from typing import Optional
 
 from wexample_helpers.const.types import (
     UPGRADE_TYPE_ALPHA,

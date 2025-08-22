@@ -1,4 +1,3 @@
-from typing import List, Optional
 
 from wexample_helpers.exception.mixin.not_allowed_item_mixin import NotAllowedItemMixin
 from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData

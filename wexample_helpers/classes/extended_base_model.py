@@ -1,5 +1,5 @@
 import inspect
-from typing import ClassVar, NoReturn, Optional, get_origin
+from typing import ClassVar, NoReturn, get_origin
 
 from pydantic.fields import FieldInfo
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin

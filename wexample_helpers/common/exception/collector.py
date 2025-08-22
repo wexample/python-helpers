@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import inspect
 from types import TracebackType
-from typing import Dict, List, Optional
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 

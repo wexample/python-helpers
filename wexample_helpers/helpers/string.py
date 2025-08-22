@@ -1,5 +1,4 @@
 import re
-from typing import List
 
 
 def string_to_kebab_case(text: str) -> str:

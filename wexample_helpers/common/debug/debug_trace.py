@@ -1,4 +1,3 @@
-from typing import Dict, Optional
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle

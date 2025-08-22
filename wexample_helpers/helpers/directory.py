@@ -3,7 +3,7 @@ import shutil
 from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from wexample_file.const.types import PathOrString
 from wexample_helpers.helpers.file import file_read

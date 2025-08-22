@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from .pydantic_inheritance_config import PydanticInheritanceConfig
 from .pydantic_inheritance_model import PydanticInheritanceModel

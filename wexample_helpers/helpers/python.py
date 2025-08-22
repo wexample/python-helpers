@@ -1,5 +1,4 @@
 import re
-from typing import Optional
 
 
 def python_get_return_type_from_annotations(func) -> str | None:

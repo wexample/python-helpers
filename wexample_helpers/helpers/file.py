@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
 
 from wexample_file.const.types import PathOrString
 from wexample_helpers.const.types import FileStringOrPath

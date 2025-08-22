@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, TypeVar, Union
+from typing import Any, TypeVar
 
 T = TypeVar("T", bound=type)
 
@@ -11,7 +11,6 @@ def polyfill_import(classes: Any, *args, **kwargs) -> None:
     Using this method allow to add missing imports in file, event not used in page, and prevent auto formatters
     to consider import as useless.
     """
-    pass
 
 
 def polyfill_register_global(

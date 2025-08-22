@@ -1,6 +1,5 @@
 import os
 from abc import ABC, abstractmethod
-from typing import Dict
 
 from wexample_helpers.const.colors import Colors
 from wexample_helpers.helpers.cli import cli_make_clickable_path
@@ -15,7 +14,6 @@ class AbstractDebug(ABC):
     @abstractmethod
     def collect_data(self) -> None:
         """Collect debug data"""
-        pass
 
     def print(self, silent: bool = False) -> str:
         """Print debug data, or return it as text if return_text is True."""

@@ -1,5 +1,4 @@
 import pdb
-from typing import Optional
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 

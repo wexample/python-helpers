@@ -1,4 +1,4 @@
-from typing import Any, Type, Union
+from typing import Any
 
 from wexample_file.const.types import PathOrString
 

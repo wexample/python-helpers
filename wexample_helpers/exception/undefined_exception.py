@@ -1,6 +1,6 @@
 import traceback
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -8,7 +8,6 @@ from pydantic import BaseModel
 class ExceptionData(BaseModel):
     """Base model for exception data using Pydantic."""
 
-    pass
 
 
 class UndefinedException(Exception):

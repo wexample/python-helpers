@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Tuple
+from typing import Any
 
 import pytest
 from wexample_helpers.helpers.type import type_validate_or_fail

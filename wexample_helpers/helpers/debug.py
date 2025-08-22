@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from wexample_helpers.common.debug.debug_breakpoint import DebugBreakpoint
 from wexample_helpers.common.debug.debug_dump import DebugDump
