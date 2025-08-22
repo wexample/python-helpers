@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.common.debug.debug_dump import DebugDump
 from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import (
     AdvancedKernel,

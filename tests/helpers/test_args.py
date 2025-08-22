@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.helpers.args import (
     args_convert_dict_to_snake_dict,
     args_in_function,

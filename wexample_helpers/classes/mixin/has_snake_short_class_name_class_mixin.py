@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import (
     HasShortClassNameClassMixin,
 )

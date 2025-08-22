@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.test.classes.parent_class import ParentClass
 
 

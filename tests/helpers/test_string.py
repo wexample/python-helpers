@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.helpers.string import string_to_kebab_case, string_to_snake_case
 
 

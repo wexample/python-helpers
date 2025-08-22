@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import Field
 from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 

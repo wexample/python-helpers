@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class ParentClass:
     def __init__(self, parent_value="parent_default") -> None:
         self.parent_value = parent_value

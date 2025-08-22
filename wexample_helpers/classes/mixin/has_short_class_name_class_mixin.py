@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class HasShortClassNameClassMixin:
     @classmethod
     def get_class_name_suffix(cls) -> str | None:

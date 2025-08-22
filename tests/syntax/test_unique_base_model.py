@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from pydantic import BaseModel
 from wexample_helpers.common.debug.debug_dump import DebugDump

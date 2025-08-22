@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.helpers.array import array_replace_value, array_swap, array_unique
 
 

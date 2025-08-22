@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class Colors:
     BLUE = "\033[34m"
     GREEN = "\033[32m"

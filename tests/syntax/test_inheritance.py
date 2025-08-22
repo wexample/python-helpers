@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unittest
 
 from wexample_helpers.common.debug.debug_dump import DebugDump

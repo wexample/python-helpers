@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.helpers.dict import (
     dict_get_first_missing_key,
     dict_get_item_by_path,

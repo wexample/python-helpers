@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 DIR_GIT = ".git"
 
 FILE_EXTENSION_ENV = "env"

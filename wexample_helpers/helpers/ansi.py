@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 def ansi_strip(text: str) -> str:
     """Remove ANSI escape sequences (CSI) from the text using shared constants."""
 

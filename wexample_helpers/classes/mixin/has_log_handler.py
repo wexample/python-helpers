@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class HasLogHandler:
     def _handle_logs(self, logger_name, callback):
         """

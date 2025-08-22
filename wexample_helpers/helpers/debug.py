@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Any
 
 from wexample_helpers.common.debug.debug_breakpoint import DebugBreakpoint

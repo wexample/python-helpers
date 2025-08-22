@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from wexample_helpers.common.debug.debug_dump import DebugDump

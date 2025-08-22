@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.helpers.html import html_remove_tags, html_split_prompt_parts
 
 

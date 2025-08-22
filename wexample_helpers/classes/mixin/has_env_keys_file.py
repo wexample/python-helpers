@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.classes.mixin.has_env_keys import HasEnvKeys
 
 
