@@ -9,7 +9,6 @@ class ExceptionData(BaseModel):
     """Base model for exception data using Pydantic."""
 
 
-
 class UndefinedException(Exception):
     """Base exception class for all application exceptions.
 

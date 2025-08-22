@@ -1,5 +1,3 @@
-
-
 class HasShortClassNameClassMixin:
     @classmethod
     def get_class_name_suffix(cls) -> str | None:

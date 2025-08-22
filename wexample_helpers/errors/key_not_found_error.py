@@ -1,5 +1,3 @@
-
-
 class KeyNotFoundError(Exception):
     """Exception raised when a key is not found in a list of available keys."""
 

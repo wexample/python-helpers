@@ -1,4 +1,3 @@
-
 from wexample_helpers.exception.mixin.not_allowed_item_mixin import NotAllowedItemMixin
 from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData
 from wexample_helpers.exception.undefined_exception import UndefinedException
