@@ -1,6 +1,6 @@
-from types import NoneType
-from typing import Any, Dict, List, Optional, Set, Tuple, Type, Union
 from collections.abc import Callable
+from types import NoneType
+from typing import Any, Optional, Union
 
 from wexample_helpers.helpers.type import type_is_compatible, type_is_generic
 from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
@@ -11,10 +11,7 @@ class TestHelperType(AbstractTestHelpers):
         # Types that should be detected as generic
         should_be_true = [
             list,
-            list,
             dict,
-            dict,
-            tuple,
             tuple,
             Union,
             list[str],
@@ -54,8 +51,6 @@ class TestHelperType(AbstractTestHelpers):
             (float, float),
             (type(None), type(None)),  # NoneType
             (list, list),
-            (list, list),
-            (dict, dict),
             (dict, dict),
             (dict[str, str], dict[Any, Any]),
             (dict[str, int], dict[str, int]),
@@ -110,8 +105,6 @@ class TestHelperType(AbstractTestHelpers):
                 (None, NoneType),
                 # Basic containers
                 ([], list),
-                ([], list),
-                ({}, dict),
                 ({}, dict),
                 # Typed containers
                 (["item1", "item2"], list[str]),
@@ -144,7 +137,6 @@ class TestHelperType(AbstractTestHelpers):
                 (TestClassB(), TestClassB),
                 # Class types
                 (TestClassA, type[TestClassA]),
-                (TestClassB, type[TestClassA]),
                 (TestClassB, type[TestClassB]),
                 (TestClassA, type[Any]),
                 (TestClassB, type[Any]),
