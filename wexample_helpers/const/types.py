@@ -21,8 +21,9 @@ StringsMatch = Match[str]
 Scalar = str | int | float | bool | None
 BasicValue = Scalar | AnyList | StringKeysDict
 StructuredData: TypeAlias = (
-    Scalar | Sequence["StructuredData"] | Mapping[str, "StructuredData"]
+        Scalar | Sequence["StructuredData"] | Mapping[str, "StructuredData"]
 )
+JsonContent: StructuredData
 
 AnyCallable = Callable[..., Any]
 Args = Any
