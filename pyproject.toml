@@ -21,7 +21,6 @@ classifiers = [
 dependencies = [
     "pip-tools",
     "pydantic",
-    "pytest",
 ]
 
 [project.readme]
@@ -36,3 +35,6 @@ homepage = "https://github.com/wexample/python-helpers"
 
 [project.entry-points.pytest11]
 wexample-helpers = "wexample_helpers.test.plugin.runtest_makereport"
+
+[project.optional-dependencies]
+dev = ["pytest"]
