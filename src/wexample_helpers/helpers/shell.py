@@ -7,30 +7,31 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
-from typing import Any, Callable, Mapping, Optional, Sequence, Union
+from typing import Any, Optional, Union
+from collections.abc import Callable, Mapping, Sequence
 
 
 @dataclass
 class ShellResult:
     """Structured result for shell command execution."""
 
-    args: Union[str, list[str]]
+    args: str | list[str]
     returncode: int
-    stdout: Optional[str]
-    stderr: Optional[str]
-    cwd: Optional[str]
+    stdout: str | None
+    stderr: str | None
+    cwd: str | None
     duration: float
     start_time: float
     end_time: float
 
 
-def shell_which(cmd: str) -> Optional[str]:
+def shell_which(cmd: str) -> str | None:
     """Return full path to executable or None if not found (shutil.which wrapper)."""
 
     return shutil.which(cmd)
 
 
-def shell_split_cmd(cmd: Union[str, Sequence[str]]) -> list[str]:
+def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
     """Split a command if provided as a string using shlex; pass lists through."""
 
     if isinstance(cmd, str):
@@ -39,8 +40,8 @@ def shell_split_cmd(cmd: Union[str, Sequence[str]]) -> list[str]:
 
 
 def _shell_apply_sudo(
-        cmd: Union[str, Sequence[str]], *, sudo_user: Optional[str], elevate: bool, shell: bool
-) -> Union[str, list[str]]:
+        cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
+) -> str | list[str]:
     """Prefix the command with sudo options when requested.
 
     - If shell=True and sudo is requested, we build a string prefix.
@@ -59,7 +60,7 @@ def _shell_apply_sudo(
         if isinstance(cmd, str):
             return f"{base} {cmd}"
         else:
-            return f"{base} {' '.join(shlex.quote(c) for c in cmd)}"
+            return f"{base} {shlex.join(cmd)}"
     else:
         prefix: list[str] = ["sudo"]
         if sudo_user:
@@ -70,19 +71,19 @@ def _shell_apply_sudo(
 
 
 def shell_run(
-        cmd: Union[str, Sequence[str]],
+        cmd: str | Sequence[str],
         *,
-        cwd: Optional[str] = None,
-        env: Optional[Mapping[str, str]] = None,
+        cwd: str | None = None,
+        env: Mapping[str, str] | None = None,
         check: bool = True,
         capture: bool = True,
         text: bool = True,
         encoding: str = "utf-8",
         errors: str = "replace",
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
         shell: bool = False,
         inherit_stdio: bool = False,
-        sudo_user: Optional[str] = None,
+        sudo_user: str | None = None,
         elevate: bool = False,
 ) -> ShellResult:
     """Run a command synchronously with a modern, explicit API.
@@ -99,12 +100,12 @@ def shell_run(
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
 
-    used_cmd: Union[str, list[str]]
+    used_cmd: str | list[str]
 
     if shell:
         # When using the shell, keep string as-is; if list is provided, join safely.
         if not isinstance(cmd, str):
-            used_cmd = " ".join(shlex.quote(c) for c in cmd)
+            used_cmd = shlex.join(cmd)
         else:
             used_cmd = cmd
     else:
@@ -165,19 +166,19 @@ def shell_run(
 
 
 async def shell_run_async(
-        cmd: Union[str, Sequence[str]],
+        cmd: str | Sequence[str],
         *,
-        cwd: Optional[str] = None,
-        env: Optional[Mapping[str, str]] = None,
+        cwd: str | None = None,
+        env: Mapping[str, str] | None = None,
         check: bool = True,
         capture: bool = True,
         text: bool = True,
         encoding: str = "utf-8",
         errors: str = "replace",
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
         shell: bool = False,
         inherit_stdio: bool = False,
-        sudo_user: Optional[str] = None,
+        sudo_user: str | None = None,
         elevate: bool = False,
 ) -> ShellResult:
     """Run a command asynchronously using asyncio and return a ShellResult.
@@ -185,11 +186,11 @@ async def shell_run_async(
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
 
-    used_cmd: Union[str, list[str]]
+    used_cmd: str | list[str]
 
     if shell:
         if not isinstance(cmd, str):
-            used_cmd = " ".join(shlex.quote(c) for c in cmd)
+            used_cmd = shlex.join(cmd)
         else:
             used_cmd = cmd
     else:
@@ -228,14 +229,14 @@ async def shell_run_async(
         if timeout is not None:
             await asyncio.wait_for(proc.wait(), timeout)
             rc = proc.returncode
-            out: Optional[bytes] = None
-            err: Optional[bytes] = None
+            out: bytes | None = None
+            err: bytes | None = None
             if capture:
                 out, err = await proc.communicate()
         else:
             out, err = await proc.communicate() if capture else (None, None)
             rc = proc.returncode
-    except asyncio.TimeoutError:
+    except TimeoutError:
         proc.kill()
         await proc.wait()
         raise
@@ -266,17 +267,17 @@ async def shell_run_async(
 
 
 async def shell_stream_async(
-        cmd: Union[str, Sequence[str]],
+        cmd: str | Sequence[str],
         *,
-        cwd: Optional[str] = None,
-        env: Optional[Mapping[str, str]] = None,
-        on_stdout: Optional[Callable[[str], Any]] = None,
-        on_stderr: Optional[Callable[[str], Any]] = None,
+        cwd: str | None = None,
+        env: Mapping[str, str] | None = None,
+        on_stdout: Callable[[str], Any] | None = None,
+        on_stderr: Callable[[str], Any] | None = None,
         text: bool = True,
         encoding: str = "utf-8",
         errors: str = "replace",
         shell: bool = False,
-        sudo_user: Optional[str] = None,
+        sudo_user: str | None = None,
         elevate: bool = False,
         check: bool = True,
 ) -> int:
@@ -286,11 +287,11 @@ async def shell_stream_async(
     - Returns the process return code (and raises if check=True and rc!=0).
     """
 
-    used_cmd: Union[str, list[str]]
+    used_cmd: str | list[str]
 
     if shell:
         if not isinstance(cmd, str):
-            used_cmd = " ".join(shlex.quote(c) for c in cmd)
+            used_cmd = shlex.join(cmd)
         else:
             used_cmd = cmd
     else:
