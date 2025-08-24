@@ -29,14 +29,11 @@ text = "MIT"
 [project.urls]
 homepage = "https://github.com/wexample/python-helpers"
 
-[project.entry-points.pytest11]
-wexample-helpers = "wexample_helpers.test.plugin.runtest_makereport"
-
 [project.optional-dependencies]
 dev = ["pytest"]
 
 [tool.pdm.build]
-includes = ["python_package_workdir/py.typed", "src/python_package_workdir/py.typed"]
+includes = ["src/python_package_workdir/py.typed"]
 package-dir = "src"
 
 [[tool.pdm.build.packages]]
