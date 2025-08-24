@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "wexample-helpers"
-version = "0.0.63"
+version = "0.0.64"
 description = "Some python basic helpers and constants."
 authors = [
     { name = "weeger", email = "contact@wexample.com" },
