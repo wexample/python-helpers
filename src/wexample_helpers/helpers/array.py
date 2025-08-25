@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Iterable
 
 
 def array_replace_value(
-    array: Sequence[Any], search: Any, replacement: Any
+        array: Sequence[Any], search: Any, replacement: Any
 ) -> list[Any]:
     return [replacement if value == search else value for value in array]
 
@@ -33,3 +33,18 @@ def array_dict_get_by(key: str, value: Any, list_of_dicts: list[dict]) -> dict |
     :return: The first dictionary that matches the key-value pair, or None if not found.
     """
     return next((d for d in list_of_dicts if d.get(key) == value), None)
+
+
+def array_sort_in_place(array: Iterable) -> None:
+    try:
+        # tomlkit array supports list protocol; rebuild sorted content
+        items = [str(x) for x in list(array)]
+        items.sort()
+        # Clear and re-append to preserve tomlkit node type
+        while len(array):
+            array.pop()  # type: ignore[attr-defined]
+        for it in items:
+            array.append(it)  # type: ignore[attr-defined]
+    except Exception:
+        # Be forgiving; leave as-is on any unexpected structure
+        pass
