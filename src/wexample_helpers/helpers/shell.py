@@ -40,7 +40,7 @@ def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
 
 
 def _shell_apply_sudo(
-        cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
+    cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
 ) -> str | list[str]:
     """Prefix the command with sudo options when requested.
 
@@ -71,20 +71,20 @@ def _shell_apply_sudo(
 
 
 def shell_run(
-        cmd: str | Sequence[str],
-        *,
-        cwd: str | None = None,
-        env: Mapping[str, str] | None = None,
-        check: bool = True,
-        capture: bool = True,
-        text: bool = True,
-        encoding: str = "utf-8",
-        errors: str = "replace",
-        timeout: float | None = None,
-        shell: bool = False,
-        inherit_stdio: bool = False,
-        sudo_user: str | None = None,
-        elevate: bool = False,
+    cmd: str | Sequence[str],
+    *,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    check: bool = True,
+    capture: bool = True,
+    text: bool = True,
+    encoding: str = "utf-8",
+    errors: str = "replace",
+    timeout: float | None = None,
+    shell: bool = False,
+    inherit_stdio: bool = False,
+    sudo_user: str | None = None,
+    elevate: bool = False,
 ) -> ShellResult:
     """Run a command synchronously with a modern, explicit API.
 
@@ -111,7 +111,9 @@ def shell_run(
     else:
         used_cmd = shell_split_cmd(cmd)
 
-    used_cmd = _shell_apply_sudo(used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell)
+    used_cmd = _shell_apply_sudo(
+        used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell
+    )
 
     popen_kwargs: dict[str, Any] = {
         "cwd": cwd,
@@ -166,20 +168,20 @@ def shell_run(
 
 
 async def shell_run_async(
-        cmd: str | Sequence[str],
-        *,
-        cwd: str | None = None,
-        env: Mapping[str, str] | None = None,
-        check: bool = True,
-        capture: bool = True,
-        text: bool = True,
-        encoding: str = "utf-8",
-        errors: str = "replace",
-        timeout: float | None = None,
-        shell: bool = False,
-        inherit_stdio: bool = False,
-        sudo_user: str | None = None,
-        elevate: bool = False,
+    cmd: str | Sequence[str],
+    *,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    check: bool = True,
+    capture: bool = True,
+    text: bool = True,
+    encoding: str = "utf-8",
+    errors: str = "replace",
+    timeout: float | None = None,
+    shell: bool = False,
+    inherit_stdio: bool = False,
+    sudo_user: str | None = None,
+    elevate: bool = False,
 ) -> ShellResult:
     """Run a command asynchronously using asyncio and return a ShellResult.
 
@@ -196,7 +198,9 @@ async def shell_run_async(
     else:
         used_cmd = shell_split_cmd(cmd)
 
-    used_cmd = _shell_apply_sudo(used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell)
+    used_cmd = _shell_apply_sudo(
+        used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell
+    )
 
     if inherit_stdio:
         stdout_opt = None
@@ -251,7 +255,9 @@ async def shell_run_async(
         stderr_text = None
 
     if check and rc != 0:
-        exc = subprocess.CalledProcessError(rc, used_cmd, stdout=stdout_text, stderr=stderr_text)
+        exc = subprocess.CalledProcessError(
+            rc, used_cmd, stdout=stdout_text, stderr=stderr_text
+        )
         raise exc
 
     return ShellResult(
@@ -267,19 +273,19 @@ async def shell_run_async(
 
 
 async def shell_stream_async(
-        cmd: str | Sequence[str],
-        *,
-        cwd: str | None = None,
-        env: Mapping[str, str] | None = None,
-        on_stdout: Callable[[str], Any] | None = None,
-        on_stderr: Callable[[str], Any] | None = None,
-        text: bool = True,
-        encoding: str = "utf-8",
-        errors: str = "replace",
-        shell: bool = False,
-        sudo_user: str | None = None,
-        elevate: bool = False,
-        check: bool = True,
+    cmd: str | Sequence[str],
+    *,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    on_stdout: Callable[[str], Any] | None = None,
+    on_stderr: Callable[[str], Any] | None = None,
+    text: bool = True,
+    encoding: str = "utf-8",
+    errors: str = "replace",
+    shell: bool = False,
+    sudo_user: str | None = None,
+    elevate: bool = False,
+    check: bool = True,
 ) -> int:
     """Run a command asynchronously and stream stdout/stderr line-by-line.
 
@@ -297,7 +303,9 @@ async def shell_stream_async(
     else:
         used_cmd = shell_split_cmd(cmd)
 
-    used_cmd = _shell_apply_sudo(used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell)
+    used_cmd = _shell_apply_sudo(
+        used_cmd, sudo_user=sudo_user, elevate=elevate, shell=shell
+    )
 
     if shell:
         proc = await asyncio.create_subprocess_shell(
@@ -317,7 +325,9 @@ async def shell_stream_async(
             env=dict(env) if env is not None else None,
         )
 
-    async def _pump(stream: asyncio.StreamReader, writer: Callable[[str], Any], name: str) -> None:
+    async def _pump(
+        stream: asyncio.StreamReader, writer: Callable[[str], Any], name: str
+    ) -> None:
         while True:
             line = await stream.readline()
             if not line:

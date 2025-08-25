@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 
 def array_replace_value(

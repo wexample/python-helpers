@@ -3,8 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from wexample_helpers.const.types import PathOrString
-from wexample_helpers.const.types import FileStringOrPath
+from wexample_helpers.const.types import FileStringOrPath, PathOrString
 
 
 def file_change_mode(path: PathOrString, mode: int) -> None:
