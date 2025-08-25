@@ -18,9 +18,3 @@ class HasEnvKeysFile(HasEnvKeys):
         load_dotenv(file_path)
         self.env_config.update(dotenv_values(file_path))
         self._validate_env_keys()
-
-    def _init_env_file_yaml(self, file_path: str) -> None:
-        from wexample_helpers_yaml.helpers.yaml_helpers import yaml_read_dict
-
-        self.env_config.update(yaml_read_dict(file_path))
-        self._validate_env_keys()
