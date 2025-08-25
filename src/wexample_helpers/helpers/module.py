@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import pathlib
-from typing import TYPE_CHECKING, Any
+import sys
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     pass
@@ -32,8 +33,80 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> typ
     return cls
 
 
+def module_build_fqmn_from_paths(
+        file_path: pathlib.Path, package_root: pathlib.Path, package_name: Optional[str] = None
+) -> str:
+    rel = file_path.resolve().relative_to(package_root.resolve())
+    parts = list(rel.with_suffix("").parts)
+    if package_name:
+        parts = [package_name] + parts
+    return ".".join(parts)
+
+
+def module_spec_from_file(importlib_util, file_path: pathlib.Path, module_name: str):
+    spec = importlib_util.spec_from_file_location(module_name, str(file_path))
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot create a spec for module: {file_path} as {module_name}")
+    return spec
+
+
+def _prepare_module(importlib_util, spec, module_name: str):
+    module = importlib_util.module_from_spec(spec)
+    pkg = module_name.rpartition(".")[0]
+    # __package__ must be the parent package (or '' when top-level)
+    module.__package__ = pkg if pkg else ""
+    sys.modules[module_name] = module
+    return module
+
+
+def ensure_sys_path(path: pathlib.Path) -> None:
+    """Ensure a path is present in sys.path (idempotent)."""
+    s = str(path)
+    if s not in sys.path:
+        sys.path.insert(0, s)
+
+
+def module_load_class_from_file_with_package_root(
+        file_path: pathlib.Path,
+        class_name: str,
+        package_root: pathlib.Path,
+        package_name: Optional[str] = None,
+) -> type:
+    """Load a class by name from a python module file path, within a package context.
+
+    This loader enables relative imports inside the loaded module by:
+    - Computing a fully-qualified module name (FQMN) from (package_root, file_path).
+    - Setting module.__package__ to the parent of the FQMN.
+    - Temporarily inserting package_root into sys.path during module execution.
+    """
+    import importlib
+
+    if not file_path.exists():
+        raise FileNotFoundError(f"Module file not found: {file_path}")
+
+    try:
+        module_name = module_build_fqmn_from_paths(file_path, package_root, package_name)
+    except ValueError as e:
+        raise ImportError(
+            f"file_path '{file_path}' is not under package_root '{package_root}'"
+        ) from e
+
+    spec = module_spec_from_file(importlib.util, file_path, module_name)
+    module = _prepare_module(importlib.util, spec, module_name)
+    # Keep package_root in sys.path to support late imports executed at runtime
+    ensure_sys_path(package_root)
+    spec.loader.exec_module(module)  # type: ignore[attr-defined]
+
+    try:
+        return getattr(module, class_name)
+    except AttributeError as e:
+        raise ImportError(
+            f"Class '{class_name}' not found in module '{module_name}' ({file_path})."
+        ) from e
+
+
 def module_collect_classes(
-    module, base_class: type | None = None, skip_prefixes: list[str] | None = None
+        module, base_class: type | None = None, skip_prefixes: list[str] | None = None
 ) -> dict[str, type]:
     import inspect
 
@@ -79,7 +152,7 @@ def module_are_same(a: Any, b: Any) -> bool:
         return False
 
     def class_signature(
-        c: type,
+            c: type,
     ) -> tuple[str | None, str | None, int | None, str | None, str | None]:
         mod_name = getattr(c, "__module__", None)
         qualname = getattr(c, "__qualname__", None)
@@ -114,30 +187,30 @@ def module_are_same(a: Any, b: Any) -> bool:
     b_src_file, b_mod_file, b_lineno, b_hash, b_qual = b_sig
 
     if (
-        a_src_file
-        and b_src_file
-        and a_src_file == b_src_file
-        and a_qual == b_qual
-        and a_hash
-        and b_hash
-        and a_hash == b_hash
+            a_src_file
+            and b_src_file
+            and a_src_file == b_src_file
+            and a_qual == b_qual
+            and a_hash
+            and b_hash
+            and a_hash == b_hash
     ):
         return True
 
     if (
-        a_mod_file
-        and b_mod_file
-        and a_mod_file == b_mod_file
-        and a_qual == b_qual
-        and a_hash
-        and b_hash
-        and a_hash == b_hash
+            a_mod_file
+            and b_mod_file
+            and a_mod_file == b_mod_file
+            and a_qual == b_qual
+            and a_hash
+            and b_hash
+            and a_hash == b_hash
     ):
         return True
 
     if (
-        getattr(a, "__module__", None) == getattr(b, "__module__", None)
-        and a_qual == b_qual
+            getattr(a, "__module__", None) == getattr(b, "__module__", None)
+            and a_qual == b_qual
     ):
         return True
 
