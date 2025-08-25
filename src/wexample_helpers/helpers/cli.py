@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from wexample_file.const.types import PathOrString
+from wexample_helpers.const.types import PathOrString
 
 
 def cli_make_clickable_path(path: PathOrString, short_title: bool | str = False) -> str:

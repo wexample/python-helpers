@@ -24,6 +24,7 @@ StructuredData: TypeAlias = (
     Scalar | Sequence["StructuredData"] | Mapping[str, "StructuredData"]
 )
 JsonContent: StructuredData
+PathOrString = Union[Path, str]
 
 AnyCallable = Callable[..., Any]
 Args = Any

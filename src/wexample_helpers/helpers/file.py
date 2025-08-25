@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from wexample_file.const.types import PathOrString
+from wexample_helpers.const.types import PathOrString
 from wexample_helpers.const.types import FileStringOrPath
 
 

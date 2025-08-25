@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-from wexample_file.const.types import PathOrString
+from wexample_helpers.const.types import PathOrString
 from wexample_helpers.helpers.file import file_read
 
 AnyCallable = Callable[..., Any]
