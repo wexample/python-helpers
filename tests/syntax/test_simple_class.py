@@ -4,7 +4,7 @@ import unittest
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
 from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
-from wexample_helpers.test.classes.simple_class import SimpleClass
+from wexample_helpers.testing.classes.simple_class import SimpleClass
 
 
 class TestSimpleObject(unittest.TestCase):

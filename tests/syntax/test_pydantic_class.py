@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_class import PydanticClass
+from wexample_helpers.testing.classes.pydantic_class import PydanticClass
 
 
 def test_pydantic_class() -> None:

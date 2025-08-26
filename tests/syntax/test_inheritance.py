@@ -4,8 +4,8 @@ import unittest
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
 from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
-from wexample_helpers.test.classes.child_class import ChildClass
-from wexample_helpers.test.classes.parent_class import ParentClass
+from wexample_helpers.testing.classes.child_class import ChildClass
+from wexample_helpers.testing.classes.parent_class import ParentClass
 
 
 class TestInheritance(unittest.TestCase):

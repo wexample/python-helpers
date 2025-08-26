@@ -14,7 +14,7 @@ from wexample_helpers.helpers.type import (
     type_to_name,
     type_validate_or_fail,
 )
-from wexample_helpers.test.abstract_test_helpers import AbstractTestHelpers
+from wexample_helpers.testing.abstract_test_helpers import AbstractTestHelpers
 
 
 class TestHelperType(AbstractTestHelpers):

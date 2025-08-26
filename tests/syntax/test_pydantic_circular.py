@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_circular_advanced_kernel import (
+from wexample_helpers.testing.classes.pydantic_circular_advanced_kernel import (
     AdvancedKernel,
 )
-from wexample_helpers.test.classes.pydantic_circular_base_kernel import BaseKernel
+from wexample_helpers.testing.classes.pydantic_circular_base_kernel import BaseKernel
 
 
 def _test_kernel_service(kernel_class: type, kernel_name: str):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.test.classes.pydantic_inheritance_main import (
+from wexample_helpers.testing.classes.pydantic_inheritance_main import (
     PydanticInheritanceMain,
 )
 
