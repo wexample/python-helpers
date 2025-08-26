@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from wexample_helpers.test.classes.first_parent import FirstParent
-from wexample_helpers.test.classes.second_parent import SecondParent
+from wexample_helpers.testing.classes.first_parent import FirstParent
+from wexample_helpers.testing.classes.second_parent import SecondParent
 
 
 class MultipleChild(FirstParent, SecondParent):

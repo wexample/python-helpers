@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from wexample_helpers.test.classes.parent_class import ParentClass
+from wexample_helpers.testing.classes.parent_class import ParentClass
 
 
 class ChildClass(ParentClass):
