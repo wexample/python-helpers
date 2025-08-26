@@ -39,7 +39,7 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
             previous=previous,
             message=(
                 f"Invalid variable type '{var_type_name}' for value "
-                f"{string_truncate(str(variable_value), 40)!r}. "
+                f"{string_truncate(str(variable_value), 1000)!r}. "
                 f"Allowed types: {types_str}."
             ),
         )
