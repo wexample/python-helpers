@@ -1,18 +1,16 @@
-# Helpers
+# wexample-helpers
 
 Some python basic helpers and constants.
 
-Version: 0.0.30
+Version: 0.0.64
 
 ## Requirements
 
-- Python >=3.6
+- Python >=3.10
 
 ## Dependencies
 
-- pip-tools
-- pydantic
-- pytest
+- pydantic>=2,<3
 
 ## Installation
 
