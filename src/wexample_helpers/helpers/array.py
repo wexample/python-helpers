@@ -5,7 +5,7 @@ from typing import Any
 
 
 def array_replace_value(
-        array: Sequence[Any], search: Any, replacement: Any
+    array: Sequence[Any], search: Any, replacement: Any
 ) -> list[Any]:
     return [replacement if value == search else value for value in array]
 
