@@ -34,7 +34,7 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> typ
 
 
 def module_build_fqmn_from_paths(
-        file_path: pathlib.Path, package_root: pathlib.Path, package_name: Optional[str] = None
+        file_path: pathlib.Path, package_root: pathlib.Path, package_name: str | None = None
 ) -> str:
     rel = file_path.resolve().relative_to(package_root.resolve())
     parts = list(rel.with_suffix("").parts)
@@ -70,7 +70,7 @@ def module_load_class_from_file_with_package_root(
         file_path: pathlib.Path,
         class_name: str,
         package_root: pathlib.Path,
-        package_name: Optional[str] = None,
+        package_name: str | None = None,
 ) -> type:
     """Load a class by name from a python module file path, within a package context.
 
