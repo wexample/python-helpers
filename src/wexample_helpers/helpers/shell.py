@@ -10,6 +10,8 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
+from wexample_helpers.const.types import PathOrString
+
 
 @dataclass
 class ShellResult:
@@ -73,7 +75,7 @@ def _shell_apply_sudo(
 def shell_run(
     cmd: str | Sequence[str],
     *,
-    cwd: str | None = None,
+    cwd: PathOrString | None = None,
     env: Mapping[str, str] | None = None,
     check: bool = True,
     capture: bool = True,
