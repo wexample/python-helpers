@@ -17,6 +17,7 @@ class ImportPackagesMixin:
     """
 
     import_packages: ClassVar[tuple[str, ...]] = ()
+    _imports_loaded: ClassVar[bool] = False
 
     def __init_subclass__(cls, **kwargs):  # type: ignore[override]
         super().__init_subclass__(**kwargs)
@@ -34,6 +35,9 @@ class ImportPackagesMixin:
         This mitigates Pydantic v2 'class-not-fully-defined' errors by ensuring all
         referenced modules are imported before model_rebuild is invoked.
         """
+        # Per-class guard: idempotent within a process
+        if getattr(cls, "_imports_loaded", False):
+            return
         loaded_packages = getattr(cls, "import_packages", ())
 
         # 1) Import foundational packages first (merged from the class hierarchy)
@@ -87,3 +91,8 @@ class ImportPackagesMixin:
                 m.model_rebuild()
             except Exception:
                 pass
+
+        try:
+            cls._imports_loaded = True
+        except Exception:
+            pass
