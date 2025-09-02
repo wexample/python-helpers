@@ -16,7 +16,7 @@ class HasEnvKeys:
 
     env_files_directory: None | str = Field(
         description="The location of env files, may be different from the entrypoint",
-        default=None
+        default=None,
     )
 
     def __init__(self, **kwargs) -> None:
