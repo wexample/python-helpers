@@ -19,7 +19,7 @@ class ImportPackagesMixin:
     import_packages: ClassVar[tuple[str, ...]] = ()
     _imports_loaded: ClassVar[bool] = False
 
-    def __init_subclass__(cls, **kwargs):  # type: ignore[override]
+    def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         super().__init_subclass__(**kwargs)
         merged: list[str] = []
         for base in cls.__bases__:

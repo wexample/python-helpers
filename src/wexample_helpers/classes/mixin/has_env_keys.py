@@ -1,14 +1,23 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from pydantic import Field
 from wexample_helpers.const.types import StringsList
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class HasEnvKeys:
     """Base mixin for environment variable validation."""
 
     env_config: dict[str, str | None] = {}
+
+    env_files_directory: None | str = Field(
+        description="The location of env files, may be different from the entrypoint",
+        default=None
+    )
 
     def __init__(self, **kwargs) -> None:
         self.env_config = {}
@@ -19,6 +28,12 @@ class HasEnvKeys:
         Should be overridden by child classes.
         """
         return []
+
+    def _get_env_files_directory(self) -> Path:
+        from pathlib import Path
+
+        assert self.env_files_directory is not None
+        return Path(self.env_files_directory)
 
     def _validate_env_keys(self) -> None:
         """
