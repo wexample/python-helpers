@@ -11,6 +11,6 @@ class PropertyClass:
         return self._value
 
     @value.setter
-    def value(self, new_value):
+    def value(self, new_value) -> None:
         """Set the value."""
         self._value = new_value
