@@ -5,15 +5,17 @@ from typing import Any
 from wexample_helpers.const.types import PathOrString
 
 
-def cli_make_clickable_path(path: PathOrString, short_title: bool | str = False) -> str:
+def cli_make_clickable_path(
+    path: PathOrString, short_title: bool | PathOrString = False
+) -> str:
     from pathlib import Path
 
-    if isinstance(short_title, str):
-        display_text = short_title
-    elif short_title:
+    if short_title is True:
         display_text = Path(path).name
-    else:
+    elif short_title is False:
         display_text = path
+    else:
+        display_text = str(short_title)
 
     # \033]8;;file://{path}\033\\  : Link start
     # \033]8;;\033\\              : Link end
