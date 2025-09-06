@@ -3,11 +3,12 @@ from __future__ import annotations
 import inspect
 from typing import ClassVar, Final, NoReturn, get_origin, get_type_hints
 
+from pydantic import BaseModel
+
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
-from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 
 
-class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
+class ExtendedBaseModel(PrintableMixin, BaseModel):
     def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         from pydantic.fields import FieldInfo
 
