@@ -3,6 +3,7 @@ from __future__ import annotations
 
 def test_html_remove_tags() -> None:
     from wexample_helpers.helpers.html import html_remove_tags
+
     # Test basic HTML tag removal
     assert html_remove_tags("<p>Hello</p>") == "Hello"
 
@@ -27,6 +28,7 @@ def test_html_remove_tags() -> None:
 
 def test_html_split_prompt_parts() -> None:
     from wexample_helpers.helpers.html import html_split_prompt_parts
+
     # Test basic split - should keep HTML with adjacent text
     assert html_split_prompt_parts("Hello <b>World</b>") == ["Hello <b>World</b>"]
 

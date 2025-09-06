@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from wexample_helpers.enums.debug_path_style import DebugPathStyle
-
 from typing import TYPE_CHECKING
+
+from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 if TYPE_CHECKING:
     from frame import ExceptionFrame
@@ -14,12 +14,14 @@ class ExceptionHandler:
 
     def __init__(self, formatter: TraceFormatter | None = None) -> None:
         from wexample_helpers.common.exception.formatter import TraceFormatter
+
         self.formatter = formatter or TraceFormatter()
 
     def _get_truncate_index(
         self, frames: list[ExceptionFrame], error: Exception
     ) -> int:
         from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
+
         error_module = error.__class__.__module__
         for rule_type in ErrorTruncateRules:
             if error_module.startswith(rule_type.module_prefix):
@@ -52,6 +54,7 @@ class ExceptionHandler:
         hide_magic_frames: bool = False,
     ) -> str:
         from wexample_helpers.common.exception.collector import TraceCollector
+
         frames = TraceCollector.from_traceback(
             error.__traceback__,
             path_style=path_style,
@@ -81,6 +84,7 @@ class ExceptionHandler:
         skip_frames: int = 0,
     ) -> str:
         from wexample_helpers.common.exception.collector import TraceCollector
+
         frames = TraceCollector.from_stack(
             skip_frames=skip_frames,
             path_style=path_style,

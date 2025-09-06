@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import inspect
+from typing import TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 from .frame import ExceptionFrame
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from types import TracebackType
 

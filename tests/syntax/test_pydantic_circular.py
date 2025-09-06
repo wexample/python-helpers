@@ -4,6 +4,7 @@ from __future__ import annotations
 def _test_kernel_service(kernel_class: type, kernel_name: str):
     """Test kernel and service circular reference."""
     from wexample_helpers.common.debug.debug_dump import DebugDump
+
     # Create a kernel which will automatically create its service
     kernel = kernel_class(name=kernel_name, debug=True)
 

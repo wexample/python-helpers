@@ -6,6 +6,7 @@ from pydantic import Field
 
 if TYPE_CHECKING:
     from pathlib import Path
+
     from wexample_helpers.const.types import StringsList
 
 

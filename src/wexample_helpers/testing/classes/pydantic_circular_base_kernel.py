@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, PrivateAttr
 from typing import TYPE_CHECKING
+
+from pydantic import BaseModel, Field, PrivateAttr
+
 if TYPE_CHECKING:
     from pydantic_circular_service import Service
 
@@ -30,4 +32,5 @@ class BaseKernel(BaseModel):
     def get_service_class(cls) -> type[Service]:
         """Get the service class to instantiate. Can be overridden by subclasses."""
         from pydantic_circular_service import Service
+
         return Service

@@ -53,7 +53,9 @@ class ImportPackagesMixin:
         for name, module in list(sys.modules.items()):
             if not module:
                 continue
-            if any(name == pkg or name.startswith(pkg + ".") for pkg in loaded_packages):
+            if any(
+                name == pkg or name.startswith(pkg + ".") for pkg in loaded_packages
+            ):
                 try:
                     parent_ns.update(vars(module))
                 except Exception:

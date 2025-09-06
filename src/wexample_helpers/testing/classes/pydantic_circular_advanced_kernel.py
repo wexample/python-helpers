@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from pydantic import Field
-from .pydantic_circular_base_kernel import BaseKernel
 from typing import TYPE_CHECKING
+
+from pydantic import Field
+
+from .pydantic_circular_base_kernel import BaseKernel
+
 if TYPE_CHECKING:
     from pydantic_circular_advanced_service import AdvancedService
 
@@ -17,4 +20,5 @@ class AdvancedKernel(BaseKernel):
     def get_service_class(cls) -> type[AdvancedService]:
         """Override to use AdvancedService."""
         from pydantic_circular_advanced_service import AdvancedService
+
         return AdvancedService

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import (
     Any,
     Union,
@@ -268,6 +269,7 @@ def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
 
 def type_to_name(t: Any) -> str:
     from types import UnionType
+
     # Accept python types, strings, and mypy UnionType
     if isinstance(t, str):
         return t

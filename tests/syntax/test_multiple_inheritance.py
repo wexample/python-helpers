@@ -10,6 +10,7 @@ class TestMultipleInheritance(unittest.TestCase):
         from wexample_helpers.testing.classes.first_parent import FirstParent
         from wexample_helpers.testing.classes.multiple_child import MultipleChild
         from wexample_helpers.testing.classes.second_parent import SecondParent
+
         # Test instance creation with default values
         child = MultipleChild()
         self.assertIsInstance(child, MultipleChild)

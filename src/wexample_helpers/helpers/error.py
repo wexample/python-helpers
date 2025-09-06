@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 def error_get_truncate_index(frames: list[TraceFrame], error: Exception) -> int:
     """Returns the index where to truncate the trace based on error type. Returns -1 if no truncation needed."""
     from wexample_helpers.common.exception.handler import ExceptionHandler
+
     # Delegate to ExceptionHandler internals to avoid duplication, but keep public API.
     handler = ExceptionHandler()
     return handler._get_truncate_index(frames, error)  # type: ignore[attr-defined]
@@ -24,6 +25,7 @@ def error_format(
     paths_map: dict | None = None,
 ) -> str:
     from wexample_helpers.common.exception.handler import ExceptionHandler
+
     handler = ExceptionHandler()
     # Then print the formatted traceback using the new handler
     return handler.format_exception(

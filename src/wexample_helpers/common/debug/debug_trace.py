@@ -24,6 +24,7 @@ class DebugTrace(AbstractDebug):
 
     def print(self, silent: bool = False):
         from wexample_helpers.helpers.trace import trace_format, trace_get_frames
+
         if silent:
             # Build text without printing
             frames = trace_get_frames(

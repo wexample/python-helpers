@@ -9,6 +9,7 @@ class TestInheritance(unittest.TestCase):
         from wexample_helpers.common.debug.debug_dump import DebugDump
         from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
         from wexample_helpers.testing.classes.parent_class import ParentClass
+
         # Test instance creation
         parent = ParentClass(parent_value="custom_parent")
         child = ChildClass(child_value="custom_child", parent_value="inherited_parent")

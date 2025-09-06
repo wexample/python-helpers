@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING
 
 from wexample_helpers.const.types import (
     UPGRADE_TYPE_MINOR,
-    )
-from typing import TYPE_CHECKING
+)
+
 if TYPE_CHECKING:
     from wexample_helpers.const.types import StringsList, VersionDescriptor
 

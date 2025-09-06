@@ -8,6 +8,7 @@ class TestSimpleObject(unittest.TestCase):
         from wexample_helpers.common.debug.debug_dump import DebugDump
         from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
         from wexample_helpers.testing.classes.simple_class import SimpleClass
+
         # Test instance creation with default values
         obj1 = SimpleClass()
         self.assertIsInstance(obj1, SimpleClass)

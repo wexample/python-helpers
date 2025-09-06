@@ -8,10 +8,10 @@ import sys
 import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.const.types import PathOrString
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 

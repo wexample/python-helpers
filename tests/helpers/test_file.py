@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import os
 import stat
+from typing import TYPE_CHECKING
 
 import pytest
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from collections.abc import Generator
     from pathlib import Path
@@ -36,6 +37,7 @@ def test_file_change_mode(temp_file: Path) -> None:
 
 def test_file_change_mode_recursive(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_change_mode_recursive
+
     # Create test structure
     subdir = temp_dir / "subdir"
     subdir.mkdir()
@@ -52,6 +54,7 @@ def test_file_change_mode_recursive(temp_dir: Path) -> None:
 
 def test_file_list_subdirectories(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_list_subdirectories
+
     # Create test directories
     (temp_dir / "dir1").mkdir()
     (temp_dir / "dir2").mkdir()
@@ -64,6 +67,7 @@ def test_file_list_subdirectories(temp_dir: Path) -> None:
 
 def test_file_mode_conversions() -> None:
     from wexample_helpers.helpers.file import file_mode_num_to_octal, file_mode_octal_to_num
+
     # Test num to octal
     assert file_mode_num_to_octal(0o644) == "644"
 
@@ -141,6 +145,7 @@ def test_file_validate_mode_octal_or_fail() -> None:
 
 def test_file_get_directories(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_get_directories
+
     # Create test structure
     dir1 = temp_dir / "dir1"
     dir2 = temp_dir / "dir2"

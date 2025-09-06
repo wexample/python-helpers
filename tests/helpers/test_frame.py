@@ -12,6 +12,7 @@ sys.path.insert(0, HELPERS_PATH)
 def test_exception_frame_formatting_full_and_filename(tmp_path) -> None:
     from wexample_helpers.enums.debug_path_style import DebugPathStyle
     from wexample_helpers.common.exception.frame import ExceptionFrame
+
     # Create a temp file to simulate a real path
     p = tmp_path / "module" / "file.py"
     p.parent.mkdir(parents=True, exist_ok=True)

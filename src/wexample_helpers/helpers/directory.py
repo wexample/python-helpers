@@ -4,8 +4,8 @@ import os
 import shutil
 from collections.abc import Callable
 from contextlib import contextmanager
-from typing import Any
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 if TYPE_CHECKING:
     from wexample_helpers.const.types import PathOrString
 

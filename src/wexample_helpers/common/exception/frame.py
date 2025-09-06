@@ -36,6 +36,7 @@ class ExceptionFrame:
 
     def format(self) -> str:
         from wexample_helpers.helpers.cli import cli_make_clickable_path
+
         formatted_path = self.get_formatted_path()
         path_with_line = f"{formatted_path}:{self.lineno}"
 

@@ -29,6 +29,7 @@ class DebugDump(AbstractDebug):
         self, obj: Any, depth: int = 0, seen: set[int] | None = None
     ) -> dict:
         from datetime import datetime
+
         if seen is None:
             seen = set()
 
