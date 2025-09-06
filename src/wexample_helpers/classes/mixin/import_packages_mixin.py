@@ -17,7 +17,8 @@ class ImportPackagesMixin:
     """
 
     import_packages: ClassVar[tuple[str, ...]] = ()
-    _imports_loaded: ClassVar[bool] = False
+    # Track which concrete classes have completed load_imports()
+    _imports_loaded_classes: ClassVar[set[type]] = set()
 
     @classmethod
     def load_imports(cls) -> None:
@@ -26,17 +27,17 @@ class ImportPackagesMixin:
         This mitigates Pydantic v2 'class-not-fully-defined' errors by ensuring all
         referenced modules are imported before model_rebuild is invoked.
         """
-        # Per-class guard: idempotent within a process
-        if getattr(cls, "_imports_loaded", False):
+        # Per-class guard using a shared registry (avoid inheritance bleed)
+        if cls in ImportPackagesMixin._imports_loaded_classes:
             return
-        # Build merged packages dynamically from the full MRO (base -> cls)
+
+        # Merge packages dynamically from the full MRO (base -> cls)
         merged: list[str] = []
         for c in reversed(cls.mro()):
             merged += list(getattr(c, "import_packages", ()))
-        # Deduplicate while preserving order
         loaded_packages = tuple(dict.fromkeys(merged))
 
-        # 1) Import foundational packages first (merged from the class hierarchy)
+        # Import packages (best effort) and their submodules
         for pkg_name in loaded_packages:
             try:
                 pkg = importlib.import_module(pkg_name)
@@ -47,50 +48,22 @@ class ImportPackagesMixin:
                     try:
                         importlib.import_module(mod.name)
                     except Exception:
-                        # Best effort: some optional modules may fail to import
                         pass
 
-        # 2) Build a parent namespace with symbols from the loaded packages to resolve bare names
+        # Build a parent namespace composed of symbols from loaded packages
         parent_ns: dict[str, object] = {}
         for name, module in list(sys.modules.items()):
             if not module:
                 continue
-            if any(
-                name == pkg or name.startswith(pkg + ".") for pkg in loaded_packages
-            ):
+            if any(name == pkg or name.startswith(pkg + ".") for pkg in loaded_packages):
                 try:
                     parent_ns.update(vars(module))
                 except Exception:
                     pass
 
-        # 3) Rebuild all Pydantic models (two passes for forward refs)
-        seen: set[type] = set()
-        stack = list(BaseModel.__subclasses__())
-        while stack:
-            m = stack.pop()
-            if m in seen:
-                continue
-            seen.add(m)
-            # Provide a broad namespace for forward ref resolution
-            try:
-                setattr(m, "__pydantic_parent_namespace__", parent_ns)
-            except Exception:
-                pass
-            try:
-                m.model_rebuild()
-            except Exception:
-                # Ignore, next pass may resolve
-                pass
-            stack.extend(m.__subclasses__())
+        # Rebuild the current class using the populated namespace
+        setattr(cls, "__pydantic_parent_namespace__", parent_ns)
+        cls.model_rebuild()
 
-        for m in list(seen):
-            try:
-                setattr(m, "__pydantic_parent_namespace__", parent_ns)
-                m.model_rebuild()
-            except Exception:
-                pass
-
-        try:
-            cls._imports_loaded = True
-        except Exception:
-            pass
+        # Mark as loaded for this exact class
+        ImportPackagesMixin._imports_loaded_classes.add(cls)
