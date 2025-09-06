@@ -4,7 +4,6 @@ import os
 from dataclasses import dataclass
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.helpers.cli import cli_make_clickable_path
 
 
 @dataclass(frozen=True)
@@ -36,6 +35,7 @@ class ExceptionFrame:
             return os.path.basename(path)
 
     def format(self) -> str:
+        from wexample_helpers.helpers.cli import cli_make_clickable_path
         formatted_path = self.get_formatted_path()
         path_with_line = f"{formatted_path}:{self.lineno}"
 

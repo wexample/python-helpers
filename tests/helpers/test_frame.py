@@ -8,15 +8,10 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
 HELPERS_PATH = os.path.join(PROJECT_ROOT, "pip", "helpers")
 sys.path.insert(0, HELPERS_PATH)
 
-from wexample_helpers.common.exception.frame import (  # type: ignore  # noqa: E402
-    ExceptionFrame,
-)
-from wexample_helpers.enums.debug_path_style import (  # type: ignore  # noqa: E402
-    DebugPathStyle,
-)
-
 
 def test_exception_frame_formatting_full_and_filename(tmp_path) -> None:
+    from wexample_helpers.enums.debug_path_style import DebugPathStyle
+    from wexample_helpers.common.exception.frame import ExceptionFrame
     # Create a temp file to simulate a real path
     p = tmp_path / "module" / "file.py"
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -48,6 +43,8 @@ def test_exception_frame_formatting_full_and_filename(tmp_path) -> None:
 
 
 def test_exception_frame_paths_map_substitution(tmp_path) -> None:
+    from wexample_helpers.enums.debug_path_style import DebugPathStyle
+    from wexample_helpers.common.exception.frame import ExceptionFrame
     prod = "/var/app"
     local = str(tmp_path)
     target = os.path.join(prod, "src", "x.py")

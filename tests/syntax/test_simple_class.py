@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
-from wexample_helpers.testing.classes.simple_class import SimpleClass
-
 
 class TestSimpleObject(unittest.TestCase):
     def test_simple_object(self) -> None:
+        from wexample_helpers.common.debug.debug_dump import DebugDump
+        from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
+        from wexample_helpers.testing.classes.simple_class import SimpleClass
         # Test instance creation with default values
         obj1 = SimpleClass()
         self.assertIsInstance(obj1, SimpleClass)

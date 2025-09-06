@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from typing import TypeVar
-
-from wexample_helpers.const.types import StringKeysDict
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import StringKeysDict
 
 T = TypeVar("T", bound="SerializableMixin")
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
 
 def path_resolve_from(path: str, from_cwd: str) -> str:
@@ -15,6 +14,7 @@ def path_resolve_from(path: str, from_cwd: str) -> str:
     Returns:
         str: The absolute resolved path
     """
+    from pathlib import Path
     # Convert both inputs to Path objects
     path_obj = Path(path)
     from_cwd_obj = Path(from_cwd)

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from pydantic import BaseModel, Field, PrivateAttr
-
-from .pydantic_circular_service import Service
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pydantic_circular_service import Service
 
 
 class Kernel(BaseModel):
@@ -15,6 +16,7 @@ class Kernel(BaseModel):
     _service: Service | None = PrivateAttr(default=None)
 
     def __init__(self, **data) -> None:
+        from pydantic_circular_service import Service
         super().__init__(**data)
         # Create and initialize service
         self._service = Service(name=f"{self.name}_service")

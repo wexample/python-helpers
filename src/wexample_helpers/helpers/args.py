@@ -3,17 +3,10 @@ from __future__ import annotations
 import ast
 import inspect
 import re
-from collections.abc import Iterable
 from typing import Any, cast
-
-from wexample_helpers.const.types import (
-    AnyCallable,
-    BasicValue,
-    Scalar,
-    StringKeysDict,
-    StringsList,
-)
-from wexample_helpers.helpers.string import string_to_snake_case
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import AnyCallable, BasicValue, StringKeysDict, StringsList
 
 
 def args_replace_one(
@@ -61,6 +54,7 @@ def args_shift_one(
 
 
 def args_split_arg_array(arg: str | Iterable[str], separator: str = ",") -> StringsList:
+    from collections.abc import Iterable
     if not arg:
         return []
 
@@ -77,6 +71,7 @@ def args_split_arg_array(arg: str | Iterable[str], separator: str = ",") -> Stri
 
 
 def args_convert_dict_to_snake_dict(input_dict: dict[str, Any]) -> dict[str, Any]:
+    from wexample_helpers.helpers.string import string_to_snake_case
     return {string_to_snake_case(key): value for key, value in input_dict.items()}
 
 
@@ -97,6 +92,7 @@ def args_parse_list_or_strings_list(arg: str) -> StringsList:
 
 
 def args_parse_list(arg: str) -> StringsList:
+    from wexample_helpers.const.types import StringsList
     arg_list = args_parse_one(arg, [])
 
     if not isinstance(arg_list, list):
@@ -108,6 +104,7 @@ def args_parse_list(arg: str) -> StringsList:
 
 
 def args_parse_one(argument: str, default: Any | None = None) -> BasicValue:
+    from wexample_helpers.const.types import BasicValue
     if argument is None or argument == "":
         return default
 
@@ -124,6 +121,7 @@ def args_is_basic_value(value: Any) -> bool:
     """
     Check if the value is compatible with basic YAML types
     """
+    from wexample_helpers.const.types import Scalar
 
     if isinstance(value, Scalar):
         return True

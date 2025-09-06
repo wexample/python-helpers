@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-from types import TracebackType
 from typing import TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
@@ -8,9 +6,8 @@ from wexample_helpers.enums.debug_path_style import DebugPathStyle
 if TYPE_CHECKING:
     # Backward-compat type alias to new frame class
     from wexample_helpers.common.exception.frame import ExceptionFrame as TraceFrame
-
-from wexample_helpers.common.exception.collector import TraceCollector
-from wexample_helpers.common.exception.formatter import TraceFormatter
+    from wexample_helpers.common.exception.frame import TraceFrame
+    from types import TracebackType
 
 
 def trace_print(
@@ -37,6 +34,7 @@ def trace_get_traceback_frames(
     paths_map: dict | None = None,
 ) -> list[TraceFrame]:
     """Convert exception traceback frames to TraceFrame objects."""
+    from wexample_helpers.common.exception.collector import TraceCollector
     return TraceCollector.from_traceback(
         traceback,
         path_style=path_style,
@@ -50,6 +48,7 @@ def trace_get_frames(
     paths_map: dict | None = None,
 ) -> list[TraceFrame]:
     """Convert stack frames to TraceFrame objects."""
+    from wexample_helpers.common.exception.collector import TraceCollector
     return TraceCollector.from_stack(
         skip_frames=(skip_frames + 1) if (skip_frames is not None) else None,
         path_style=path_style,
@@ -59,4 +58,5 @@ def trace_get_frames(
 
 def trace_format(traceback_frames: list[TraceFrame]) -> str:
     """Format a list of TraceFrame objects and optional exception information."""
+    from wexample_helpers.common.exception.formatter import TraceFormatter
     return TraceFormatter().format(traceback_frames)

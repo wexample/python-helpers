@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import inspect
 from typing import ClassVar, Final, NoReturn, get_origin, get_type_hints
-
-from pydantic.fields import FieldInfo
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
 from wexample_helpers.classes.unique_base_model import UniqueBaseModel
 
 
 class ExtendedBaseModel(PrintableMixin, UniqueBaseModel):
     def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
+        from pydantic.fields import FieldInfo
         super().__init_subclass__(**kwargs)
         # Only names declared in this class body (avoid inherited ones)
         local_annotations = cls.__dict__.get("__annotations__", {}) or {}

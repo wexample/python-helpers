@@ -3,7 +3,6 @@ from __future__ import annotations
 
 def ansi_strip(text: str) -> str:
     """Remove ANSI escape sequences (CSI) from the text using shared constants."""
-
     from wexample_helpers.const.ansi import CSI_RE
 
     return CSI_RE.sub("", text)
@@ -26,7 +25,6 @@ def ansi_display_width(text: str) -> int:
     Strips ANSI CSI and OSC 8 sequences, then measures width with wcwidth
     to handle emojis, combining marks, and double-width (CJK) characters.
     """
-
     from wcwidth import wcwidth
 
     visible = ansi_strip_invisible(text)
@@ -51,6 +49,7 @@ def ansi_center(text: str, width: int, fillchar: str = " ") -> str:
 
 
 def ansi_truncate_visible(text: str, max_width: int) -> str:
+    from wcwidth import _wcw, wcwidth
     if max_width <= 0:
         return ""
     if ansi_display_width(text) <= max_width:
@@ -61,10 +60,6 @@ def ansi_truncate_visible(text: str, max_width: int) -> str:
     out_chars = []
     current = 0
     for ch in plain:
-        # Compute width if we add this char
-        # Use a tiny buffer check to avoid recomputing from scratch each time
-        # but keep it simple and robust.
-        from wcwidth import wcwidth as _wcw
 
         w = _wcw(ch)
         if w is None:

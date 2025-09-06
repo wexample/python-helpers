@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from pydantic import Field
-from wexample_helpers.const.types import StringsList
 
 if TYPE_CHECKING:
     from pathlib import Path
+    from wexample_helpers.const.types import StringsList
 
 
 class HasEnvKeys:
@@ -40,12 +40,10 @@ class HasEnvKeys:
         Validates that all required environment variables are set.
         Raises MissingRequiredEnvVarError if any required variable is missing.
         """
+        from wexample_helpers.errors.missing_required_env_var_error import MissingRequiredEnvVarError
         missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:
-            from wexample_helpers.errors.missing_required_env_var_error import (
-                MissingRequiredEnvVarError,
-            )
 
             raise MissingRequiredEnvVarError(missing_keys)
 

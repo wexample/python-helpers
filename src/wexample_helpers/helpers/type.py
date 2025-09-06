@@ -1,7 +1,4 @@
 from __future__ import annotations
-
-from collections.abc import Callable
-from types import UnionType
 from typing import (
     Any,
     Union,
@@ -9,10 +6,6 @@ from typing import (
     get_args,
     get_origin,
     get_type_hints,
-)
-
-from wexample_helpers.exception.not_allowed_variable_type_exception import (
-    NotAllowedVariableTypeException,
 )
 
 
@@ -46,6 +39,8 @@ def type_is_generic(type_value: Any) -> bool:
 
 
 def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
+    from collections.abc import Callable
+    from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
     if allowed_type is Any:
         return
 
@@ -118,6 +113,7 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
+    from types import UnionType
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
 
@@ -208,6 +204,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
 
 def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
     """Check if actual_type is compatible with allowed_type for generics like Dict, List, Tuple, and Union."""
+    from collections.abc import Callable
     origin = get_origin(allowed_type) or allowed_type
     actual_origin = get_origin(actual_type) or actual_type
     allowed_args = get_args(allowed_type)
@@ -270,6 +267,7 @@ def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
 
 
 def type_to_name(t: Any) -> str:
+    from types import UnionType
     # Accept python types, strings, and mypy UnionType
     if isinstance(t, str):
         return t

@@ -6,11 +6,14 @@ import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
 from wexample_helpers.const.types import PathOrString
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @dataclass

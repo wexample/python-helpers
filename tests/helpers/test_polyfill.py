@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from wexample_helpers.helpers.polyfill import polyfill_register_global
-
 
 def test_polyfill_register_global() -> None:
+    from wexample_helpers.helpers.polyfill import polyfill_register_global
     # Test that the function accepts any type of argument without raising exceptions
     class DummyClass:
         pass

@@ -3,18 +3,11 @@ from __future__ import annotations
 import re
 
 from wexample_helpers.const.types import (
-    UPGRADE_TYPE_ALPHA,
-    UPGRADE_TYPE_BETA,
-    UPGRADE_TYPE_DEV,
-    UPGRADE_TYPE_INTERMEDIATE,
-    UPGRADE_TYPE_MAJOR,
     UPGRADE_TYPE_MINOR,
-    UPGRADE_TYPE_NIGHTLY,
-    UPGRADE_TYPE_RC,
-    UPGRADE_TYPE_SNAPSHOT,
-    StringsList,
-    VersionDescriptor,
-)
+    )
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import StringsList, VersionDescriptor
 
 
 def is_greater_than(
@@ -124,6 +117,7 @@ def version_increment(
     increment: int = 1,
     build: bool | str = False,
 ) -> str:
+    from wexample_helpers.const.types import UPGRADE_TYPE_ALPHA, UPGRADE_TYPE_BETA, UPGRADE_TYPE_DEV, UPGRADE_TYPE_INTERMEDIATE, UPGRADE_TYPE_MAJOR, UPGRADE_TYPE_NIGHTLY, UPGRADE_TYPE_RC, UPGRADE_TYPE_SNAPSHOT
     version_dict = version_parse(version)
     if not version_dict:
         raise ValueError(f"Invalid version format: {version}")

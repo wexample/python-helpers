@@ -5,16 +5,6 @@ import shutil
 import tempfile
 
 import pytest
-from wexample_helpers.helpers.directory import (
-    directory_aggregate_all_files,
-    directory_aggregate_all_files_from_dir,
-    directory_empty_dir,
-    directory_execute_inside,
-    directory_get_base_name,
-    directory_get_parent_path,
-    directory_list_files,
-    directory_remove_tree_if_exists,
-)
 
 
 @pytest.fixture
@@ -28,6 +18,7 @@ def temp_dir() -> None:
 
 
 def test_directory_remove_tree_if_exists(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_remove_tree_if_exists
     # Create a test file in the temp directory
     test_file = os.path.join(temp_dir, "test.txt")
     with open(test_file, "w") as f:
@@ -42,6 +33,7 @@ def test_directory_remove_tree_if_exists(temp_dir) -> None:
 
 
 def test_directory_execute_inside(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_execute_inside
     original_dir = os.getcwd()
 
     with directory_execute_inside(temp_dir):
@@ -50,12 +42,14 @@ def test_directory_execute_inside(temp_dir) -> None:
 
 
 def test_directory_get_base_name() -> None:
+    from wexample_helpers.helpers.directory import directory_get_base_name
     assert directory_get_base_name("/path/to/dir/") == "dir"
     assert directory_get_base_name("/path/to/dir") == "dir"
     assert directory_get_base_name("dir") == "dir"
 
 
 def test_directory_get_parent_path() -> None:
+    from wexample_helpers.helpers.directory import directory_get_parent_path
     assert directory_get_parent_path("/path/to/dir/") == "/path/to/"
     assert directory_get_parent_path("/path/to/dir") == "/path/to/"
     assert (
@@ -64,6 +58,7 @@ def test_directory_get_parent_path() -> None:
 
 
 def test_directory_empty_dir(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_empty_dir
     # Create test files and subdirectories
     test_file = os.path.join(temp_dir, "test.txt")
     test_subdir = os.path.join(temp_dir, "subdir")
@@ -81,6 +76,7 @@ def test_directory_empty_dir(temp_dir) -> None:
 
 
 def test_directory_list_files(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_list_files
     # Create test files in different subdirectories
     os.makedirs(os.path.join(temp_dir, "dir1"))
     os.makedirs(os.path.join(temp_dir, "dir2"))
@@ -106,6 +102,7 @@ def test_directory_list_files(temp_dir) -> None:
 
 
 def test_directory_aggregate_all_files(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_aggregate_all_files
     # Create test files with known content
     files = [
         (os.path.join(temp_dir, "file1.txt"), "content1\n"),
@@ -124,6 +121,7 @@ def test_directory_aggregate_all_files(temp_dir) -> None:
 
 
 def test_directory_aggregate_all_files_from_dir(temp_dir) -> None:
+    from wexample_helpers.helpers.directory import directory_aggregate_all_files_from_dir
     # Create test files with known content
     files = [
         (os.path.join(temp_dir, "file1.txt"), "content1\n"),

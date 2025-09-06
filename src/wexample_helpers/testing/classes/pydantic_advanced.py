@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 
 from pydantic import BaseModel, Field, PrivateAttr, computed_field, field_validator
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from datetime import timedelta
 
 
 class Status(Enum):

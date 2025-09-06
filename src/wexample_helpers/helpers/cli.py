@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from typing import Any
-
-from wexample_helpers.const.types import PathOrString
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import PathOrString
 
 
 def cli_make_clickable_path(

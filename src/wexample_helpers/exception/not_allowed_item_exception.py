@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from wexample_helpers.exception.mixin.not_allowed_item_mixin import NotAllowedItemMixin
-from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData
 from wexample_helpers.exception.undefined_exception import UndefinedException
 
 
@@ -24,6 +23,7 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
         previous: Exception | None = None,
         message: str | None = None,
     ) -> None:
+        from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData
         if allowed_values is None:
             allowed_values = []
 

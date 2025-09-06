@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import inspect
-from datetime import datetime
 from typing import Any
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
@@ -29,6 +28,7 @@ class DebugDump(AbstractDebug):
     def _collect_data(
         self, obj: Any, depth: int = 0, seen: set[int] | None = None
     ) -> dict:
+        from datetime import datetime
         if seen is None:
             seen = set()
 
