@@ -19,15 +19,6 @@ class ImportPackagesMixin:
     import_packages: ClassVar[tuple[str, ...]] = ()
     _imports_loaded: ClassVar[bool] = False
 
-    def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
-        super().__init_subclass__(**kwargs)
-        merged: list[str] = []
-        for base in cls.__bases__:
-            merged += list(getattr(base, "import_packages", ()))
-        merged += list(getattr(cls, "import_packages", ()))
-        # Deduplicate while preserving order
-        cls.import_packages = tuple(dict.fromkeys(merged))
-
     @classmethod
     def load_imports(cls) -> None:
         """Import packages from `cls.import_packages` and rebuild Pydantic models.
@@ -38,7 +29,12 @@ class ImportPackagesMixin:
         # Per-class guard: idempotent within a process
         if getattr(cls, "_imports_loaded", False):
             return
-        loaded_packages = getattr(cls, "import_packages", ())
+        # Build merged packages dynamically from the full MRO (base -> cls)
+        merged: list[str] = []
+        for c in reversed(cls.mro()):
+            merged += list(getattr(c, "import_packages", ()))
+        # Deduplicate while preserving order
+        loaded_packages = tuple(dict.fromkeys(merged))
 
         # 1) Import foundational packages first (merged from the class hierarchy)
         for pkg_name in loaded_packages:
