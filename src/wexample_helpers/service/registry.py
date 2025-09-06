@@ -2,17 +2,19 @@ from __future__ import annotations
 
 from typing import Any, Generic, TypeVar
 
-from pydantic import BaseModel
-
 RegistrableType = TypeVar("RegistrableType")
 
 
-class Registry(BaseModel, Generic[RegistrableType]):
+class Registry(Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
 
-    _items: dict[str, RegistrableType] = {}
+    _items: dict[str, RegistrableType] | None = None
     _fail_if_missing: bool = True
     container: Any
+
+    def __init__(self, container: Any):
+        self._items = {}
+        self.container = container
 
     def register(self, key: str, item: RegistrableType) -> None:
         """Register an item in the registry."""
