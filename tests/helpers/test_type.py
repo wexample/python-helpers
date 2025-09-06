@@ -128,7 +128,7 @@ class TestHelperType(AbstractTestHelpers):
         def annotated_bad() -> str:
             return "nope"
 
-        def no_annotations() -> int:
+        def no_annotations():
             return 1
 
         # Accept when return type matches
