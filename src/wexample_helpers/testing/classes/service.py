@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, Field, PrivateAttr
 
 if TYPE_CHECKING:
-    from .pydantic_circular_kernel import Kernel
+    from .kernel import Kernel
 
 
 class Service(BaseModel):

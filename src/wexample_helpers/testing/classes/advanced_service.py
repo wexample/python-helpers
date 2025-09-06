@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 from pydantic import Field
 
-from .pydantic_circular_service import Service
+from .service import Service
 
 if TYPE_CHECKING:
-    from .pydantic_circular_advanced_kernel import AdvancedKernel
-    from .pydantic_circular_base_kernel import BaseKernel
+    from .advanced_kernel import AdvancedKernel
+    from .base_kernel import BaseKernel
 
 
 class AdvancedService(Service):
