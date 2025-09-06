@@ -5,8 +5,6 @@ import pkgutil
 import sys
 from typing import ClassVar
 
-from pydantic import BaseModel
-
 
 class ImportPackagesMixin:
     """Mixin that accumulates `import_packages` and provides a bootstrap loader.
