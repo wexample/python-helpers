@@ -7,6 +7,5 @@ class UniqueBaseModel(BaseModel):
     """
     TODO De-pydanticify everything
     """
+    pass
 
-    def __init_subclass__(cls, **kwargs) -> None:
-        pass
