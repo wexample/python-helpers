@@ -38,10 +38,6 @@ dev = [
 distribution = true
 
 [tool.pdm.build]
-includes = [
-    'src/wexample_helpers/*',
-]
-package-dir = "src"
 
 [[tool.pdm.build.packages]]
 include = "wexample_helpers"
