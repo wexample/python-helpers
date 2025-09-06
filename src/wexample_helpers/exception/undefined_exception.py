@@ -4,10 +4,8 @@ import traceback
 import uuid
 from typing import Any
 
-from pydantic import BaseModel
 
-
-class ExceptionData(BaseModel):
+class ExceptionData:
     """Base model for exception data using Pydantic."""
 
 
@@ -25,11 +23,11 @@ class UndefinedException(Exception):
     error_code: str = "UNDEFINED_ERROR"
 
     def __init__(
-        self,
-        message: str,
-        data: dict[str, Any] | None = None,
-        cause: Exception | None = None,
-        previous: Exception | None = None,
+            self,
+            message: str,
+            data: dict[str, Any] | None = None,
+            cause: Exception | None = None,
+            previous: Exception | None = None,
     ) -> None:
         self.message = message
         self.data = data or {}
