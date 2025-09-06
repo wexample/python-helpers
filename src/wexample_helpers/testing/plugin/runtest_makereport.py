@@ -5,8 +5,8 @@ import pytest
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call) -> None:
-    from wexample_helpers.enums.debug_path_style import DebugPathStyle
     from wexample_helpers.common.exception.handler import ExceptionHandler
+    from wexample_helpers.enums.debug_path_style import DebugPathStyle
     outcome = yield
     rep = outcome.get_result()
 

@@ -12,7 +12,9 @@ class AbstractTestHelpers(ABC):
         success_cases: list[tuple[Any, Any]] = None,
         failure_cases: list[tuple[Any, Any]] = None,
     ) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
         from wexample_helpers.helpers.type import type_validate_or_fail
 
         # Success cases: should not raise exceptions

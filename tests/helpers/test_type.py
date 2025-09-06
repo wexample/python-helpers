@@ -46,6 +46,7 @@ class TestHelperType(AbstractTestHelpers):
 
     def test_type_is_compatibility(self) -> None:
         from collections.abc import Callable
+
         from wexample_helpers.helpers.type import type_is_compatible
         success_cases = [
             (str, Any),
@@ -87,8 +88,13 @@ class TestHelperType(AbstractTestHelpers):
             ), f"Expected {actual_type} to be incompatible with {expected_type}"
 
     def test_pep604_union_equivalents(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
-        from wexample_helpers.helpers.type import type_is_compatible, type_validate_or_fail
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
+        from wexample_helpers.helpers.type import (
+            type_is_compatible,
+            type_validate_or_fail,
+        )
 
         # Compatibility API currently targets typing.Union, ensure baseline
         assert type_is_compatible(str, Union[str, int])
@@ -111,7 +117,10 @@ class TestHelperType(AbstractTestHelpers):
 
     def test_callable_annotations_behavior(self) -> None:
         from collections.abc import Callable
-        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
         from wexample_helpers.helpers.type import type_validate_or_fail
         def annotated_ok() -> bool:
             return True
@@ -136,7 +145,9 @@ class TestHelperType(AbstractTestHelpers):
         type_validate_or_fail(no_annotations, Callable[..., bool])
 
     def test_tuple_len_mismatch(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
         from wexample_helpers.helpers.type import type_validate_or_fail
 
         # Exact length required

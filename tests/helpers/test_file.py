@@ -66,7 +66,10 @@ def test_file_list_subdirectories(temp_dir: Path) -> None:
 
 
 def test_file_mode_conversions() -> None:
-    from wexample_helpers.helpers.file import file_mode_num_to_octal, file_mode_octal_to_num
+    from wexample_helpers.helpers.file import (
+        file_mode_num_to_octal,
+        file_mode_octal_to_num,
+    )
 
     # Test num to octal
     assert file_mode_num_to_octal(0o644) == "644"
@@ -78,7 +81,10 @@ def test_file_mode_conversions() -> None:
 
 
 def test_file_path_mode_operations(temp_file: Path) -> None:
-    from wexample_helpers.helpers.file import file_path_get_mode_num, file_path_get_octal_mode
+    from wexample_helpers.helpers.file import (
+        file_path_get_mode_num,
+        file_path_get_octal_mode,
+    )
     os.chmod(temp_file, 0o644)
 
     assert file_path_get_octal_mode(temp_file) == "644"
@@ -110,6 +116,7 @@ def test_file_remove_if_exists(temp_file: Path) -> None:
 
 def test_file_resolve_path() -> None:
     from pathlib import Path
+
     from wexample_helpers.helpers.file import file_resolve_path
     path_str = "/test/path"
     path_obj = Path("/test/path")

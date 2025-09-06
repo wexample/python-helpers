@@ -49,7 +49,7 @@ def ansi_center(text: str, width: int, fillchar: str = " ") -> str:
 
 
 def ansi_truncate_visible(text: str, max_width: int) -> str:
-    from wcwidth import _wcw, wcwidth
+    from wcwidth import _wcw
     if max_width <= 0:
         return ""
     if ansi_display_width(text) <= max_width:

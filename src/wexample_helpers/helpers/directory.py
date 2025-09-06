@@ -90,6 +90,7 @@ def directory_list_files(dir_path: PathOrString) -> list[str]:
 def directory_aggregate_all_files(file_paths: list[PathOrString]) -> str:
     """Aggregate contents of the given list of file paths."""
     from pathlib import Path
+
     from wexample_helpers.helpers.file import file_read
     return os.linesep.join(file_read(os.fspath(Path(fp))) for fp in file_paths)
 

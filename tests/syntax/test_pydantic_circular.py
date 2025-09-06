@@ -26,13 +26,17 @@ def _test_kernel_service(kernel_class: type, kernel_name: str):
 
 def test_pydantic_circular() -> None:
     """Test basic kernel circular reference."""
-    from wexample_helpers.testing.classes.pydantic_circular_base_kernel import BaseKernel
+    from wexample_helpers.testing.classes.pydantic_circular_base_kernel import (
+        BaseKernel,
+    )
     _test_kernel_service(BaseKernel, "test_kernel")
 
 
 def test_pydantic_circular_advanced() -> None:
     """Test advanced kernel with inheritance."""
-    from wexample_helpers.testing.classes.pydantic_circular_advanced_kernel import AdvancedKernel
+    from wexample_helpers.testing.classes.pydantic_circular_advanced_kernel import (
+        AdvancedKernel,
+    )
     kernel = _test_kernel_service(AdvancedKernel, "advanced_kernel")
 
     # Additional advanced checks

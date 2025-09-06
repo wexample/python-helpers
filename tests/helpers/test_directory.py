@@ -125,7 +125,9 @@ def test_directory_aggregate_all_files(temp_dir) -> None:
 
 
 def test_directory_aggregate_all_files_from_dir(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_aggregate_all_files_from_dir
+    from wexample_helpers.helpers.directory import (
+        directory_aggregate_all_files_from_dir,
+    )
 
     # Create test files with known content
     files = [

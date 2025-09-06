@@ -14,8 +14,9 @@ class HasClassDependencies:
 
     @classmethod
     def import_dependencies_and_rebuild(cls) -> None:
-        from wexample_helpers.helpers.polyfill import polyfill_register_global
         import sys
+
+        from wexample_helpers.helpers.polyfill import polyfill_register_global
 
         polyfill_register_global(
             cls.get_class_dependencies(), vars(sys.modules[cls.__module__])

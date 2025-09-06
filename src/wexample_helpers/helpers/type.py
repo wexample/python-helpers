@@ -41,7 +41,10 @@ def type_is_generic(type_value: Any) -> bool:
 
 def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
     from collections.abc import Callable
-    from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+
+    from wexample_helpers.exception.not_allowed_variable_type_exception import (
+        NotAllowedVariableTypeException,
+    )
     if allowed_type is Any:
         return
 

@@ -10,7 +10,9 @@ from wexample_helpers.testing.classes.unique_base_model_child import (
 def test_unique_base_model() -> None:
     """Test a valid child class of UniqueBaseModel."""
     from wexample_helpers.common.debug.debug_dump import DebugDump
-    from wexample_helpers.errors.multiple_base_model_inheritance_error import MultipleBaseModelInheritanceError
+    from wexample_helpers.errors.multiple_base_model_inheritance_error import (
+        MultipleBaseModelInheritanceError,
+    )
 
     # Create instance
     instance = UniqueBaseModelChild(

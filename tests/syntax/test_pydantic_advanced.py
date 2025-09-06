@@ -2,9 +2,13 @@ from __future__ import annotations
 
 
 def test_pydantic_advanced() -> None:
-    from wexample_helpers.common.debug.debug_dump import DebugDump
-    from wexample_helpers.testing.classes.pydantic_advanced import PydanticAdvanced, Status
     from datetime import datetime
+
+    from wexample_helpers.common.debug.debug_dump import DebugDump
+    from wexample_helpers.testing.classes.pydantic_advanced import (
+        PydanticAdvanced,
+        Status,
+    )
 
     # Create an instance with various data types
     instance = PydanticAdvanced(

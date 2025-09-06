@@ -2,9 +2,10 @@ from __future__ import annotations
 
 
 def test_pydantic_class() -> None:
+    from datetime import datetime
+
     from wexample_helpers.common.debug.debug_dump import DebugDump
     from wexample_helpers.testing.classes.pydantic_class import PydanticClass
-    from datetime import datetime
 
     # Create instance with some data
     instance = PydanticClass(
