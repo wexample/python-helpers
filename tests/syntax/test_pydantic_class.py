@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 
-def test_pydantic_class() -> None:
+def test_attrs_class() -> None:
     from datetime import datetime
 
     from wexample_helpers.common.debug.debug_dump import DebugDump
-    from wexample_helpers.testing.classes.pydantic_class import PydanticClass
+    from wexample_helpers.testing.classes.attrs_class import AttrsClass
 
     # Create instance with some data
-    instance = PydanticClass(
+    instance = AttrsClass(
         name="test_item",
         count=42,
         description="A test item",

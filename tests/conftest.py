@@ -2,11 +2,8 @@ import pytest
 
 
 def pytest_collection_modifyitems(config, items):
-    skip_reason = pytest.mark.skip(reason="Skipped Pydantic-related tests during migration to attrs/cattrs")
-    patterns = (
-        "tests/syntax/test_pydantic_",
-        "tests/syntax/test_unique_base_model.py",
-    )
+    skip_reason = pytest.mark.skip(reason="Skipped during migration: unique_base_model relies on Pydantic semantics")
+    patterns = ("tests/syntax/test_unique_base_model.py",)
     for item in items:
         nodeid = item.nodeid
         if any(pat in nodeid for pat in patterns):

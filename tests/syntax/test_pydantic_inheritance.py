@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 
-def test_pydantic_inheritance() -> None:
+def test_attrs_inheritance() -> None:
     from wexample_helpers.common.debug.debug_dump import DebugDump
-    from wexample_helpers.testing.classes.pydantic_inheritance_main import (
-        PydanticInheritanceMain,
+    from wexample_helpers.testing.classes.attrs_inheritance_main import (
+        AttrsInheritanceMain,
     )
 
     # Create instance with various properties
-    instance = PydanticInheritanceMain(
+    instance = AttrsInheritanceMain(
         environment="production",
         name="test_instance",
         tags=["test", "debug"],

@@ -15,7 +15,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = []
+dependencies = [
+    "attrs>=23",
+    "cattrs>=23",
+]
 
 [project.readme]
 file = "README.md"
