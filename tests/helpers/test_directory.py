@@ -35,6 +35,7 @@ def test_directory_remove_tree_if_exists(temp_dir) -> None:
 
 def test_directory_execute_inside(temp_dir) -> None:
     from wexample_helpers.helpers.directory import directory_execute_inside
+
     original_dir = os.getcwd()
 
     with directory_execute_inside(temp_dir):
@@ -44,6 +45,7 @@ def test_directory_execute_inside(temp_dir) -> None:
 
 def test_directory_get_base_name() -> None:
     from wexample_helpers.helpers.directory import directory_get_base_name
+
     assert directory_get_base_name("/path/to/dir/") == "dir"
     assert directory_get_base_name("/path/to/dir") == "dir"
     assert directory_get_base_name("dir") == "dir"
@@ -51,6 +53,7 @@ def test_directory_get_base_name() -> None:
 
 def test_directory_get_parent_path() -> None:
     from wexample_helpers.helpers.directory import directory_get_parent_path
+
     assert directory_get_parent_path("/path/to/dir/") == "/path/to/"
     assert directory_get_parent_path("/path/to/dir") == "/path/to/"
     assert (

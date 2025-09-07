@@ -26,6 +26,7 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
         from wexample_helpers.exception.model.not_allowed_item_data import (
             NotAllowedItemData,
         )
+
         if allowed_values is None:
             allowed_values = []
 

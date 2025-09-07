@@ -46,6 +46,7 @@ def test_exception_frame_formatting_full_and_filename(tmp_path) -> None:
 def test_exception_frame_paths_map_substitution(tmp_path) -> None:
     from wexample_helpers.common.exception.frame import ExceptionFrame
     from wexample_helpers.enums.debug_path_style import DebugPathStyle
+
     prod = "/var/app"
     local = str(tmp_path)
     target = os.path.join(prod, "src", "x.py")

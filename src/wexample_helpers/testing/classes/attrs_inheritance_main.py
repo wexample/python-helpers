@@ -21,7 +21,9 @@ class AttrsInheritanceMain(AttrsInheritanceConfig, AttrsInheritanceModel):
             priority=data.get("priority", 0),
         )
         # Then initialize config
-        AttrsInheritanceConfig.__init__(self, environment=data.get("environment", "development"))
+        AttrsInheritanceConfig.__init__(
+            self, environment=data.get("environment", "development")
+        )
 
     def get_full_state(self) -> dict[str, Any]:
         return {

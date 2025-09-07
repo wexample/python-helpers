@@ -44,6 +44,7 @@ class HasEnvKeys:
         from wexample_helpers.errors.missing_required_env_var_error import (
             MissingRequiredEnvVarError,
         )
+
         missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:

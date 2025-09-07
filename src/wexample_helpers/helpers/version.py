@@ -128,6 +128,7 @@ def version_increment(
         UPGRADE_TYPE_RC,
         UPGRADE_TYPE_SNAPSHOT,
     )
+
     version_dict = version_parse(version)
     if not version_dict:
         raise ValueError(f"Invalid version format: {version}")

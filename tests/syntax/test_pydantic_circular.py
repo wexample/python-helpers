@@ -29,6 +29,7 @@ def test_attrs_circular() -> None:
     from wexample_helpers.testing.classes.attrs_circular_base_kernel import (
         BaseKernel,
     )
+
     _test_kernel_service(BaseKernel, "test_kernel")
 
 
@@ -37,6 +38,7 @@ def test_attrs_circular_advanced() -> None:
     from wexample_helpers.testing.classes.attrs_circular_advanced_kernel import (
         AdvancedKernel,
     )
+
     kernel = _test_kernel_service(AdvancedKernel, "advanced_kernel")
 
     # Additional advanced checks

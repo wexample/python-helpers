@@ -12,7 +12,7 @@ class Registry(Generic[RegistrableType]):
     _fail_if_missing: bool = True
     container: Any
 
-    def __init__(self, container: Any):
+    def __init__(self, container: Any) -> None:
         self._items = {}
         self.container = container
 

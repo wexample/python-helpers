@@ -16,7 +16,7 @@ class BaseKernel:
 
     name: str
     debug: bool = False
-    _service: Optional[Service] = attrs.field(default=None, eq=False)
+    _service: Service | None = attrs.field(default=None, eq=False)
 
     def __attrs_post_init__(self) -> None:
         service_cls = self.get_service_class()
@@ -29,5 +29,5 @@ class BaseKernel:
         return self._service
 
     @classmethod
-    def get_service_class(cls) -> Type[Service]:
+    def get_service_class(cls) -> type[Service]:
         return Service

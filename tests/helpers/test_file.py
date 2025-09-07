@@ -27,6 +27,7 @@ def temp_file(temp_dir: Path) -> Generator[Path]:
 
 def test_file_change_mode(temp_file: Path) -> None:
     from wexample_helpers.helpers.file import file_change_mode
+
     mode = 0o644
     file_change_mode(str(temp_file), mode)
     assert stat.S_IMODE(temp_file.stat().st_mode) == mode
@@ -85,6 +86,7 @@ def test_file_path_mode_operations(temp_file: Path) -> None:
         file_path_get_mode_num,
         file_path_get_octal_mode,
     )
+
     os.chmod(temp_file, 0o644)
 
     assert file_path_get_octal_mode(temp_file) == "644"
@@ -93,6 +95,7 @@ def test_file_path_mode_operations(temp_file: Path) -> None:
 
 def test_file_read_write(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_read, file_write
+
     file_path = temp_dir / "test.txt"
     content = "Hello, World!"
 
@@ -106,6 +109,7 @@ def test_file_read_write(temp_dir: Path) -> None:
 
 def test_file_remove_if_exists(temp_file: Path) -> None:
     from wexample_helpers.helpers.file import file_remove_if_exists
+
     assert temp_file.exists()
     file_remove_if_exists(str(temp_file))
     assert not temp_file.exists()
@@ -118,6 +122,7 @@ def test_file_resolve_path() -> None:
     from pathlib import Path
 
     from wexample_helpers.helpers.file import file_resolve_path
+
     path_str = "/test/path"
     path_obj = Path("/test/path")
 
@@ -127,6 +132,7 @@ def test_file_resolve_path() -> None:
 
 def test_file_touch(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_touch
+
     file_path = temp_dir / "touch_test.txt"
     file_touch(str(file_path))
     assert file_path.exists()
@@ -135,6 +141,7 @@ def test_file_touch(temp_dir: Path) -> None:
 
 def test_file_validate_mode_octal() -> None:
     from wexample_helpers.helpers.file import file_validate_mode_octal
+
     assert file_validate_mode_octal("644")
     assert file_validate_mode_octal("755")
     assert not file_validate_mode_octal("999")  # Invalid octal
@@ -144,6 +151,7 @@ def test_file_validate_mode_octal() -> None:
 
 def test_file_validate_mode_octal_or_fail() -> None:
     from wexample_helpers.helpers.file import file_validate_mode_octal_or_fail
+
     assert file_validate_mode_octal_or_fail("644")
 
     with pytest.raises(Exception):

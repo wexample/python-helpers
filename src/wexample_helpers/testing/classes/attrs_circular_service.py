@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @attrs.define(eq=False)
 class Service:
     name: str
-    kernel: Optional[BaseKernel] = None
+    kernel: BaseKernel | None = None
 
     def initialize(self, kernel: BaseKernel) -> None:
         self.kernel = kernel
@@ -21,11 +21,11 @@ class Service:
         return "basic"
 
     @property
-    def base_kernel(self) -> Optional[BaseKernel]:
+    def base_kernel(self) -> BaseKernel | None:
         return self.kernel
 
     @property
-    def advanced_kernel(self) -> Optional[AdvancedKernel]:
+    def advanced_kernel(self) -> AdvancedKernel | None:
         # Only available when attached to an AdvancedKernel
         k = self.kernel
         if k is not None and k.__class__.__name__ == "AdvancedKernel":

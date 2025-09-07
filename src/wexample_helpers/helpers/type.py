@@ -45,6 +45,7 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
     from wexample_helpers.exception.not_allowed_variable_type_exception import (
         NotAllowedVariableTypeException,
     )
+
     if allowed_type is Any:
         return
 
@@ -118,6 +119,7 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     from types import UnionType
+
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
 
@@ -209,6 +211,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
 def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
     """Check if actual_type is compatible with allowed_type for generics like Dict, List, Tuple, and Union."""
     from collections.abc import Callable
+
     origin = get_origin(allowed_type) or allowed_type
     actual_origin = get_origin(actual_type) or actual_type
     allowed_args = get_args(allowed_type)

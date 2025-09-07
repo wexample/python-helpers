@@ -18,7 +18,7 @@ class AttrsClass:
     count: int = 0
 
     # Optional fields
-    description: Optional[str] = None
+    description: str | None = None
     tags: list[str] = attrs.field(factory=list)
 
     # Field with default factory

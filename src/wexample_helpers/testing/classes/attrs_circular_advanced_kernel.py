@@ -13,5 +13,5 @@ class AdvancedKernel(BaseKernel):
     version: str = "1.0.0"
 
     @classmethod
-    def get_service_class(cls) -> Type[Service]:
+    def get_service_class(cls) -> type[Service]:
         return AdvancedService
