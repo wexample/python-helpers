@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 import attrs
 
 from .attrs_circular_base_kernel import BaseKernel
