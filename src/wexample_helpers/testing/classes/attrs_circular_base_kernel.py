@@ -7,7 +7,7 @@ import attrs
 from .attrs_circular_service import Service
 
 if TYPE_CHECKING:
-    from .attrs_circular_service import AdvancedService
+    pass
 
 
 @attrs.define(eq=False)
