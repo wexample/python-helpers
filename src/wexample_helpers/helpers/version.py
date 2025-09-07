@@ -42,6 +42,52 @@ def is_greater_than(
     return true_if_equal
 
 
+def version_increment(
+    version: str,
+    type: str = UPGRADE_TYPE_MINOR,
+    increment: int = 1,
+    build: bool | str = False,
+) -> str:
+    from wexample_helpers.const.types import (
+        UPGRADE_TYPE_ALPHA,
+        UPGRADE_TYPE_BETA,
+        UPGRADE_TYPE_DEV,
+        UPGRADE_TYPE_INTERMEDIATE,
+        UPGRADE_TYPE_MAJOR,
+        UPGRADE_TYPE_NIGHTLY,
+        UPGRADE_TYPE_RC,
+        UPGRADE_TYPE_SNAPSHOT,
+    )
+
+    version_dict = version_parse(version)
+    if not version_dict:
+        raise ValueError(f"Invalid version format: {version}")
+
+    # Increment according to type
+    if type == UPGRADE_TYPE_MAJOR:
+        version_dict["major"] = int(version_dict["major"]) + increment
+        version_dict["intermediate"] = 0
+        version_dict["minor"] = 0
+    elif type == UPGRADE_TYPE_INTERMEDIATE:
+        version_dict["intermediate"] = int(version_dict["intermediate"]) + increment
+        version_dict["minor"] = 0
+    elif type == UPGRADE_TYPE_MINOR:
+        version_dict["minor"] = int(version_dict["minor"]) + increment
+    # Any of pre-build version
+    elif type in [
+        UPGRADE_TYPE_ALPHA,
+        UPGRADE_TYPE_BETA,
+        UPGRADE_TYPE_DEV,
+        UPGRADE_TYPE_RC,
+        UPGRADE_TYPE_NIGHTLY,
+        UPGRADE_TYPE_SNAPSHOT,
+    ]:
+        version_dict["pre_build_type"] = type
+        version_dict["pre_build_number"] = increment
+
+    return version_join(version_dict, build)
+
+
 def version_join(version: VersionDescriptor, add_build: bool | str = False) -> str:
     output = f"{version['major']}.{version['intermediate']}.{version['minor']}"
 
@@ -110,49 +156,3 @@ def version_parse(version: str) -> VersionDescriptor | None:
         return None
 
     return version_dict
-
-
-def version_increment(
-    version: str,
-    type: str = UPGRADE_TYPE_MINOR,
-    increment: int = 1,
-    build: bool | str = False,
-) -> str:
-    from wexample_helpers.const.types import (
-        UPGRADE_TYPE_ALPHA,
-        UPGRADE_TYPE_BETA,
-        UPGRADE_TYPE_DEV,
-        UPGRADE_TYPE_INTERMEDIATE,
-        UPGRADE_TYPE_MAJOR,
-        UPGRADE_TYPE_NIGHTLY,
-        UPGRADE_TYPE_RC,
-        UPGRADE_TYPE_SNAPSHOT,
-    )
-
-    version_dict = version_parse(version)
-    if not version_dict:
-        raise ValueError(f"Invalid version format: {version}")
-
-    # Increment according to type
-    if type == UPGRADE_TYPE_MAJOR:
-        version_dict["major"] = int(version_dict["major"]) + increment
-        version_dict["intermediate"] = 0
-        version_dict["minor"] = 0
-    elif type == UPGRADE_TYPE_INTERMEDIATE:
-        version_dict["intermediate"] = int(version_dict["intermediate"]) + increment
-        version_dict["minor"] = 0
-    elif type == UPGRADE_TYPE_MINOR:
-        version_dict["minor"] = int(version_dict["minor"]) + increment
-    # Any of pre-build version
-    elif type in [
-        UPGRADE_TYPE_ALPHA,
-        UPGRADE_TYPE_BETA,
-        UPGRADE_TYPE_DEV,
-        UPGRADE_TYPE_RC,
-        UPGRADE_TYPE_NIGHTLY,
-        UPGRADE_TYPE_SNAPSHOT,
-    ]:
-        version_dict["pre_build_type"] = type
-        version_dict["pre_build_number"] = increment
-
-    return version_join(version_dict, build)

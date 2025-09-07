@@ -15,6 +15,13 @@ def polyfill_import(classes: Any, *args, **kwargs) -> None:
     """
 
 
+def polyfill_not_implemented_error() -> None:
+    import inspect
+
+    function_name = inspect.currentframe().f_back.f_code.co_name
+    raise NotImplementedError(f"{function_name} must be implemented by subclass")
+
+
 def polyfill_register_global(
     classes: T | list[T] | tuple[T, ...], context: dict | None = None
 ) -> None:
@@ -48,10 +55,3 @@ def polyfill_register_global(
             raise TypeError(f"Expected a class, got {type(cls)}")
         cls_name = cls.__name__
         context[cls_name] = cls
-
-
-def polyfill_not_implemented_error() -> None:
-    import inspect
-
-    function_name = inspect.currentframe().f_back.f_code.co_name
-    raise NotImplementedError(f"{function_name} must be implemented by subclass")

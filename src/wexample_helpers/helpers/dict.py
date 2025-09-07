@@ -16,6 +16,15 @@ DICT_ITEM_EXISTS_ACTION_MERGE = "merge"
 DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 
+def dict_get_first_missing_key(
+    dictionary: StringKeysMapping, required_keys: StringsList
+) -> str | None:
+    for key in required_keys:
+        if key not in dictionary:
+            return key
+    return None
+
+
 def dict_get_item_by_path(
     data: Any,
     key: str,
@@ -131,12 +140,3 @@ def dict_sort_values(
     return {
         k: v for k, v in sorted(dictionary.items(), key=key or (lambda item: item[1]))
     }
-
-
-def dict_get_first_missing_key(
-    dictionary: StringKeysMapping, required_keys: StringsList
-) -> str | None:
-    for key in required_keys:
-        if key not in dictionary:
-            return key
-    return None

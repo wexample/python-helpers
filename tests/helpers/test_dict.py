@@ -1,6 +1,14 @@
 from __future__ import annotations
 
 
+def test_dict_get_first_missing_key() -> None:
+    from wexample_helpers.helpers.dict import dict_get_first_missing_key
+
+    data = {"a": 1, "b": 2}
+    assert dict_get_first_missing_key(data, ["a", "b", "c"]) == "c"
+    assert dict_get_first_missing_key(data, ["a", "b"]) is None
+
+
 def test_dict_get_item_by_path() -> None:
     from wexample_helpers.helpers.dict import dict_get_item_by_path
 
@@ -58,11 +66,3 @@ def test_dict_sort_values() -> None:
     data = {"c": 3, "a": 1, "b": 2}
     sorted_dict = dict_sort_values(data)
     assert list(sorted_dict.items()) == [("a", 1), ("b", 2), ("c", 3)]
-
-
-def test_dict_get_first_missing_key() -> None:
-    from wexample_helpers.helpers.dict import dict_get_first_missing_key
-
-    data = {"a": 1, "b": 2}
-    assert dict_get_first_missing_key(data, ["a", "b", "c"]) == "c"
-    assert dict_get_first_missing_key(data, ["a", "b"]) is None

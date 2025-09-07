@@ -38,6 +38,16 @@ def file_change_mode_recursive(
             )
 
 
+def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
+    """Get directories under path, optionally recursively."""
+    from pathlib import Path
+
+    base = Path(path)
+    if not recursive:
+        return [str(p) for p in base.iterdir() if p.is_dir()]
+    return [str(p) for p in base.rglob("*") if p.is_dir()]
+
+
 def file_list_subdirectories(path: PathOrString) -> list[str]:
     """
     List immediate subdirectory names (excluding hidden) under a given path.
@@ -61,14 +71,14 @@ def file_mode_octal_to_num(mode: str | int) -> int:
     return int(str(mode), 8)
 
 
-def file_path_get_octal_mode(path: Path) -> str:
-    """Get the octal permission string for a Path object."""
-    return file_mode_num_to_octal(path.stat().st_mode)
-
-
 def file_path_get_mode_num(path: Path) -> int:
     """Get the numeric permission bits for a Path object."""
     return path.stat().st_mode & 0o777
+
+
+def file_path_get_octal_mode(path: Path) -> str:
+    """Get the octal permission string for a Path object."""
+    return file_mode_num_to_octal(path.stat().st_mode)
 
 
 def file_read(file_path: PathOrString) -> str:
@@ -148,13 +158,3 @@ def file_write_ensure(
     p = file_resolve_path(file_path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(content, encoding=encoding)
-
-
-def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
-    """Get directories under path, optionally recursively."""
-    from pathlib import Path
-
-    base = Path(path)
-    if not recursive:
-        return [str(p) for p in base.iterdir() if p.is_dir()]
-    return [str(p) for p in base.rglob("*") if p.is_dir()]

@@ -12,13 +12,33 @@ if TYPE_CHECKING:
 AnyCallable = Callable[..., Any]
 
 
-def directory_remove_tree_if_exists(directory: PathOrString) -> None:
-    """Remove a directory and all its contents if it exists."""
+def directory_aggregate_all_files(file_paths: list[PathOrString]) -> str:
+    """Aggregate contents of the given list of file paths."""
     from pathlib import Path
 
-    p = Path(directory)
-    if p.exists():
-        shutil.rmtree(p)
+    from wexample_helpers.helpers.file import file_read
+
+    return os.linesep.join(file_read(os.fspath(Path(fp))) for fp in file_paths)
+
+
+def directory_aggregate_all_files_from_dir(dir_path: PathOrString) -> str:
+    """Aggregate contents of all files in a directory and its subdirectories."""
+    return directory_aggregate_all_files(directory_list_files(dir_path))
+
+
+def directory_empty_dir(dir_path: PathOrString) -> None:
+    """Remove all contents within a directory, but keep the directory itself."""
+    from pathlib import Path
+
+    p = Path(dir_path)
+    if not p.is_dir():
+        raise NotADirectoryError(f"{p!r} is not a directory.")
+    for item in os.listdir(p):
+        item_path = os.path.join(p, item)
+        if os.path.isdir(item_path) and not os.path.islink(item_path):
+            shutil.rmtree(item_path)
+        else:
+            os.remove(item_path)
 
 
 @contextmanager
@@ -64,21 +84,6 @@ def directory_get_parent_path(path: PathOrString) -> str:
     return parent + os.sep if parent else os.sep
 
 
-def directory_empty_dir(dir_path: PathOrString) -> None:
-    """Remove all contents within a directory, but keep the directory itself."""
-    from pathlib import Path
-
-    p = Path(dir_path)
-    if not p.is_dir():
-        raise NotADirectoryError(f"{p!r} is not a directory.")
-    for item in os.listdir(p):
-        item_path = os.path.join(p, item)
-        if os.path.isdir(item_path) and not os.path.islink(item_path):
-            shutil.rmtree(item_path)
-        else:
-            os.remove(item_path)
-
-
 def directory_list_files(dir_path: PathOrString) -> list[str]:
     """List all files in directory and subdirectories, sorted alphabetically."""
     from pathlib import Path
@@ -93,15 +98,10 @@ def directory_list_files(dir_path: PathOrString) -> list[str]:
     return file_paths
 
 
-def directory_aggregate_all_files(file_paths: list[PathOrString]) -> str:
-    """Aggregate contents of the given list of file paths."""
+def directory_remove_tree_if_exists(directory: PathOrString) -> None:
+    """Remove a directory and all its contents if it exists."""
     from pathlib import Path
 
-    from wexample_helpers.helpers.file import file_read
-
-    return os.linesep.join(file_read(os.fspath(Path(fp))) for fp in file_paths)
-
-
-def directory_aggregate_all_files_from_dir(dir_path: PathOrString) -> str:
-    """Aggregate contents of all files in a directory and its subdirectories."""
-    return directory_aggregate_all_files(directory_list_files(dir_path))
+    p = Path(directory)
+    if p.exists():
+        shutil.rmtree(p)

@@ -53,6 +53,28 @@ def test_file_change_mode_recursive(temp_dir: Path) -> None:
     assert stat.S_IMODE((temp_dir / "file2.txt").stat().st_mode) == mode
 
 
+def test_file_get_directories(temp_dir: Path) -> None:
+    from wexample_helpers.helpers.file import file_get_directories
+
+    # Create test structure
+    dir1 = temp_dir / "dir1"
+    dir2 = temp_dir / "dir2"
+    subdir = dir1 / "subdir"
+
+    for d in [dir1, dir2, subdir]:
+        d.mkdir()
+
+    # Test non-recursive
+    dirs = file_get_directories(str(temp_dir))
+    assert len(dirs) == 2
+    assert all(os.path.basename(d) in ["dir1", "dir2"] for d in dirs)
+
+    # Test recursive
+    dirs = file_get_directories(str(temp_dir), recursive=True)
+    assert len(dirs) == 3
+    assert any("subdir" in d for d in dirs)
+
+
 def test_file_list_subdirectories(temp_dir: Path) -> None:
     from wexample_helpers.helpers.file import file_list_subdirectories
 
@@ -156,25 +178,3 @@ def test_file_validate_mode_octal_or_fail() -> None:
 
     with pytest.raises(Exception):
         file_validate_mode_octal_or_fail("999")
-
-
-def test_file_get_directories(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_get_directories
-
-    # Create test structure
-    dir1 = temp_dir / "dir1"
-    dir2 = temp_dir / "dir2"
-    subdir = dir1 / "subdir"
-
-    for d in [dir1, dir2, subdir]:
-        d.mkdir()
-
-    # Test non-recursive
-    dirs = file_get_directories(str(temp_dir))
-    assert len(dirs) == 2
-    assert all(os.path.basename(d) in ["dir1", "dir2"] for d in dirs)
-
-    # Test recursive
-    dirs = file_get_directories(str(temp_dir), recursive=True)
-    assert len(dirs) == 3
-    assert any("subdir" in d for d in dirs)

@@ -16,65 +16,6 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-@dataclass
-class ShellResult:
-    """Structured result for shell command execution."""
-
-    args: str | list[str]
-    returncode: int
-    stdout: str | None
-    stderr: str | None
-    cwd: str | None
-    duration: float
-    start_time: float
-    end_time: float
-
-
-def shell_which(cmd: str) -> str | None:
-    """Return full path to executable or None if not found (shutil.which wrapper)."""
-
-    return shutil.which(cmd)
-
-
-def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
-    """Split a command if provided as a string using shlex; pass lists through."""
-
-    if isinstance(cmd, str):
-        return shlex.split(cmd)
-    return list(cmd)
-
-
-def _shell_apply_sudo(
-    cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
-) -> str | list[str]:
-    """Prefix the command with sudo options when requested.
-
-    - If shell=True and sudo is requested, we build a string prefix.
-    - If shell=False, we build a list prefix.
-    """
-
-    if not sudo_user and not elevate:
-        return cmd if isinstance(cmd, str) or shell else list(cmd)  # type: ignore[arg-type]
-
-    if shell:
-        base = "sudo"
-        if sudo_user:
-            base += f" -u {shlex.quote(sudo_user)} --"
-        elif elevate:
-            base += " --"
-        if isinstance(cmd, str):
-            return f"{base} {cmd}"
-        else:
-            return f"{base} {shlex.join(cmd)}"
-    else:
-        prefix: list[str] = ["sudo"]
-        if sudo_user:
-            prefix += ["-u", sudo_user, "--"]
-        elif elevate:
-            prefix += ["--"]
-        return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
-
-
 def shell_run(
     cmd: str | Sequence[str],
     *,
@@ -277,6 +218,14 @@ async def shell_run_async(
     )
 
 
+def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
+    """Split a command if provided as a string using shlex; pass lists through."""
+
+    if isinstance(cmd, str):
+        return shlex.split(cmd)
+    return list(cmd)
+
+
 async def shell_stream_async(
     cmd: str | Sequence[str],
     *,
@@ -371,3 +320,54 @@ async def shell_stream_async(
     if check and rc != 0:
         raise subprocess.CalledProcessError(rc, used_cmd)
     return rc
+
+
+def shell_which(cmd: str) -> str | None:
+    """Return full path to executable or None if not found (shutil.which wrapper)."""
+
+    return shutil.which(cmd)
+
+
+def _shell_apply_sudo(
+    cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
+) -> str | list[str]:
+    """Prefix the command with sudo options when requested.
+
+    - If shell=True and sudo is requested, we build a string prefix.
+    - If shell=False, we build a list prefix.
+    """
+
+    if not sudo_user and not elevate:
+        return cmd if isinstance(cmd, str) or shell else list(cmd)  # type: ignore[arg-type]
+
+    if shell:
+        base = "sudo"
+        if sudo_user:
+            base += f" -u {shlex.quote(sudo_user)} --"
+        elif elevate:
+            base += " --"
+        if isinstance(cmd, str):
+            return f"{base} {cmd}"
+        else:
+            return f"{base} {shlex.join(cmd)}"
+    else:
+        prefix: list[str] = ["sudo"]
+        if sudo_user:
+            prefix += ["-u", sudo_user, "--"]
+        elif elevate:
+            prefix += ["--"]
+        return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
+
+
+@dataclass
+class ShellResult:
+    """Structured result for shell command execution."""
+
+    args: str | list[str]
+    returncode: int
+    stdout: str | None
+    stderr: str | None
+    cwd: str | None
+    duration: float
+    start_time: float
+    end_time: float

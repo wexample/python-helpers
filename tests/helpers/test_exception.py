@@ -11,16 +11,6 @@ HELPERS_PATH = os.path.join(PROJECT_ROOT, "pip", "helpers")
 sys.path.insert(0, HELPERS_PATH)
 
 
-def _raise_nested() -> None:
-    def inner() -> None:
-        raise ValueError("boom")
-
-    def middle() -> None:
-        inner()
-
-    middle()
-
-
 def test_error_format_contains_exception_and_frames() -> None:
     from wexample_helpers.enums.debug_path_style import DebugPathStyle
     from wexample_helpers.helpers.error import error_format
@@ -46,3 +36,13 @@ def test_error_format_contains_exception_and_frames() -> None:
 
     # Contains path with a colon and line number pattern
     assert re.search(r":\d+\nLine\s+:\s+\d+", out_clean) is not None
+
+
+def _raise_nested() -> None:
+    def inner() -> None:
+        raise ValueError("boom")
+
+    def middle() -> None:
+        inner()
+
+    middle()

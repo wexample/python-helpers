@@ -10,112 +10,6 @@ from typing import (
 )
 
 
-def type_is_isinstance(value: Any, allowed_type: Any) -> bool:
-    """Like isinstance but never raises TypeError; returns False instead."""
-    try:
-        return isinstance(value, allowed_type)
-    except TypeError:
-        return False
-
-
-def _safe_issubclass(a: Any, b: Any) -> bool:
-    """Like issubclass but never raises TypeError; returns False instead."""
-    try:
-        return issubclass(a, b)
-    except TypeError:
-        return False
-
-
-def type_is_generic(type_value: Any) -> bool:
-    """Detects if a given type is a generic type like List, Dict, Union"""
-
-    # Set of known generic types for quick membership testing
-    generic_types = {list, dict, tuple, Union}
-
-    # Extract the base type of type_value using get_origin, or use type_value itself if get_origin is None
-    type_value = get_origin(type_value) or type_value
-
-    # Check if type_value is a known generic type
-    return type_value in generic_types
-
-
-def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
-    from collections.abc import Callable
-
-    from wexample_helpers.exception.not_allowed_variable_type_exception import (
-        NotAllowedVariableTypeException,
-    )
-
-    if allowed_type is Any:
-        return
-
-    if allowed_type is Callable:
-        if callable(value):
-            return
-        # Not a callable where one was expected
-        raise NotAllowedVariableTypeException(
-            variable_type=type(value).__name__,
-            variable_value=value,
-            allowed_types=["callable"],
-        )
-
-    # Check if the raw value matches any allowed base type
-    if not type_is_generic(allowed_type):
-        if type_is_isinstance(allowed_type, Callable):
-            if isinstance(value, Callable):
-                # Type is probably not a meta type, i.e:
-                #   - allowed_type=Type[MyClass] will match value MyClass
-                #   - allowed_type=MyClass will not match value MyClass
-                if isinstance(allowed_type, type):
-                    raise NotAllowedVariableTypeException(
-                        variable_type=type(value).__name__,
-                        variable_value=value,
-                        allowed_types=[allowed_type],
-                    )
-
-                args = get_args(allowed_type)
-                if args:
-                    return_type = args[-1]
-
-                    try:
-                        type_hints = get_type_hints(value, localns=locals())
-                        actual_return_type_hint = type_hints.get("return", None)
-                    except NameError:
-                        actual_return_type_hint = None
-
-                    if actual_return_type_hint is None:
-                        return
-
-                    # Handle generic types
-                    if type_is_compatible(
-                        actual_type=cast(type, actual_return_type_hint),
-                        allowed_type=return_type,
-                    ):
-                        return
-
-                    raise NotAllowedVariableTypeException(
-                        variable_type=str(actual_return_type_hint),
-                        variable_value=value,
-                        allowed_types=[return_type],
-                    )
-
-                return
-        # Explicit check for simple types without get_origin
-        elif type_is_isinstance(value, allowed_type):
-            return
-
-    # Handle generic types (includes Union/| and Type[...])
-    if type_generic_value_is_valid(value, allowed_type):
-        return
-
-    # If none of the checks passed, raise an exception
-    raise NotAllowedVariableTypeException(
-        variable_type=type(value).__name__,
-        variable_value=value,
-        allowed_types=[allowed_type],
-    )
-
-
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     from types import UnionType
@@ -273,6 +167,27 @@ def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
     return actual_type == allowed_type
 
 
+def type_is_generic(type_value: Any) -> bool:
+    """Detects if a given type is a generic type like List, Dict, Union"""
+
+    # Set of known generic types for quick membership testing
+    generic_types = {list, dict, tuple, Union}
+
+    # Extract the base type of type_value using get_origin, or use type_value itself if get_origin is None
+    type_value = get_origin(type_value) or type_value
+
+    # Check if type_value is a known generic type
+    return type_value in generic_types
+
+
+def type_is_isinstance(value: Any, allowed_type: Any) -> bool:
+    """Like isinstance but never raises TypeError; returns False instead."""
+    try:
+        return isinstance(value, allowed_type)
+    except TypeError:
+        return False
+
+
 def type_to_name(t: Any) -> str:
     from types import UnionType
 
@@ -288,3 +203,88 @@ def type_to_name(t: Any) -> str:
         except Exception:
             return str(t)
     return str(t)
+
+
+def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
+    from collections.abc import Callable
+
+    from wexample_helpers.exception.not_allowed_variable_type_exception import (
+        NotAllowedVariableTypeException,
+    )
+
+    if allowed_type is Any:
+        return
+
+    if allowed_type is Callable:
+        if callable(value):
+            return
+        # Not a callable where one was expected
+        raise NotAllowedVariableTypeException(
+            variable_type=type(value).__name__,
+            variable_value=value,
+            allowed_types=["callable"],
+        )
+
+    # Check if the raw value matches any allowed base type
+    if not type_is_generic(allowed_type):
+        if type_is_isinstance(allowed_type, Callable):
+            if isinstance(value, Callable):
+                # Type is probably not a meta type, i.e:
+                #   - allowed_type=Type[MyClass] will match value MyClass
+                #   - allowed_type=MyClass will not match value MyClass
+                if isinstance(allowed_type, type):
+                    raise NotAllowedVariableTypeException(
+                        variable_type=type(value).__name__,
+                        variable_value=value,
+                        allowed_types=[allowed_type],
+                    )
+
+                args = get_args(allowed_type)
+                if args:
+                    return_type = args[-1]
+
+                    try:
+                        type_hints = get_type_hints(value, localns=locals())
+                        actual_return_type_hint = type_hints.get("return", None)
+                    except NameError:
+                        actual_return_type_hint = None
+
+                    if actual_return_type_hint is None:
+                        return
+
+                    # Handle generic types
+                    if type_is_compatible(
+                        actual_type=cast(type, actual_return_type_hint),
+                        allowed_type=return_type,
+                    ):
+                        return
+
+                    raise NotAllowedVariableTypeException(
+                        variable_type=str(actual_return_type_hint),
+                        variable_value=value,
+                        allowed_types=[return_type],
+                    )
+
+                return
+        # Explicit check for simple types without get_origin
+        elif type_is_isinstance(value, allowed_type):
+            return
+
+    # Handle generic types (includes Union/| and Type[...])
+    if type_generic_value_is_valid(value, allowed_type):
+        return
+
+    # If none of the checks passed, raise an exception
+    raise NotAllowedVariableTypeException(
+        variable_type=type(value).__name__,
+        variable_value=value,
+        allowed_types=[allowed_type],
+    )
+
+
+def _safe_issubclass(a: Any, b: Any) -> bool:
+    """Like issubclass but never raises TypeError; returns False instead."""
+    try:
+        return issubclass(a, b)
+    except TypeError:
+        return False
