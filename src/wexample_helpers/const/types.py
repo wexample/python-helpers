@@ -36,6 +36,7 @@ StringMessageParameters = StringKeysDict
 FileStringOrPath = Union[str, Path]
 
 # Version types
+# filestate: python-constant-sort
 UPGRADE_TYPE_MAJOR: str = "major"
 UPGRADE_TYPE_INTERMEDIATE: str = "intermediate"
 UPGRADE_TYPE_MINOR: str = "minor"

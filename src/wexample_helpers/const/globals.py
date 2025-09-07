@@ -2,10 +2,12 @@ from __future__ import annotations
 
 DIR_GIT = ".git"
 
+# filestate: python-constant-sort
 FILE_EXTENSION_ENV = "env"
 FILE_EXTENSION_PYTHON = "py"
 FILE_EXTENSION_YAML = "yml"
 
+# filestate: python-constant-sort
 FILE_NAME_ENV = f".{FILE_EXTENSION_ENV}"
 FILE_NAME_ENV_YAML = f".{FILE_EXTENSION_ENV}.{FILE_EXTENSION_YAML}"
 
