@@ -10,7 +10,8 @@ Version: 0.0.67
 
 ## Dependencies
 
-- pydantic>=2,<3
+- attrs>=23
+- cattrs>=23
 
 ## Installation
 
