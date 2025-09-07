@@ -10,8 +10,8 @@ Version: 0.0.67
 
 ## Dependencies
 
-- attrs>=23
-- cattrs>=23
+- attrs>=23.1.0
+- cattrs>=23.1.0
 
 ## Installation
 

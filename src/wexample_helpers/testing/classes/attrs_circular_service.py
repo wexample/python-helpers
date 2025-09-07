@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import attrs
 
 if TYPE_CHECKING:
-    from .attrs_circular_base_kernel import BaseKernel, AdvancedKernel
+    from .attrs_circular_base_kernel import AdvancedKernel, BaseKernel
 
 
 @attrs.define(eq=False)

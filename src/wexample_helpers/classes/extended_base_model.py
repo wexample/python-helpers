@@ -4,7 +4,6 @@ import inspect
 from typing import ClassVar, Final, NoReturn, get_origin, get_type_hints
 
 from pydantic import BaseModel
-
 from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
 
 
