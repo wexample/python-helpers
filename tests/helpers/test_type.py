@@ -48,6 +48,7 @@ class TestHelperType(AbstractTestHelpers):
         from collections.abc import Callable
 
         from wexample_helpers.helpers.type import type_is_compatible
+
         success_cases = [
             (str, Any),
             (bool, Any),
@@ -122,6 +123,7 @@ class TestHelperType(AbstractTestHelpers):
             NotAllowedVariableTypeException,
         )
         from wexample_helpers.helpers.type import type_validate_or_fail
+
         def annotated_ok() -> bool:
             return True
 
@@ -166,6 +168,7 @@ class TestHelperType(AbstractTestHelpers):
     def test_validation(self) -> bool:
         from collections.abc import Callable
         from types import NoneType
+
         def _test_callable() -> bool:
             return True
 
