@@ -8,10 +8,10 @@ from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 @dataclass(frozen=True)
 class ExceptionFrame:
-    filename: str
-    lineno: int
-    function: str
     code: str | None
+    filename: str
+    function: str
+    lineno: int
     path_style: DebugPathStyle = DebugPathStyle.FULL
     paths_map: dict[str, str] | None = None
 

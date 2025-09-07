@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 @attrs.define(eq=False)
 class BaseKernel:
     """Base kernel using attrs; creates its Service and initializes circular link."""
+    debug: bool = False
 
     name: str
-    debug: bool = False
     _service: Service | None = attrs.field(default=None, eq=False)
 
     def __attrs_post_init__(self) -> None:

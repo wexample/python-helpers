@@ -30,11 +30,11 @@ class AttrsAdvanced:
         converter=lambda v: round(float(v), 2),
         validator=[ge(0), le(100)],
     )
+    _created_at: datetime = attrs.field(factory=datetime.now)
+    _internal_notes: list[str] = attrs.field(factory=list)
 
     # Private-like internal state
     _secret_key: str = attrs.field(default="private")
-    _created_at: datetime = attrs.field(factory=datetime.now)
-    _internal_notes: list[str] = attrs.field(factory=list)
 
     # Note: range validation is handled by attrs validators and rounding by the converter above.
 

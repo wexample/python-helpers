@@ -51,8 +51,8 @@ VERSION_PRE_BUILD_NUMBER: int = 0
 
 
 class VersionDescriptor(TypedDict):
-    major: int | None
     intermediate: int | None
+    major: int | None
     minor: int | None
-    pre_build_type: str | None
     pre_build_number: int | None
+    pre_build_type: str | None

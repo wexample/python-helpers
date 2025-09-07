@@ -6,9 +6,9 @@ from typing import Any
 
 class PrivateFieldsMixin:
     """Mixin providing private attributes template."""
+    _created_at: datetime
 
     _metadata: dict[str, Any]
-    _created_at: datetime
     _secret_key: str = "default-key"
 
     def __init__(self) -> None:

@@ -11,10 +11,10 @@ class AttrsClass:
 
     Mirrors the structure of PydanticClass for testing cattrs/attrs flows.
     """
+    count: int = 0
 
     # Required fields
     name: str
-    count: int = 0
 
     # Optional fields
     description: str | None = None

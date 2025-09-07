@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 @attrs.define(eq=False)
 class Service:
-    name: str
     kernel: BaseKernel | None = None
+    name: str
 
     def initialize(self, kernel: BaseKernel) -> None:
         self.kernel = kernel

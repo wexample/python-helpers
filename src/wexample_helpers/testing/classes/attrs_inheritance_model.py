@@ -9,11 +9,11 @@ from ..mixins.public_fields_mixin import PublicFieldsMixin
 @attrs.define
 class AttrsInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin):
     """attrs model combining both mixins with additional functionality."""
+    description: str | None = None
 
     # PublicFieldsMixin expects these attributes to exist; define them with defaults
     name: str = ""
     tags: list[str] = attrs.field(factory=list)
-    description: str | None = None
     version: str = "1.0.0"
 
     # Extra fields akin to the Pydantic version

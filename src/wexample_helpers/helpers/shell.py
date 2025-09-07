@@ -364,10 +364,10 @@ class ShellResult:
     """Structured result for shell command execution."""
 
     args: str | list[str]
-    returncode: int
-    stdout: str | None
-    stderr: str | None
     cwd: str | None
     duration: float
-    start_time: float
     end_time: float
+    returncode: int
+    start_time: float
+    stderr: str | None
+    stdout: str | None
