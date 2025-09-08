@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 class MissingRequiredEnvVarError(Exception):
     """Custom exception raised when required environment variables are missing."""
+
     def __init__(self, missing_keys: StringsList) -> None:
         self.missing_keys = missing_keys
         message = f"Missing required environment variables: {', '.join(missing_keys)}"

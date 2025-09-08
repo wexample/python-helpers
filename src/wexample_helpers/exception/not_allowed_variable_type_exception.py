@@ -9,6 +9,7 @@ from wexample_helpers.exception.not_allowed_item_exception import (
 
 class NotAllowedVariableTypeException(NotAllowedItemException):
     """A specific exception for bad variables types"""
+
     error_code: str = "NOT_ALLOWED_VARIABLE_TYPE"
 
     def __init__(

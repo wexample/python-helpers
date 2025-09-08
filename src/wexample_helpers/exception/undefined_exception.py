@@ -18,6 +18,7 @@ class UndefinedException(Exception):
     - Error tracing
     - Serialization support
     """
+
     # Class-level error code, should be overridden by subclasses
     error_code: str = "UNDEFINED_ERROR"
 

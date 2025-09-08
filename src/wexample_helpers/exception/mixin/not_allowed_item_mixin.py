@@ -8,6 +8,7 @@ class NotAllowedItemMixin:
     1. A provided item is not found in a list of allowed items
     2. A required item was not provided at all
     """
+
     @staticmethod
     def format_not_allowed_item_message(
         item_type: str, item_value: str | None, allowed_values: list[str]

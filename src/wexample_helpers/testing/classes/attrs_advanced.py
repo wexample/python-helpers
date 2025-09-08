@@ -18,7 +18,6 @@ class AttrsAdvanced:
     """An attrs-based equivalent of the former PydanticAdvanced."""
     # Public fields
     id: str
-    status: Status = Status.PENDING
     # Complex types
     metadata: dict[str, str | int | bool] = attrs.field(factory=dict)
     # Score with range enforcement and rounding
@@ -27,6 +26,7 @@ class AttrsAdvanced:
         converter=lambda v: round(float(v), 2),
         validator=[ge(0), le(100)],
     )
+    status: Status = Status.PENDING
     _created_at: datetime = attrs.field(factory=datetime.now)
     _internal_notes: list[str] = attrs.field(factory=list)
     # Private-like internal state

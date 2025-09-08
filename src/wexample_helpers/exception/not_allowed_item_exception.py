@@ -11,6 +11,7 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
     1. A specific item value is not in a list of allowed values
     2. A required item was not provided at all
     """
+
     error_code: str = "NOT_ALLOWED_ITEM"
 
     def __init__(
