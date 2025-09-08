@@ -19,10 +19,8 @@ class AttrsAdvanced:
     # Public fields
     id: str
     status: Status = Status.PENDING
-
     # Complex types
     metadata: dict[str, str | int | bool] = attrs.field(factory=dict)
-
     # Score with range enforcement and rounding
     score: float = attrs.field(
         default=0.0,
@@ -31,7 +29,6 @@ class AttrsAdvanced:
     )
     _created_at: datetime = attrs.field(factory=datetime.now)
     _internal_notes: list[str] = attrs.field(factory=list)
-
     # Private-like internal state
     _secret_key: str = attrs.field(default="private")
     

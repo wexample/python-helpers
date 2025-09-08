@@ -9,7 +9,6 @@ class Registry(Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
     container: Any
     _fail_if_missing: bool = True
-
     _items: dict[str, RegistrableType] | None = None
 
     def __init__(self, container: Any) -> None:

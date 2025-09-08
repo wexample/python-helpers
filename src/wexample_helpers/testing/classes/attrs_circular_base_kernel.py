@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 class BaseKernel:
     """Base kernel using attrs; creates its Service and initializes circular link."""
     debug: bool = False
-
     name: str
     _service: Service | None = attrs.field(default=None, eq=False)
 
