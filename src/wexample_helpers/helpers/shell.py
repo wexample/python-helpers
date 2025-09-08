@@ -45,7 +45,6 @@ def shell_run(
     - inherit_stdio: If True, inherit parent's stdio (overrides capture).
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
-
     used_cmd: str | list[str]
 
     if shell:
@@ -133,7 +132,6 @@ async def shell_run_async(
 
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
-
     used_cmd: str | list[str]
 
     if shell:
@@ -246,7 +244,6 @@ async def shell_stream_async(
     - If callbacks are None, default to writing to sys.stdout/sys.stderr.
     - Returns the process return code (and raises if check=True and rc!=0).
     """
-
     used_cmd: str | list[str]
 
     if shell:
@@ -324,7 +321,6 @@ async def shell_stream_async(
 
 def shell_which(cmd: str) -> str | None:
     """Return full path to executable or None if not found (shutil.which wrapper)."""
-
     return shutil.which(cmd)
 
 

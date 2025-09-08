@@ -8,7 +8,6 @@ def ansi_center(text: str, width: int, fillchar: str = " ") -> str:
     pre/append fill characters, so links (OSC 8) and colors remain intact
     and margins aren't part of hyperlinks.
     """
-
     w = ansi_display_width(text)
     if w >= width:
         return text

@@ -169,7 +169,6 @@ def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
 
 def type_is_generic(type_value: Any) -> bool:
     """Detects if a given type is a generic type like List, Dict, Union"""
-
     # Set of known generic types for quick membership testing
     generic_types = {list, dict, tuple, Union}
 
