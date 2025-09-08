@@ -358,6 +358,7 @@ def _shell_apply_sudo(
 @dataclass
 class ShellResult:
     """Structured result for shell command execution."""
+
     args: str | list[str]
     cwd: str | None
     duration: float

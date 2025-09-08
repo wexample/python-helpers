@@ -11,7 +11,6 @@ class AttrsClass:
 
     Mirrors the structure of PydanticClass for testing cattrs/attrs flows.
     """
-
     count: int = 0
     # Field with default factory
     created_at: datetime = attrs.field(factory=datetime.now)

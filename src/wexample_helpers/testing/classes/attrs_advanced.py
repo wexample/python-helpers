@@ -16,7 +16,6 @@ class Status(Enum):
 @attrs.define
 class AttrsAdvanced:
     """An attrs-based equivalent of the former PydanticAdvanced."""
-
     # Public fields
     id: str
     # Complex types

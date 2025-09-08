@@ -10,5 +10,6 @@ if TYPE_CHECKING:
 
 class TraceFormatter:
     """Formats a sequence of ExceptionFrame objects into a human-readable string."""
+
     def format(self, frames: Iterable[ExceptionFrame]) -> str:
         return "\n".join(str(frame) for frame in frames)
