@@ -12,5 +12,6 @@ class SerializableMixin:
 
     def hydrate(self, data: StringKeysDict) -> None:
         pass
+
     def serialize(self) -> StringKeysDict:
         return {}

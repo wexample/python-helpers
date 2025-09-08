@@ -5,6 +5,7 @@ from .base_mixin import BaseMixin
 
 class PublicFieldsMixin(BaseMixin):
     """Mixin providing public fields template."""
+
     description: str | None
 
     name: str

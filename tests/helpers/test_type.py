@@ -119,6 +119,7 @@ class TestHelperType(AbstractTestHelpers):
             assert not type_is_compatible(
                 actual_type, expected_type
             ), f"Expected {actual_type} to be incompatible with {expected_type}"
+
     def test_type_is_generic(self) -> None:
         from wexample_helpers.helpers.type import type_is_generic
 

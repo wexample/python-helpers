@@ -26,6 +26,7 @@ class ExtendedBaseModel(PrintableMixin, BaseModel):
 
             cls_name = type(self).__name__
             raise AttributeError(f"{cls_name} has no attribute '{item}'") from None
+
     def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         from pydantic.fields import FieldInfo
 
