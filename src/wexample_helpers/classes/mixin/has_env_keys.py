@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 class HasEnvKeys:
     """Base mixin for environment variable validation."""
-
     env_config: dict[str, str | None] = {}
     env_files_directory: None | str = Field(
         description="The location of env files, may be different from the entrypoint",

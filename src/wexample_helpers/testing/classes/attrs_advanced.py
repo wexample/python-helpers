@@ -16,6 +16,7 @@ class Status(Enum):
 @attrs.define
 class AttrsAdvanced:
     """An attrs-based equivalent of the former PydanticAdvanced."""
+
     # Public fields
     id: str
     # Complex types
@@ -31,7 +32,7 @@ class AttrsAdvanced:
     _internal_notes: list[str] = attrs.field(factory=list)
     # Private-like internal state
     _secret_key: str = attrs.field(default="private")
-    
+
     # Note: range validation is handled by attrs validators and rounding by the converter above.
     @property
     def age(self) -> timedelta:

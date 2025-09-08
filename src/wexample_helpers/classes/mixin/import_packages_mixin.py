@@ -13,7 +13,6 @@ class ImportPackagesMixin:
     - __init_subclass__ merges declarations across the hierarchy (L→R, then self).
     - load_imports() imports modules, builds a parent namespace, and rebuilds Pydantic models.
     """
-
     import_packages: ClassVar[tuple[str, ...]] = ()
     # Track which concrete classes have completed load_imports()
     _imports_loaded_classes: ClassVar[set[type]] = set()

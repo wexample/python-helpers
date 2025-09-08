@@ -9,6 +9,7 @@ from ..mixins.public_fields_mixin import PublicFieldsMixin
 @attrs.define
 class AttrsInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin):
     """attrs model combining both mixins with additional functionality."""
+
     description: str | None = None
     # Extra fields akin to the Pydantic version
     enabled: bool = True

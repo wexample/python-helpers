@@ -5,7 +5,6 @@ from wexample_helpers.exception.undefined_exception import ExceptionData
 
 class NotAllowedItemData(ExceptionData):
     """Data model for exceptions related to not allowed items."""
-
     # NOTE: We intentionally avoid Pydantic here. Provide a simple
     # initializer and a `model_dump()` method to keep compatibility with
     # existing call sites that previously relied on Pydantic models.
