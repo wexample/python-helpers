@@ -34,9 +34,8 @@ class AttrsAdvanced:
 
     # Private-like internal state
     _secret_key: str = attrs.field(default="private")
-
+    
     # Note: range validation is handled by attrs validators and rounding by the converter above.
-
     @property
     def age(self) -> timedelta:
         return datetime.now() - self._created_at
