@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 @attrs.define(eq=False)
 class BaseKernel:
     """Base kernel using attrs; creates its Service and initializes circular link."""
-
     debug: bool = False
 
     name: str

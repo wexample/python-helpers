@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 
 class ExceptionHandler:
     """High-level API to format exceptions with truncation rules and path handling."""
-
     def __init__(self, formatter: TraceFormatter | None = None) -> None:
         from wexample_helpers.common.exception.formatter import TraceFormatter
 

@@ -8,7 +8,6 @@ from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
 
 
 class ExtendedBaseModel(PrintableMixin, BaseModel):
-
     def __getattr__(self, item):
         try:
             return super().__getattr__(item)

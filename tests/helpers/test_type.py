@@ -7,7 +7,6 @@ from wexample_helpers.testing.abstract_test_helpers import AbstractTestHelpers
 
 
 class TestHelperType(AbstractTestHelpers):
-
     def test_callable_annotations_behavior(self) -> None:
         from collections.abc import Callable
 

@@ -7,7 +7,6 @@ from wexample_helpers.service.registry import Registry
 
 class RegistryContainerMixin:
     """Abstract container for managing multiple registries of any type."""
-
     _registries: dict[str, Registry] = {}
 
     def get_item(self, registry_name: str, key: str, **kwargs) -> Any | None:

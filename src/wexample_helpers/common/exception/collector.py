@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 
 class TraceCollector:
     """Collects frames from current stack or from an exception traceback."""
-
     @staticmethod
     def from_stack(
         *,

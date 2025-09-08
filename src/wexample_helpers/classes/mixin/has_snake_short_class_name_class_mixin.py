@@ -6,7 +6,6 @@ from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import (
 
 
 class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
-
     @classmethod
     def get_name(cls) -> str:
         return cls.get_snake_short_class_name()

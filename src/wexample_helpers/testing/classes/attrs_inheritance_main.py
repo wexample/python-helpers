@@ -8,7 +8,6 @@ from .attrs_inheritance_model import AttrsInheritanceModel
 
 class AttrsInheritanceMain(AttrsInheritanceConfig, AttrsInheritanceModel):
     """Main class demonstrating multiple inheritance with attrs and mixins."""
-
     def __init__(self, **data) -> None:
         # Initialize attrs model first (it expects fields as kwargs)
         AttrsInheritanceModel.__init__(

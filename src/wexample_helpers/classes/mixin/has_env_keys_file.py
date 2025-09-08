@@ -5,7 +5,6 @@ from wexample_helpers.classes.mixin.has_env_keys import HasEnvKeys
 
 class HasEnvKeysFile(HasEnvKeys):
     """Mixin for classes that need to load env from files."""
-
     def _init_env_file(self, file_path: str) -> None:
         """
         Load environment variables from a file and validate them.

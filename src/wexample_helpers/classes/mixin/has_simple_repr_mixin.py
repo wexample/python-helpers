@@ -2,7 +2,6 @@ from __future__ import annotations
 
 
 class HasSimpleReprMixin:
-
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}"
 
