@@ -14,6 +14,10 @@ class AbstractDebug(ABC):
     def collect_data(self) -> None:
         """Collect debug data"""
 
+    def execute(self) -> None:
+        """Execute the debug operation"""
+        self.print()
+
     def print(self, silent: bool = False) -> str:
         """Print debug data, or return it as text if return_text is True."""
         lines = self._render_data(self.data)
@@ -25,59 +29,6 @@ class AbstractDebug(ABC):
     def render(self) -> str:
         """Return the formatted debug output as a string without printing."""
         return "\n".join(self._render_data(self.data))
-
-    def execute(self) -> None:
-        """Execute the debug operation"""
-        self.print()
-
-    def _get_relative_path(self, path: str) -> str:
-        """Convert absolute path to relative path if possible."""
-        try:
-            rel_path = os.path.relpath(path, self.cwd)
-            if not rel_path.startswith("../"):
-                return rel_path
-        except ValueError:
-            pass
-        return path
-
-    def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
-        """Format class name with module. Use a distinct color for classes."""
-        from wexample_helpers.const.colors import Colors
-
-        result = f"{indent}{Colors.MAGENTA}→ {name}{Colors.RESET}"
-        if module != "__main__":
-            result += f" {Colors.GREEN}({module}){Colors.RESET}"
-        return result
-
-    def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
-        """Format file path with optional line number."""
-        from wexample_helpers.const.colors import Colors
-        from wexample_helpers.helpers.cli import cli_make_clickable_path
-
-        rel_path = self._get_relative_path(path)
-        clickable_path = cli_make_clickable_path(path, short_title=rel_path)
-        line_info = f":{line}" if line is not None else ""
-        return f"{indent}    {Colors.YELLOW}File: {clickable_path}{line_info}{Colors.RESET}"
-
-    def _format_instance_name(self, name: str, indent: str = "") -> str:
-        """Format instance name with distinct class color."""
-        from wexample_helpers.const.colors import Colors
-
-        return f"{indent}{Colors.MAGENTA}Instance of {name}{Colors.RESET}"
-
-    def _format_attributes_header(self, indent: str = "") -> str:
-        """Format attributes section header."""
-        from wexample_helpers.const.colors import Colors
-
-        return f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}"
-
-    def _get_attribute_visibility(self, name: str) -> str:
-        """Get attribute visibility based on name."""
-        if name.startswith("__"):
-            return "private"
-        elif name.startswith("_"):
-            return "protected"
-        return "public"
 
     def _format_attribute_value(self, name: str, value: dict, indent: str = "") -> str:
         """Format attribute value in a clean YAML-like format."""
@@ -105,6 +56,55 @@ class AbstractDebug(ABC):
             )
 
         return "\n".join(result)
+
+    def _format_attributes_header(self, indent: str = "") -> str:
+        """Format attributes section header."""
+        from wexample_helpers.const.colors import Colors
+
+        return f"{indent}{Colors.BRIGHT}Instance attributes:{Colors.RESET}"
+
+    def _format_class_name(self, name: str, module: str, indent: str = "") -> str:
+        """Format class name with module. Use a distinct color for classes."""
+        from wexample_helpers.const.colors import Colors
+
+        result = f"{indent}{Colors.MAGENTA}→ {name}{Colors.RESET}"
+        if module != "__main__":
+            result += f" {Colors.GREEN}({module}){Colors.RESET}"
+        return result
+
+    def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
+        """Format file path with optional line number."""
+        from wexample_helpers.const.colors import Colors
+        from wexample_helpers.helpers.cli import cli_make_clickable_path
+
+        rel_path = self._get_relative_path(path)
+        clickable_path = cli_make_clickable_path(path, short_title=rel_path)
+        line_info = f":{line}" if line is not None else ""
+        return f"{indent}    {Colors.YELLOW}File: {clickable_path}{line_info}{Colors.RESET}"
+
+    def _format_instance_name(self, name: str, indent: str = "") -> str:
+        """Format instance name with distinct class color."""
+        from wexample_helpers.const.colors import Colors
+
+        return f"{indent}{Colors.MAGENTA}Instance of {name}{Colors.RESET}"
+
+    def _get_attribute_visibility(self, name: str) -> str:
+        """Get attribute visibility based on name."""
+        if name.startswith("__"):
+            return "private"
+        elif name.startswith("_"):
+            return "protected"
+        return "public"
+
+    def _get_relative_path(self, path: str) -> str:
+        """Convert absolute path to relative path if possible."""
+        try:
+            rel_path = os.path.relpath(path, self.cwd)
+            if not rel_path.startswith("../"):
+                return rel_path
+        except ValueError:
+            pass
+        return path
 
     def _inline_data(self, data: dict) -> str:
         """Render a compact, one-line representation of a data node (used for dict keys)."""

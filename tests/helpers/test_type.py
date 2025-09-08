@@ -7,42 +7,74 @@ from wexample_helpers.testing.abstract_test_helpers import AbstractTestHelpers
 
 
 class TestHelperType(AbstractTestHelpers):
-    def test_type_is_generic(self) -> None:
-        from wexample_helpers.helpers.type import type_is_generic
 
-        # Types that should be detected as generic
-        should_be_true = [
-            list,
-            dict,
-            tuple,
-            Union,
-            list[str],
-            dict[str, Any],
-            Union[list[int], dict[int, int]],
-        ]
+    def test_callable_annotations_behavior(self) -> None:
+        from collections.abc import Callable
 
-        # Types that should NOT be detected as generic
-        should_not_be_true = [
-            int,
-            str,
-            float,
-            bool,
-            complex,
-            Any,  # Any is not considered a generic type here
-            None,  # NoneType is also non-generic
-            object,
-            type,  # Built-in 'type' itself is not a generic
-        ]
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
+        from wexample_helpers.helpers.type import type_validate_or_fail
 
-        for type_ in should_be_true:
-            assert type_is_generic(
-                type_
-            ), f"{type_} should be detected as a generic type"
+        def annotated_ok() -> bool:
+            return True
 
-        for type_ in should_not_be_true:
-            assert not type_is_generic(
-                type_
-            ), f"{type_} should NOT be detected as a generic type"
+        def annotated_bad() -> str:
+            return "nope"
+
+        def no_annotations() -> int:
+            return 1
+
+        # Accept when return type matches
+        type_validate_or_fail(annotated_ok, Callable[..., bool])
+        # Reject when return type mismatches
+        with pytest.raises(NotAllowedVariableTypeException):
+            type_validate_or_fail(annotated_bad, Callable[..., bool])
+        # No annotations: accept for generic Callable and for Callable[..., Any]
+        type_validate_or_fail(no_annotations, Callable)
+        type_validate_or_fail(no_annotations, Callable[..., Any])
+        # But still reject if a specific incompatible return is enforced
+        # Our implementation treats missing hints as acceptable (early return), so this should pass
+        # Keep a positive check to lock current behavior
+        type_validate_or_fail(no_annotations, Callable[..., bool])
+
+    def test_empty_generics_are_accepted(self) -> None:
+        from wexample_helpers.helpers.type import type_validate_or_fail
+
+        # Empty containers should validate for any inner type
+        type_validate_or_fail([], list[int])
+        type_validate_or_fail(set(), set[int])
+        type_validate_or_fail({}, dict[str, int])
+
+    def test_pep604_union_equivalents(self) -> None:
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
+        from wexample_helpers.helpers.type import (
+            type_is_compatible,
+            type_validate_or_fail,
+        )
+
+        # Compatibility API currently targets typing.Union, ensure baseline
+        assert type_is_compatible(str, Union[str, int])
+        assert type_is_compatible(int, Union[str, int])
+        assert not type_is_compatible(float, Union[str, int])
+
+        # Validation path accepts PEP 604 `|` unions
+        type_validate_or_fail("x", str | int)
+        type_validate_or_fail(1, str | int)
+        with pytest.raises(NotAllowedVariableTypeException):
+            type_validate_or_fail(1.0, str | int)
+
+    def test_tuple_len_mismatch(self) -> None:
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
+        from wexample_helpers.helpers.type import type_validate_or_fail
+
+        # Exact length required
+        with pytest.raises(NotAllowedVariableTypeException):
+            type_validate_or_fail((1, 2), tuple[int, int, int])
 
     def test_type_is_compatibility(self) -> None:
         from collections.abc import Callable
@@ -87,74 +119,42 @@ class TestHelperType(AbstractTestHelpers):
             assert not type_is_compatible(
                 actual_type, expected_type
             ), f"Expected {actual_type} to be incompatible with {expected_type}"
+    def test_type_is_generic(self) -> None:
+        from wexample_helpers.helpers.type import type_is_generic
 
-    def test_pep604_union_equivalents(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-        from wexample_helpers.helpers.type import (
-            type_is_compatible,
-            type_validate_or_fail,
-        )
+        # Types that should be detected as generic
+        should_be_true = [
+            list,
+            dict,
+            tuple,
+            Union,
+            list[str],
+            dict[str, Any],
+            Union[list[int], dict[int, int]],
+        ]
 
-        # Compatibility API currently targets typing.Union, ensure baseline
-        assert type_is_compatible(str, Union[str, int])
-        assert type_is_compatible(int, Union[str, int])
-        assert not type_is_compatible(float, Union[str, int])
+        # Types that should NOT be detected as generic
+        should_not_be_true = [
+            int,
+            str,
+            float,
+            bool,
+            complex,
+            Any,  # Any is not considered a generic type here
+            None,  # NoneType is also non-generic
+            object,
+            type,  # Built-in 'type' itself is not a generic
+        ]
 
-        # Validation path accepts PEP 604 `|` unions
-        type_validate_or_fail("x", str | int)
-        type_validate_or_fail(1, str | int)
-        with pytest.raises(NotAllowedVariableTypeException):
-            type_validate_or_fail(1.0, str | int)
+        for type_ in should_be_true:
+            assert type_is_generic(
+                type_
+            ), f"{type_} should be detected as a generic type"
 
-    def test_empty_generics_are_accepted(self) -> None:
-        from wexample_helpers.helpers.type import type_validate_or_fail
-
-        # Empty containers should validate for any inner type
-        type_validate_or_fail([], list[int])
-        type_validate_or_fail(set(), set[int])
-        type_validate_or_fail({}, dict[str, int])
-
-    def test_callable_annotations_behavior(self) -> None:
-        from collections.abc import Callable
-
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-        from wexample_helpers.helpers.type import type_validate_or_fail
-
-        def annotated_ok() -> bool:
-            return True
-
-        def annotated_bad() -> str:
-            return "nope"
-
-        def no_annotations() -> int:
-            return 1
-
-        # Accept when return type matches
-        type_validate_or_fail(annotated_ok, Callable[..., bool])
-        # Reject when return type mismatches
-        with pytest.raises(NotAllowedVariableTypeException):
-            type_validate_or_fail(annotated_bad, Callable[..., bool])
-        # No annotations: accept for generic Callable and for Callable[..., Any]
-        type_validate_or_fail(no_annotations, Callable)
-        type_validate_or_fail(no_annotations, Callable[..., Any])
-        # But still reject if a specific incompatible return is enforced
-        # Our implementation treats missing hints as acceptable (early return), so this should pass
-        # Keep a positive check to lock current behavior
-        type_validate_or_fail(no_annotations, Callable[..., bool])
-
-    def test_tuple_len_mismatch(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-        from wexample_helpers.helpers.type import type_validate_or_fail
-
-        # Exact length required
-        with pytest.raises(NotAllowedVariableTypeException):
-            type_validate_or_fail((1, 2), tuple[int, int, int])
+        for type_ in should_not_be_true:
+            assert not type_is_generic(
+                type_
+            ), f"{type_} should NOT be detected as a generic type"
 
     def test_type_to_name(self) -> None:
         from wexample_helpers.helpers.type import type_to_name

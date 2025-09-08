@@ -8,6 +8,24 @@ from wexample_helpers.classes.mixin.printable_mixin import PrintableMixin
 
 
 class ExtendedBaseModel(PrintableMixin, BaseModel):
+
+    def __getattr__(self, item):
+        try:
+            return super().__getattr__(item)
+        except AttributeError:
+            # Special diagnostic for pydantic initialization issues
+            if item == "__pydantic_private__":
+                cls_name = type(self).__name__
+                msg = (
+                    f"{cls_name} is not fully initialized by Pydantic.'.\n"
+                    "This typically happens when a mixin defines __init__ and is initialized before BaseModel.\n"
+                    "Fix: in your class __init__, call ExtendedBaseModel.__init__(self, **kwargs) first, then your mixins;\n"
+                    "or move mixin initialization logic to a post-init hook."
+                )
+                raise AttributeError(msg) from None
+
+            cls_name = type(self).__name__
+            raise AttributeError(f"{cls_name} has no attribute '{item}'") from None
     def __init_subclass__(cls, **kwargs) -> None:  # type: ignore[override]
         from pydantic.fields import FieldInfo
 
@@ -89,21 +107,3 @@ class ExtendedBaseModel(PrintableMixin, BaseModel):
         raise NotImplementedError(
             message or f"{cls.__name__}.{method} must be implemented by subclass"
         )
-
-    def __getattr__(self, item):
-        try:
-            return super().__getattr__(item)
-        except AttributeError:
-            # Special diagnostic for pydantic initialization issues
-            if item == "__pydantic_private__":
-                cls_name = type(self).__name__
-                msg = (
-                    f"{cls_name} is not fully initialized by Pydantic.'.\n"
-                    "This typically happens when a mixin defines __init__ and is initialized before BaseModel.\n"
-                    "Fix: in your class __init__, call ExtendedBaseModel.__init__(self, **kwargs) first, then your mixins;\n"
-                    "or move mixin initialization logic to a post-init hook."
-                )
-                raise AttributeError(msg) from None
-
-            cls_name = type(self).__name__
-            raise AttributeError(f"{cls_name} has no attribute '{item}'") from None

@@ -23,11 +23,11 @@ class BaseKernel:
         self._service = service_cls(name=f"{self.name}_service")
         self._service.initialize(self)
 
+    @classmethod
+    def get_service_class(cls) -> type[Service]:
+        return Service
+
     @property
     def service(self) -> Service:
         assert self._service is not None
         return self._service
-
-    @classmethod
-    def get_service_class(cls) -> type[Service]:
-        return Service

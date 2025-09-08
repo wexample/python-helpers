@@ -17,33 +17,21 @@ class ExceptionHandler:
 
         self.formatter = formatter or TraceFormatter()
 
-    def _get_truncate_index(
-        self, frames: list[ExceptionFrame], error: Exception
-    ) -> int:
-        from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
+    def format_current_trace(
+        self,
+        *,
+        path_style: DebugPathStyle = DebugPathStyle.FULL,
+        paths_map: dict[str, str] | None = None,
+        skip_frames: int = 0,
+    ) -> str:
+        from wexample_helpers.common.exception.collector import TraceCollector
 
-        error_module = error.__class__.__module__
-        for rule_type in ErrorTruncateRules:
-            if error_module.startswith(rule_type.module_prefix):
-                rule = rule_type.rule
-
-                if rule.truncate_stack_count is not None:
-                    return min(rule.truncate_stack_count, len(frames))
-
-                for i, frame in enumerate(frames):
-                    filename = frame.filename
-
-                    if (
-                        rule.truncate_after_module
-                        and rule.truncate_after_module in filename
-                    ):
-                        return i + 1
-
-                    if rule.truncate_after_file and filename.endswith(
-                        rule.truncate_after_file
-                    ):
-                        return i + 1
-        return -1
+        frames = TraceCollector.from_stack(
+            skip_frames=skip_frames,
+            path_style=path_style,
+            paths_map=paths_map,
+        )
+        return self.formatter.format(frames)
 
     def format_exception(
         self,
@@ -76,18 +64,30 @@ class ExceptionHandler:
 
         return f"{self.formatter.format(frames)}\n{type(error).__name__}: {error}"
 
-    def format_current_trace(
-        self,
-        *,
-        path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: dict[str, str] | None = None,
-        skip_frames: int = 0,
-    ) -> str:
-        from wexample_helpers.common.exception.collector import TraceCollector
+    def _get_truncate_index(
+        self, frames: list[ExceptionFrame], error: Exception
+    ) -> int:
+        from wexample_helpers.enums.error_truncate_rule import ErrorTruncateRules
 
-        frames = TraceCollector.from_stack(
-            skip_frames=skip_frames,
-            path_style=path_style,
-            paths_map=paths_map,
-        )
-        return self.formatter.format(frames)
+        error_module = error.__class__.__module__
+        for rule_type in ErrorTruncateRules:
+            if error_module.startswith(rule_type.module_prefix):
+                rule = rule_type.rule
+
+                if rule.truncate_stack_count is not None:
+                    return min(rule.truncate_stack_count, len(frames))
+
+                for i, frame in enumerate(frames):
+                    filename = frame.filename
+
+                    if (
+                        rule.truncate_after_module
+                        and rule.truncate_after_module in filename
+                    ):
+                        return i + 1
+
+                    if rule.truncate_after_file and filename.endswith(
+                        rule.truncate_after_file
+                    ):
+                        return i + 1
+        return -1

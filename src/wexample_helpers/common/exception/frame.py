@@ -15,24 +15,8 @@ class ExceptionFrame:
     path_style: DebugPathStyle = DebugPathStyle.FULL
     paths_map: dict[str, str] | None = None
 
-    def get_formatted_path(self) -> str:
-        path = self.filename
-
-        if self.paths_map:
-            for prod_path, local_path in self.paths_map.items():
-                if path.startswith(prod_path):
-                    path = path.replace(prod_path, local_path, 1)
-                    break
-
-        if self.path_style == DebugPathStyle.FULL:
-            return path
-        elif self.path_style == DebugPathStyle.RELATIVE:
-            try:
-                return os.path.relpath(path)
-            except ValueError:
-                return path
-        else:
-            return os.path.basename(path)
+    def __str__(self) -> str:  # pragma: no cover – str delegates to format
+        return self.format()
 
     def format(self) -> str:
         from wexample_helpers.helpers.cli import cli_make_clickable_path
@@ -52,5 +36,21 @@ class ExceptionFrame:
             return f"{base}{code_section}"
         return base
 
-    def __str__(self) -> str:  # pragma: no cover – str delegates to format
-        return self.format()
+    def get_formatted_path(self) -> str:
+        path = self.filename
+
+        if self.paths_map:
+            for prod_path, local_path in self.paths_map.items():
+                if path.startswith(prod_path):
+                    path = path.replace(prod_path, local_path, 1)
+                    break
+
+        if self.path_style == DebugPathStyle.FULL:
+            return path
+        elif self.path_style == DebugPathStyle.RELATIVE:
+            try:
+                return os.path.relpath(path)
+            except ValueError:
+                return path
+        else:
+            return os.path.basename(path)

@@ -10,9 +10,10 @@ class RegistryContainerMixin:
 
     _registries: dict[str, Registry] = {}
 
-    def _get_registry_class_type(self) -> type[Registry]:
-        """Get the type of registry to use. Must be overridden by child classes."""
-        return Registry
+    def get_item(self, registry_name: str, key: str, **kwargs) -> Any | None:
+        """Retrieve an item from a specific registry by its key."""
+        registry = self.get_registry(registry_name)
+        return registry.get(key, **kwargs)
 
     def get_registry(
         self, name: str, registry_class_type: type[Registry] | None = None
@@ -22,14 +23,6 @@ class RegistryContainerMixin:
         if registry_name not in self._registries:
             return self.set_registry(registry_name, registry_class_type)
         return self._registries[registry_name]
-
-    def set_registry(
-        self, name: str, registry_class_type: type[Registry] | None = None
-    ) -> Registry:
-        self._registries[name] = (
-            registry_class_type or self._get_registry_class_type()
-        )(container=self)
-        return self._registries[name]
 
     def register_item(self, registry_name: str, key: str, item: Any) -> Registry:
         """Register an item in a specific registry."""
@@ -48,7 +41,14 @@ class RegistryContainerMixin:
             registry.register(key, item)
         return registry
 
-    def get_item(self, registry_name: str, key: str, **kwargs) -> Any | None:
-        """Retrieve an item from a specific registry by its key."""
-        registry = self.get_registry(registry_name)
-        return registry.get(key, **kwargs)
+    def set_registry(
+        self, name: str, registry_class_type: type[Registry] | None = None
+    ) -> Registry:
+        self._registries[name] = (
+            registry_class_type or self._get_registry_class_type()
+        )(container=self)
+        return self._registries[name]
+
+    def _get_registry_class_type(self) -> type[Registry]:
+        """Get the type of registry to use. Must be overridden by child classes."""
+        return Registry

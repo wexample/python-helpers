@@ -23,6 +23,20 @@ class HasEnvKeys:
     def __init__(self, **kwargs) -> None:
         self.env_config = {}
 
+    def get_env_parameter(self, key: str, default: Any = None) -> Any:
+        from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
+
+        if not key in self.env_config:
+            if default is not None:
+                return default
+
+            raise KeyNotFoundError(
+                message=f"Environment variable is not defined",
+                key=key,
+                available_keys=list(self.env_config.keys()),
+            )
+        return self.env_config[key]
+
     def get_expected_env_keys(self) -> list[str]:
         """
         Returns a list of required environment variable keys.
@@ -35,21 +49,6 @@ class HasEnvKeys:
 
         assert self.env_files_directory is not None
         return Path(self.env_files_directory)
-
-    def _validate_env_keys(self) -> None:
-        """
-        Validates that all required environment variables are set.
-        Raises MissingRequiredEnvVarError if any required variable is missing.
-        """
-        from wexample_helpers.errors.missing_required_env_var_error import (
-            MissingRequiredEnvVarError,
-        )
-
-        missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
-
-        if missing_keys:
-
-            raise MissingRequiredEnvVarError(missing_keys)
 
     def _get_missing_env_keys(self, required_keys: StringsList) -> StringsList:
         """Check for missing environment variables in both os.environ and _env_values."""
@@ -71,16 +70,17 @@ class HasEnvKeys:
         self.env_config = env_dict
         self._validate_env_keys()
 
-    def get_env_parameter(self, key: str, default: Any = None) -> Any:
-        from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
+    def _validate_env_keys(self) -> None:
+        """
+        Validates that all required environment variables are set.
+        Raises MissingRequiredEnvVarError if any required variable is missing.
+        """
+        from wexample_helpers.errors.missing_required_env_var_error import (
+            MissingRequiredEnvVarError,
+        )
 
-        if not key in self.env_config:
-            if default is not None:
-                return default
+        missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
-            raise KeyNotFoundError(
-                message=f"Environment variable is not defined",
-                key=key,
-                available_keys=list(self.env_config.keys()),
-            )
-        return self.env_config[key]
+        if missing_keys:
+
+            raise MissingRequiredEnvVarError(missing_keys)

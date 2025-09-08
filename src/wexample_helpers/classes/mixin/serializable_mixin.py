@@ -9,8 +9,8 @@ T = TypeVar("T", bound="SerializableMixin")
 
 
 class SerializableMixin:
-    def serialize(self) -> StringKeysDict:
-        return {}
 
     def hydrate(self, data: StringKeysDict) -> None:
         pass
+    def serialize(self) -> StringKeysDict:
+        return {}

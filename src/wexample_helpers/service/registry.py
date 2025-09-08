@@ -16,9 +16,8 @@ class Registry(Generic[RegistrableType]):
         self._items = {}
         self.container = container
 
-    def register(self, key: str, item: RegistrableType) -> None:
-        """Register an item in the registry."""
-        self._items[key] = item
+    def all_keys(self) -> list[str]:
+        return list(self._items.keys())
 
     def get(self, key: str, **kwargs) -> RegistrableType | None:
         """
@@ -38,8 +37,9 @@ class Registry(Generic[RegistrableType]):
         """Check if an item exists in the registry."""
         return key in self._items
 
-    def all_keys(self) -> list[str]:
-        return list(self._items.keys())
+    def register(self, key: str, item: RegistrableType) -> None:
+        """Register an item in the registry."""
+        self._items[key] = item
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:
         if item is None and self._fail_if_missing:

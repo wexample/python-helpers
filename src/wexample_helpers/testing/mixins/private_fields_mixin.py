@@ -15,6 +15,11 @@ class PrivateFieldsMixin:
         self._created_at = datetime.now()
         self._metadata = {}
 
+    @property
+    def created_at(self) -> datetime:
+        """Read-only access to creation time."""
+        return self._created_at
+
     def get_metadata(self) -> dict[str, Any]:
         """Safe access to private metadata."""
         return self._metadata.copy()
@@ -22,8 +27,3 @@ class PrivateFieldsMixin:
     def set_metadata(self, key: str, value: Any) -> None:
         """Safely set metadata value."""
         self._metadata[key] = value
-
-    @property
-    def created_at(self) -> datetime:
-        """Read-only access to creation time."""
-        return self._created_at

@@ -13,17 +13,6 @@ class Service:
     kernel: BaseKernel | None = None
     name: str
 
-    def initialize(self, kernel: BaseKernel) -> None:
-        self.kernel = kernel
-
-    @property
-    def mode(self) -> str:
-        return "basic"
-
-    @property
-    def base_kernel(self) -> BaseKernel | None:
-        return self.kernel
-
     @property
     def advanced_kernel(self) -> AdvancedKernel | None:
         # Only available when attached to an AdvancedKernel
@@ -32,6 +21,17 @@ class Service:
             # Avoid direct import to keep circular hints safe at runtime
             return k  # type: ignore[return-value]
         return None
+
+    @property
+    def base_kernel(self) -> BaseKernel | None:
+        return self.kernel
+
+    @property
+    def mode(self) -> str:
+        return "basic"
+
+    def initialize(self, kernel: BaseKernel) -> None:
+        self.kernel = kernel
 
 
 @attrs.define(eq=False)
