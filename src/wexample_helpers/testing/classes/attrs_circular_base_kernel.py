@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     pass
 
 
-@attrs.define(eq=False, kw_only = True)
+@attrs.define(eq=False, kw_only=True)
 class BaseKernel:
     """Base kernel using attrs; creates its Service and initializes circular link."""
 

@@ -5,7 +5,7 @@ from datetime import datetime
 import attrs
 
 
-@attrs.define(kw_only = True)
+@attrs.define(kw_only=True)
 class AttrsClass:
     """An attrs-based class with various field types.
 

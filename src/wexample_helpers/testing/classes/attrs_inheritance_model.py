@@ -6,7 +6,7 @@ from ..mixins.private_fields_mixin import PrivateFieldsMixin
 from ..mixins.public_fields_mixin import PublicFieldsMixin
 
 
-@attrs.define(kw_only = True)
+@attrs.define(kw_only=True)
 class AttrsInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin):
     """attrs model combining both mixins with additional functionality."""
 
