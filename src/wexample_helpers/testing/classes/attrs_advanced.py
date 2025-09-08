@@ -13,7 +13,7 @@ class Status(Enum):
     INACTIVE = "inactive"
 
 
-@attrs.define
+@attrs.define(kw_only = True)
 class AttrsAdvanced:
     """An attrs-based equivalent of the former PydanticAdvanced."""
 

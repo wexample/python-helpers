@@ -6,7 +6,7 @@ from .attrs_circular_base_kernel import BaseKernel
 from .attrs_circular_service import AdvancedService, Service
 
 
-@attrs.define
+@attrs.define(kw_only = True)
 class AdvancedKernel(BaseKernel):
     version: str = "1.0.0"
 

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .attrs_circular_base_kernel import AdvancedKernel, BaseKernel
 
 
-@attrs.define(eq=False)
+@attrs.define(eq=False, kw_only = True)
 class Service:
     kernel: BaseKernel | None = None
     name: str
@@ -34,7 +34,7 @@ class Service:
         self.kernel = kernel
 
 
-@attrs.define(eq=False)
+@attrs.define(eq=False, kw_only = True)
 class AdvancedService(Service):
     @property
     def mode(self) -> str:
