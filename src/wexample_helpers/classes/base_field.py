@@ -21,17 +21,30 @@ class BaseField(ABC):
 
     def to_attrs_field(self) -> Any:
         """Convert to attrs field with proper metadata and validation."""
+        # Separate attrs parameters from metadata
+        attrs_params = ['init', 'repr', 'eq', 'order', 'hash', 'compare', 'kw_only', 'on_setattr', 'alias', 'type']
+        
         metadata = {
             'description': self.description,
             'visibility': self.visibility.value,
             'field_type': self.__class__.__name__
         }
-        metadata.update(self.extra_kwargs)
+        
+        # Build field_kwargs with attrs parameters
+        field_kwargs = {'metadata': metadata}
+        
+        # Extract attrs-specific parameters from extra_kwargs
+        for param in attrs_params:
+            if param in self.extra_kwargs:
+                field_kwargs[param] = self.extra_kwargs[param]
+        
+        # Add remaining extra_kwargs to metadata
+        remaining_kwargs = {k: v for k, v in self.extra_kwargs.items() if k not in attrs_params}
+        metadata.update(remaining_kwargs)
 
         # Combine name validation + custom validation
         validators = self._build_validators()
 
-        field_kwargs = {'metadata': metadata}
         if self.default is not None:
             field_kwargs['default'] = self.default
         if validators:
