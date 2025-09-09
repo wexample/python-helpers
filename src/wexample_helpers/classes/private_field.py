@@ -11,6 +11,6 @@ class PrivateField(BaseField):
     def visibility(self) -> FieldVisibility:
         return FieldVisibility.PRIVATE
 
-def private_field(description: str, validator: Callable = None, **kwargs) -> Any:
-    """Create a private field."""
-    return PrivateField(description, validator, **kwargs).to_attrs_field()
+def private_field(description: str, validator: Callable = None, init: bool = False, **kwargs) -> Any:
+    """Create a private field. Private fields have init=False by default."""
+    return PrivateField(description, validator, init=init, **kwargs).to_attrs_field()
