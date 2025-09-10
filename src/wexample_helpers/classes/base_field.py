@@ -30,7 +30,8 @@ class BaseField(ABC):
         """Convert to attrs field with proper metadata and validation."""
         attrs_params = [
             "init", "repr", "eq", "order", "hash", "compare",
-            "kw_only", "on_setattr", "alias", "type", "factory"
+            "kw_only", "on_setattr", "alias", "type", "factory",
+            "converter"
         ]
 
         metadata = {
@@ -41,17 +42,16 @@ class BaseField(ABC):
 
         field_kwargs = {"metadata": metadata}
 
-        # seulement si un default explicite est fourni
         if self.default is not attrs.NOTHING:
             field_kwargs["default"] = self.default
 
-        # attrs-specific kwargs
         for param in attrs_params:
             if param in self.extra_kwargs:
                 field_kwargs[param] = self.extra_kwargs[param]
 
-        # Les kwargs restants → metadata
-        remaining_kwargs = {k: v for k, v in self.extra_kwargs.items() if k not in attrs_params}
+        remaining_kwargs = {
+            k: v for k, v in self.extra_kwargs.items() if k not in attrs_params
+        }
         metadata.update(remaining_kwargs)
 
         # Validators
@@ -64,16 +64,23 @@ class BaseField(ABC):
     def _build_validators(self) -> Optional[Callable]:
         """Build combined validator function."""
         name_validator = self._create_name_validator()
-        custom_validator = self.validator
+        validators = self.validator
 
-        if not name_validator and not custom_validator:
+        # Normalize validators into a list
+        if validators is None:
+            validators = []
+        elif not isinstance(validators, (list, tuple)):
+            validators = [validators]
+
+        if name_validator:
+            validators.insert(0, name_validator)
+
+        if not validators:
             return None
 
         def combined_validator(instance, attribute, value):
-            if name_validator:
-                name_validator(instance, attribute, value)
-            if custom_validator:
-                custom_validator(instance, attribute, value)
+            for v in validators:
+                v(instance, attribute, value)
             return value
 
         return combined_validator

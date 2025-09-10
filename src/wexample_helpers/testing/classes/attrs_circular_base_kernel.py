@@ -2,21 +2,31 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import attrs
-
+from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 from .attrs_circular_service import Service
+from ...classes.private_field import private_field
 
 if TYPE_CHECKING:
     pass
 
 
-@attrs.define(eq=False, kw_only=True)
-class BaseKernel:
+@base_class
+class BaseKernel(BaseClass):
     """Base kernel using attrs; creates its Service and initializes circular link."""
 
-    debug: bool = False
-    name: str
-    _service: Service | None = attrs.field(default=None, eq=False)
+    debug: bool = public_field(
+        default=False,
+        description="Enable or disable debug mode for the kernel",
+    )
+    name: str = public_field(
+        description="Name of the kernel instance",
+    )
+    _service: Service | None = private_field(
+        default=None,
+        description="Internal reference to the associated Service instance",
+    )
 
     def __attrs_post_init__(self) -> None:
         service_cls = self.get_service_class()

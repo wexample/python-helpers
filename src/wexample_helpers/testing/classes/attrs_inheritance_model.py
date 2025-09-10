@@ -1,27 +1,41 @@
 from __future__ import annotations
 
-import attrs
-
 from ..mixins.private_fields_mixin import PrivateFieldsMixin
 from ..mixins.public_fields_mixin import PublicFieldsMixin
+from ...classes.base_class import BaseClass
+from ...classes.field import public_field
+from ...decorator.base_class import base_class
 
 
-@attrs.define(kw_only=True)
-class AttrsInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin):
+@base_class
+class AttrsInheritanceModel(PublicFieldsMixin, PrivateFieldsMixin, BaseClass):
     """attrs model combining both mixins with additional functionality."""
 
-    description: str | None = None
-    # Extra fields akin to the Pydantic version
-    enabled: bool = True
-    # PublicFieldsMixin expects these attributes to exist; define them with defaults
-    name: str = ""
-    priority: int = 0
-    tags: list[str] = attrs.field(factory=list)
-    version: str = "1.0.0"
+    description: str | None = public_field(
+        default=None,
+        description="Optional text description of the model",
+    )
+    enabled: bool = public_field(
+        default=True,
+        description="Indicates whether the model is enabled",
+    )
+    name: str = public_field(
+        default="",
+        description="Name of the model, required by PublicFieldsMixin",
+    )
+    priority: int = public_field(
+        default=0,
+        description="Priority value used for ordering or processing",
+    )
+    tags: list[str] = public_field(
+        factory=list,
+        description="List of tags associated with the model",
+    )
+    version: str = public_field(
+        default="1.0.0",
+        description="Version identifier of the model",
+    )
 
     def __attrs_post_init__(self) -> None:
-        # Initialize mixins that set private fields
-        PrivateFieldsMixin.__init__(self)
-        PublicFieldsMixin.__init__(self)
         # Initialize any mixin-specific stuff if needed
         self._metadata["initialized_at"] = self._created_at

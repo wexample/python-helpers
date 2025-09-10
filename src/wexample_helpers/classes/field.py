@@ -13,9 +13,10 @@ class Field(BaseField):
     def visibility(self) -> FieldVisibility:
         return FieldVisibility.PUBLIC
 
+
 def public_field(
         description: str,
-        validator: Callable = None,
+        validator: None | Callable | list[Callable] = None,
         default: Any = attrs.NOTHING,
         **kwargs
 ) -> Any:
