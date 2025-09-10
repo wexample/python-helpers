@@ -17,6 +17,12 @@ class BaseClass(ABC):
         super().__init_subclass__(**kwargs)
         cls._validate_field_types()
 
+    def _execute_super_attrs_post_init_if_exists(self) -> None:
+        """Call parent's __attrs_post_init__ if it exists in MRO."""
+        post_init = getattr(super(BaseClass, self), "__attrs_post_init__", None)
+        if callable(post_init):
+            post_init()
+
     def _filter_kwargs(self, kwargs: dict, allowed_params: list[str]) -> dict:
         """Generic method to filter initialization parameters."""
         return {key: value for key, value in kwargs.items() if key in allowed_params}
