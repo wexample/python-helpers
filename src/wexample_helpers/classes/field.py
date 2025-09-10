@@ -1,7 +1,6 @@
-from typing import Callable, Any
+from typing import Any, Callable
 
 import attrs
-
 from wexample_helpers.classes.base_field import BaseField
 from wexample_helpers.enums.field_visibility import FieldVisibility
 

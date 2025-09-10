@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 
 from attrs.validators import ge, le
-
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.private_field import private_field

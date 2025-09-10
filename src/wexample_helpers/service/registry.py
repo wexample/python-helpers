@@ -16,12 +16,10 @@ class Registry(Generic[RegistrableType]):
 
     container: Any = public_field(description="The service container")
     _fail_if_missing: bool = private_field(
-        description="Define if missing item is fatal or not",
-        default=False
+        description="Define if missing item is fatal or not", default=False
     )
     _items: dict[str, RegistrableType] | None = private_field(
-        description="The items of the registry",
-        factory=dict
+        description="The items of the registry", factory=dict
     )
 
     def __init__(self, container: Any) -> None:

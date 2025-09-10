@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
-from .attrs_circular_service import Service
+
 from ...classes.private_field import private_field
+from .attrs_circular_service import Service
 
 if TYPE_CHECKING:
     pass

@@ -1,9 +1,8 @@
 from abc import ABC
-from typing import Any, Optional, Callable
+from typing import Any, Callable, Optional
 
 import attrs
 from attrs import field
-
 from wexample_helpers.enums.field_visibility import FieldVisibility
 
 

@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.service.registry import Registry
 
 
-from wexample_helpers.classes.base_class import BaseClass
-from wexample_helpers.decorator.base_class import base_class
 @base_class
 class RegistryContainerMixin(BaseClass):
     """Abstract container for managing multiple registries of any type."""

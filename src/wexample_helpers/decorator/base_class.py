@@ -1,4 +1,4 @@
-from typing import Optional, Callable, Type
+from typing import Callable, Optional, Type
 
 import attrs
 

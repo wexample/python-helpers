@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import inspect
 from abc import ABC
-from typing import NoReturn, TYPE_CHECKING
+from typing import TYPE_CHECKING, NoReturn
 
 from wexample_helpers.decorator.base_class import base_class
 

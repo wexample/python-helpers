@@ -17,8 +17,7 @@ class HasEnvKeys(BaseClass):
     """Base mixin for environment variable validation."""
 
     env_config: dict[str, str | None] = public_field(
-        factory=dict,
-        description="The loaded environment configuration"
+        factory=dict, description="The loaded environment configuration"
     )
     env_files_directory: None | str = public_field(
         description="The location of env files, may be different from the entrypoint",

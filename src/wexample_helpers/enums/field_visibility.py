@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class FieldVisibility(Enum):
     PUBLIC = "public"
     PRIVATE = "private"
