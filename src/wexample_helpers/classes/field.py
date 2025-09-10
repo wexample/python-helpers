@@ -1,5 +1,7 @@
 from typing import Callable, Any
 
+import attrs
+
 from wexample_helpers.classes.base_field import BaseField
 from wexample_helpers.enums.field_visibility import FieldVisibility
 
@@ -11,6 +13,11 @@ class Field(BaseField):
     def visibility(self) -> FieldVisibility:
         return FieldVisibility.PUBLIC
 
-def public_field(description: str, validator: Callable = None, **kwargs) -> Any:
+def public_field(
+        description: str,
+        validator: Callable = None,
+        default: Any = attrs.NOTHING,
+        **kwargs
+) -> Any:
     """Create a public field."""
-    return Field(description, validator, **kwargs).to_attrs_field()
+    return Field(description, validator=validator, default=default, **kwargs).to_attrs_field()

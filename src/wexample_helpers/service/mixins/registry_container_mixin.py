@@ -5,7 +5,10 @@ from typing import Any
 from wexample_helpers.service.registry import Registry
 
 
-class RegistryContainerMixin:
+from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.decorator.base_class import base_class
+@base_class
+class RegistryContainerMixin(BaseClass):
     """Abstract container for managing multiple registries of any type."""
 
     _registries: dict[str, Registry] = {}

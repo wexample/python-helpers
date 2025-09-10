@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Any, Optional, Callable
 
+import attrs
 from attrs import field
 
 from wexample_helpers.enums.field_visibility import FieldVisibility
@@ -9,7 +10,13 @@ from wexample_helpers.enums.field_visibility import FieldVisibility
 class BaseField(ABC):
     """Base class for all field types."""
 
-    def __init__(self, description: str, validator: Callable = None, default: Any = None, **kwargs):
+    def __init__(
+        self,
+        description: str,
+        validator: Optional[Callable] = None,
+        default: Any = attrs.NOTHING,
+        **kwargs
+    ):
         self.description = description
         self.validator = validator
         self.default = default
@@ -21,34 +28,36 @@ class BaseField(ABC):
 
     def to_attrs_field(self) -> Any:
         """Convert to attrs field with proper metadata and validation."""
-        # Separate attrs parameters from metadata
-        attrs_params = ['init', 'repr', 'eq', 'order', 'hash', 'compare', 'kw_only', 'on_setattr', 'alias', 'type']
-        
+        attrs_params = [
+            "init", "repr", "eq", "order", "hash", "compare",
+            "kw_only", "on_setattr", "alias", "type", "factory"
+        ]
+
         metadata = {
-            'description': self.description,
-            'visibility': self.visibility.value,
-            'field_type': self.__class__.__name__
+            "description": self.description,
+            "visibility": self.visibility.value,
+            "field_type": self.__class__.__name__,
         }
-        
-        # Build field_kwargs with attrs parameters
-        field_kwargs = {'metadata': metadata}
-        
-        # Extract attrs-specific parameters from extra_kwargs
+
+        field_kwargs = {"metadata": metadata}
+
+        # seulement si un default explicite est fourni
+        if self.default is not attrs.NOTHING:
+            field_kwargs["default"] = self.default
+
+        # attrs-specific kwargs
         for param in attrs_params:
             if param in self.extra_kwargs:
                 field_kwargs[param] = self.extra_kwargs[param]
-        
-        # Add remaining extra_kwargs to metadata
+
+        # Les kwargs restants → metadata
         remaining_kwargs = {k: v for k, v in self.extra_kwargs.items() if k not in attrs_params}
         metadata.update(remaining_kwargs)
 
-        # Combine name validation + custom validation
+        # Validators
         validators = self._build_validators()
-
-        if self.default is not None:
-            field_kwargs['default'] = self.default
         if validators:
-            field_kwargs['validator'] = validators
+            field_kwargs["validator"] = validators
 
         return field(**field_kwargs)
 
@@ -61,14 +70,10 @@ class BaseField(ABC):
             return None
 
         def combined_validator(instance, attribute, value):
-            # Check naming convention first
             if name_validator:
                 name_validator(instance, attribute, value)
-
-            # Then custom validation
             if custom_validator:
                 custom_validator(instance, attribute, value)
-
             return value
 
         return combined_validator
@@ -91,5 +96,5 @@ class BaseField(ABC):
     def _get_expected_prefix(self) -> Optional[str]:
         """Get expected prefix based on visibility."""
         if self.visibility in [FieldVisibility.PRIVATE, FieldVisibility.PROTECTED]:
-            return '_'
+            return "_"
         return None

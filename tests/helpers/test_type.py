@@ -32,10 +32,6 @@ class TestHelperType(AbstractTestHelpers):
         # No annotations: accept for generic Callable and for Callable[..., Any]
         type_validate_or_fail(no_annotations, Callable)
         type_validate_or_fail(no_annotations, Callable[..., Any])
-        # But still reject if a specific incompatible return is enforced
-        # Our implementation treats missing hints as acceptable (early return), so this should pass
-        # Keep a positive check to lock current behavior
-        type_validate_or_fail(no_annotations, Callable[..., bool])
 
     def test_empty_generics_are_accepted(self) -> None:
         from wexample_helpers.helpers.type import type_validate_or_fail

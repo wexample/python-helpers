@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from pydantic import Field
+from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -10,16 +12,20 @@ if TYPE_CHECKING:
     from wexample_helpers.const.types import StringsList
 
 
-class HasEnvKeys:
+@base_class
+class HasEnvKeys(BaseClass):
     """Base mixin for environment variable validation."""
 
-    env_config: dict[str, str | None] = {}
-    env_files_directory: None | str = Field(
+    env_config: dict[str, str | None] = public_field(
+        factory=dict,
+        description="The loaded environment configuration"
+    )
+    env_files_directory: None | str = public_field(
         description="The location of env files, may be different from the entrypoint",
         default=None,
     )
 
-    def __init__(self, **kwargs) -> None:
+    def __attrs_post_init__(self) -> None:
         self.env_config = {}
 
     def get_env_parameter(self, key: str, default: Any = None) -> Any:
@@ -81,5 +87,4 @@ class HasEnvKeys:
         missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:
-
             raise MissingRequiredEnvVarError(missing_keys)

@@ -2,15 +2,27 @@ from __future__ import annotations
 
 from typing import Any, Generic, TypeVar
 
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.classes.private_field import private_field
+
 RegistrableType = TypeVar("RegistrableType")
 
+from wexample_helpers.decorator.base_class import base_class
 
+
+@base_class
 class Registry(Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
 
-    container: Any
-    _fail_if_missing: bool = True
-    _items: dict[str, RegistrableType] | None = None
+    container: Any = public_field(description="The service container")
+    _fail_if_missing: bool = private_field(
+        description="Define if missing item is fatal or not",
+        default=False
+    )
+    _items: dict[str, RegistrableType] | None = private_field(
+        description="The items of the registry",
+        factory=dict
+    )
 
     def __init__(self, container: Any) -> None:
         self._items = {}
