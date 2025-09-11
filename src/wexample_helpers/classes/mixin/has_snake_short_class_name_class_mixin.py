@@ -3,10 +3,8 @@ from __future__ import annotations
 from wexample_helpers.classes.mixin.has_short_class_name_class_mixin import (
     HasShortClassNameClassMixin,
 )
-from wexample_helpers.decorator.base_class import base_class
 
 
-@base_class
 class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
     @classmethod
     def get_name(cls) -> str:

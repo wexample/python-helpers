@@ -4,11 +4,13 @@ from typing import TYPE_CHECKING
 
 import attrs
 
+from ...decorator.base_class import base_class
+
 if TYPE_CHECKING:
     from .attrs_circular_base_kernel import AdvancedKernel, BaseKernel
 
 
-@attrs.define(eq=False, kw_only=True)
+@base_class
 class Service:
     kernel: BaseKernel | None = None
     name: str
@@ -34,7 +36,7 @@ class Service:
         self.kernel = kernel
 
 
-@attrs.define(eq=False, kw_only=True)
+@base_class
 class AdvancedService(Service):
     @property
     def mode(self) -> str:

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import attrs
-
 from .attrs_circular_base_kernel import BaseKernel
 from .attrs_circular_service import AdvancedService, Service
+from ...decorator.base_class import base_class
 
 
-@attrs.define(kw_only=True)
+@base_class
 class AdvancedKernel(BaseKernel):
     version: str = "1.0.0"
 
