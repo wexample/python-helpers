@@ -1,10 +1,11 @@
-from typing import Callable, Optional, Type
+from typing import Optional, Type
+from collections.abc import Callable
 
 import attrs
 
 
-def base_class(_cls: Optional[Type] = None, *, slots: bool = False) -> Callable:
-    def wrap(cls: Type) -> Type:
+def base_class(_cls: type | None = None, *, slots: bool = False) -> Callable:
+    def wrap(cls: type) -> type:
         return attrs.define(kw_only=True, slots=slots)(cls)
 
     if _cls is None:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from ...decorator.base_class import base_class
 from .attrs_circular_base_kernel import BaseKernel
 from .attrs_circular_service import AdvancedService, Service
-from ...decorator.base_class import base_class
 
 
 @base_class

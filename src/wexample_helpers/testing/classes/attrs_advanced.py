@@ -38,7 +38,6 @@ class AttrsAdvanced(BaseClass):
         default=Status.PENDING,
         description="Current status of the object",
     )
-
     _created_at: datetime = private_field(
         factory=datetime.now,
         description="Timestamp when the object was created",

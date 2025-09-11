@@ -1,5 +1,6 @@
 from abc import ABC
-from typing import Any, Callable, Optional
+from typing import Any, Optional
+from collections.abc import Callable
 
 import attrs
 from attrs import field
@@ -12,7 +13,7 @@ class BaseField(ABC):
     def __init__(
         self,
         description: str,
-        validator: Optional[Callable] = None,
+        validator: Callable | None = None,
         default: Any = attrs.NOTHING,
         **kwargs
     ):
@@ -60,7 +61,7 @@ class BaseField(ABC):
 
         return field(**field_kwargs)
 
-    def _build_validators(self) -> Optional[Callable]:
+    def _build_validators(self) -> Callable | None:
         """Build combined validator function."""
         name_validator = self._create_name_validator()
         validators = self.validator
@@ -84,7 +85,7 @@ class BaseField(ABC):
 
         return combined_validator
 
-    def _create_name_validator(self) -> Optional[Callable]:
+    def _create_name_validator(self) -> Callable | None:
         """Create validator for field name conventions."""
         expected_prefix = self._get_expected_prefix()
         if not expected_prefix:
@@ -99,7 +100,7 @@ class BaseField(ABC):
 
         return name_validator
 
-    def _get_expected_prefix(self) -> Optional[str]:
+    def _get_expected_prefix(self) -> str | None:
         """Get expected prefix based on visibility."""
         if self.visibility in [FieldVisibility.PRIVATE, FieldVisibility.PROTECTED]:
             return "_"

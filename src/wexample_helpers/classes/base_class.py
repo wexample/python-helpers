@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, NoReturn
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
-    from wexample_helpers.classes.base_field import BaseField
+    pass
 
 
 @base_class(slots=True)
