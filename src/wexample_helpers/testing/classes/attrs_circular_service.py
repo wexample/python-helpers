@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-
 from ...decorator.base_class import base_class
 
 if TYPE_CHECKING:

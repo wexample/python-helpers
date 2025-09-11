@@ -1,5 +1,5 @@
-from typing import Optional, Type
 from collections.abc import Callable
+from typing import Optional, Type
 
 import attrs
 

@@ -1,6 +1,6 @@
 from abc import ABC
-from typing import Any, Optional
 from collections.abc import Callable
+from typing import Any, Optional
 
 import attrs
 from attrs import field
