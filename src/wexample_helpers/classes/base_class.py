@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 @base_class(slots=True)
 class BaseClass(ABC):
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs) -> None:
         """Validate that all non-uppercase properties inherit from BaseField."""
         super().__init_subclass__(**kwargs)
         cls._validate_field_types()
@@ -34,7 +34,7 @@ class BaseClass(ABC):
         )
 
     @classmethod
-    def _validate_field_types(cls):
+    def _validate_field_types(cls) -> None:
         """Ensure all non-uppercase class attributes are BaseField instances."""
         # Import here to avoid circular imports
         from wexample_helpers.classes.base_field import BaseField

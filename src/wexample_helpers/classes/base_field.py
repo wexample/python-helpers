@@ -16,7 +16,7 @@ class BaseField(ABC):
         validator: Callable | None = None,
         default: Any = attrs.NOTHING,
         **kwargs,
-    ):
+    ) -> None:
         self.description = description
         self.validator = validator
         self.default = default
@@ -100,7 +100,7 @@ class BaseField(ABC):
         if not expected_prefix:
             return None
 
-        def name_validator(instance, attribute, value):
+        def name_validator(instance, attribute, value) -> None:
             if not attribute.name.startswith(expected_prefix):
                 raise ValueError(
                     f"{self.__class__.__name__} '{attribute.name}' must start with "
