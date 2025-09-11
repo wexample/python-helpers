@@ -12,7 +12,7 @@ def public_field(
     description: str,
     validator: None | Callable | list[Callable] = None,
     default: Any = attrs.NOTHING,
-    **kwargs
+    **kwargs,
 ) -> Any:
     """Create a public field."""
     return Field(
