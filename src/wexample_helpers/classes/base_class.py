@@ -79,7 +79,7 @@ class BaseClass(ABC):
 
     def _execute_super_attrs_post_init_if_exists(self) -> None:
         """Call parent's __attrs_post_init__ if it exists in MRO."""
-        post_init = getattr(super(BaseClass, self), "__attrs_post_init__", None)
+        post_init = getattr(super(), "__attrs_post_init__", None)
         if callable(post_init):
             post_init()
 
