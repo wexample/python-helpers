@@ -1,5 +1,5 @@
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from wexample_helpers.classes.base_field import BaseField
 from wexample_helpers.enums.field_visibility import FieldVisibility

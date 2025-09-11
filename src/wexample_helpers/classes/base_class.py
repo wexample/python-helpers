@@ -19,9 +19,9 @@ class BaseClass(ABC):
 
     @classmethod
     def _raise_not_implemented_error(
-            cls,
-            method: str | None = None,
-            message: str | None = None,
+        cls,
+        method: str | None = None,
+        message: str | None = None,
     ) -> NoReturn:
         """Convenience to raise a standardized NotImplementedError."""
         if method is None:
@@ -42,23 +42,27 @@ class BaseClass(ABC):
         # Get all class attributes (including inherited ones)
         for name, value in cls.__dict__.items():
             # Skip special attributes, methods, and uppercase constants
-            if (name.startswith('_') or
-                    name.isupper() or
-                    callable(value) or
-                    isinstance(value, (classmethod, staticmethod, property))):
+            if (
+                name.startswith("_")
+                or name.isupper()
+                or callable(value)
+                or isinstance(value, (classmethod, staticmethod, property))
+            ):
                 continue
 
             # Check if it's an attrs field
-            if hasattr(value, '__class__') and hasattr(value.__class__, '__module__'):
+            if hasattr(value, "__class__") and hasattr(value.__class__, "__module__"):
                 # Check if it's an attrs field by looking at its type
-                if 'attrs' in str(type(value)):
+                if "attrs" in str(type(value)):
                     # For attrs fields, we need to check the metadata or factory
-                    metadata = getattr(value, 'metadata', {})
-                    field_type = metadata.get('field_type')
+                    metadata = getattr(value, "metadata", {})
+                    field_type = metadata.get("field_type")
 
                     # If it has field_type metadata, it should be a BaseField subclass
-                    if field_type and not any(field_type == base.__name__
-                                              for base in BaseField.__subclasses__() + [BaseField]):
+                    if field_type and not any(
+                        field_type == base.__name__
+                        for base in BaseField.__subclasses__() + [BaseField]
+                    ):
                         raise TypeError(
                             f"Field '{name}' in class '{cls.__name__}' must use a BaseField subclass. "
                             f"Found field_type: {field_type}"

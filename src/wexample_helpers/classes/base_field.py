@@ -15,7 +15,7 @@ class BaseField(ABC):
         description: str,
         validator: Callable | None = None,
         default: Any = attrs.NOTHING,
-        **kwargs
+        **kwargs,
     ):
         self.description = description
         self.validator = validator
@@ -29,9 +29,18 @@ class BaseField(ABC):
     def to_attrs_field(self) -> Any:
         """Convert to attrs field with proper metadata and validation."""
         attrs_params = [
-            "init", "repr", "eq", "order", "hash", "compare",
-            "kw_only", "on_setattr", "alias", "type", "factory",
-            "converter"
+            "init",
+            "repr",
+            "eq",
+            "order",
+            "hash",
+            "compare",
+            "kw_only",
+            "on_setattr",
+            "alias",
+            "type",
+            "factory",
+            "converter",
         ]
 
         metadata = {
