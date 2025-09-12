@@ -4,7 +4,10 @@ from collections.abc import Callable
 from typing import Any
 
 from wexample_helpers.classes.base_field import BaseField
-from wexample_helpers.enums.field_visibility import FieldVisibility
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
 def protected_field(description: str, validator: Callable = None, **kwargs) -> Any:
@@ -17,4 +20,5 @@ class ProtectedField(BaseField):
 
     @property
     def visibility(self) -> FieldVisibility:
+        from wexample_helpers.enums.field_visibility import FieldVisibility
         return FieldVisibility.PROTECTED

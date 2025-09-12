@@ -7,10 +7,10 @@ from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
 from ...classes.private_field import private_field
-from .attrs_circular_service import Service
 
 if TYPE_CHECKING:
     pass
+    from attrs_circular_service import Service
 
 
 @base_class
@@ -36,6 +36,7 @@ class BaseKernel(BaseClass):
 
     @classmethod
     def get_service_class(cls) -> type[Service]:
+        from attrs_circular_service import Service
         return Service
 
     @property

@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-
-from wexample_helpers.enums.debug_path_style import DebugPathStyle
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 
 @dataclass(frozen=True)
@@ -37,6 +38,7 @@ class ExceptionFrame:
         return base
 
     def get_formatted_path(self) -> str:
+        from wexample_helpers.enums.debug_path_style import DebugPathStyle
         path = self.filename
 
         if self.paths_map:

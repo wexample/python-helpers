@@ -4,7 +4,9 @@ from typing import Any
 
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.service.registry import Registry
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.service.registry import Registry
 
 
 @base_class
@@ -54,4 +56,5 @@ class RegistryContainerMixin(BaseClass):
 
     def _get_registry_class_type(self) -> type[Registry]:
         """Get the type of registry to use. Must be overridden by child classes."""
+        from wexample_helpers.service.registry import Registry
         return Registry

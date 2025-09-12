@@ -5,7 +5,10 @@ from typing import Any
 
 import attrs
 from wexample_helpers.classes.base_field import BaseField
-from wexample_helpers.enums.field_visibility import FieldVisibility
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
 def public_field(
@@ -25,4 +28,5 @@ class Field(BaseField):
 
     @property
     def visibility(self) -> FieldVisibility:
+        from wexample_helpers.enums.field_visibility import FieldVisibility
         return FieldVisibility.PUBLIC

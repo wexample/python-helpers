@@ -1,7 +1,8 @@
 from __future__ import annotations
-
-from datetime import datetime
 from typing import Any
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class PrivateFieldsMixin:
@@ -12,6 +13,7 @@ class PrivateFieldsMixin:
     _secret_key: str = "default-key"
 
     def __init__(self) -> None:
+        from datetime import datetime
         self._created_at = datetime.now()
         self._metadata = {}
 

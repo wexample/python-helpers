@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from enum import Enum
 
 from attrs.validators import ge, le
@@ -8,6 +8,9 @@ from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.private_field import private_field
 from wexample_helpers.decorator.base_class import base_class
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from datetime import datetime, timedelta
 
 
 class Status(Enum):
@@ -54,6 +57,7 @@ class AttrsAdvanced(BaseClass):
     # Note: range validation is handled by attrs validators and rounding by the converter above.
     @property
     def age(self) -> timedelta:
+        from datetime import datetime
         return datetime.now() - self._created_at
 
     @property

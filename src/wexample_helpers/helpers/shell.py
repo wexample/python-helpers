@@ -14,6 +14,8 @@ from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from collections.abc import Mapping, Sequence
+    from wexample_helpers.const.types import PathOrString
 
 
 def shell_run(

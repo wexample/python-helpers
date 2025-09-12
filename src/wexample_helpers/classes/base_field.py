@@ -4,8 +4,10 @@ from collections.abc import Callable
 from typing import Any
 
 import attrs
-from attrs import field
-from wexample_helpers.enums.field_visibility import FieldVisibility
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
 class BaseField:
@@ -25,10 +27,12 @@ class BaseField:
 
     @property
     def visibility(self) -> FieldVisibility:
+        from wexample_helpers.enums.field_visibility import FieldVisibility
         return FieldVisibility.PUBLIC  # Override in subclasses
 
     def to_attrs_field(self) -> Any:
         """Convert to attrs field with proper metadata and validation."""
+        from attrs import field
         attrs_params = [
             "init",
             "repr",
@@ -112,6 +116,7 @@ class BaseField:
 
     def _get_expected_prefix(self) -> str | None:
         """Get expected prefix based on visibility."""
+        from wexample_helpers.enums.field_visibility import FieldVisibility
         if self.visibility in [FieldVisibility.PRIVATE, FieldVisibility.PROTECTED]:
             return "_"
         return None
