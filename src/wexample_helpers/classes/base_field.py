@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from abc import ABC
 from collections.abc import Callable
 from typing import Any
 
@@ -9,7 +8,7 @@ from attrs import field
 from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
-class BaseField(ABC):
+class BaseField:
     """Base class for all field types."""
 
     def __init__(

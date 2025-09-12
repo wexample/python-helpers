@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from abc import ABC
 from typing import Any
 
 import pytest
 
 
-class AbstractTestHelpers(ABC):
+class AbstractTestHelpers:
     def _test_type_validate_or_fail(
         self,
         success_cases: list[tuple[Any, Any]] = None,

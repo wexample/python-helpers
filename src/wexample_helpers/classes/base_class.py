@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import inspect
-from abc import ABC
 from typing import TYPE_CHECKING, NoReturn
 
 from wexample_helpers.decorator.base_class import base_class
@@ -10,8 +9,8 @@ if TYPE_CHECKING:
     pass
 
 
-@base_class(slots=True)
-class BaseClass(ABC):
+@base_class
+class BaseClass:
     def __init_subclass__(cls, **kwargs) -> None:
         """Validate that all non-uppercase properties inherit from BaseField."""
         super().__init_subclass__(**kwargs)

@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import os
-from abc import ABC, abstractmethod
+
+from wexample_helpers.classes.abstract_method import abstract_method
 
 
-class AbstractDebug(ABC):
+class AbstractDebug:
     def __init__(self) -> None:
         self.data = None
         self.cwd = os.getcwd()
         self.collect_data()
 
-    @abstractmethod
+    @abstract_method
     def collect_data(self) -> None:
         """Collect debug data"""
 
