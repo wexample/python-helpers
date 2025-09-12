@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from wexample_helpers.enums.debug_path_style import DebugPathStyle
+
+from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 
 @dataclass(frozen=True)

@@ -4,10 +4,10 @@ import inspect
 from typing import TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+from wexample_helpers.common.exception.frame import ExceptionFrame
 
 if TYPE_CHECKING:
     from types import TracebackType
-    from frame import ExceptionFrame
 
 
 class TraceCollector:
@@ -15,16 +15,15 @@ class TraceCollector:
 
     @staticmethod
     def from_stack(
-        *,
-        skip_frames: int | None = None,
-        path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: dict[str, str] | None = None,
+            *,
+            skip_frames: int | None = None,
+            path_style: DebugPathStyle = DebugPathStyle.FULL,
+            paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
-        from frame import ExceptionFrame
         frames: list[ExceptionFrame] = []
         for frame in inspect.stack()[
-            (skip_frames + 1 if skip_frames is not None else 0) :
-        ]:
+                     (skip_frames + 1 if skip_frames is not None else 0):
+                     ]:
             frames.append(
                 ExceptionFrame(
                     filename=frame.filename,
@@ -40,12 +39,11 @@ class TraceCollector:
 
     @staticmethod
     def from_traceback(
-        traceback: TracebackType,
-        *,
-        path_style: DebugPathStyle = DebugPathStyle.FULL,
-        paths_map: dict[str, str] | None = None,
+            traceback: TracebackType,
+            *,
+            path_style: DebugPathStyle = DebugPathStyle.FULL,
+            paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
-        from frame import ExceptionFrame
         frames: list[ExceptionFrame] = []
         current = traceback
         while current is not None:
