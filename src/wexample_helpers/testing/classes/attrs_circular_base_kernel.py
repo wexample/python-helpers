@@ -9,7 +9,6 @@ from wexample_helpers.decorator.base_class import base_class
 from ...classes.private_field import private_field
 
 if TYPE_CHECKING:
-    pass
     from attrs_circular_service import Service
 
 
