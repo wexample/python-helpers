@@ -38,6 +38,7 @@ class ExceptionFrame:
 
     def get_formatted_path(self) -> str:
         from wexample_helpers.enums.debug_path_style import DebugPathStyle
+
         path = self.filename
 
         if self.paths_map:

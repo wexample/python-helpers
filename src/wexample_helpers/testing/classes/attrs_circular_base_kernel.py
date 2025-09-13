@@ -36,6 +36,7 @@ class BaseKernel(BaseClass):
     @classmethod
     def get_service_class(cls) -> type[Service]:
         from attrs_circular_service import Service
+
         return Service
 
     @property

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import attrs
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     from wexample_helpers.enums.field_visibility import FieldVisibility
 
 

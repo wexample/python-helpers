@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from datetime import timedelta
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from attrs.validators import ge, le
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.private_field import private_field
 from wexample_helpers.decorator.base_class import base_class
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from datetime import datetime, timedelta
 

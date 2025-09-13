@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING, Any
 from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Callable, Mapping, Sequence
+
     from wexample_helpers.const.types import PathOrString
 
 
