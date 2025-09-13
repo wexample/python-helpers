@@ -2,7 +2,7 @@
 
 Some python basic helpers and constants.
 
-Version: 0.0.67
+Version: 0.0.68
 
 ## Requirements
 
