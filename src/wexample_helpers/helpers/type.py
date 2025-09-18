@@ -16,23 +16,42 @@ if TYPE_CHECKING:
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     from types import UnionType
+    from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
 
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
 
     # Validate Union (supports typing.Union and PEP 604 | operator which yields types.UnionType)
     if origin is Union or origin is UnionType:
+        typed_dict_errors = []
         for arg in args:
             # Check TypedDict in Union
             if _is_typed_dict(arg) and isinstance(value, dict):
                 try:
                     _validate_typed_dict(value, arg)
                     return True
+                except NotAllowedVariableTypeException as e:
+                    # Collect TypedDict specific errors
+                    error_msg = getattr(e, 'variable_type', str(e))
+                    typed_dict_errors.append(f"{arg.__name__}: {error_msg}")
+                    continue
                 except Exception:
                     continue
             # Regular type validation
             if type_generic_value_is_valid(value, arg):
                 return True
+        
+        # If we had TypedDict errors and value is dict, raise specific error
+        if typed_dict_errors and isinstance(value, dict):
+            from wexample_helpers.exception.not_allowed_variable_type_exception import (
+                NotAllowedVariableTypeException,
+            )
+            raise NotAllowedVariableTypeException(
+                variable_type=f"dict validation failed: {'; '.join(typed_dict_errors)}",
+                variable_value=value,
+                allowed_types=[allowed_type],
+            )
+        
         return False
 
     # Handle Type[T] annotations: we expect "value" to be a class, and it must be a subclass of T
@@ -302,6 +321,7 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 
 def _is_typed_dict(type_hint: Any) -> bool:
     """Check if a type hint is a TypedDict."""
+
     # Check module and class name for TypedDict
     if hasattr(type_hint, '__module__') and hasattr(type_hint, '__name__'):
         # Direct check for typing module TypedDict classes
@@ -325,12 +345,13 @@ def _is_typed_dict(type_hint: Any) -> bool:
         pass
     
     # Fallback check for standard attributes
-    return (
+    result = (
         hasattr(type_hint, '__annotations__') and
         hasattr(type_hint, '__total__') and
         hasattr(type_hint, '__required_keys__') and
         hasattr(type_hint, '__optional_keys__')
     )
+    return result
 
 
 def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
@@ -365,8 +386,17 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
     # Validate types of present keys
     for key, expected_type in annotations.items():
         if key in value:
+            # Unwrap Required/NotRequired wrappers
+            actual_type = expected_type
+            if hasattr(expected_type, '__origin__'):
+                origin = get_origin(expected_type)
+                if origin and hasattr(origin, '__name__') and origin.__name__ in ('Required', 'NotRequired'):
+                    args = get_args(expected_type)
+                    if args:
+                        actual_type = args[0]
+
             try:
-                type_validate_or_fail(value[key], expected_type)
+                type_validate_or_fail(value[key], actual_type)
             except Exception as e:
                 # Handle both NotAllowedVariableTypeException and other exceptions
                 error_msg = getattr(e, 'variable_type', str(e))
