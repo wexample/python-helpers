@@ -28,7 +28,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
                 try:
                     _validate_typed_dict(value, arg)
                     return True
-                except:
+                except Exception:
                     continue
             # Regular type validation
             if type_generic_value_is_valid(value, arg):
@@ -302,6 +302,29 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 
 def _is_typed_dict(type_hint: Any) -> bool:
     """Check if a type hint is a TypedDict."""
+    # Check module and class name for TypedDict
+    if hasattr(type_hint, '__module__') and hasattr(type_hint, '__name__'):
+        # Direct check for typing module TypedDict classes
+        if (hasattr(type_hint, '__annotations__') and 
+            hasattr(type_hint, '__total__')):
+            return True
+    
+    # Check for typing_extensions.TypedDict or typing.TypedDict metaclass
+    try:
+        from typing_extensions import _TypedDictMeta
+        if isinstance(type_hint, _TypedDictMeta):
+            return True
+    except ImportError:
+        pass
+    
+    try:
+        import typing
+        if hasattr(typing, '_TypedDictMeta') and isinstance(type_hint, typing._TypedDictMeta):
+            return True
+    except (ImportError, AttributeError):
+        pass
+    
+    # Fallback check for standard attributes
     return (
         hasattr(type_hint, '__annotations__') and
         hasattr(type_hint, '__total__') and
@@ -344,9 +367,11 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
         if key in value:
             try:
                 type_validate_or_fail(value[key], expected_type)
-            except NotAllowedVariableTypeException as e:
+            except Exception as e:
+                # Handle both NotAllowedVariableTypeException and other exceptions
+                error_msg = getattr(e, 'variable_type', str(e))
                 raise NotAllowedVariableTypeException(
-                    variable_type=f"dict key '{key}' has invalid type: {e.variable_type}",
+                    variable_type=f"dict key '{key}' has invalid type: {error_msg}",
                     variable_value=value,
                     allowed_types=[typed_dict_type],
                 )
