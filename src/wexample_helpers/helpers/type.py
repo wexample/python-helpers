@@ -6,8 +6,11 @@ from typing import (
     cast,
     get_args,
     get_origin,
-    get_type_hints,
+    get_type_hints, TYPE_CHECKING,
 )
+
+if TYPE_CHECKING:
+    from types import UnionType
 
 
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
@@ -214,6 +217,11 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
     if allowed_type is Any:
         return
 
+    # Check for TypedDict validation
+    if _is_typed_dict(allowed_type) and isinstance(value, dict):
+        _validate_typed_dict(value, allowed_type)
+        return
+
     if allowed_type is Callable:
         if callable(value):
             return
@@ -253,8 +261,8 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 
                     # Handle generic types
                     if type_is_compatible(
-                        actual_type=cast(type, actual_return_type_hint),
-                        allowed_type=return_type,
+                            actual_type=cast(type, actual_return_type_hint),
+                            allowed_type=return_type,
                     ):
                         return
 
@@ -279,6 +287,58 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
         variable_value=value,
         allowed_types=[allowed_type],
     )
+
+
+def _is_typed_dict(type_hint: Any) -> bool:
+    """Check if a type hint is a TypedDict."""
+    return (
+        hasattr(type_hint, '__annotations__') and
+        hasattr(type_hint, '__total__') and
+        hasattr(type_hint, '__required_keys__') and
+        hasattr(type_hint, '__optional_keys__')
+    )
+
+
+def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
+    """Validate a dict against a TypedDict type."""
+    from wexample_helpers.exception.not_allowed_variable_type_exception import (
+        NotAllowedVariableTypeException,
+    )
+    
+    annotations = getattr(typed_dict_type, '__annotations__', {})
+    required_keys = getattr(typed_dict_type, '__required_keys__', set())
+    optional_keys = getattr(typed_dict_type, '__optional_keys__', set())
+    
+    # Check for missing required keys
+    missing_keys = required_keys - set(value.keys())
+    if missing_keys:
+        raise NotAllowedVariableTypeException(
+            variable_type=f"dict missing keys: {missing_keys}",
+            variable_value=value,
+            allowed_types=[typed_dict_type],
+        )
+    
+    # Check for unexpected keys
+    allowed_keys = required_keys | optional_keys
+    unexpected_keys = set(value.keys()) - allowed_keys
+    if unexpected_keys:
+        raise NotAllowedVariableTypeException(
+            variable_type=f"dict with unexpected keys: {unexpected_keys}",
+            variable_value=value,
+            allowed_types=[typed_dict_type],
+        )
+    
+    # Validate types of present keys
+    for key, expected_type in annotations.items():
+        if key in value:
+            try:
+                type_validate_or_fail(value[key], expected_type)
+            except NotAllowedVariableTypeException as e:
+                raise NotAllowedVariableTypeException(
+                    variable_type=f"dict key '{key}' has invalid type: {e.variable_type}",
+                    variable_value=value,
+                    allowed_types=[typed_dict_type],
+                )
 
 
 def _safe_issubclass(a: Any, b: Any) -> bool:
