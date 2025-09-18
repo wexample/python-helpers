@@ -22,7 +22,18 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
 
     # Validate Union (supports typing.Union and PEP 604 | operator which yields types.UnionType)
     if origin is Union or origin is UnionType:
-        return any(type_generic_value_is_valid(value, arg) for arg in args)
+        for arg in args:
+            # Check TypedDict in Union
+            if _is_typed_dict(arg) and isinstance(value, dict):
+                try:
+                    _validate_typed_dict(value, arg)
+                    return True
+                except:
+                    continue
+            # Regular type validation
+            if type_generic_value_is_valid(value, arg):
+                return True
+        return False
 
     # Handle Type[T] annotations: we expect "value" to be a class, and it must be a subclass of T
     if origin is type:
