@@ -13,12 +13,13 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
     error_code: str = "NOT_ALLOWED_VARIABLE_TYPE"
 
     def __init__(
-        self,
-        variable_type: Any,
-        variable_value: Any,
-        allowed_types: list[Any] | None = None,
-        cause: Exception | None = None,
-        previous: Exception | None = None,
+            self,
+            variable_type: Any,
+            variable_value: Any,
+            allowed_types: list[Any] | None = None,
+            cause: Exception | None = None,
+            previous: Exception | None = None,
+            message: str | None = None
     ) -> None:
         from wexample_helpers.helpers.string import string_truncate
         from wexample_helpers.helpers.type import type_to_name
@@ -38,7 +39,7 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
             cause=cause,
             previous=previous,
             message=(
-                f"Invalid variable type '{var_type_name}' for value "
+                f"{message or ''}Invalid variable type '{var_type_name}' for value "
                 f"{string_truncate(str(variable_value), 1000)!r}. "
                 f"Allowed types: {types_str}."
             ),
