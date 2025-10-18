@@ -28,15 +28,14 @@ def trace_format(
 
 
 def trace_get_frames(
-    skip_frames: int | None = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: dict | None = None,
 ) -> list[TraceFrame]:
     """Convert stack frames to TraceFrame objects."""
     from wexample_helpers.common.exception.collector import TraceCollector
 
+    # Collect all frames, filtering happens in the formatter
     return TraceCollector.from_stack(
-        skip_frames=(skip_frames + 1) if (skip_frames is not None) else None,
         path_style=path_style,
         paths_map=paths_map,
     )
@@ -70,12 +69,9 @@ def trace_print(
         skip_frames: If an int, filter internal frames and show count.
                     If None, show all frames including internals.
     """
-    # Always skip this function's frame when collecting (1 frame)
-    # This is independent of the skip_frames parameter which controls filtering
     print(
         trace_format(
             trace_get_frames(
-                skip_frames=1,  # Only skip trace_print itself
                 path_style=path_style,
                 paths_map=paths_map,
             ),

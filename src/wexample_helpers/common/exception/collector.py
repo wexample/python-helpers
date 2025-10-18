@@ -21,14 +21,12 @@ class TraceCollector:
     @staticmethod
     def from_stack(
             *,
-            skip_frames: int | None = None,
             path_style: DebugPathStyle = DebugPathStyle.FULL,
             paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
         frames: list[ExceptionFrame] = []
-        for frame in inspect.stack()[
-                     (skip_frames + 1 if skip_frames is not None else 0):
-                     ]:
+        # Skip only from_stack itself (frame 0)
+        for frame in inspect.stack()[1:]:
             is_internal = TraceCollector._is_internal_frame(frame.filename)
             # Join all code context lines if available
             code = "".join(frame.code_context) if frame.code_context else None
