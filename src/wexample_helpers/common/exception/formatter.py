@@ -25,7 +25,11 @@ class TraceFormatter:
 
         if skip_frames is None:
             # Show all frames including internals
-            return "\n".join(str(frame) for frame in frames_list)
+            result = "\n".join(str(frame) for frame in frames_list)
+            # Add note about trace collector being excluded
+            result += "\n\n" + "=" * 50 + "\n"
+            result += "Note: TraceCollector.from_stack() excluded from trace"
+            return result
 
         # Filter out internal frames
         filtered_frames = [frame for frame in frames_list if not frame.is_internal]
