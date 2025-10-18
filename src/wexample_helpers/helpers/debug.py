@@ -42,14 +42,25 @@ def debug_dump_and_die(*args, **kwargs) -> None:
 
 
 def debug_trace(
-    path_style: DebugPathStyle = DebugPathStyle.FULL, paths_map: dict | None = None
+    path_style: DebugPathStyle = DebugPathStyle.FULL,
+    paths_map: dict | None = None,
+    skip_frames: int | None = 1,
 ) -> None:
+    """Print a debug trace of the current stack.
+
+    Args:
+        path_style: How to display file paths
+        paths_map: Optional path mappings for display
+        skip_frames: If an int, skip this many frames from the top and filter internal frames.
+                    If None, show all frames including internals.
+    """
     from wexample_helpers.helpers.trace import trace_print
 
-    # Delegate to trace helpers that use the new exception/trace classes
+    # trace_print will handle incrementing skip_frames for its own frame
     trace_print(
         path_style=path_style,
         paths_map=paths_map,
+        skip_frames=skip_frames,
     )
 
 
@@ -57,11 +68,24 @@ def debug_trace_and_die(
     message: str = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: dict | None = None,
+    skip_frames: int | None = 1,
 ) -> None:
+    """Print a debug trace and exit.
+
+    Args:
+        message: Optional message to print before the trace
+        path_style: How to display file paths
+        paths_map: Optional path mappings for display
+        skip_frames: If an int, skip this many frames from the top and filter internal frames.
+                    If None, show all frames including internals.
+    """
     if message:
         print(message)
+
+    # debug_trace will handle the skip_frames logic
     debug_trace(
         path_style=path_style,
         paths_map=paths_map,
+        skip_frames=skip_frames,
     )
     exit(1)

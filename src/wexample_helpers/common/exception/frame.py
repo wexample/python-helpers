@@ -14,6 +14,7 @@ class ExceptionFrame:
     lineno: int
     path_style: DebugPathStyle = DebugPathStyle.FULL
     paths_map: dict[str, str] | None = None
+    is_internal: bool = False
 
     def __str__(self) -> str:  # pragma: no cover – str delegates to format
         return self.format()

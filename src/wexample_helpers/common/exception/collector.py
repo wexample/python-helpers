@@ -14,6 +14,11 @@ class TraceCollector:
     """Collects frames from current stack or from an exception traceback."""
 
     @staticmethod
+    def _is_internal_frame(filename: str) -> bool:
+        """Check if a frame is from internal debug/trace helpers."""
+        return filename.endswith(("/helpers/trace.py", "/helpers/debug.py"))
+
+    @staticmethod
     def from_stack(
             *,
             skip_frames: int | None = None,
@@ -24,14 +29,18 @@ class TraceCollector:
         for frame in inspect.stack()[
                      (skip_frames + 1 if skip_frames is not None else 0):
                      ]:
+            is_internal = TraceCollector._is_internal_frame(frame.filename)
+            # Join all code context lines if available
+            code = "".join(frame.code_context) if frame.code_context else None
             frames.append(
                 ExceptionFrame(
                     filename=frame.filename,
                     lineno=frame.lineno,
                     function=frame.function,
-                    code=frame.code_context[0] if frame.code_context else None,
+                    code=code,
                     path_style=path_style,
                     paths_map=paths_map,
+                    is_internal=is_internal,
                 )
             )
         frames.reverse()
@@ -58,6 +67,7 @@ class TraceCollector:
                 except (OSError, IndexError):
                     pass
 
+            is_internal = TraceCollector._is_internal_frame(frame.f_code.co_filename)
             frames.append(
                 ExceptionFrame(
                     filename=frame.f_code.co_filename,
@@ -66,6 +76,7 @@ class TraceCollector:
                     code=code,
                     path_style=path_style,
                     paths_map=paths_map,
+                    is_internal=is_internal,
                 )
             )
             current = current.tb_next
