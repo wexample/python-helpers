@@ -4,7 +4,8 @@ import os
 import shutil
 from collections.abc import Callable
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from wexample_helpers.const.types import PathOrString
@@ -105,3 +106,35 @@ def directory_remove_tree_if_exists(directory: PathOrString) -> None:
     p = Path(directory)
     if p.exists():
         shutil.rmtree(p)
+
+
+def directory_iterate_parent_dirs(
+        path: PathOrString,
+        condition: Callable[[Path], bool],
+) -> Optional[Path]:
+    """
+    Iterate through parent directories until a condition is met.
+
+    Args:
+        path: The starting directory path
+        condition: A callback function that takes a Path and returns True when the condition is met
+
+    Returns:
+        The Path where the condition was met, or None if no match was found
+    """
+    current_path = Path(path).resolve()
+
+    # Iterate through parent directories
+    while True:
+        if condition(current_path):
+            return current_path
+
+        # Check if we've reached the root
+        parent = current_path.parent
+        if parent == current_path:
+            # We've reached the root directory
+            break
+
+        current_path = parent
+
+    return None
