@@ -15,6 +15,7 @@ class PrivateFieldsMixin:
 
     def __init__(self) -> None:
         from datetime import datetime
+
         self._created_at = datetime.now()
         self._metadata = {}
 

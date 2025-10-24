@@ -17,4 +17,5 @@ class AdvancedKernel(BaseKernel):
     @classmethod
     def get_service_class(cls) -> type[Service]:
         from attrs_circular_service import AdvancedService
+
         return AdvancedService

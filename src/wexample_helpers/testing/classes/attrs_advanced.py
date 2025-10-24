@@ -59,6 +59,7 @@ class AttrsAdvanced(BaseClass):
     @property
     def age(self) -> timedelta:
         from datetime import datetime
+
         return datetime.now() - self._created_at
 
     @property

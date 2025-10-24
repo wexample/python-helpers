@@ -6,7 +6,8 @@ from typing import (
     cast,
     get_args,
     get_origin,
-    get_type_hints, TYPE_CHECKING,
+    get_type_hints,
+    TYPE_CHECKING,
 )
 
 if TYPE_CHECKING:
@@ -16,7 +17,9 @@ if TYPE_CHECKING:
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     from types import UnionType
-    from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+    from wexample_helpers.exception.not_allowed_variable_type_exception import (
+        NotAllowedVariableTypeException,
+    )
 
     origin = get_origin(allowed_type) or allowed_type
     args = get_args(allowed_type)
@@ -32,7 +35,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
                     return True
                 except NotAllowedVariableTypeException as e:
                     # Collect TypedDict specific errors
-                    error_msg = getattr(e, 'variable_type', str(e))
+                    error_msg = getattr(e, "variable_type", str(e))
                     typed_dict_errors.append(f"{arg.__name__}: {error_msg}")
                     continue
                 except Exception:
@@ -40,18 +43,19 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
             # Regular type validation
             if type_generic_value_is_valid(value, arg):
                 return True
-        
+
         # If we had TypedDict errors and value is dict, raise specific error
         if typed_dict_errors and isinstance(value, dict):
             from wexample_helpers.exception.not_allowed_variable_type_exception import (
                 NotAllowedVariableTypeException,
             )
+
             raise NotAllowedVariableTypeException(
                 variable_type=f"dict validation failed: {'; '.join(typed_dict_errors)}",
                 variable_value=value,
                 allowed_types=[allowed_type],
             )
-        
+
         return False
 
     # Handle Type[T] annotations: we expect "value" to be a class, and it must be a subclass of T
@@ -291,8 +295,8 @@ def type_validate_or_fail(value: Any, allowed_type: type | UnionType) -> None:
 
                     # Handle generic types
                     if type_is_compatible(
-                            actual_type=cast(type, actual_return_type_hint),
-                            allowed_type=return_type,
+                        actual_type=cast(type, actual_return_type_hint),
+                        allowed_type=return_type,
                     ):
                         return
 
@@ -323,33 +327,36 @@ def _is_typed_dict(type_hint: Any) -> bool:
     """Check if a type hint is a TypedDict."""
 
     # Check module and class name for TypedDict
-    if hasattr(type_hint, '__module__') and hasattr(type_hint, '__name__'):
+    if hasattr(type_hint, "__module__") and hasattr(type_hint, "__name__"):
         # Direct check for typing module TypedDict classes
-        if (hasattr(type_hint, '__annotations__') and 
-            hasattr(type_hint, '__total__')):
+        if hasattr(type_hint, "__annotations__") and hasattr(type_hint, "__total__"):
             return True
-    
+
     # Check for typing_extensions.TypedDict or typing.TypedDict metaclass
     try:
         from typing_extensions import _TypedDictMeta
+
         if isinstance(type_hint, _TypedDictMeta):
             return True
     except ImportError:
         pass
-    
+
     try:
         import typing
-        if hasattr(typing, '_TypedDictMeta') and isinstance(type_hint, typing._TypedDictMeta):
+
+        if hasattr(typing, "_TypedDictMeta") and isinstance(
+            type_hint, typing._TypedDictMeta
+        ):
             return True
     except (ImportError, AttributeError):
         pass
-    
+
     # Fallback check for standard attributes
     result = (
-        hasattr(type_hint, '__annotations__') and
-        hasattr(type_hint, '__total__') and
-        hasattr(type_hint, '__required_keys__') and
-        hasattr(type_hint, '__optional_keys__')
+        hasattr(type_hint, "__annotations__")
+        and hasattr(type_hint, "__total__")
+        and hasattr(type_hint, "__required_keys__")
+        and hasattr(type_hint, "__optional_keys__")
     )
     return result
 
@@ -359,11 +366,11 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
     from wexample_helpers.exception.not_allowed_variable_type_exception import (
         NotAllowedVariableTypeException,
     )
-    
-    annotations = getattr(typed_dict_type, '__annotations__', {})
-    required_keys = getattr(typed_dict_type, '__required_keys__', set())
-    optional_keys = getattr(typed_dict_type, '__optional_keys__', set())
-    
+
+    annotations = getattr(typed_dict_type, "__annotations__", {})
+    required_keys = getattr(typed_dict_type, "__required_keys__", set())
+    optional_keys = getattr(typed_dict_type, "__optional_keys__", set())
+
     # Check for missing required keys
     missing_keys = required_keys - set(value.keys())
     if missing_keys:
@@ -372,7 +379,7 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
             variable_value=value,
             allowed_types=[typed_dict_type],
         )
-    
+
     # Check for unexpected keys
     allowed_keys = required_keys | optional_keys
     unexpected_keys = set(value.keys()) - allowed_keys
@@ -382,15 +389,19 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
             variable_value=value,
             allowed_types=[typed_dict_type],
         )
-    
+
     # Validate types of present keys
     for key, expected_type in annotations.items():
         if key in value:
             # Unwrap Required/NotRequired wrappers
             actual_type = expected_type
-            if hasattr(expected_type, '__origin__'):
+            if hasattr(expected_type, "__origin__"):
                 origin = get_origin(expected_type)
-                if origin and hasattr(origin, '__name__') and origin.__name__ in ('Required', 'NotRequired'):
+                if (
+                    origin
+                    and hasattr(origin, "__name__")
+                    and origin.__name__ in ("Required", "NotRequired")
+                ):
                     args = get_args(expected_type)
                     if args:
                         actual_type = args[0]
@@ -399,7 +410,7 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
                 type_validate_or_fail(value[key], actual_type)
             except Exception as e:
                 # Handle both NotAllowedVariableTypeException and other exceptions
-                error_msg = getattr(e, 'variable_type', str(e))
+                error_msg = getattr(e, "variable_type", str(e))
                 raise NotAllowedVariableTypeException(
                     variable_type=f"dict key '{key}' has invalid type: {error_msg}",
                     variable_value=value,

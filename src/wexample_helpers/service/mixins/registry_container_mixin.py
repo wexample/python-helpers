@@ -57,4 +57,5 @@ class RegistryContainerMixin(BaseClass):
     def _get_registry_class_type(self) -> type[Registry]:
         """Get the type of registry to use. Must be overridden by child classes."""
         from wexample_helpers.service.registry import Registry
+
         return Registry

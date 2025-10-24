@@ -24,4 +24,5 @@ class PrivateField(BaseField):
     @property
     def visibility(self) -> FieldVisibility:
         from wexample_helpers.enums.field_visibility import FieldVisibility
+
         return FieldVisibility.PRIVATE

@@ -20,9 +20,9 @@ class TraceCollector:
 
     @staticmethod
     def from_stack(
-            *,
-            path_style: DebugPathStyle = DebugPathStyle.FULL,
-            paths_map: dict[str, str] | None = None,
+        *,
+        path_style: DebugPathStyle = DebugPathStyle.FULL,
+        paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
         frames: list[ExceptionFrame] = []
         # Skip only from_stack itself (frame 0)
@@ -46,10 +46,10 @@ class TraceCollector:
 
     @staticmethod
     def from_traceback(
-            traceback: TracebackType,
-            *,
-            path_style: DebugPathStyle = DebugPathStyle.FULL,
-            paths_map: dict[str, str] | None = None,
+        traceback: TracebackType,
+        *,
+        path_style: DebugPathStyle = DebugPathStyle.FULL,
+        paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
         frames: list[ExceptionFrame] = []
         current = traceback
