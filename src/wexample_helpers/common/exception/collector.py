@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import inspect
 from typing import TYPE_CHECKING
-
-from wexample_helpers.common.exception.frame import ExceptionFrame
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 if TYPE_CHECKING:
     from types import TracebackType
+    from wexample_helpers.common.exception.frame import ExceptionFrame
 
 
 class TraceCollector:
@@ -19,6 +18,7 @@ class TraceCollector:
         path_style: DebugPathStyle = DebugPathStyle.FULL,
         paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
+        from wexample_helpers.common.exception.frame import ExceptionFrame
         frames: list[ExceptionFrame] = []
         # Skip only from_stack itself (frame 0)
         for frame in inspect.stack()[1:]:
@@ -46,6 +46,7 @@ class TraceCollector:
         path_style: DebugPathStyle = DebugPathStyle.FULL,
         paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
+        from wexample_helpers.common.exception.frame import ExceptionFrame
         frames: list[ExceptionFrame] = []
         current = traceback
         while current is not None:

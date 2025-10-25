@@ -85,29 +85,6 @@ def directory_get_parent_path(path: PathOrString) -> str:
     return parent + os.sep if parent else os.sep
 
 
-def directory_list_files(dir_path: PathOrString) -> list[str]:
-    """List all files in directory and subdirectories, sorted alphabetically."""
-    from pathlib import Path
-
-    p = Path(dir_path)
-    file_paths: list[str] = []
-    for root, _, files in os.walk(p):
-        for file in sorted(files):
-            full_path = os.path.join(root, file)
-            if os.path.isfile(full_path):
-                file_paths.append(full_path)
-    return file_paths
-
-
-def directory_remove_tree_if_exists(directory: PathOrString) -> None:
-    """Remove a directory and all its contents if it exists."""
-    from pathlib import Path
-
-    p = Path(directory)
-    if p.exists():
-        shutil.rmtree(p)
-
-
 def directory_iterate_parent_dirs(
     path: PathOrString,
     condition: Callable[[Path], bool],
@@ -138,3 +115,26 @@ def directory_iterate_parent_dirs(
         current_path = parent
 
     return None
+
+
+def directory_list_files(dir_path: PathOrString) -> list[str]:
+    """List all files in directory and subdirectories, sorted alphabetically."""
+    from pathlib import Path
+
+    p = Path(dir_path)
+    file_paths: list[str] = []
+    for root, _, files in os.walk(p):
+        for file in sorted(files):
+            full_path = os.path.join(root, file)
+            if os.path.isfile(full_path):
+                file_paths.append(full_path)
+    return file_paths
+
+
+def directory_remove_tree_if_exists(directory: PathOrString) -> None:
+    """Remove a directory and all its contents if it exists."""
+    from pathlib import Path
+
+    p = Path(directory)
+    if p.exists():
+        shutil.rmtree(p)
