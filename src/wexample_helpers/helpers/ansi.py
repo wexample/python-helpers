@@ -48,7 +48,7 @@ def ansi_strip_osc(text: str) -> str:
 
 
 def ansi_truncate_visible(text: str, max_width: int) -> str:
-    from wcwidth import _wcw
+    from wcwidth import wcwidth
 
     if max_width <= 0:
         return ""
@@ -61,7 +61,7 @@ def ansi_truncate_visible(text: str, max_width: int) -> str:
     current = 0
     for ch in plain:
 
-        w = _wcw(ch)
+        w = wcwidth(ch)
         if w is None:
             w = 0
         if w < 0:
