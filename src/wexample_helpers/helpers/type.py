@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 from typing import (
     Any,
@@ -371,7 +372,6 @@ def _safe_issubclass(a: Any, b: Any) -> bool:
 def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
     """Validate a dict against a TypedDict type."""
     from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
-    from __future__ import annotations
 
     annotations = getattr(typed_dict_type, "__annotations__", {})
     required_keys = getattr(typed_dict_type, "__required_keys__", set())
