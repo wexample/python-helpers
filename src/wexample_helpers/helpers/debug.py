@@ -42,6 +42,7 @@ def debug_dump_and_die(*args, **kwargs) -> None:
 
 
 def debug_trace(
+    data: Any = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: dict | None = None,
     skip_frames: int | None = 1,
@@ -55,6 +56,9 @@ def debug_trace(
                     If None, show all frames including internals.
     """
     from wexample_helpers.helpers.trace import trace_print
+
+    if data is not None:
+        debug_dump(data)
 
     # trace_print will handle incrementing skip_frames for its own frame
     trace_print(
