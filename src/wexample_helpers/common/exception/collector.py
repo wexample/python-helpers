@@ -19,6 +19,7 @@ class TraceCollector:
         paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
         from wexample_helpers.common.exception.frame import ExceptionFrame
+
         frames: list[ExceptionFrame] = []
         # Skip only from_stack itself (frame 0)
         for frame in inspect.stack()[1:]:
@@ -47,6 +48,7 @@ class TraceCollector:
         paths_map: dict[str, str] | None = None,
     ) -> list[ExceptionFrame]:
         from wexample_helpers.common.exception.frame import ExceptionFrame
+
         frames: list[ExceptionFrame] = []
         current = traceback
         while current is not None:
