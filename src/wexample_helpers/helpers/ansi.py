@@ -48,7 +48,6 @@ def ansi_strip_osc(text: str) -> str:
 
 
 def ansi_truncate_visible(text: str, max_width: int) -> str:
-    from wcwidth import wcwidth
     from wcwidth import _wcw
 
     if max_width <= 0:
