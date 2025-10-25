@@ -12,6 +12,7 @@ class ExceptionFrame:
     filename: str
     function: str
     lineno: int
+    
     is_internal: bool = False
     path_style: DebugPathStyle = DebugPathStyle.FULL
     paths_map: dict[str, str] | None = None
