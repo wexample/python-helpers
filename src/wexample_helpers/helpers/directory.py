@@ -4,7 +4,6 @@ import os
 import shutil
 from collections.abc import Callable
 from contextlib import contextmanager
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
@@ -99,6 +98,7 @@ def directory_iterate_parent_dirs(
     Returns:
         The Path where the condition was met, or None if no match was found
     """
+    from pathlib import Path
     current_path = Path(path).resolve()
 
     # Iterate through parent directories
