@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from typing import (
+    TYPE_CHECKING,
     Any,
     Union,
     cast,
     get_args,
     get_origin,
     get_type_hints,
-    TYPE_CHECKING,
 )
 
 if TYPE_CHECKING:
@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
     from types import UnionType
+
     from wexample_helpers.exception.not_allowed_variable_type_exception import (
         NotAllowedVariableTypeException,
     )
