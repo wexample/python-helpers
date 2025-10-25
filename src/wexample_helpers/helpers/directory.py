@@ -99,6 +99,7 @@ def directory_iterate_parent_dirs(
         The Path where the condition was met, or None if no match was found
     """
     from pathlib import Path
+
     current_path = Path(path).resolve()
 
     # Iterate through parent directories
