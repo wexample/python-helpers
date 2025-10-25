@@ -14,11 +14,6 @@ class TraceCollector:
     """Collects frames from current stack or from an exception traceback."""
 
     @staticmethod
-    def _is_internal_frame(filename: str) -> bool:
-        """Check if a frame is from internal debug/trace helpers."""
-        return filename.endswith(("/helpers/trace.py", "/helpers/debug.py"))
-
-    @staticmethod
     def from_stack(
         *,
         path_style: DebugPathStyle = DebugPathStyle.FULL,
@@ -79,3 +74,8 @@ class TraceCollector:
             )
             current = current.tb_next
         return frames
+
+    @staticmethod
+    def _is_internal_frame(filename: str) -> bool:
+        """Check if a frame is from internal debug/trace helpers."""
+        return filename.endswith(("/helpers/trace.py", "/helpers/debug.py"))

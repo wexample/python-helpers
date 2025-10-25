@@ -9,10 +9,6 @@ def dd(*args, **kwargs) -> None:
     debug_dump_and_die(*args, **kwargs)
 
 
-def dt(*args, **kwargs) -> None:
-    debug_trace_and_die(*args, **kwargs)
-
-
 def debug_breakpoint(message: str = None) -> None:
     from wexample_helpers.common.debug.debug_breakpoint import DebugBreakpoint
 
@@ -97,3 +93,7 @@ def debug_trace_and_die(
         skip_frames=skip_frames,
     )
     exit(1)
+
+
+def dt(*args, **kwargs) -> None:
+    debug_trace_and_die(*args, **kwargs)

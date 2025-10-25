@@ -137,6 +137,12 @@ def module_collect_classes(
     return collected
 
 
+def module_get_path(module) -> pathlib.Path:
+    import importlib.resources
+
+    return pathlib.Path(importlib.resources.files(module))
+
+
 def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
     import importlib
 
@@ -210,12 +216,6 @@ def module_spec_from_file(importlib_util, file_path: pathlib.Path, module_name: 
             f"Cannot create a spec for module: {file_path} as {module_name}"
         )
     return spec
-
-
-def module_get_path(module) -> pathlib.Path:
-    import importlib.resources
-
-    return pathlib.Path(importlib.resources.files(module))
 
 
 def _prepare_module(importlib_util, spec, module_name: str):

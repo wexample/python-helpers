@@ -111,7 +111,7 @@ def directory_remove_tree_if_exists(directory: PathOrString) -> None:
 def directory_iterate_parent_dirs(
     path: PathOrString,
     condition: Callable[[Path], bool],
-) -> Optional[Path]:
+) -> Path | None:
     """
     Iterate through parent directories until a condition is met.
 

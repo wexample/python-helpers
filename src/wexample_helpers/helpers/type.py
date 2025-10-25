@@ -361,6 +361,14 @@ def _is_typed_dict(type_hint: Any) -> bool:
     return result
 
 
+def _safe_issubclass(a: Any, b: Any) -> bool:
+    """Like issubclass but never raises TypeError; returns False instead."""
+    try:
+        return issubclass(a, b)
+    except TypeError:
+        return False
+
+
 def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
     """Validate a dict against a TypedDict type."""
     from wexample_helpers.exception.not_allowed_variable_type_exception import (
@@ -416,11 +424,3 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
                     variable_value=value,
                     allowed_types=[typed_dict_type],
                 )
-
-
-def _safe_issubclass(a: Any, b: Any) -> bool:
-    """Like issubclass but never raises TypeError; returns False instead."""
-    try:
-        return issubclass(a, b)
-    except TypeError:
-        return False
