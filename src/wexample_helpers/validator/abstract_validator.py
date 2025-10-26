@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Any
 
 from wexample_helpers.classes.base_class import BaseClass
@@ -9,7 +9,7 @@ from wexample_helpers.decorator.base_class import base_class
 
 
 @base_class
-class AbstractValidator(BaseClass, ABC):
+class AbstractValidator(BaseClass):
     error_message: str | None = public_field(
         default=None,
         description="Custom error message to display when validation fails",

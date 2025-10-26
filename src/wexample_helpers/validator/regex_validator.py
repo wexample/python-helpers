@@ -12,6 +12,7 @@ from wexample_helpers.validator.abstract_validator import AbstractValidator
 @base_class
 class RegexValidator(AbstractValidator):
     _patterns: list[str] = private_field(
+        factory=list,
         description="List of regular expression patterns to match against (OR logic)",
     )
     pattern: list[str] | str = public_field(
@@ -23,9 +24,6 @@ class RegexValidator(AbstractValidator):
     )
 
     def __attrs_post_init__(self) -> None:
-        if not self._patterns:
-            raise ValueError("At least one pattern must be provided")
-
         if isinstance(self.pattern, str):
             self._patterns = [self.pattern]
         else:
