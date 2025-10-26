@@ -11,16 +11,16 @@ from wexample_helpers.validator.abstract_validator import AbstractValidator
 
 @base_class
 class RegexValidator(AbstractValidator):
-    _patterns: list[str] = private_field(
-        factory=list,
-        description="List of regular expression patterns to match against (OR logic)",
+    flags: int = public_field(
+        default=0,
+        description="Regular expression flags (e.g., re.IGNORECASE)",
     )
     pattern: list[str] | str = public_field(
         description="Regular expression pattern or list of regular expressions pattern to match against (OR logic)",
     )
-    flags: int = public_field(
-        default=0,
-        description="Regular expression flags (e.g., re.IGNORECASE)",
+    _patterns: list[str] = private_field(
+        factory=list,
+        description="List of regular expression patterns to match against (OR logic)",
     )
 
     def __attrs_post_init__(self) -> None:

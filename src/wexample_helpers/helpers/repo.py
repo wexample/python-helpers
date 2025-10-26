@@ -11,16 +11,16 @@ STATE_FILE = Path(".last_git_state")
 
 def repo_get_state(cwd: Optional[PathOrString] = None) -> str:
     """Return a unique hash representing the current git state (HEAD + changes).
-    
+
     Args:
         cwd: Optional path to the git repository. If None, uses current directory.
     """
     head_result = shell_run(["git", "rev-parse", "HEAD"], cwd=cwd)
     head_hash = head_result.stdout.strip() if head_result.stdout else ""
-    
+
     diff_result = shell_run(["git", "diff"], cwd=cwd)
     diff_hash = diff_result.stdout if diff_result.stdout else ""
-    
+
     return f"{head_hash}-{hash(diff_hash)}"
 
 
@@ -29,7 +29,7 @@ def repo_has_changed(
     state_file: Optional[Path] = None,
 ) -> bool:
     """Check if code has changed since last run.
-    
+
     Args:
         cwd: Optional path to the git repository. If None, uses current directory.
         state_file: Optional custom state file path. If None, uses STATE_FILE.
@@ -42,12 +42,13 @@ def repo_has_changed(
         return True
     return False
 
+
 def repo_has_changed_since(
     previous_state: str,
     cwd: Optional[PathOrString] = None,
 ) -> bool:
     """Return True if the repo state has changed compared to a provided hash.
-    
+
     Args:
         previous_state: The previous git state hash to compare against.
         cwd: Optional path to the git repository. If None, uses current directory.

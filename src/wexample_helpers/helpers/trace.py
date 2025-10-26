@@ -56,6 +56,13 @@ def trace_get_traceback_frames(
     )
 
 
+def trace_inheritance_stack(obj) -> None:
+    print("Class inheritance stack:")
+
+    for cls in obj.__class__.mro():
+        print(f"  ↳ {cls.__module__}.{cls.__name__}")
+
+
 def trace_print(
     path_style: DebugPathStyle = DebugPathStyle.FULL,
     paths_map: dict | None = None,
@@ -78,10 +85,3 @@ def trace_print(
             skip_frames=skip_frames,
         )
     )
-
-
-def trace_inheritance_stack(obj) -> None:
-    print("Class inheritance stack:")
-
-    for cls in obj.__class__.mro():
-        print(f"  ↳ {cls.__module__}.{cls.__name__}")

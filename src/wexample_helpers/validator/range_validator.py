@@ -9,13 +9,13 @@ from wexample_helpers.validator.abstract_validator import AbstractValidator
 
 @base_class
 class RangeValidator(AbstractValidator):
-    min_value: int | float | None = public_field(
-        default=None,
-        description="Minimum allowed value (inclusive)",
-    )
     max_value: int | float | None = public_field(
         default=None,
         description="Maximum allowed value (inclusive)",
+    )
+    min_value: int | float | None = public_field(
+        default=None,
+        description="Minimum allowed value (inclusive)",
     )
 
     def validate(self, value: Any) -> bool:

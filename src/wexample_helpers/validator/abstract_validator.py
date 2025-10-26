@@ -40,7 +40,6 @@ class AbstractValidator(BaseClass):
         Returns:
             True if validation passes, False otherwise
         """
-        pass
 
     @abstractmethod
     def _get_default_error_message(self, value: Any) -> str:
@@ -53,4 +52,3 @@ class AbstractValidator(BaseClass):
         Returns:
             Default error message string
         """
-        pass
