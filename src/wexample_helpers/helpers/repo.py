@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Optional
 
 from wexample_helpers.const.types import PathOrString
-from wexample_helpers.helpers.shell import shell_run
 
 STATE_FILE = Path(".last_git_state")
 
@@ -15,6 +14,7 @@ def repo_get_state(cwd: PathOrString | None = None) -> str:
     Args:
         cwd: Optional path to the git repository. If None, uses current directory.
     """
+    from wexample_helpers.helpers.shell import shell_run
     head_result = shell_run(["git", "rev-parse", "HEAD"], cwd=cwd)
     head_hash = head_result.stdout.strip() if head_result.stdout else ""
 
