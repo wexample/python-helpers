@@ -1,26 +1,54 @@
-import subprocess
 from pathlib import Path
+from typing import Optional
+
+from wexample_helpers.const.types import PathOrString
+from wexample_helpers.helpers.shell import shell_run
 
 STATE_FILE = Path(".last_git_state")
 
 
-def repo_get_state() -> str:
-    """Return a unique hash representing the current git state (HEAD + changes)."""
-    head_hash = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    diff_hash = subprocess.check_output(["git", "diff"], text=True)
+def repo_get_state(cwd: Optional[PathOrString] = None) -> str:
+    """Return a unique hash representing the current git state (HEAD + changes).
+    
+    Args:
+        cwd: Optional path to the git repository. If None, uses current directory.
+    """
+    head_result = shell_run(["git", "rev-parse", "HEAD"], cwd=cwd)
+    head_hash = head_result.stdout.strip() if head_result.stdout else ""
+    
+    diff_result = shell_run(["git", "diff"], cwd=cwd)
+    diff_hash = diff_result.stdout if diff_result.stdout else ""
+    
     return f"{head_hash}-{hash(diff_hash)}"
 
 
-def repo_has_changed() -> bool:
-    """Check if code has changed since last run."""
-    current_state = repo_get_state()
-    previous_state = STATE_FILE.read_text().strip() if STATE_FILE.exists() else None
+def repo_has_changed(
+    cwd: Optional[PathOrString] = None,
+    state_file: Optional[Path] = None,
+) -> bool:
+    """Check if code has changed since last run.
+    
+    Args:
+        cwd: Optional path to the git repository. If None, uses current directory.
+        state_file: Optional custom state file path. If None, uses STATE_FILE.
+    """
+    current_state = repo_get_state(cwd=cwd)
+    file_to_use = state_file if state_file is not None else STATE_FILE
+    previous_state = file_to_use.read_text().strip() if file_to_use.exists() else None
     if current_state != previous_state:
-        STATE_FILE.write_text(current_state)
+        file_to_use.write_text(current_state)
         return True
     return False
 
-def repo_has_changed_since(previous_state: str) -> bool:
-    """Return True if the repo state has changed compared to a provided hash."""
-    current_state = repo_get_state()
+def repo_has_changed_since(
+    previous_state: str,
+    cwd: Optional[PathOrString] = None,
+) -> bool:
+    """Return True if the repo state has changed compared to a provided hash.
+    
+    Args:
+        previous_state: The previous git state hash to compare against.
+        cwd: Optional path to the git repository. If None, uses current directory.
+    """
+    current_state = repo_get_state(cwd=cwd)
     return current_state != previous_state
