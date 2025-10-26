@@ -9,7 +9,7 @@ from wexample_helpers.helpers.shell import shell_run
 STATE_FILE = Path(".last_git_state")
 
 
-def repo_get_state(cwd: Optional[PathOrString] = None) -> str:
+def repo_get_state(cwd: PathOrString | None = None) -> str:
     """Return a unique hash representing the current git state (HEAD + changes).
 
     Args:
@@ -25,8 +25,8 @@ def repo_get_state(cwd: Optional[PathOrString] = None) -> str:
 
 
 def repo_has_changed(
-    cwd: Optional[PathOrString] = None,
-    state_file: Optional[Path] = None,
+    cwd: PathOrString | None = None,
+    state_file: Path | None = None,
 ) -> bool:
     """Check if code has changed since last run.
 
@@ -45,7 +45,7 @@ def repo_has_changed(
 
 def repo_has_changed_since(
     previous_state: str,
-    cwd: Optional[PathOrString] = None,
+    cwd: PathOrString | None = None,
 ) -> bool:
     """Return True if the repo state has changed compared to a provided hash.
 
