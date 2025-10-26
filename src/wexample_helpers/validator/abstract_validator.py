@@ -15,19 +15,6 @@ class AbstractValidator(BaseClass):
         description="Custom error message to display when validation fails",
     )
 
-    @abstractmethod
-    def validate(self, value: Any) -> bool:
-        """
-        Validate the given value.
-
-        Args:
-            value: The value to validate
-
-        Returns:
-            True if validation passes, False otherwise
-        """
-        pass
-
     def get_error_message(self, value: Any) -> str:
         """
         Get the error message for a failed validation.
@@ -41,6 +28,19 @@ class AbstractValidator(BaseClass):
         if self.error_message:
             return self.error_message
         return self._get_default_error_message(value)
+
+    @abstractmethod
+    def validate(self, value: Any) -> bool:
+        """
+        Validate the given value.
+
+        Args:
+            value: The value to validate
+
+        Returns:
+            True if validation passes, False otherwise
+        """
+        pass
 
     @abstractmethod
     def _get_default_error_message(self, value: Any) -> str:

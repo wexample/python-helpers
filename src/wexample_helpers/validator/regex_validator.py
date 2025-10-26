@@ -56,4 +56,6 @@ class RegexValidator(AbstractValidator):
             return f"Value '{value}' does not match pattern '{self._patterns[0]}'"
         else:
             patterns_str = "', '".join(self._patterns)
-            return f"Value '{value}' does not match any of the patterns: '{patterns_str}'"
+            return (
+                f"Value '{value}' does not match any of the patterns: '{patterns_str}'"
+            )

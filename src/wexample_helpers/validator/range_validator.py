@@ -41,7 +41,9 @@ class RangeValidator(AbstractValidator):
 
     def _get_default_error_message(self, value: Any) -> str:
         if self.min_value is not None and self.max_value is not None:
-            return f"Value {value} must be between {self.min_value} and {self.max_value}"
+            return (
+                f"Value {value} must be between {self.min_value} and {self.max_value}"
+            )
         elif self.min_value is not None:
             return f"Value {value} must be at least {self.min_value}"
         elif self.max_value is not None:
