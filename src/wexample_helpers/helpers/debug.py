@@ -83,8 +83,6 @@ def debug_trace_and_die(
         skip_frames: If an int, skip this many frames from the top and filter internal frames.
                     If None, show all frames including internals.
     """
-    if message:
-        print(message)
 
     # debug_trace will handle the skip_frames logic
     debug_trace(
@@ -92,6 +90,9 @@ def debug_trace_and_die(
         paths_map=paths_map,
         skip_frames=skip_frames,
     )
+
+    if message:
+        debug_dump(message)
     exit(1)
 
 
