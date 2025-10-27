@@ -4,6 +4,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 import attrs
+
 from wexample_helpers.classes.base_field import BaseField
 
 if TYPE_CHECKING:
