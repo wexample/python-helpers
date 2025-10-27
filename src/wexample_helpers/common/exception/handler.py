@@ -6,7 +6,6 @@ from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 if TYPE_CHECKING:
     from frame import ExceptionFrame
-
     from wexample_helpers.common.exception.formatter import TraceFormatter
 
 
