@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any, Optional, Union
 
 import pytest
-
 from wexample_helpers.testing.abstract_test_helpers import AbstractTestHelpers
 
 
