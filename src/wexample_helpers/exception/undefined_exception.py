@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-import traceback
 import uuid
 from typing import Any
-
-
-class ExceptionData:
-    """Base model for exception data using Pydantic."""
 
 
 class UndefinedException(Exception):
@@ -14,8 +9,8 @@ class UndefinedException(Exception):
 
     Provides enhanced functionality including:
     - Unique error codes
-    - Structured error data using Pydantic
-    - Error tracing
+    - Structured error data using TypedDict
+    - Error chaining (cause/previous)
     - Serialization support
     """
 
@@ -34,11 +29,6 @@ class UndefinedException(Exception):
         self.cause = cause
         self.previous = previous
         self.exception_id = str(uuid.uuid4())
-        self.traceback = (
-            traceback.format_exc()
-            if traceback.format_exc() != "NoneType: None\n"
-            else None
-        )
         super().__init__(self.message)
 
     def to_dict(self) -> dict[str, Any]:
@@ -61,3 +51,20 @@ class UndefinedException(Exception):
         """Add additional data to the exception."""
         self.data.update(kwargs)
         return self
+
+    def __repr__(self) -> str:
+        """Return a detailed string representation of the exception."""
+        parts = [
+            f"{self.__class__.__name__}(",
+            f"  error_code={self.error_code!r}",
+            f"  message={self.message!r}",
+            f"  exception_id={self.exception_id!r}",
+        ]
+        if self.data:
+            parts.append(f"  data={self.data!r}")
+        if self.cause:
+            parts.append(f"  cause={self.cause!r}")
+        if self.previous:
+            parts.append(f"  previous={self.previous!r}")
+        parts.append(")")
+        return "\n".join(parts)

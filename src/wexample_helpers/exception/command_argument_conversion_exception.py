@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from wexample_helpers.exception.undefined_exception import (
-    ExceptionData,
-    UndefinedException,
-)
+from typing import TypedDict
+
+from wexample_helpers.exception.undefined_exception import UndefinedException
 
 
-class CommandArgumentConversionData(ExceptionData):
-    """Data model for CommandArgumentConversion exception."""
+class CommandArgumentConversionData(TypedDict):
+    """Data structure for CommandArgumentConversion exception."""
 
     argument_name: str
     target_type: str
@@ -27,19 +26,15 @@ class CommandArgumentConversionException(UndefinedException):
         cause: Exception | None = None,
         previous: Exception | None = None,
     ) -> None:
-        # Create structured data using Pydantic model
-        data_model = CommandArgumentConversionData(
-            argument_name=argument_name, value=value, target_type=str(target_type)
-        )
-
-        # Store attributes as instance attributes
-        self.argument_name = argument_name
-        self.value = value
-        self.target_type = target_type
+        data: CommandArgumentConversionData = {
+            "argument_name": argument_name,
+            "value": value,
+            "target_type": target_type.__name__,
+        }
 
         super().__init__(
             message=f"Cannot convert value '{value}' for argument '{argument_name}' to type {target_type.__name__}",
-            data=data_model.model_dump(),
+            data=data,
             cause=cause,
             previous=previous,
         )
