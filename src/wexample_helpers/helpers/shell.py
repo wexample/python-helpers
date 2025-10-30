@@ -7,9 +7,9 @@ import subprocess
 import sys
 import time
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
+from wexample_helpers.classes.shell_result import ShellResult
 from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
@@ -357,15 +357,3 @@ def _shell_apply_sudo(
         return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
 
 
-@dataclass
-class ShellResult:
-    """Structured result for shell command execution."""
-
-    args: str | list[str]
-    cwd: str | None
-    duration: float
-    end_time: float
-    returncode: int
-    start_time: float
-    stderr: str | None
-    stdout: str | None
