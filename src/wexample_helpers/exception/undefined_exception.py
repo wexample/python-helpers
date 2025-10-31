@@ -31,6 +31,23 @@ class UndefinedException(Exception):
         self.exception_id = str(uuid.uuid4())
         super().__init__(self.message)
 
+    def __repr__(self) -> str:
+        """Return a detailed string representation of the exception."""
+        parts = [
+            f"{self.__class__.__name__}(",
+            f"  error_code={self.error_code!r}",
+            f"  message={self.message!r}",
+            f"  exception_id={self.exception_id!r}",
+        ]
+        if self.data:
+            parts.append(f"  data={self.data!r}")
+        if self.cause:
+            parts.append(f"  cause={self.cause!r}")
+        if self.previous:
+            parts.append(f"  previous={self.previous!r}")
+        parts.append(")")
+        return "\n".join(parts)
+
     def to_dict(self) -> dict[str, Any]:
         """Convert exception to dictionary for serialization."""
         result = {
@@ -51,20 +68,3 @@ class UndefinedException(Exception):
         """Add additional data to the exception."""
         self.data.update(kwargs)
         return self
-
-    def __repr__(self) -> str:
-        """Return a detailed string representation of the exception."""
-        parts = [
-            f"{self.__class__.__name__}(",
-            f"  error_code={self.error_code!r}",
-            f"  message={self.message!r}",
-            f"  exception_id={self.exception_id!r}",
-        ]
-        if self.data:
-            parts.append(f"  data={self.data!r}")
-        if self.cause:
-            parts.append(f"  cause={self.cause!r}")
-        if self.previous:
-            parts.append(f"  previous={self.previous!r}")
-        parts.append(")")
-        return "\n".join(parts)

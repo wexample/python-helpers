@@ -355,5 +355,3 @@ def _shell_apply_sudo(
         elif elevate:
             prefix += ["--"]
         return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
-
-
