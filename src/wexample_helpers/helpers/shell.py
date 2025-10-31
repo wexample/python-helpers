@@ -8,13 +8,14 @@ import sys
 import time
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
+
 from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
 
-    from wexample_helpers.const.types import PathOrString
     from wexample_helpers.classes.shell_result import ShellResult
+    from wexample_helpers.const.types import PathOrString
 
 
 def shell_run(
