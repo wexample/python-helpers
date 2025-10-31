@@ -1,3 +1,9 @@
+# wexample-helpers
+
+Version: 0.0.72
+
+Some python basic helpers and constants.
+
 ## Code Quality & Typing
 
 All Wexample packages follow strict quality standards:
