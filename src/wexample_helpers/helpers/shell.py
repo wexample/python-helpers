@@ -8,14 +8,13 @@ import sys
 import time
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
-
-from wexample_helpers.classes.shell_result import ShellResult
 from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
 
     from wexample_helpers.const.types import PathOrString
+    from wexample_helpers.classes.shell_result import ShellResult
 
 
 def shell_run(
@@ -47,6 +46,7 @@ def shell_run(
     - inherit_stdio: If True, inherit parent's stdio (overrides capture).
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
+    from wexample_helpers.classes.shell_result import ShellResult
     used_cmd: str | list[str]
 
     if shell:
@@ -134,6 +134,7 @@ async def shell_run_async(
 
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
+    from wexample_helpers.classes.shell_result import ShellResult
     used_cmd: str | list[str]
 
     if shell:
