@@ -143,6 +143,13 @@ def module_get_path(module) -> pathlib.Path:
     return pathlib.Path(importlib.resources.files(module))
 
 
+def module_load_class_from_file_if_exist(**kwargs) -> type | None:
+    try:
+        module_load_class_from_file(**kwargs)
+    except:
+        return None
+
+
 def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
     import importlib
 

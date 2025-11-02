@@ -84,16 +84,54 @@ def string_replace_params(text: str, params: dict) -> str:
 
 def string_to_kebab_case(text: str) -> str:
     """
-    Convert text to kebab case, converting spaces and underscores to dashes.
+    Convert text to kebab case (e.g. "MyClassName" -> "my-class-name").
     """
     return re.sub(r"[_\s]+", "-", re.sub(r"([a-z])([A-Z])", r"\1-\2", text)).lower()
 
 
 def string_to_snake_case(text: str) -> str:
+    """
+    Convert text to snake_case (e.g. "MyClassName" -> "my_class_name").
+    """
     s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", text)
-    s2 = re.sub("([a-z])([A-Z])", r"\1_\2", s1).lower()
-    s3 = re.sub("([0-9])([A-Z])", r"\1\2", s2)
-    return str(re.sub(r"\W+", "_", s3))
+    s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1)
+    return re.sub(r"\W+", "_", s2).lower()
+
+
+def string_to_camel_case(text: str) -> str:
+    """
+    Convert text to camelCase (e.g. 'my_example_string' -> 'myExampleString').
+    """
+    parts = re.split(r"[_\-\s]+", text)
+    if not parts:
+        return ""
+    return parts[0].lower() + "".join(p.capitalize() for p in parts[1:])
+
+
+def string_to_pascal_case(text: str) -> str:
+    """
+    Convert text to PascalCase (ClassCase), e.g. 'my_example_string' -> 'MyExampleString'.
+    """
+    parts = re.split(r"[_\-\s]+", text)
+    return "".join(p.capitalize() for p in parts if p)
+
+
+# alias for convenience
+string_to_class_case = string_to_pascal_case
+
+
+def string_to_title_case(text: str) -> str:
+    """
+    Convert text to Title Case (capitalize first letter of each word).
+    """
+    return " ".join(word.capitalize() for word in re.split(r"[\s_\-]+", text.strip()))
+
+
+def string_capitalize_first(text: str) -> str:
+    """
+    Capitalize only the first letter of the string (safe version).
+    """
+    return text[:1].upper() + text[1:] if text else text
 
 
 def string_truncate(text: str, limit: int) -> str:
