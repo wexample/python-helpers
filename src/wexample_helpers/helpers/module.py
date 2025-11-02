@@ -145,15 +145,16 @@ def module_get_path(module) -> pathlib.Path:
 
 def module_load_class_from_file_if_exist(**kwargs) -> type | None:
     try:
-        module_load_class_from_file(**kwargs)
-    except:
+        return module_load_class_from_file(**kwargs)
+    except Exception:
         return None
 
 
 def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
-    import importlib
-
     """Load a class by name from a python module file path."""
+    import importlib
+    import importlib.util
+
     if not file_path.exists():
         raise FileNotFoundError(f"Module file not found: {file_path}")
 
@@ -184,11 +185,12 @@ def module_load_class_from_file_with_package_root(
     """Load a class by name from a python module file path, within a package context.
 
     This loader enables relative imports inside the loaded module by:
-    - Computing a fully-qualified module name (FQMN) from (package_root, file_path).
-    - Setting module.__package__ to the parent of the FQMN.
-    - Temporarily inserting package_root into sys.path during module execution.
+        - Computing a fully-qualified module name (FQMN) from (package_root, file_path).
+        - Setting module.__package__ to the parent of the FQMN.
+        - Temporarily inserting package_root into sys.path during module execution.
     """
     import importlib
+    import importlib.util
 
     if not file_path.exists():
         raise FileNotFoundError(f"Module file not found: {file_path}")
