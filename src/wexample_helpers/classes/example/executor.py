@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from wexample_helpers.classes.example.example import Example
+from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.helpers.module import module_load_class_from_file_if_exist
 from wexample_helpers.helpers.string import string_to_pascal_case
@@ -10,8 +11,14 @@ from wexample_helpers.service.mixins.registry_container_mixin import RegistryCon
 
 @base_class
 class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
+    filters: tuple[str, ...] | None = public_field(
+        default=None,
+        description="Optional list of substrings to select which examples to run.",
+    )
+
     def __attrs_post_init__(self) -> None:
         super().__attrs_post_init__()
+        self._normalise_filters()
         examples_registry = self.get_registry("examples")
         examples_dir = Path(self.entrypoint_path).parent
 
@@ -38,6 +45,31 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
 
     def execute(self) -> None:
         examples_registry = self.get_registry("examples")
+        matched = False
         for key, example in examples_registry.get_all().items():
+            if not self._should_run_example(key, example):
+                continue
+            matched = True
             print(f"Running example: {key}")
             example.execute()
+
+        if self.filters and not matched:
+            filters = ", ".join(self.filters)
+            print(f"No examples matched filters: {filters}")
+
+    def _normalise_filters(self) -> None:
+        if not self.filters:
+            self.filters = None
+            self._filters_lower: tuple[str, ...] = ()
+            return
+
+        cleaned = tuple(filter(None, (f.strip() for f in self.filters)))
+        self.filters = cleaned or None
+        self._filters_lower = tuple(f.lower() for f in self.filters) if self.filters else ()
+
+    def _should_run_example(self, key: str, example: Example) -> bool:
+        if not self.filters:
+            return True
+        key_lower = key.lower()
+        class_name = example.__class__.__name__.lower()
+        return any(token in key_lower or token in class_name for token in self._filters_lower)
