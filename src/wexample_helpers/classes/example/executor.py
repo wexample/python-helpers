@@ -62,11 +62,26 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
                 item=example_class(path=path, executor=self),
             )
 
+    def execute(self) -> None:
+        examples_registry = self.get_registry("examples")
+        matched = False
+        for key, example in examples_registry.get_all().items():
+            if not self._should_run_example(key, example):
+                continue
+            matched = True
+            self._print_log(f"Running example: {key}")
+            example.execute()
+
+        if self.filters and not matched:
+            filters = ", ".join(self.filters)
+            self._print_log(f"No examples matched filters: {filters}")
+
+    def _build_example_key(self, path: Path, root: Path) -> str:
+        relative = path.relative_to(root).with_suffix("")
+        return str(relative).replace("\\", "/")
+
     def _get_example_class_type(self) -> type[Example]:
         return Example
-
-    def _print_log(self, message: str) -> None:
-        print(message)
 
     def _iter_example_files(self, root: Path) -> list[Path]:
         files: list[Path] = []
@@ -84,24 +99,6 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
                 continue
             files.append(path)
         return files
-
-    def _build_example_key(self, path: Path, root: Path) -> str:
-        relative = path.relative_to(root).with_suffix("")
-        return str(relative).replace("\\", "/")
-
-    def execute(self) -> None:
-        examples_registry = self.get_registry("examples")
-        matched = False
-        for key, example in examples_registry.get_all().items():
-            if not self._should_run_example(key, example):
-                continue
-            matched = True
-            self._print_log(f"Running example: {key}")
-            example.execute()
-
-        if self.filters and not matched:
-            filters = ", ".join(self.filters)
-            self._print_log(f"No examples matched filters: {filters}")
 
     def _normalise_filters(self) -> None:
         raw_filters = self.filters
@@ -129,6 +126,9 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
 
         self.filters = cleaned or None
         self._filters_lower = tuple(f.lower() for f in cleaned) if cleaned else ()
+
+    def _print_log(self, message: str) -> None:
+        print(message)
 
     def _should_run_example(self, key: str, example: Example) -> bool:
         if not self.filters:
