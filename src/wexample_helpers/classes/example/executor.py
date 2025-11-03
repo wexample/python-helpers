@@ -11,7 +11,9 @@ from wexample_helpers.helpers.module import (
 )
 from wexample_helpers.helpers.string import string_to_pascal_case
 from wexample_helpers.mixin.with_entrypoint_path_mixin import WithEntrypointPathMixin
-from wexample_helpers.service.mixins.registry_container_mixin import RegistryContainerMixin
+from wexample_helpers.service.mixins.registry_container_mixin import (
+    RegistryContainerMixin,
+)
 
 
 @base_class
@@ -104,7 +106,9 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
     def _normalise_filters(self) -> None:
         raw_filters = self.filters
 
-        if raw_filters is None or (isinstance(raw_filters, str) and not raw_filters.strip()):
+        if raw_filters is None or (
+            isinstance(raw_filters, str) and not raw_filters.strip()
+        ):
             self.filters = None
             self._filters_lower: tuple[str, ...] = ()
             return
@@ -124,13 +128,13 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         )
 
         self.filters = cleaned or None
-        self._filters_lower = (
-            tuple(f.lower() for f in cleaned) if cleaned else ()
-        )
+        self._filters_lower = tuple(f.lower() for f in cleaned) if cleaned else ()
 
     def _should_run_example(self, key: str, example: Example) -> bool:
         if not self.filters:
             return True
         key_lower = key.lower()
         class_name = example.__class__.__name__.lower()
-        return any(token in key_lower or token in class_name for token in self._filters_lower)
+        return any(
+            token in key_lower or token in class_name for token in self._filters_lower
+        )
