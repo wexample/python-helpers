@@ -21,23 +21,20 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         super().__attrs_post_init__()
         self._normalise_filters()
         examples_registry = self.get_registry("examples")
-        examples_dir = Path(self.entrypoint_path).parent
+        examples_dir = Path(self.entrypoint_path).parent.resolve()
 
-        for path in sorted(examples_dir.iterdir()):
-            if not path.is_file() or path.suffix != ".py":
-                continue
-            if path.name in {"__init__.py", "__main__.py"} or path.name.startswith("_"):
-                continue
-
+        for path in self._iter_example_files(examples_dir):
             example_class = module_load_class_from_file_if_exist(
                 file_path=path,
                 class_name=string_to_pascal_case(path.stem),
             )
 
             if not isinstance(example_class, type) or not issubclass(
-                    example_class, self._get_example_class_type()
+                example_class, self._get_example_class_type()
             ):
                 continue
+
+            key = self._build_example_key(path=path, root=examples_dir)
 
             examples_registry.register(
                 key=path.stem,
