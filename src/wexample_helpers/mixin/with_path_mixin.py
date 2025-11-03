@@ -28,7 +28,7 @@ class WithPathMixin(BaseClass):
 
     def _check_exists(self) -> None:
         """If check_exists is True, ensure the path exists."""
-        from wexample_file.excpetion.local_path_not_found_exception import (
+        from wexample_file.exception.local_path_not_found_exception import (
             LocalPathNotFoundException,
         )
 
