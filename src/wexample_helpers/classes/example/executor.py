@@ -1,6 +1,5 @@
-from pathlib import Path
-
 from collections.abc import Iterable
+from pathlib import Path
 
 from wexample_helpers.classes.example.example import Example
 from wexample_helpers.classes.field import public_field
@@ -36,7 +35,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
             )
 
             if not isinstance(example_class, type) or not issubclass(
-                example_class, Example
+                    example_class, self._get_example_class_type()
             ):
                 continue
 
@@ -44,6 +43,9 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
                 key=path.stem,
                 item=example_class(path=path),
             )
+
+    def _get_example_class_type(self) -> type[Example]:
+        return Example
 
     def execute(self) -> None:
         examples_registry = self.get_registry("examples")
