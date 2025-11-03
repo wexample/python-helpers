@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @base_class
 class Example(WithPathMixin, BaseClass):
-    executor: "Executor | None" = public_field(
+    executor: Executor | None = public_field(
         default=None,
         description="Reference to the Executor managing this example instance.",
     )

@@ -143,13 +143,6 @@ def module_get_path(module) -> pathlib.Path:
     return pathlib.Path(importlib.resources.files(module))
 
 
-def module_load_class_from_file_if_exist(**kwargs) -> type | None:
-    try:
-        return module_load_class_from_file(**kwargs)
-    except Exception:
-        return None
-
-
 def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
     """Load a class by name from a python module file path."""
     import importlib
@@ -174,6 +167,13 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> typ
         ) from e
 
     return cls
+
+
+def module_load_class_from_file_if_exist(**kwargs) -> type | None:
+    try:
+        return module_load_class_from_file(**kwargs)
+    except Exception:
+        return None
 
 
 def module_load_class_from_file_with_package_root(
