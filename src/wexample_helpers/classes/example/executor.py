@@ -4,7 +4,9 @@ from pathlib import Path
 from wexample_helpers.classes.example.example import Example
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.helpers.module import module_load_class_from_file_if_exist
+from wexample_helpers.helpers.module import (
+    module_load_class_from_file_with_package_root,
+)
 from wexample_helpers.helpers.string import string_to_pascal_case
 from wexample_helpers.mixin.with_entrypoint_path_mixin import WithEntrypointPathMixin
 from wexample_helpers.service.mixins.registry_container_mixin import RegistryContainerMixin
@@ -24,16 +26,29 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         examples_dir = Path(self.entrypoint_path).parent.resolve()
         from wexample_helpers.helpers.cli import cli_make_clickable_path
 
+        package_name = examples_dir.name
+
         for path in self._iter_example_files(examples_dir):
-            example_class = module_load_class_from_file_if_exist(
-                file_path=path,
-                class_name=string_to_pascal_case(path.stem),
-            )
+            class_name = string_to_pascal_case(path.stem)
+            try:
+                example_class = module_load_class_from_file_with_package_root(
+                    file_path=path,
+                    class_name=class_name,
+                    package_root=examples_dir,
+                    package_name=package_name,
+                )
+            except Exception:
+                self._print_log(
+                    f'Bad example "{class_name}" in file: {cli_make_clickable_path(path)}'
+                )
+                continue
 
             if not isinstance(example_class, type) or not issubclass(
                 example_class, self._get_example_class_type()
             ):
-                self._print_log(f"Bad example \"{string_to_pascal_case(path.stem)}\" in file: {cli_make_clickable_path(path)}")
+                self._print_log(
+                    f'Bad example "{class_name}" in file: {cli_make_clickable_path(path)}'
+                )
                 continue
 
             key = self._build_example_key(path=path, root=examples_dir)
