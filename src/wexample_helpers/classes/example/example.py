@@ -1,9 +1,16 @@
+
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.mixin.with_path_mixin import WithPathMixin
-from wexample_helpers.service.registry import RegistrableType
 
 
 @base_class
-class Example(WithPathMixin, RegistrableType):
+class Example(WithPathMixin, BaseClass):
+    executor: "Executor | None" = public_field(
+        default=None,
+        description="Reference to the Executor managing this example instance.",
+    )
+
     def execute(self) -> None:
         pass

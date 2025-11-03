@@ -41,7 +41,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
 
             examples_registry.register(
                 key=path.stem,
-                item=example_class(path=path),
+                item=example_class(path=path, executor=self),
             )
 
     def _get_example_class_type(self) -> type[Example]:
