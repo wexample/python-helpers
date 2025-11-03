@@ -47,6 +47,9 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
     def _get_example_class_type(self) -> type[Example]:
         return Example
 
+    def _print_log(self, message: str) -> None:
+        return message
+
     def execute(self) -> None:
         examples_registry = self.get_registry("examples")
         matched = False
@@ -54,12 +57,12 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
             if not self._should_run_example(key, example):
                 continue
             matched = True
-            print(f"Running example: {key}")
+            self._print_log(f"Running example: {key}")
             example.execute()
 
         if self.filters and not matched:
             filters = ", ".join(self.filters)
-            print(f"No examples matched filters: {filters}")
+            self._print_log(f"No examples matched filters: {filters}")
 
     def _normalise_filters(self) -> None:
         raw_filters = self.filters
