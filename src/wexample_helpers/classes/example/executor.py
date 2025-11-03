@@ -22,6 +22,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         self._normalise_filters()
         examples_registry = self.get_registry("examples")
         examples_dir = Path(self.entrypoint_path).parent.resolve()
+        from wexample_helpers.helpers.cli import cli_make_clickable_path
 
         for path in self._iter_example_files(examples_dir):
             example_class = module_load_class_from_file_if_exist(
@@ -32,6 +33,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
             if not isinstance(example_class, type) or not issubclass(
                 example_class, self._get_example_class_type()
             ):
+                self._print_log(f"Bad example \"{string_to_pascal_case(path.stem)}\" in file: {cli_make_clickable_path(path)}")
                 continue
 
             key = self._build_example_key(path=path, root=examples_dir)
@@ -45,7 +47,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         return Example
 
     def _print_log(self, message: str) -> None:
-        return message
+        print(message)
 
     def _iter_example_files(self, root: Path) -> list[Path]:
         files: list[Path] = []
