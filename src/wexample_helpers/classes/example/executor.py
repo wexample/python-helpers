@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from collections.abc import Iterable
+
 from wexample_helpers.classes.example.example import Example
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
@@ -58,14 +60,31 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
             print(f"No examples matched filters: {filters}")
 
     def _normalise_filters(self) -> None:
-        if not self.filters:
+        raw_filters = self.filters
+
+        if raw_filters is None or (isinstance(raw_filters, str) and not raw_filters.strip()):
             self.filters = None
             self._filters_lower: tuple[str, ...] = ()
             return
 
-        cleaned = tuple(filter(None, (f.strip() for f in self.filters)))
+        if isinstance(raw_filters, str):
+            tokens: Iterable[str] = (raw_filters,)
+        elif isinstance(raw_filters, Iterable):
+            tokens = raw_filters
+        else:
+            tokens = (str(raw_filters),)
+
+        cleaned = tuple(
+            filter(
+                None,
+                (str(token).strip() for token in tokens),
+            )
+        )
+
         self.filters = cleaned or None
-        self._filters_lower = tuple(f.lower() for f in self.filters) if self.filters else ()
+        self._filters_lower = (
+            tuple(f.lower() for f in cleaned) if cleaned else ()
+        )
 
     def _should_run_example(self, key: str, example: Example) -> bool:
         if not self.filters:
