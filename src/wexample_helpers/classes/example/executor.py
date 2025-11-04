@@ -13,6 +13,7 @@ from wexample_helpers.service.mixins.registry_container_mixin import (
     RegistryContainerMixin,
 )
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from wexample_helpers.classes.example.example import Example
 
@@ -83,6 +84,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
 
     def _get_example_class_type(self) -> type[Example]:
         from wexample_helpers.classes.example.example import Example
+
         return Example
 
     def _iter_example_files(self, root: Path) -> list[Path]:

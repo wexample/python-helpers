@@ -48,6 +48,7 @@ def shell_run(
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
     from pathlib import Path
+
     from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]
@@ -138,6 +139,7 @@ async def shell_run_async(
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
     from pathlib import Path
+
     from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]
