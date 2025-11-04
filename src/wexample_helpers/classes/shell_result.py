@@ -9,7 +9,7 @@ class ShellResult:
     """Structured result for shell command execution."""
 
     args: str | list[str]
-    cwd: Path
+    cwd: Path | None
     duration: float
     end_time: float
     returncode: int

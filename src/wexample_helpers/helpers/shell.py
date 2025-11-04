@@ -102,7 +102,7 @@ def shell_run(
             returncode=completed.returncode,
             stdout=completed.stdout if capture else None,
             stderr=completed.stderr if capture else None,
-            cwd=Path(cwd),
+            cwd=Path(cwd) if cwd else None,
             duration=end - start,
             start_time=start,
             end_time=end,
