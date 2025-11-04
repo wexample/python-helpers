@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 
 # OSC (Operating System Command) sequences such as hyperlinks: ESC ] ... ( ESC \ or BEL )

@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from pathlib import Path
-
-from wexample_helpers.classes.example.example import Example
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.helpers.module import (
@@ -14,6 +12,9 @@ from wexample_helpers.mixin.with_entrypoint_path_mixin import WithEntrypointPath
 from wexample_helpers.service.mixins.registry_container_mixin import (
     RegistryContainerMixin,
 )
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.classes.example.example import Example
 
 
 @base_class
@@ -81,6 +82,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         return str(relative).replace("\\", "/")
 
     def _get_example_class_type(self) -> type[Example]:
+        from wexample_helpers.classes.example.example import Example
         return Example
 
     def _iter_example_files(self, root: Path) -> list[Path]:

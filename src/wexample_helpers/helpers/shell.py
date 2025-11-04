@@ -7,7 +7,6 @@ import subprocess
 import sys
 import time
 from collections.abc import Mapping, Sequence
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.const.types import PathOrString
@@ -48,6 +47,7 @@ def shell_run(
     - inherit_stdio: If True, inherit parent's stdio (overrides capture).
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
+    from pathlib import Path
     from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]
@@ -137,6 +137,7 @@ async def shell_run_async(
 
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
+    from pathlib import Path
     from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -6,7 +7,7 @@ if TYPE_CHECKING:
 
 
 def system_get_venv_bin_path() -> Path:
-    from pathlib import Path
     import sys
+    from pathlib import Path
 
     return Path(sys.executable).parent
