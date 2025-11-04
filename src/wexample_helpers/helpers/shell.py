@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 from collections.abc import Mapping, Sequence
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.const.types import PathOrString
@@ -101,7 +102,7 @@ def shell_run(
             returncode=completed.returncode,
             stdout=completed.stdout if capture else None,
             stderr=completed.stderr if capture else None,
-            cwd=cwd,
+            cwd=Path(cwd),
             duration=end - start,
             start_time=start,
             end_time=end,
@@ -215,7 +216,7 @@ async def shell_run_async(
         returncode=rc,
         stdout=stdout_text,
         stderr=stderr_text,
-        cwd=cwd,
+        cwd=Path(cwd),
         duration=end - start,
         start_time=start,
         end_time=end,

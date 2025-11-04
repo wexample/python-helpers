@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass
@@ -8,7 +9,7 @@ class ShellResult:
     """Structured result for shell command execution."""
 
     args: str | list[str]
-    cwd: str | None
+    cwd: Path
     duration: float
     end_time: float
     returncode: int
