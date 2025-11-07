@@ -97,3 +97,19 @@ def debug_trace_and_die(
 
 def dt(*args, **kwargs) -> None:
     debug_trace_and_die(*args, **kwargs)
+
+
+import time
+
+_DEBUG_TIMERS = {}
+
+
+def debug_timer_start(name: str):
+    _DEBUG_TIMERS[name] = time.perf_counter()
+
+
+def debug_timer_end(name: str, precision: int = 2):
+    if name not in _DEBUG_TIMERS:
+        return None
+
+    return time.perf_counter() - _DEBUG_TIMERS.pop(name)
