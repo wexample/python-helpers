@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "wexample-helpers"
-version = "0.0.78"
+version = "0.0.79"
 description = "Some python basic helpers and constants."
 authors = [{name = "weeger", email = "contact@wexample.com"}]
 requires-python = ">=3.10"
@@ -30,6 +30,10 @@ dev = [
     "pytest-cov",
 ]
 
+[tool.setuptools.packages.find]
+include = ["*"]
+exclude = ["wexample_helpers.testing*"]
+
 [tool.pdm]
 distribution = true
 
@@ -39,6 +43,14 @@ package-dir = "src"
 [[tool.pdm.build.packages]]
 include = "wexample_helpers"
 from = "src"
-[tool.setuptools.packages.find]
-include = ["*"]
-exclude = ["wexample_helpers.testing*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["wexample_helpers"]
+omit = ["*/tests/*", "*/.venv/*", "*/venv/*"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "def __repr__", "raise AssertionError", "raise NotImplementedError", "if __name__ == .__main__.:", "if TYPE_CHECKING:", "@abstractmethod"]
