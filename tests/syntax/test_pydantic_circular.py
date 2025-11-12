@@ -1,14 +1,35 @@
 from __future__ import annotations
 
-from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.testing.classes.pydantic_circular_advanced_kernel import (
-    AdvancedKernel,
-)
-from wexample_helpers.testing.classes.pydantic_circular_base_kernel import BaseKernel
+
+def test_attrs_circular() -> None:
+    """Test basic kernel circular reference."""
+    from wexample_helpers.testing.classes.attrs_circular_base_kernel import (
+        BaseKernel,
+    )
+
+    _test_kernel_service(BaseKernel, "test_kernel")
+
+
+def test_attrs_circular_advanced() -> None:
+    """Test advanced kernel with inheritance."""
+    from wexample_helpers.testing.classes.attrs_circular_advanced_kernel import (
+        AdvancedKernel,
+    )
+
+    kernel = _test_kernel_service(AdvancedKernel, "advanced_kernel")
+
+    # Additional advanced checks
+    assert isinstance(kernel, AdvancedKernel)
+    assert kernel.version == "1.0.0"
+    assert kernel.service.mode == "advanced"
+    assert kernel.service.base_kernel == kernel  # Test base type access
+    assert kernel.service.advanced_kernel == kernel  # Test advanced type access
 
 
 def _test_kernel_service(kernel_class: type, kernel_name: str):
     """Test kernel and service circular reference."""
+    from wexample_helpers.common.debug.debug_dump import DebugDump
+
     # Create a kernel which will automatically create its service
     kernel = kernel_class(name=kernel_name, debug=True)
 
@@ -26,20 +47,3 @@ def _test_kernel_service(kernel_class: type, kernel_name: str):
     service_dump.execute()
 
     return kernel
-
-
-def test_pydantic_circular() -> None:
-    """Test basic kernel circular reference."""
-    _test_kernel_service(BaseKernel, "test_kernel")
-
-
-def test_pydantic_circular_advanced() -> None:
-    """Test advanced kernel with inheritance."""
-    kernel = _test_kernel_service(AdvancedKernel, "advanced_kernel")
-
-    # Additional advanced checks
-    assert isinstance(kernel, AdvancedKernel)
-    assert kernel.version == "1.0.0"
-    assert kernel.service.mode == "advanced"
-    assert kernel.service.base_kernel == kernel  # Test base type access
-    assert kernel.service.advanced_kernel == kernel  # Test advanced type access

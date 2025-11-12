@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from wexample_helpers.exception.mixin.not_allowed_item_mixin import NotAllowedItemMixin
-from wexample_helpers.exception.model.not_allowed_item_data import NotAllowedItemData
 from wexample_helpers.exception.undefined_exception import UndefinedException
 
 
@@ -19,27 +18,25 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
         self,
         item_type: str,
         item_value: str | None = None,
-        allowed_values: list[str] = None,
+        allowed_values: list[str] | None = None,
         cause: Exception | None = None,
         previous: Exception | None = None,
         message: str | None = None,
     ) -> None:
+        from wexample_helpers.exception.model.not_allowed_item_data import (
+            NotAllowedItemData,
+        )
+
         if allowed_values is None:
             allowed_values = []
 
-        # Create structured data using Pydantic model
-        data_model = NotAllowedItemData(
-            item_type=item_type,
-            item_value=item_value,
-            allowed_values=allowed_values,
-            is_missing=item_value is None,
-        )
-
-        # Store attributes as instance attributes
-        self.item_type = item_type
-        self.item_value = item_value
-        self.allowed_values = allowed_values
-        self.is_missing = item_value is None
+        # Create structured data using TypedDict
+        data: NotAllowedItemData = {
+            "item_type": item_type,
+            "item_value": item_value,
+            "allowed_values": allowed_values,
+            "is_missing": item_value is None,
+        }
 
         # Generate message using the mixin method
         message = message or self.format_not_allowed_item_message(
@@ -48,7 +45,7 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
 
         super().__init__(
             message=message,
-            data=data_model.model_dump(),
+            data=data,
             cause=cause,
             previous=previous,
         )

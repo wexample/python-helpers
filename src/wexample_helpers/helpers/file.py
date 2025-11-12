@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
+from typing import TYPE_CHECKING
 
-from wexample_helpers.const.types import FileStringOrPath, PathOrString
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from wexample_helpers.const.types import FileStringOrPath, PathOrString
 
 
 def file_change_mode(path: PathOrString, mode: int) -> None:
@@ -35,10 +38,22 @@ def file_change_mode_recursive(
             )
 
 
+def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
+    """Get directories under path, optionally recursively."""
+    from pathlib import Path
+
+    base = Path(path)
+    if not recursive:
+        return [str(p) for p in base.iterdir() if p.is_dir()]
+    return [str(p) for p in base.rglob("*") if p.is_dir()]
+
+
 def file_list_subdirectories(path: PathOrString) -> list[str]:
     """
     List immediate subdirectory names (excluding hidden) under a given path.
     """
+    from pathlib import Path
+
     base = Path(path)
     subdirs = [
         p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")
@@ -56,18 +71,20 @@ def file_mode_octal_to_num(mode: str | int) -> int:
     return int(str(mode), 8)
 
 
-def file_path_get_octal_mode(path: Path) -> str:
-    """Get the octal permission string for a Path object."""
-    return file_mode_num_to_octal(path.stat().st_mode)
-
-
 def file_path_get_mode_num(path: Path) -> int:
     """Get the numeric permission bits for a Path object."""
     return path.stat().st_mode & 0o777
 
 
+def file_path_get_octal_mode(path: Path) -> str:
+    """Get the octal permission string for a Path object."""
+    return file_mode_num_to_octal(path.stat().st_mode)
+
+
 def file_read(file_path: PathOrString) -> str:
     """Read file content as UTF-8 text."""
+    from pathlib import Path
+
     return Path(file_path).read_text(encoding="utf-8")
 
 
@@ -83,6 +100,8 @@ def file_read_or_default(
 
 def file_remove_if_exists(path: PathOrString) -> None:
     """Remove a file or symlink if it exists."""
+    from pathlib import Path
+
     p = Path(path)
     if p.is_file() or p.is_symlink():
         p.unlink()
@@ -90,11 +109,15 @@ def file_remove_if_exists(path: PathOrString) -> None:
 
 def file_resolve_path(path: FileStringOrPath) -> Path:
     """Resolve a FileStringOrPath to a pathlib.Path object."""
+    from pathlib import Path
+
     return path if isinstance(path, Path) else Path(path)
 
 
 def file_touch(path: PathOrString, times: tuple[int, int] | None = None) -> None:
     """Create file if missing and update its access and modification times."""
+    from pathlib import Path
+
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     with p.open("a"):
@@ -116,6 +139,8 @@ def file_validate_mode_octal_or_fail(mode: str | int) -> bool:
 
 def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -> None:
     """Write content to file, overwriting if it exists."""
+    from pathlib import Path
+
     p = Path(file_path)
     p.write_text(content, encoding=encoding)
 
@@ -133,11 +158,3 @@ def file_write_ensure(
     p = file_resolve_path(file_path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(content, encoding=encoding)
-
-
-def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
-    """Get directories under path, optionally recursively."""
-    base = Path(path)
-    if not recursive:
-        return [str(p) for p in base.iterdir() if p.is_dir()]
-    return [str(p) for p in base.rglob("*") if p.is_dir()]

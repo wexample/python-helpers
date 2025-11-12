@@ -15,6 +15,9 @@ class DebugDumpClass(AbstractDebug):
     def collect_data(self) -> None:
         self.data = self._collect_hierarchy(self.cls)
 
+    def print(self, silent: bool = False):
+        return super().print(silent=silent)
+
     def _collect_hierarchy(self, cls: Any, seen: set[int] | None = None) -> dict:
         if seen is None:
             seen = set()
@@ -83,6 +86,3 @@ class DebugDumpClass(AbstractDebug):
             result["bases"] = bases
 
         return result
-
-    def print(self, silent: bool = False):
-        return super().print(silent=silent)

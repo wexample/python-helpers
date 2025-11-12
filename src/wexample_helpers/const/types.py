@@ -36,22 +36,23 @@ StringMessageParameters = StringKeysDict
 FileStringOrPath = Union[str, Path]
 
 # Version types
-UPGRADE_TYPE_MAJOR: str = "major"
-UPGRADE_TYPE_INTERMEDIATE: str = "intermediate"
-UPGRADE_TYPE_MINOR: str = "minor"
+# filestate: python-constant-sort
 UPGRADE_TYPE_ALPHA: str = "alpha"
 UPGRADE_TYPE_BETA: str = "beta"
 UPGRADE_TYPE_DEV: str = "dev"
-UPGRADE_TYPE_RC: str = "rc"
+UPGRADE_TYPE_INTERMEDIATE: str = "intermediate"
+UPGRADE_TYPE_MAJOR: str = "major"
+UPGRADE_TYPE_MINOR: str = "minor"
 UPGRADE_TYPE_NIGHTLY: str = "nightly"
+UPGRADE_TYPE_RC: str = "rc"
 UPGRADE_TYPE_SNAPSHOT: str = "snapshot"
 
 VERSION_PRE_BUILD_NUMBER: int = 0
 
 
 class VersionDescriptor(TypedDict):
-    major: int | None
     intermediate: int | None
+    major: int | None
     minor: int | None
-    pre_build_type: str | None
     pre_build_number: int | None
+    pre_build_type: str | None

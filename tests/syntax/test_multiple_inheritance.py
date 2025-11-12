@@ -2,15 +2,15 @@ from __future__ import annotations
 
 import unittest
 
-from wexample_helpers.common.debug.debug_dump import DebugDump
-from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
-from wexample_helpers.testing.classes.first_parent import FirstParent
-from wexample_helpers.testing.classes.multiple_child import MultipleChild
-from wexample_helpers.testing.classes.second_parent import SecondParent
-
 
 class TestMultipleInheritance(unittest.TestCase):
     def test_multiple_inheritance(self) -> None:
+        from wexample_helpers.common.debug.debug_dump import DebugDump
+        from wexample_helpers.common.debug.debug_dump_class import DebugDumpClass
+        from wexample_helpers.testing.classes.first_parent import FirstParent
+        from wexample_helpers.testing.classes.multiple_child import MultipleChild
+        from wexample_helpers.testing.classes.second_parent import SecondParent
+
         # Test instance creation with default values
         child = MultipleChild()
         self.assertIsInstance(child, MultipleChild)

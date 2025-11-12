@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from wexample_helpers.helpers.string import string_to_kebab_case, string_to_snake_case
-
 
 def test_string_to_kebab_case() -> None:
+    from wexample_helpers.helpers.string import string_to_kebab_case
+
     # Test camelCase to kebab-case
     assert string_to_kebab_case("camelCase") == "camel-case"
 
@@ -33,6 +33,8 @@ def test_string_to_kebab_case() -> None:
 
 
 def test_string_to_snake_case() -> None:
+    from wexample_helpers.helpers.string import string_to_snake_case
+
     # Test camelCase to snake_case
     assert string_to_snake_case("camelCase") == "camel_case"
 

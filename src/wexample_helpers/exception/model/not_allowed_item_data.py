@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from wexample_helpers.exception.undefined_exception import ExceptionData
+from typing import TypedDict
 
 
-class NotAllowedItemData(ExceptionData):
-    """Data model for exceptions related to not allowed items."""
+class NotAllowedItemData(TypedDict):
+    """Data structure for exceptions related to not allowed items."""
 
+    allowed_values: list[str]
+    is_missing: bool
     item_type: str
-    item_value: str | None = None
-    allowed_values: list[str] = []
-    is_missing: bool = False
+    item_value: str | None

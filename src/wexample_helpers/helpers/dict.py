@@ -1,15 +1,28 @@
 from __future__ import annotations
 
 import copy
-from collections.abc import Mapping, Sequence
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
-from wexample_helpers.const.types import StringKeysDict, StringKeysMapping, StringsList
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import (
+        StringKeysDict,
+        StringKeysMapping,
+        StringsList,
+    )
 
 DICT_PATH_SEPARATOR_DEFAULT = "."
 DICT_ITEM_EXISTS_ACTION_ABORT = "abort"
 DICT_ITEM_EXISTS_ACTION_MERGE = "merge"
 DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
+
+
+def dict_get_first_missing_key(
+    dictionary: StringKeysMapping, required_keys: StringsList
+) -> str | None:
+    for key in required_keys:
+        if key not in dictionary:
+            return key
+    return None
 
 
 def dict_get_item_by_path(
@@ -18,6 +31,8 @@ def dict_get_item_by_path(
     default: Any | None = None,
     separator: str = DICT_PATH_SEPARATOR_DEFAULT,
 ) -> Any:
+    from collections.abc import Mapping, Sequence
+
     for k in key.split(separator):
         if isinstance(data, Mapping) and k in data:
             data = data[k]
@@ -59,6 +74,8 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
 
     Note: Only keys of type str are supported; values are Any.
     """
+    from wexample_helpers.const.types import StringKeysMapping
+
     result: StringKeysDict = {}
     for dictionary in dicts:
         for key, value in dictionary.items():
@@ -92,6 +109,8 @@ def dict_set_item_by_path(
     value: Any,
     when_exist: str = DICT_ITEM_EXISTS_ACTION_REPLACE,
 ) -> None:
+    from wexample_helpers.const.types import StringsList
+
     # Allow pre-split to escape non-separator dots, like in file names.
     if isinstance(key, list):
         keys = cast(StringsList, key)
@@ -121,12 +140,3 @@ def dict_sort_values(
     return {
         k: v for k, v in sorted(dictionary.items(), key=key or (lambda item: item[1]))
     }
-
-
-def dict_get_first_missing_key(
-    dictionary: StringKeysMapping, required_keys: StringsList
-) -> str | None:
-    for key in required_keys:
-        if key not in dictionary:
-            return key
-    return None

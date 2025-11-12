@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from wexample_helpers.const.types import StringsList
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import StringsList
 
 
 class MissingRequiredEnvVarError(Exception):

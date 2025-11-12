@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from wexample_helpers.helpers.polyfill import polyfill_register_global
-
 
 class HasClassDependencies:
     @classmethod
@@ -13,12 +11,3 @@ class HasClassDependencies:
         this function can be used to import dependencies before rebuilding class
         """
         return []
-
-    @classmethod
-    def import_dependencies_and_rebuild(cls) -> None:
-        import sys
-
-        polyfill_register_global(
-            cls.get_class_dependencies(), vars(sys.modules[cls.__module__])
-        )
-        cls.model_rebuild()

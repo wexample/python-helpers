@@ -2,21 +2,32 @@ from __future__ import annotations
 
 from typing import Any, Generic, TypeVar
 
-from pydantic import BaseModel
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.classes.private_field import private_field
 
 RegistrableType = TypeVar("RegistrableType")
 
+from wexample_helpers.decorator.base_class import base_class
 
-class Registry(BaseModel, Generic[RegistrableType]):
+
+@base_class
+class Registry(Generic[RegistrableType]):
     """Generic registry for managing any type of data."""
 
-    _items: dict[str, RegistrableType] = {}
-    _fail_if_missing: bool = True
-    container: Any
+    container: Any = public_field(description="The service container")
+    _fail_if_missing: bool = private_field(
+        description="Define if missing item is fatal or not", default=False
+    )
+    _items: dict[str, RegistrableType] | None = private_field(
+        description="The items of the registry", factory=dict
+    )
 
-    def register(self, key: str, item: RegistrableType) -> None:
-        """Register an item in the registry."""
-        self._items[key] = item
+    def __init__(self, container: Any) -> None:
+        self._items = {}
+        self.container = container
+
+    def all_keys(self) -> list[str]:
+        return list(self._items.keys())
 
     def get(self, key: str, **kwargs) -> RegistrableType | None:
         """
@@ -36,8 +47,9 @@ class Registry(BaseModel, Generic[RegistrableType]):
         """Check if an item exists in the registry."""
         return key in self._items
 
-    def all_keys(self) -> list[str]:
-        return list(self._items.keys())
+    def register(self, key: str, item: RegistrableType) -> None:
+        """Register an item in the registry."""
+        self._items[key] = item
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:
         if item is None and self._fail_if_missing:

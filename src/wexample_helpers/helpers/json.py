@@ -4,13 +4,15 @@ import json
 import os
 from typing import Any
 
+from wexample_helpers.const.types import PathOrString
 
-def json_load(path: str) -> list[Any] | dict[Any, Any]:
+
+def json_load(path: PathOrString) -> list[Any] | dict[Any, Any]:
     with open(path) as f:
         return json.load(f)
 
 
-def json_load_if_valid(path: str) -> Any | bool:
+def json_load_if_valid(path: PathOrString) -> Any | bool:
     if os.path.exists(path):
         try:
             with open(path) as f:
@@ -20,7 +22,7 @@ def json_load_if_valid(path: str) -> Any | bool:
     return False
 
 
-def json_parse_if_valid(json_data: str, default: any = False) -> Any:
+def json_parse_if_valid(json_data: PathOrString, default: any = False) -> Any:
     try:
         return json.loads(json_data)
     except:

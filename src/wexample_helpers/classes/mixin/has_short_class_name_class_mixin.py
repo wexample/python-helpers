@@ -7,6 +7,10 @@ class HasShortClassNameClassMixin:
         return None
 
     @classmethod
+    def get_name(cls) -> str:
+        return cls.get_short_class_name()
+
+    @classmethod
     def get_short_class_name(cls) -> str:
         short_name = cls.__name__
         suffix = cls.get_class_name_suffix()
@@ -15,7 +19,3 @@ class HasShortClassNameClassMixin:
             return short_name[: -len(suffix)]
 
         return short_name
-
-    @classmethod
-    def get_name(cls) -> str:
-        return cls.get_short_class_name()

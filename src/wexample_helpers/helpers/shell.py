@@ -6,70 +6,16 @@ import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
-from typing import Any
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.const.types import PathOrString
 
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
 
-@dataclass
-class ShellResult:
-    """Structured result for shell command execution."""
-
-    args: str | list[str]
-    returncode: int
-    stdout: str | None
-    stderr: str | None
-    cwd: str | None
-    duration: float
-    start_time: float
-    end_time: float
-
-
-def shell_which(cmd: str) -> str | None:
-    """Return full path to executable or None if not found (shutil.which wrapper)."""
-
-    return shutil.which(cmd)
-
-
-def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
-    """Split a command if provided as a string using shlex; pass lists through."""
-
-    if isinstance(cmd, str):
-        return shlex.split(cmd)
-    return list(cmd)
-
-
-def _shell_apply_sudo(
-    cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
-) -> str | list[str]:
-    """Prefix the command with sudo options when requested.
-
-    - If shell=True and sudo is requested, we build a string prefix.
-    - If shell=False, we build a list prefix.
-    """
-
-    if not sudo_user and not elevate:
-        return cmd if isinstance(cmd, str) or shell else list(cmd)  # type: ignore[arg-type]
-
-    if shell:
-        base = "sudo"
-        if sudo_user:
-            base += f" -u {shlex.quote(sudo_user)} --"
-        elif elevate:
-            base += " --"
-        if isinstance(cmd, str):
-            return f"{base} {cmd}"
-        else:
-            return f"{base} {shlex.join(cmd)}"
-    else:
-        prefix: list[str] = ["sudo"]
-        if sudo_user:
-            prefix += ["-u", sudo_user, "--"]
-        elif elevate:
-            prefix += ["--"]
-        return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
+    from wexample_helpers.classes.shell_result import ShellResult
+    from wexample_helpers.const.types import PathOrString
 
 
 def shell_run(
@@ -101,6 +47,9 @@ def shell_run(
     - inherit_stdio: If True, inherit parent's stdio (overrides capture).
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
     """
+    from pathlib import Path
+
+    from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]
 
@@ -154,7 +103,7 @@ def shell_run(
             returncode=completed.returncode,
             stdout=completed.stdout if capture else None,
             stderr=completed.stderr if capture else None,
-            cwd=cwd,
+            cwd=Path(cwd) if cwd else None,
             duration=end - start,
             start_time=start,
             end_time=end,
@@ -189,6 +138,9 @@ async def shell_run_async(
 
     If check=True and the return code is non-zero, raises CalledProcessError.
     """
+    from pathlib import Path
+
+    from wexample_helpers.classes.shell_result import ShellResult
 
     used_cmd: str | list[str]
 
@@ -267,11 +219,19 @@ async def shell_run_async(
         returncode=rc,
         stdout=stdout_text,
         stderr=stderr_text,
-        cwd=cwd,
+        cwd=Path(cwd),
         duration=end - start,
         start_time=start,
         end_time=end,
     )
+
+
+def shell_split_cmd(cmd: str | Sequence[str]) -> list[str]:
+    """Split a command if provided as a string using shlex; pass lists through."""
+
+    if isinstance(cmd, str):
+        return shlex.split(cmd)
+    return list(cmd)
 
 
 async def shell_stream_async(
@@ -294,7 +254,6 @@ async def shell_stream_async(
     - If callbacks are None, default to writing to sys.stdout/sys.stderr.
     - Returns the process return code (and raises if check=True and rc!=0).
     """
-
     used_cmd: str | list[str]
 
     if shell:
@@ -368,3 +327,39 @@ async def shell_stream_async(
     if check and rc != 0:
         raise subprocess.CalledProcessError(rc, used_cmd)
     return rc
+
+
+def shell_which(cmd: str) -> str | None:
+    """Return full path to executable or None if not found (shutil.which wrapper)."""
+    return shutil.which(cmd)
+
+
+def _shell_apply_sudo(
+    cmd: str | Sequence[str], *, sudo_user: str | None, elevate: bool, shell: bool
+) -> str | list[str]:
+    """Prefix the command with sudo options when requested.
+
+    - If shell=True and sudo is requested, we build a string prefix.
+    - If shell=False, we build a list prefix.
+    """
+
+    if not sudo_user and not elevate:
+        return cmd if isinstance(cmd, str) or shell else list(cmd)  # type: ignore[arg-type]
+
+    if shell:
+        base = "sudo"
+        if sudo_user:
+            base += f" -u {shlex.quote(sudo_user)} --"
+        elif elevate:
+            base += " --"
+        if isinstance(cmd, str):
+            return f"{base} {cmd}"
+        else:
+            return f"{base} {shlex.join(cmd)}"
+    else:
+        prefix: list[str] = ["sudo"]
+        if sudo_user:
+            prefix += ["-u", sudo_user, "--"]
+        elif elevate:
+            prefix += ["--"]
+        return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))

@@ -18,6 +18,6 @@ class ErrorTruncateRule:
 class ErrorTruncateRules(Enum):
     PYDANTIC = ("pydantic.", ErrorTruncateRule(truncate_after_module="pydantic"))
 
-    def __init__(self, module_prefix: str, rule: ErrorTruncateRule):
+    def __init__(self, module_prefix: str, rule: ErrorTruncateRule) -> None:
         self.module_prefix = module_prefix
         self.rule = rule
