@@ -1,6 +1,6 @@
 # wexample-helpers
 
-Version: 0.0.80
+Version: 0.0.81
 
 Some python basic helpers and constants.
 
