@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from wexample_helpers.const.types import PathOrString
+    from pathlib import Path
 
 AnyCallable = Callable[..., Any]
 
