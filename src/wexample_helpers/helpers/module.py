@@ -4,6 +4,8 @@ import pathlib
 import sys
 from typing import TYPE_CHECKING, Any
 
+from wexample_helpers.const.types import StringKeysDict
+
 if TYPE_CHECKING:
     pass
 
@@ -234,3 +236,10 @@ def _prepare_module(importlib_util, spec, module_name: str):
     module.__package__ = pkg if pkg else ""
     sys.modules[module_name] = module
     return module
+
+def module_get_distribution_map() -> StringKeysDict:
+    from importlib.metadata import distributions
+    return {
+        (dist.metadata["Name"] or "").lower(): dist.version
+        for dist in distributions()
+    }
