@@ -24,9 +24,6 @@ class HasEnvKeys(BaseClass):
         default=None,
     )
 
-    def __attrs_post_init__(self) -> None:
-        self.env_config = {}
-
     def get_env_parameter(self, key: str, default: str | None = None) -> Any:
         from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
