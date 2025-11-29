@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
+from wexample_helpers.const.globals import UNSET
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
@@ -24,11 +25,11 @@ class HasEnvKeys(BaseClass):
         default=None,
     )
 
-    def get_env_parameter(self, key: str, default: str | None = None) -> Any:
+    def get_env_parameter(self, key: str, default: str | None = UNSET) -> Any:
         from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
         if not key in self.env_config:
-            if default is not None:
+            if default is not UNSET:
                 return default
 
             raise KeyNotFoundError(
