@@ -39,6 +39,25 @@ class HasEnvKeys(BaseClass):
             )
         return self.env_config[key]
 
+    def set_env_parameter(self, key: str, value: str) -> None:
+        """
+        Set a single environment parameter in env_config.
+        
+        Args:
+            key: The environment variable key
+            value: The value to set
+        """
+        self.env_config[key] = value
+
+    def set_env_parameters(self, parameters: dict[str, str]) -> None:
+        """
+        Set multiple environment parameters in env_config in batch.
+        
+        Args:
+            parameters: Dictionary of key-value pairs to set
+        """
+        self.env_config.update(parameters)
+
     def get_expected_env_keys(self) -> list[str]:
         """
         Returns a list of required environment variable keys.
