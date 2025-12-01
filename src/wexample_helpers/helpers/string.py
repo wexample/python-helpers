@@ -89,52 +89,203 @@ def string_replace_params(text: str, params: dict) -> str:
     return result
 
 
+def _normalize(value: str) -> list[str]:
+    """
+    Base normalization: convert any string to list of lowercase words.
+    Handles camelCase, PascalCase, snake_case, kebab-case, and mixed formats.
+    
+    :param value: The string to normalize
+    :return: List of lowercase words
+    """
+    if not value:
+        return []
+
+    # Replace separators by spaces
+    value = re.sub(r"[-_]", " ", value)
+
+    # Add space before capital letters (Camel / Pascal)
+    value = re.sub(r"(?<!^)(?=[A-Z])", " ", value)
+
+    # Split into words
+    return [w.lower() for w in value.split() if w.strip()]
+
+
 def string_to_camel_case(text: str) -> str:
     """
     Convert text to camelCase (e.g. 'my_example_string' -> 'myExampleString').
     """
-    parts = re.split(r"[_\-\s]+", text)
-    if not parts:
+    words = _normalize(text)
+    if not words:
         return ""
-    return parts[0].lower() + "".join(p.capitalize() for p in parts[1:])
+    return words[0] + "".join(w.capitalize() for w in words[1:])
 
 
 def string_to_kebab_case(text: str) -> str:
     """
-    Convert text to kebab case (e.g. "MyClassName" -> "my-class-name").
+    Convert text to kebab-case (e.g. "MyClassName" -> "my-class-name").
     """
-    return re.sub(r"[_\s]+", "-", re.sub(r"([a-z])([A-Z])", r"\1-\2", text)).lower()
+    return "-".join(_normalize(text))
 
 
 def string_to_pascal_case(text: str) -> str:
     """
     Convert text to PascalCase (ClassCase), e.g. 'my_example_string' -> 'MyExampleString'.
     """
-    parts = re.split(r"[_\-\s]+", text)
-    return "".join(p.capitalize() for p in parts if p)
+    return "".join(w.capitalize() for w in _normalize(text))
 
 
 def string_to_snake_case(text: str) -> str:
     """
     Convert text to snake_case (e.g. "MyClassName" -> "my_class_name").
     """
-    s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", text)
-    s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1)
-    return re.sub(r"\W+", "_", s2).lower()
+    return "_".join(_normalize(text))
 
 
 def string_to_title_case(text: str) -> str:
     """
     Convert text to Title Case (capitalize first letter of each word).
     """
-    return " ".join(word.capitalize() for word in re.split(r"[\s_\-]+", text.strip()))
+    return " ".join(w.capitalize() for w in _normalize(text))
+
+
+def string_to_constant_case(text: str) -> str:
+    """
+    Convert text to CONSTANT_CASE (e.g. "MyClassName" -> "MY_CLASS_NAME").
+    """
+    return "_".join(_normalize(text)).upper()
+
+
+def string_to_dot_case(text: str) -> str:
+    """
+    Convert text to dot.case (e.g. "MyClassName" -> "my.class.name").
+    Useful for configuration keys and namespaces.
+    """
+    return ".".join(_normalize(text))
+
+
+def string_to_path_case(text: str) -> str:
+    """
+    Convert text to path/case (e.g. "MyClassName" -> "my/class/name").
+    Useful for file paths and URL segments.
+    """
+    return "/".join(_normalize(text))
+
+
+def string_detect_case(text: str) -> str:
+    """
+    Detect the case format of a string.
+    
+    :param text: The string to analyze
+    :return: One of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path', 'mixed', 'unknown'
+    """
+    if not text or not text.strip():
+        return "unknown"
+    
+    text = text.strip()
+    
+    # Check for specific patterns
+    if re.match(r"^[A-Z][A-Z0-9_]*$", text):
+        return "constant"
+    if re.match(r"^[a-z][a-z0-9]*(_[a-z0-9]+)*$", text):
+        return "snake"
+    if re.match(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$", text):
+        return "kebab"
+    if re.match(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$", text):
+        return "dot"
+    if re.match(r"^[a-z][a-z0-9]*(/[a-z0-9]+)*$", text):
+        return "path"
+    if re.match(r"^[a-z][a-zA-Z0-9]*$", text) and re.search(r"[A-Z]", text):
+        return "camel"
+    if re.match(r"^[A-Z][a-zA-Z0-9]*$", text):
+        return "pascal"
+    if re.match(r"^[A-Z][a-z]+(\s[A-Z][a-z]+)*$", text):
+        return "title"
+    
+    # Check for mixed separators
+    separators = sum([
+        "_" in text,
+        "-" in text,
+        "." in text,
+        "/" in text,
+        bool(re.search(r"[a-z][A-Z]", text))
+    ])
+    
+    if separators > 1:
+        return "mixed"
+    
+    return "unknown"
+
+
+def string_is_snake_case(text: str) -> bool:
+    """Check if text is in snake_case format."""
+    return string_detect_case(text) == "snake"
+
+
+def string_is_kebab_case(text: str) -> bool:
+    """Check if text is in kebab-case format."""
+    return string_detect_case(text) == "kebab"
+
+
+def string_is_camel_case(text: str) -> bool:
+    """Check if text is in camelCase format."""
+    return string_detect_case(text) == "camel"
+
+
+def string_is_pascal_case(text: str) -> bool:
+    """Check if text is in PascalCase format."""
+    return string_detect_case(text) == "pascal"
+
+
+def string_is_constant_case(text: str) -> bool:
+    """Check if text is in CONSTANT_CASE format."""
+    return string_detect_case(text) == "constant"
+
+
+def string_is_title_case(text: str) -> bool:
+    """Check if text is in Title Case format."""
+    return string_detect_case(text) == "title"
+
+
+def string_is_dot_case(text: str) -> bool:
+    """Check if text is in dot.case format."""
+    return string_detect_case(text) == "dot"
+
+
+def string_is_path_case(text: str) -> bool:
+    """Check if text is in path/case format."""
+    return string_detect_case(text) == "path"
+
+
+def string_convert_case(text: str, to_format: str) -> str:
+    """
+    Convert text to any case format.
+    
+    :param text: The string to convert
+    :param to_format: Target format - one of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path'
+    :return: Converted string
+    :raises ValueError: If to_format is not recognized
+    """
+    converters = {
+        "snake": string_to_snake_case,
+        "kebab": string_to_kebab_case,
+        "camel": string_to_camel_case,
+        "pascal": string_to_pascal_case,
+        "constant": string_to_constant_case,
+        "title": string_to_title_case,
+        "dot": string_to_dot_case,
+        "path": string_to_path_case,
+    }
+    
+    if to_format not in converters:
+        valid_formats = ", ".join(converters.keys())
+        raise ValueError(
+            f"Invalid format '{to_format}'. Must be one of: {valid_formats}"
+        )
+    
+    return converters[to_format](text)
 
 
 def string_truncate(text: str, limit: int) -> str:
     if len(text) > limit:
         return text[: limit - 3] + "..."
     return text
-
-
-# alias for convenience
-string_to_class_case = string_to_pascal_case
