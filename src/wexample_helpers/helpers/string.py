@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from typing import Callable
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
@@ -180,9 +181,9 @@ def string_detect_case(text: str) -> str:
     """
     if not text or not text.strip():
         return "unknown"
-    
+
     text = text.strip()
-    
+
     # Check for specific patterns
     if re.match(r"^[A-Z][A-Z0-9_]*$", text):
         return "constant"
@@ -200,7 +201,7 @@ def string_detect_case(text: str) -> str:
         return "pascal"
     if re.match(r"^[A-Z][a-z]+(\s[A-Z][a-z]+)*$", text):
         return "title"
-    
+
     # Check for mixed separators
     separators = sum([
         "_" in text,
@@ -209,10 +210,10 @@ def string_detect_case(text: str) -> str:
         "/" in text,
         bool(re.search(r"[a-z][A-Z]", text))
     ])
-    
+
     if separators > 1:
         return "mixed"
-    
+
     return "unknown"
 
 
@@ -256,16 +257,8 @@ def string_is_path_case(text: str) -> bool:
     return string_detect_case(text) == "path"
 
 
-def string_convert_case(text: str, to_format: str) -> str:
-    """
-    Convert text to any case format.
-    
-    :param text: The string to convert
-    :param to_format: Target format - one of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path'
-    :return: Converted string
-    :raises ValueError: If to_format is not recognized
-    """
-    converters = {
+def string_convert_case_map() -> dict[str, Callable[[str], str]]:
+    return {
         "snake": string_to_snake_case,
         "kebab": string_to_kebab_case,
         "camel": string_to_camel_case,
@@ -275,13 +268,25 @@ def string_convert_case(text: str, to_format: str) -> str:
         "dot": string_to_dot_case,
         "path": string_to_path_case,
     }
+
+
+def string_convert_case(text: str, to_format: str) -> str:
+    """
+    Convert text to any case format.
     
+    :param text: The string to convert
+    :param to_format: Target format - one of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path'
+    :return: Converted string
+    :raises ValueError: If to_format is not recognized
+    """
+    converters = string_convert_case_map()
+
     if to_format not in converters:
         valid_formats = ", ".join(converters.keys())
         raise ValueError(
             f"Invalid format '{to_format}'. Must be one of: {valid_formats}"
         )
-    
+
     return converters[to_format](text)
 
 
