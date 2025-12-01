@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Callable
+from collections.abc import Callable
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
