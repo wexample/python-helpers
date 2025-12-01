@@ -11,8 +11,13 @@ def string_append_missing_lines(lines: list[str], content: str) -> str:
     # Split the current content into lines
     current_lines = content.splitlines()
 
-    # Determine the lines that need to be added
-    lines_to_add = [line for line in lines if line not in current_lines]
+    # Determine the lines that need to be added (deduplicate to avoid adding same line multiple times)
+    lines_to_add = []
+    seen = set(current_lines)
+    for line in lines:
+        if line not in seen:
+            lines_to_add.append(line)
+            seen.add(line)
 
     if lines_to_add:
         # Ensure the content ends with a newline before appending new lines
