@@ -5,6 +5,9 @@ from collections.abc import Callable
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
+    # Normalize content by removing trailing empty lines for consistent comparison
+    content = string_remove_trailing_empty_lines(content)
+    
     # Split the current content into lines
     current_lines = content.splitlines()
 
@@ -177,6 +180,29 @@ def string_is_snake_case(text: str) -> bool:
 def string_is_title_case(text: str) -> bool:
     """Check if text is in Title Case format."""
     return string_detect_case(text) == "title"
+
+
+def string_remove_trailing_empty_lines(content: str) -> str:
+    """
+    Remove trailing empty lines from content while preserving the final newline if present.
+    
+    :param content: The string content to normalize
+    :return: Content with trailing empty lines removed
+    """
+    if not content:
+        return content
+    
+    lines = content.splitlines()
+    # Remove trailing empty lines
+    while lines and not lines[-1].strip():
+        lines.pop()
+    
+    # Rejoin and preserve final newline if original had one
+    result = '\n'.join(lines)
+    if result and content.endswith('\n'):
+        result += '\n'
+    
+    return result
 
 
 def string_remove_prefix(string: str, prefix: str) -> str:
