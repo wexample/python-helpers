@@ -94,7 +94,7 @@ def _normalize(value: str) -> list[str]:
     """
     Base normalization: convert any string to list of lowercase words.
     Handles camelCase, PascalCase, snake_case, kebab-case, and mixed formats.
-    
+
     :param value: The string to normalize
     :return: List of lowercase words
     """
@@ -175,7 +175,7 @@ def string_to_path_case(text: str) -> str:
 def string_detect_case(text: str) -> str:
     """
     Detect the case format of a string.
-    
+
     :param text: The string to analyze
     :return: One of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path', 'mixed', 'unknown'
     """
@@ -203,13 +203,15 @@ def string_detect_case(text: str) -> str:
         return "title"
 
     # Check for mixed separators
-    separators = sum([
-        "_" in text,
-        "-" in text,
-        "." in text,
-        "/" in text,
-        bool(re.search(r"[a-z][A-Z]", text))
-    ])
+    separators = sum(
+        [
+            "_" in text,
+            "-" in text,
+            "." in text,
+            "/" in text,
+            bool(re.search(r"[a-z][A-Z]", text)),
+        ]
+    )
 
     if separators > 1:
         return "mixed"
@@ -273,7 +275,7 @@ def string_convert_case_map() -> dict[str, Callable[[str], str]]:
 def string_convert_case(text: str, to_format: str) -> str:
     """
     Convert text to any case format.
-    
+
     :param text: The string to convert
     :param to_format: Target format - one of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path'
     :return: Converted string
