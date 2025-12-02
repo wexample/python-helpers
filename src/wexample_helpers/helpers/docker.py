@@ -104,3 +104,27 @@ def docker_build_name_from_path(
     root_path = str(Path(root_path).resolve())
     path_hash = hashlib.md5(root_path.encode()).hexdigest()[:8]
     return f"{prefix}-{image_name}-{path_hash}"
+
+
+def docker_stop_container(container_name: str) -> None:
+    """Stop a running Docker container."""
+    shell_run(
+        cmd=["docker", "stop", container_name],
+        inherit_stdio=True
+    )
+
+
+def docker_remove_container(container_name: str) -> None:
+    """Remove a Docker container."""
+    shell_run(
+        cmd=["docker", "rm", container_name],
+        inherit_stdio=True
+    )
+
+
+def docker_remove_image(image_name: str) -> None:
+    """Remove a Docker image."""
+    shell_run(
+        cmd=["docker", "rmi", image_name],
+        inherit_stdio=True
+    )
