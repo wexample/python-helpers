@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
+from wexample_helpers.const.globals import UNSET
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
@@ -24,14 +25,11 @@ class HasEnvKeys(BaseClass):
         default=None,
     )
 
-    def __attrs_post_init__(self) -> None:
-        self.env_config = {}
-
-    def get_env_parameter(self, key: str, default: Any = None) -> Any:
+    def get_env_parameter(self, key: str, default: str | None = UNSET) -> Any:
         from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
         if not key in self.env_config:
-            if default is not None:
+            if default is not UNSET:
                 return default
 
             raise KeyNotFoundError(
@@ -47,6 +45,25 @@ class HasEnvKeys(BaseClass):
         Should be overridden by child classes.
         """
         return []
+
+    def set_env_parameter(self, key: str, value: str) -> None:
+        """
+        Set a single environment parameter in env_config.
+
+        Args:
+            key: The environment variable key
+            value: The value to set
+        """
+        self.env_config[key] = value
+
+    def set_env_parameters(self, parameters: dict[str, str]) -> None:
+        """
+        Set multiple environment parameters in env_config in batch.
+
+        Args:
+            parameters: Dictionary of key-value pairs to set
+        """
+        self.env_config.update(parameters)
 
     def _get_env_files_directory(self) -> Path:
         from pathlib import Path

@@ -1,35 +1,27 @@
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 
-def path_resolve_from(path: str, from_cwd: str) -> str:
+def path_rebase(
+    root_src: str | Path, path_src: str | Path, root_dest: str | Path
+) -> str:
     """
-    Resolves a path relative to a given directory, even if the paths don't exist.
+    Rebase a path from one root to another.
 
-    Args:
-        path (str): The path to resolve
-        from_cwd (str): The directory to resolve from
+    Example:
+        root_src="/home/me/project"
+        path_src="/home/me/project/src/test.php"
+        root_dest="/var/www/html"
 
-    Returns:
-        str: The absolute resolved path
+        → "/var/www/html/src/test.php"
     """
-    from pathlib import Path
+    root_src = str(Path(root_src).resolve())
+    path_src = str(Path(path_src).resolve())
+    root_dest = str(Path(root_dest).resolve())
 
-    # Convert both inputs to Path objects
-    path_obj = Path(path)
-    from_cwd_obj = Path(from_cwd)
+    # Compute the relative path from the original root
+    relative_path = Path(path_src).resolve().relative_to(root_src)
 
-    # If path is already absolute, just normalize it
-    if path_obj.is_absolute():
-        return os.path.normpath(str(path_obj))
-
-    # Make from_cwd absolute if it's not already
-    if not from_cwd_obj.is_absolute():
-        from_cwd_obj = Path(os.getcwd()) / from_cwd_obj
-
-    # Join the paths and normalize
-    resolved_path = from_cwd_obj / path_obj
-
-    # Normalize the path (resolves '..' and '.')
-    return os.path.normpath(str(resolved_path))
+    # Append it to the new root
+    return str(Path(root_dest) / relative_path)

@@ -66,6 +66,30 @@ def dict_has_item_by_path(
     return True
 
 
+def dict_interpolate(value: Any, variables: StringKeysDict) -> Any:
+    import re
+
+    VAR_PATTERN = re.compile(r"\$\{([^}]+)\}")
+
+    if isinstance(value, dict):
+        return {k: dict_interpolate(v, variables) for k, v in value.items()}
+
+    if isinstance(value, list):
+        return [dict_interpolate(v, variables) for v in value]
+
+    if isinstance(value, str):
+
+        def repl(match):
+            var = match.group(1)
+            return variables.get(
+                var, f"${{{var}}}"
+            )  # si non trouvé → on laisse tel quel
+
+        return VAR_PATTERN.sub(repl, value)
+
+    return value
+
+
 def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
     """
     Recursively merge multiple dictionaries.

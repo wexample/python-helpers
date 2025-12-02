@@ -4,6 +4,8 @@ import pathlib
 import sys
 from typing import TYPE_CHECKING, Any
 
+from wexample_helpers.const.types import StringKeysDict
+
 if TYPE_CHECKING:
     pass
 
@@ -135,6 +137,14 @@ def module_collect_classes(
         collected[name] = obj
 
     return collected
+
+
+def module_get_distribution_map() -> StringKeysDict:
+    from importlib.metadata import distributions
+
+    return {
+        (dist.metadata["Name"] or "").lower(): dist.version for dist in distributions()
+    }
 
 
 def module_get_path(module) -> pathlib.Path:
