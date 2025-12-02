@@ -1,8 +1,11 @@
 from __future__ import annotations
+
 from pathlib import Path
 
 
-def path_rebase(root_src: str | Path, path_src: str | Path, root_dest: str | Path) -> str:
+def path_rebase(
+    root_src: str | Path, path_src: str | Path, root_dest: str | Path
+) -> str:
     """
     Rebase a path from one root to another.
 
