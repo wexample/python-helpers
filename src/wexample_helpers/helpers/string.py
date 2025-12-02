@@ -310,20 +310,33 @@ def string_truncate(text: str, limit: int) -> str:
 
 def _normalize(value: str) -> list[str]:
     """
-    Base normalization: convert any string to list of lowercase words.
-    Handles camelCase, PascalCase, snake_case, kebab-case, and mixed formats.
-
-    :param value: The string to normalize
-    :return: List of lowercase words
+    Convert any string into a normalized list of lowercase words.
+    Handles:
+    - camelCase / PascalCase
+    - snake_case
+    - kebab-case
+    - dotted.case
+    - path/case
+    - mixed separators
     """
+
     if not value:
         return []
 
-    # Replace separators by spaces
-    value = re.sub(r"[-_]", " ", value)
+    # Trim whitespace
+    value = value.strip()
 
-    # Add space before capital letters (Camel / Pascal)
-    value = re.sub(r"(?<!^)(?=[A-Z])", " ", value)
+    # Replace all non-alphanumeric separators with space
+    value = re.sub(r"[^A-Za-z0-9]+", " ", value)
 
-    # Split into words
-    return [w.lower() for w in value.split() if w.strip()]
+    # Split camelCase / PascalCase
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", value)
+
+    # Split multiple caps like "JSONParser" → "JSON Parser"
+    value = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", value)
+
+    # Normalize spaces
+    parts = value.lower().split()
+
+    # Remove empty segments
+    return [p for p in parts if p]
