@@ -1,7 +1,9 @@
 # docker_helpers.py
 
 from __future__ import annotations
+
 from pathlib import Path
+
 from wexample_helpers.helpers.shell import shell_run
 
 
@@ -78,3 +80,27 @@ def docker_exec(container_name: str, command: list[str]) -> str:
         capture=True
     )
     return result.stdout
+
+
+def docker_build_name_from_path(
+        root_path: str | Path,
+        image_name: str,
+        prefix: str = "wex"
+) -> str:
+    """
+    Generate a deterministic Docker container name based on the root path
+    and the Docker image name.
+
+    Args:
+        root_path: Absolute path of the application root.
+        image_name: Docker image name.
+        prefix: Optional prefix for the container name.
+
+    Returns:
+        A unique and reproducible container name.
+    """
+    import hashlib
+
+    root_path = str(Path(root_path).resolve())
+    path_hash = hashlib.md5(root_path.encode()).hexdigest()[:8]
+    return f"{prefix}-{image_name}-{path_hash}"
