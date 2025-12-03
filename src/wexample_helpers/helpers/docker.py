@@ -62,9 +62,11 @@ def docker_container_is_running(container_name: str) -> bool:
     return bool(result.stdout.strip())
 
 
-def docker_exec(container_name: str, command: list[str], user: str | None = None) -> str:
+def docker_exec(
+    container_name: str, command: list[str], user: str | None = None
+) -> str:
     """Execute a command inside a running Docker container.
-    
+
     Args:
         container_name: Name of the container
         command: Command to execute
@@ -95,10 +97,13 @@ def docker_remove_image(image_name: str) -> None:
 
 
 def docker_run_container(
-    container_name: str, image_name: str, volumes: dict[str, str], user: str | None = None
+    container_name: str,
+    image_name: str,
+    volumes: dict[str, str],
+    user: str | None = None,
 ) -> None:
     """Run a new container.
-    
+
     Args:
         container_name: Name for the container
         image_name: Docker image to use
