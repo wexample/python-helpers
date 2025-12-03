@@ -62,9 +62,21 @@ def docker_container_is_running(container_name: str) -> bool:
     return bool(result.stdout.strip())
 
 
-def docker_exec(container_name: str, command: list[str]) -> str:
-    """Execute a command inside a running Docker container."""
-    result = shell_run(cmd=["docker", "exec", container_name] + command, capture=True)
+def docker_exec(
+    container_name: str, command: list[str], user: str | None = None
+) -> str:
+    """Execute a command inside a running Docker container.
+
+    Args:
+        container_name: Name of the container
+        command: Command to execute
+        user: Optional user specification (e.g., "1000:1000" or "username")
+    """
+    cmd = ["docker", "exec"]
+    if user:
+        cmd += ["--user", user]
+    cmd += [container_name] + command
+    result = shell_run(cmd=cmd, capture=True)
     return result.stdout
 
 
@@ -85,9 +97,19 @@ def docker_remove_image(image_name: str) -> None:
 
 
 def docker_run_container(
-    container_name: str, image_name: str, volumes: dict[str, str]
+    container_name: str,
+    image_name: str,
+    volumes: dict[str, str],
+    user: str | None = None,
 ) -> None:
-    """Run a new container."""
+    """Run a new container.
+
+    Args:
+        container_name: Name for the container
+        image_name: Docker image to use
+        volumes: Dictionary of host:container volume mappings
+        user: Optional user specification (e.g., "1000:1000" or "username")
+    """
     cmd = [
         "docker",
         "run",
@@ -95,6 +117,9 @@ def docker_run_container(
         "--name",
         container_name,
     ]
+
+    if user:
+        cmd += ["--user", user]
 
     for host, container in volumes.items():
         cmd += ["-v", f"{host}:{container}"]
