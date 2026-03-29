@@ -18,6 +18,36 @@ def file_get_human_readable_size(size: int) -> str:
     return f"{size:.1f} PB"
 
 
+def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
+    """Recursively set owner uid/gid on a path and all its entries."""
+    from pathlib import Path
+
+    p = Path(path)
+    os.chown(p, uid, gid)
+    for entry in p.rglob("*"):
+        try:
+            os.chown(entry, uid, gid)
+        except OSError:
+            pass
+
+
+def file_get_dir_size(path: PathOrString) -> int:
+    """Return total byte size of all files under a directory, skipping unreadable entries."""
+    from pathlib import Path
+
+    total = 0
+    try:
+        for entry in Path(path).rglob("*"):
+            try:
+                if entry.is_file() and not entry.is_symlink():
+                    total += entry.stat().st_size
+            except OSError:
+                pass
+    except OSError:
+        pass
+    return total
+
+
 def file_change_mode(path: PathOrString, mode: int) -> None:
     """
     Change file permissions for a path, ignoring symlinks and missing files.
