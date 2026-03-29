@@ -9,6 +9,15 @@ if TYPE_CHECKING:
     from wexample_helpers.const.types import FileStringOrPath, PathOrString
 
 
+def file_get_human_readable_size(size: int) -> str:
+    """Convert a byte count to a human-readable string (e.g. '1.4 GB')."""
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if size < 1024:
+            return f"{size:.1f} {unit}"
+        size /= 1024
+    return f"{size:.1f} PB"
+
+
 def file_change_mode(path: PathOrString, mode: int) -> None:
     """
     Change file permissions for a path, ignoring symlinks and missing files.
