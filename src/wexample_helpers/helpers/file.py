@@ -38,6 +38,36 @@ def file_change_mode_recursive(
             )
 
 
+def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
+    """Recursively set owner uid/gid on a path and all its entries."""
+    from pathlib import Path
+
+    p = Path(path)
+    os.chown(p, uid, gid)
+    for entry in p.rglob("*"):
+        try:
+            os.chown(entry, uid, gid)
+        except OSError:
+            pass
+
+
+def file_get_dir_size(path: PathOrString) -> int:
+    """Return total byte size of all files under a directory, skipping unreadable entries."""
+    from pathlib import Path
+
+    total = 0
+    try:
+        for entry in Path(path).rglob("*"):
+            try:
+                if entry.is_file() and not entry.is_symlink():
+                    total += entry.stat().st_size
+            except OSError:
+                pass
+    except OSError:
+        pass
+    return total
+
+
 def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
     """Get directories under path, optionally recursively."""
     from pathlib import Path
@@ -46,6 +76,15 @@ def file_get_directories(path: PathOrString, recursive: bool = False) -> list[st
     if not recursive:
         return [str(p) for p in base.iterdir() if p.is_dir()]
     return [str(p) for p in base.rglob("*") if p.is_dir()]
+
+
+def file_get_human_readable_size(size: int) -> str:
+    """Convert a byte count to a human-readable string (e.g. '1.4 GB')."""
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if size < 1024:
+            return f"{size:.1f} {unit}"
+        size /= 1024
+    return f"{size:.1f} PB"
 
 
 def file_list_subdirectories(path: PathOrString) -> list[str]:
