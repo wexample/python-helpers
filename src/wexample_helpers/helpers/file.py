@@ -9,13 +9,33 @@ if TYPE_CHECKING:
     from wexample_helpers.const.types import FileStringOrPath, PathOrString
 
 
-def file_get_human_readable_size(size: int) -> str:
-    """Convert a byte count to a human-readable string (e.g. '1.4 GB')."""
-    for unit in ("B", "KB", "MB", "GB", "TB"):
-        if size < 1024:
-            return f"{size:.1f} {unit}"
-        size /= 1024
-    return f"{size:.1f} PB"
+def file_change_mode(path: PathOrString, mode: int) -> None:
+    """
+    Change file permissions for a path, ignoring symlinks and missing files.
+    """
+    try:
+        if not os.path.islink(str(path)):
+            os.chmod(str(path), mode)
+    except FileNotFoundError:
+        pass
+
+
+def file_change_mode_recursive(
+    path: PathOrString, mode: int, follow_symlinks: bool = True
+) -> None:
+    """
+    Recursively change mode for files and directories under path.
+
+    :param path: Root path to change mode.
+    :param mode: Permission bits to apply.
+    :param follow_symlinks: If False, skip symlinked directories.
+    """
+    file_change_mode(path, mode)
+    if os.path.isdir(str(path)) and (follow_symlinks or not os.path.islink(str(path))):
+        for item in os.listdir(str(path)):
+            file_change_mode_recursive(
+                os.path.join(str(path), item), mode, follow_symlinks
+            )
 
 
 def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
@@ -48,35 +68,6 @@ def file_get_dir_size(path: PathOrString) -> int:
     return total
 
 
-def file_change_mode(path: PathOrString, mode: int) -> None:
-    """
-    Change file permissions for a path, ignoring symlinks and missing files.
-    """
-    try:
-        if not os.path.islink(str(path)):
-            os.chmod(str(path), mode)
-    except FileNotFoundError:
-        pass
-
-
-def file_change_mode_recursive(
-    path: PathOrString, mode: int, follow_symlinks: bool = True
-) -> None:
-    """
-    Recursively change mode for files and directories under path.
-
-    :param path: Root path to change mode.
-    :param mode: Permission bits to apply.
-    :param follow_symlinks: If False, skip symlinked directories.
-    """
-    file_change_mode(path, mode)
-    if os.path.isdir(str(path)) and (follow_symlinks or not os.path.islink(str(path))):
-        for item in os.listdir(str(path)):
-            file_change_mode_recursive(
-                os.path.join(str(path), item), mode, follow_symlinks
-            )
-
-
 def file_get_directories(path: PathOrString, recursive: bool = False) -> list[str]:
     """Get directories under path, optionally recursively."""
     from pathlib import Path
@@ -85,6 +76,15 @@ def file_get_directories(path: PathOrString, recursive: bool = False) -> list[st
     if not recursive:
         return [str(p) for p in base.iterdir() if p.is_dir()]
     return [str(p) for p in base.rglob("*") if p.is_dir()]
+
+
+def file_get_human_readable_size(size: int) -> str:
+    """Convert a byte count to a human-readable string (e.g. '1.4 GB')."""
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if size < 1024:
+            return f"{size:.1f} {unit}"
+        size /= 1024
+    return f"{size:.1f} PB"
 
 
 def file_list_subdirectories(path: PathOrString) -> list[str]:
