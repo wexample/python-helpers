@@ -72,11 +72,18 @@ def docker_exec(
         command: Command to execute
         user: Optional user specification (e.g., "1000:1000" or "username")
     """
+    import subprocess
+
     cmd = ["docker", "exec"]
     if user:
         cmd += ["--user", user]
     cmd += [container_name] + command
-    result = shell_run(cmd=cmd, capture=True)
+    try:
+        result = shell_run(cmd=cmd, capture=True)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"docker exec failed (exit {e.returncode}):\n{e.stderr or e.stdout or ''}"
+        ) from e
     return result.stdout
 
 
