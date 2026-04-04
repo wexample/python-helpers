@@ -133,7 +133,7 @@ def docker_run_container(
 
     cmd.append(image_name)
 
-    shell_run(cmd, inherit_stdio=True)
+    shell_run(cmd, capture=True)
 
 
 def docker_start_container(container_name: str) -> None:
