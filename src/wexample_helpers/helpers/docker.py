@@ -95,12 +95,12 @@ def docker_image_exists(image_name: str) -> bool:
 
 def docker_remove_container(container_name: str) -> None:
     """Remove a Docker container."""
-    shell_run(cmd=["docker", "rm", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "rm", container_name], capture=True)
 
 
 def docker_remove_image(image_name: str) -> None:
     """Remove a Docker image."""
-    shell_run(cmd=["docker", "rmi", image_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "rmi", image_name], capture=True)
 
 
 def docker_run_container(
@@ -143,4 +143,4 @@ def docker_start_container(container_name: str) -> None:
 
 def docker_stop_container(container_name: str) -> None:
     """Stop a running Docker container."""
-    shell_run(cmd=["docker", "stop", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "stop", container_name], capture=True)
