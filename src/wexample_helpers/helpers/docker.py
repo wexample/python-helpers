@@ -138,7 +138,7 @@ def docker_run_container(
 
 def docker_start_container(container_name: str) -> None:
     """Start an existing stopped container."""
-    shell_run(cmd=["docker", "start", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "start", container_name], capture=True)
 
 
 def docker_stop_container(container_name: str) -> None:
