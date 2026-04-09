@@ -163,6 +163,19 @@ def file_touch(path: PathOrString, times: tuple[int, int] | None = None) -> None
         os.utime(p, times)
 
 
+def file_mode_is_notation(mode: str) -> bool:
+    """Check if mode is a chmod-style notation like +x, -x, +r, -w, etc."""
+    return isinstance(mode, str) and len(mode) == 2 and mode[0] in ("+", "-") and mode[1] in "rwx"
+
+
+def file_mode_apply_notation(current_mode: int, notation: str) -> int:
+    """Apply a chmod-style notation (+x, -x, +r, etc.) to a current numeric mode."""
+    op = notation[0]
+    bit_map = {"r": 0o444, "w": 0o222, "x": 0o111}
+    bits = bit_map[notation[1]]
+    return current_mode | bits if op == "+" else current_mode & ~bits
+
+
 def file_validate_mode_octal(mode: str | int) -> bool:
     """Validate that mode is a three-digit octal string or int."""
     m = str(mode)
