@@ -197,6 +197,25 @@ def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -
     p.write_text(content, encoding=encoding)
 
 
+def file_chown_as_real_user(path: PathOrString) -> None:
+    """Chown a path to the real user (handles sudo context)."""
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    os.chown(path, user_get_real_uid(), user_get_real_gid())
+
+
+def file_env_append_as_real_user(env_file: PathOrString, env_vars: dict[str, str]) -> None:
+    """Append missing KEY=VALUE pairs to an .env file and chown it to the real user."""
+    from pathlib import Path
+
+    p = Path(env_file)
+    existing = p.read_text() if p.exists() else ""
+    new_lines = [f"{k}={v}" for k, v in env_vars.items() if f"{k}=" not in existing]
+    if new_lines:
+        p.write_text(existing.rstrip("\n") + "\n" + "\n".join(new_lines) + "\n")
+        file_chown_as_real_user(p)
+
+
 def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
     """Copy a directory tree to dst and chown all entries to the real user (handles sudo context)."""
     import shutil
