@@ -197,6 +197,24 @@ def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -
     p.write_text(content, encoding=encoding)
 
 
+def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
+    """Copy a directory tree to dst and chown all entries to the real user (handles sudo context)."""
+    import shutil
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+
+    def _copy_with_owner(s, d, *, follow_symlinks=True):
+        shutil.copy2(s, d, follow_symlinks=follow_symlinks)
+        os.chown(d, uid, gid)
+
+    shutil.copytree(src, dst, dirs_exist_ok=True, copy_function=_copy_with_owner)
+    for p in Path(dst).rglob("*"):
+        os.chown(p, uid, gid)
+
+
 def file_write_as_real_user(
     file_path: PathOrString, content: str, mode: int = 0o644, encoding: str = "utf-8"
 ) -> None:
