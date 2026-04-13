@@ -204,6 +204,12 @@ def file_chown_as_real_user(path: PathOrString) -> None:
     os.chown(path, user_get_real_uid(), user_get_real_gid())
 
 
+def file_chown_as_real_user_if_sudo(path: PathOrString) -> None:
+    """Chown a path to the real user only when running under sudo. No-op otherwise."""
+    if os.environ.get("SUDO_UID"):
+        file_chown_as_real_user(path)
+
+
 def file_env_append_as_real_user(env_file: PathOrString, env_vars: dict[str, str]) -> None:
     """Append missing KEY=VALUE pairs to an .env file and chown it to the real user."""
     from pathlib import Path
@@ -249,15 +255,26 @@ def file_write_as_real_user(
 
 
 def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
-    """Create directory (and parents) and chown it to the real user (handles sudo context)."""
+    """Create directory (and parents) and chown all newly created dirs to the real user."""
     from pathlib import Path
 
     from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
 
     p = Path(path)
+
+    # Collect all dirs that don't exist yet, from deepest to shallowest
+    to_create = []
+    current = p
+    while not current.exists():
+        to_create.append(current)
+        current = current.parent
+
     p.mkdir(parents=True, exist_ok=True)
-    os.chmod(p, mode)
-    os.chown(p, user_get_real_uid(), user_get_real_gid())
+
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+    for created in to_create:
+        os.chmod(created, mode)
+        os.chown(created, uid, gid)
 
 
 def file_write_ensure(
