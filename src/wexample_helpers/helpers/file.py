@@ -197,6 +197,32 @@ def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -
     p.write_text(content, encoding=encoding)
 
 
+def file_write_as_real_user(
+    file_path: PathOrString, content: str, mode: int = 0o644, encoding: str = "utf-8"
+) -> None:
+    """Write content to file and chown it to the real user (handles sudo context)."""
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    p = Path(file_path)
+    p.write_text(content, encoding=encoding)
+    os.chmod(p, mode)
+    os.chown(p, user_get_real_uid(), user_get_real_gid())
+
+
+def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
+    """Create directory (and parents) and chown it to the real user (handles sudo context)."""
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    p = Path(path)
+    p.mkdir(parents=True, exist_ok=True)
+    os.chmod(p, mode)
+    os.chown(p, user_get_real_uid(), user_get_real_gid())
+
+
 def file_write_ensure(
     file_path: FileStringOrPath, content: str, encoding: str = "utf-8"
 ) -> None:
