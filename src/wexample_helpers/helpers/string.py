@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
+from functools import lru_cache
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
@@ -307,6 +308,7 @@ def string_truncate(text: str, limit: int) -> str:
     return text
 
 
+@lru_cache(maxsize=512)
 def _normalize(value: str) -> list[str]:
     """
     Convert any string into a normalized list of lowercase words.
@@ -317,6 +319,8 @@ def _normalize(value: str) -> list[str]:
     - dotted.case
     - path/case
     - mixed separators
+
+    Result is cached (pure function). Callers must not mutate the returned list.
     """
 
     if not value:

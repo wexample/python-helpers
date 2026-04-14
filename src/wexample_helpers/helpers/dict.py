@@ -17,6 +17,7 @@ DICT_ITEM_EXISTS_ACTION_MERGE = "merge"
 DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 _INTERP_VAR_PATTERN = re.compile(r"\$\{([^}]+)\}")
+_PRIMITIVE_TYPES = (str, int, float, bool, bytes, type(None))
 
 
 def dict_get_first_missing_key(
@@ -93,8 +94,6 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
 
     Note: Only keys of type str are supported; values are Any.
     """
-    from wexample_helpers.const.types import StringKeysMapping
-
     result: StringKeysDict = {}
     for dictionary in dicts:
         for key, value in dictionary.items():
@@ -107,6 +106,8 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
                     cast(StringKeysMapping, result[key]),
                     cast(StringKeysMapping, value),
                 )
+            elif isinstance(value, _PRIMITIVE_TYPES):
+                result[key] = value
             else:
                 result[key] = copy.deepcopy(value)
     return result
