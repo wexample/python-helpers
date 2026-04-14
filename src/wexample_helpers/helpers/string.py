@@ -190,13 +190,12 @@ def string_is_title_case(text: str) -> bool:
 def string_remove_prefix(string: str, prefix: str) -> str:
     """
     Remove a prefix from a string if it exists at the beginning.
-    Uses regex to match the exact prefix at the start of the string.
 
     :param string: The string to process
     :param prefix: The prefix to remove
     :return: String with prefix removed if found at start
     """
-    return re.sub(f"^{re.escape(prefix)}", "", string)
+    return string.removeprefix(prefix)
 
 
 def string_remove_trailing_empty_lines(content: str) -> str:
