@@ -1,6 +1,6 @@
-# wexample-helpers
+# helpers
 
-Version: 0.3.0
+Version: 0.4.0
 
 Some python basic helpers and constants.
 
@@ -138,7 +138,7 @@ See the [project roadmap](https://github.com/wexample/python-helpers/issues) for
 - **Documentation**: [docs.wexample.com](https://docs.wexample.com)
 - **Issue Tracker**: https://github.com/wexample/python-helpers/issues
 - **Discussions**: https://github.com/wexample/python-helpers/discussions
-- **PyPI**: [pypi.org/project/wexample-helpers](https://pypi.org/project/wexample-helpers/)
+- **PyPI**: [pypi.org/project/helpers](https://pypi.org/project/helpers/)
 
 ## Migration Notes
 

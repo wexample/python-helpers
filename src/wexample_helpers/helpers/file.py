@@ -38,6 +38,19 @@ def file_change_mode_recursive(
             )
 
 
+def file_chown_as_real_user(path: PathOrString) -> None:
+    """Chown a path to the real user (handles sudo context)."""
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    os.chown(path, user_get_real_uid(), user_get_real_gid())
+
+
+def file_chown_as_real_user_if_sudo(path: PathOrString) -> None:
+    """Chown a path to the real user only when running under sudo. No-op otherwise."""
+    if os.environ.get("SUDO_UID"):
+        file_chown_as_real_user(path)
+
+
 def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
     """Recursively set owner uid/gid on a path and all its entries."""
     from pathlib import Path
@@ -49,6 +62,38 @@ def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
             os.chown(entry, uid, gid)
         except OSError:
             pass
+
+
+def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
+    """Copy a directory tree to dst and chown all entries to the real user (handles sudo context)."""
+    import shutil
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+
+    def _copy_with_owner(s, d, *, follow_symlinks=True) -> None:
+        shutil.copy2(s, d, follow_symlinks=follow_symlinks)
+        os.chown(d, uid, gid)
+
+    shutil.copytree(src, dst, dirs_exist_ok=True, copy_function=_copy_with_owner)
+    for p in Path(dst).rglob("*"):
+        os.chown(p, uid, gid)
+
+
+def file_env_append_as_real_user(
+    env_file: PathOrString, env_vars: dict[str, str]
+) -> None:
+    """Append missing KEY=VALUE pairs to an .env file and chown it to the real user."""
+    from pathlib import Path
+
+    p = Path(env_file)
+    existing = p.read_text() if p.exists() else ""
+    new_lines = [f"{k}={v}" for k, v in env_vars.items() if f"{k}=" not in existing]
+    if new_lines:
+        p.write_text(existing.rstrip("\n") + "\n" + "\n".join(new_lines) + "\n")
+        file_chown_as_real_user(p)
 
 
 def file_get_dir_size(path: PathOrString) -> int:
@@ -98,6 +143,47 @@ def file_list_subdirectories(path: PathOrString) -> list[str]:
         p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")
     ]
     return sorted(subdirs)
+
+
+def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
+    """Create directory (and parents) and chown all newly created dirs to the real user."""
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    p = Path(path)
+
+    # Collect all dirs that don't exist yet, from deepest to shallowest
+    to_create = []
+    current = p
+    while not current.exists():
+        to_create.append(current)
+        current = current.parent
+
+    p.mkdir(parents=True, exist_ok=True)
+
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+    for created in to_create:
+        os.chmod(created, mode)
+        os.chown(created, uid, gid)
+
+
+def file_mode_apply_notation(current_mode: int, notation: str) -> int:
+    """Apply a chmod-style notation (+x, -x, +r, etc.) to a current numeric mode."""
+    op = notation[0]
+    bit_map = {"r": 0o444, "w": 0o222, "x": 0o111}
+    bits = bit_map[notation[1]]
+    return current_mode | bits if op == "+" else current_mode & ~bits
+
+
+def file_mode_is_notation(mode: str) -> bool:
+    """Check if mode is a chmod-style notation like +x, -x, +r, -w, etc."""
+    return (
+        isinstance(mode, str)
+        and len(mode) == 2
+        and mode[0] in ("+", "-")
+        and mode[1] in "rwx"
+    )
 
 
 def file_mode_num_to_octal(num: int) -> str:
@@ -163,19 +249,6 @@ def file_touch(path: PathOrString, times: tuple[int, int] | None = None) -> None
         os.utime(p, times)
 
 
-def file_mode_is_notation(mode: str) -> bool:
-    """Check if mode is a chmod-style notation like +x, -x, +r, -w, etc."""
-    return isinstance(mode, str) and len(mode) == 2 and mode[0] in ("+", "-") and mode[1] in "rwx"
-
-
-def file_mode_apply_notation(current_mode: int, notation: str) -> int:
-    """Apply a chmod-style notation (+x, -x, +r, etc.) to a current numeric mode."""
-    op = notation[0]
-    bit_map = {"r": 0o444, "w": 0o222, "x": 0o111}
-    bits = bit_map[notation[1]]
-    return current_mode | bits if op == "+" else current_mode & ~bits
-
-
 def file_validate_mode_octal(mode: str | int) -> bool:
     """Validate that mode is a three-digit octal string or int."""
     m = str(mode)
@@ -197,49 +270,6 @@ def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -
     p.write_text(content, encoding=encoding)
 
 
-def file_chown_as_real_user(path: PathOrString) -> None:
-    """Chown a path to the real user (handles sudo context)."""
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
-
-    os.chown(path, user_get_real_uid(), user_get_real_gid())
-
-
-def file_chown_as_real_user_if_sudo(path: PathOrString) -> None:
-    """Chown a path to the real user only when running under sudo. No-op otherwise."""
-    if os.environ.get("SUDO_UID"):
-        file_chown_as_real_user(path)
-
-
-def file_env_append_as_real_user(env_file: PathOrString, env_vars: dict[str, str]) -> None:
-    """Append missing KEY=VALUE pairs to an .env file and chown it to the real user."""
-    from pathlib import Path
-
-    p = Path(env_file)
-    existing = p.read_text() if p.exists() else ""
-    new_lines = [f"{k}={v}" for k, v in env_vars.items() if f"{k}=" not in existing]
-    if new_lines:
-        p.write_text(existing.rstrip("\n") + "\n" + "\n".join(new_lines) + "\n")
-        file_chown_as_real_user(p)
-
-
-def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
-    """Copy a directory tree to dst and chown all entries to the real user (handles sudo context)."""
-    import shutil
-    from pathlib import Path
-
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
-
-    uid, gid = user_get_real_uid(), user_get_real_gid()
-
-    def _copy_with_owner(s, d, *, follow_symlinks=True):
-        shutil.copy2(s, d, follow_symlinks=follow_symlinks)
-        os.chown(d, uid, gid)
-
-    shutil.copytree(src, dst, dirs_exist_ok=True, copy_function=_copy_with_owner)
-    for p in Path(dst).rglob("*"):
-        os.chown(p, uid, gid)
-
-
 def file_write_as_real_user(
     file_path: PathOrString, content: str, mode: int = 0o644, encoding: str = "utf-8"
 ) -> None:
@@ -252,29 +282,6 @@ def file_write_as_real_user(
     p.write_text(content, encoding=encoding)
     os.chmod(p, mode)
     os.chown(p, user_get_real_uid(), user_get_real_gid())
-
-
-def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
-    """Create directory (and parents) and chown all newly created dirs to the real user."""
-    from pathlib import Path
-
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
-
-    p = Path(path)
-
-    # Collect all dirs that don't exist yet, from deepest to shallowest
-    to_create = []
-    current = p
-    while not current.exists():
-        to_create.append(current)
-        current = current.parent
-
-    p.mkdir(parents=True, exist_ok=True)
-
-    uid, gid = user_get_real_uid(), user_get_real_gid()
-    for created in to_create:
-        os.chmod(created, mode)
-        os.chown(created, uid, gid)
 
 
 def file_write_ensure(
