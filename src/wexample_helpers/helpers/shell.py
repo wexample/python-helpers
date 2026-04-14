@@ -33,6 +33,8 @@ def shell_run(
     inherit_stdio: bool = False,
     sudo_user: str | None = None,
     elevate: bool = False,
+    retries: int = 0,
+    retry_delay: float = 5.0,
 ) -> ShellResult:
     """Run a command synchronously with a modern, explicit API.
 
@@ -46,6 +48,8 @@ def shell_run(
     - shell: Execute through the shell (be explicit; default False).
     - inherit_stdio: If True, inherit parent's stdio (overrides capture).
     - sudo_user/elevate: Optional sudo prefixing; never enabled by default.
+    - retries: Number of additional attempts on failure (default 0 = no retry).
+    - retry_delay: Seconds to wait between attempts (default 5.0).
     """
     from pathlib import Path
 
@@ -110,11 +114,28 @@ def shell_run(
         )
     except subprocess.CalledProcessError as e:
         end = time.monotonic()
-        # Re-raise to keep default semantics when check=True
         e.stdout = getattr(e, "stdout", None)
         e.stderr = getattr(e, "stderr", None)
-        # Attach timing for debugging/observability
         e.duration = end - start  # type: ignore[attr-defined]
+        if retries > 0:
+            time.sleep(retry_delay)
+            return shell_run(
+                cmd,
+                cwd=cwd,
+                env=env,
+                check=check,
+                capture=capture,
+                text=text,
+                encoding=encoding,
+                errors=errors,
+                timeout=timeout,
+                shell=shell,
+                inherit_stdio=inherit_stdio,
+                sudo_user=sudo_user,
+                elevate=elevate,
+                retries=retries - 1,
+                retry_delay=retry_delay,
+            )
         raise
 
 

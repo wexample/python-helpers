@@ -72,11 +72,18 @@ def docker_exec(
         command: Command to execute
         user: Optional user specification (e.g., "1000:1000" or "username")
     """
+    import subprocess
+
     cmd = ["docker", "exec"]
     if user:
         cmd += ["--user", user]
     cmd += [container_name] + command
-    result = shell_run(cmd=cmd, capture=True)
+    try:
+        result = shell_run(cmd=cmd, capture=True)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"docker exec failed (exit {e.returncode}):\n{e.stderr or e.stdout or ''}"
+        ) from e
     return result.stdout
 
 
@@ -88,12 +95,12 @@ def docker_image_exists(image_name: str) -> bool:
 
 def docker_remove_container(container_name: str) -> None:
     """Remove a Docker container."""
-    shell_run(cmd=["docker", "rm", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "rm", container_name], capture=True)
 
 
 def docker_remove_image(image_name: str) -> None:
     """Remove a Docker image."""
-    shell_run(cmd=["docker", "rmi", image_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "rmi", image_name], capture=True)
 
 
 def docker_run_container(
@@ -126,14 +133,14 @@ def docker_run_container(
 
     cmd.append(image_name)
 
-    shell_run(cmd, inherit_stdio=True)
+    shell_run(cmd, capture=True)
 
 
 def docker_start_container(container_name: str) -> None:
     """Start an existing stopped container."""
-    shell_run(cmd=["docker", "start", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "start", container_name], capture=True)
 
 
 def docker_stop_container(container_name: str) -> None:
     """Stop a running Docker container."""
-    shell_run(cmd=["docker", "stop", container_name], inherit_stdio=True)
+    shell_run(cmd=["docker", "stop", container_name], capture=True)
