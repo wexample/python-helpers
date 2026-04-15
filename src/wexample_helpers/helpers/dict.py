@@ -102,10 +102,7 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
                 and isinstance(result[key], dict)
                 and isinstance(value, dict)
             ):
-                result[key] = dict_merge(
-                    cast(StringKeysMapping, result[key]),
-                    cast(StringKeysMapping, value),
-                )
+                result[key] = dict_merge(result[key], value)
             elif isinstance(value, _PRIMITIVE_TYPES):
                 result[key] = value
             else:

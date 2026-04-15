@@ -241,6 +241,7 @@ def string_replace_params(text: str, params: dict) -> str:
     return result
 
 
+@lru_cache(maxsize=512)
 def string_to_camel_case(text: str) -> str:
     """
     Convert text to camelCase (e.g. 'my_example_string' -> 'myExampleString').
@@ -251,6 +252,7 @@ def string_to_camel_case(text: str) -> str:
     return words[0] + "".join(w.capitalize() for w in words[1:])
 
 
+@lru_cache(maxsize=512)
 def string_to_constant_case(text: str) -> str:
     """
     Convert text to CONSTANT_CASE (e.g. "MyClassName" -> "MY_CLASS_NAME").
@@ -258,6 +260,7 @@ def string_to_constant_case(text: str) -> str:
     return "_".join(_normalize(text)).upper()
 
 
+@lru_cache(maxsize=512)
 def string_to_dot_case(text: str) -> str:
     """
     Convert text to dot.case (e.g. "MyClassName" -> "my.class.name").
@@ -266,6 +269,7 @@ def string_to_dot_case(text: str) -> str:
     return ".".join(_normalize(text))
 
 
+@lru_cache(maxsize=512)
 def string_to_kebab_case(text: str) -> str:
     """
     Convert text to kebab-case (e.g. "MyClassName" -> "my-class-name").
@@ -273,6 +277,7 @@ def string_to_kebab_case(text: str) -> str:
     return "-".join(_normalize(text))
 
 
+@lru_cache(maxsize=512)
 def string_to_pascal_case(text: str) -> str:
     """
     Convert text to PascalCase (ClassCase), e.g. 'my_example_string' -> 'MyExampleString'.
@@ -280,6 +285,7 @@ def string_to_pascal_case(text: str) -> str:
     return "".join(w.capitalize() for w in _normalize(text))
 
 
+@lru_cache(maxsize=512)
 def string_to_path_case(text: str) -> str:
     """
     Convert text to path/case (e.g. "MyClassName" -> "my/class/name").
@@ -288,6 +294,7 @@ def string_to_path_case(text: str) -> str:
     return "/".join(_normalize(text))
 
 
+@lru_cache(maxsize=512)
 def string_to_snake_case(text: str) -> str:
     """
     Convert text to snake_case (e.g. "MyClassName" -> "my_class_name").
@@ -295,6 +302,7 @@ def string_to_snake_case(text: str) -> str:
     return "_".join(_normalize(text))
 
 
+@lru_cache(maxsize=512)
 def string_to_title_case(text: str) -> str:
     """
     Convert text to Title Case (capitalize first letter of each word).
@@ -308,7 +316,6 @@ def string_truncate(text: str, limit: int) -> str:
     return text
 
 
-@lru_cache(maxsize=512)
 def _normalize(value: str) -> list[str]:
     """
     Convert any string into a normalized list of lowercase words.
@@ -319,8 +326,6 @@ def _normalize(value: str) -> list[str]:
     - dotted.case
     - path/case
     - mixed separators
-
-    Result is cached (pure function). Callers must not mutate the returned list.
     """
 
     if not value:
