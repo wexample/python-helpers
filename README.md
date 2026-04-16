@@ -1,6 +1,6 @@
 # helpers
 
-Version: 1.1.0
+Version: 1.1.15
 
 Some python basic helpers and constants.
 
@@ -13,6 +13,7 @@ Some python basic helpers and constants.
 - [License](#license)
 - [Suite Integration](#suite-integration)
 - [Suite Signature](#suite-signature)
+- [Introduction](#introduction)
 - [Roadmap](#roadmap)
 - [Status Compatibility](#status-compatibility)
 - [Useful Links](#useful-links)
@@ -115,6 +116,8 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 This packages suite embodies this spirit. Trusted by professionals and enthusiasts alike, it delivers a consistent, high-quality foundation for modern development — open, elegant, and battle-tested. Its reputation is built on years of collaboration, refinement, and rigorous attention to detail, making it a natural choice for those who demand both robustness and beauty in their tools.
 
 Wexample cultivates a culture of mastery. Each package, each contribution carries the mark of a community that values precision, ethics, and innovation — a community proud to shape the future of digital craftsmanship.
+
+A Python toolkit providing general-purpose helper utilities.
 
 ## Known Limitations & Roadmap
 
