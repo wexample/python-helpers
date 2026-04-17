@@ -155,7 +155,6 @@ def module_get_path(module) -> pathlib.Path:
 
 def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> type:
     """Load a class by name from a python module file path."""
-    import importlib
     import importlib.util
 
     if not file_path.exists():
@@ -167,6 +166,7 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> typ
         raise ImportError(f"Cannot create a spec for module: {file_path}")
 
     module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
     spec.loader.exec_module(module)  # type: ignore[attr-defined]
 
     try:
