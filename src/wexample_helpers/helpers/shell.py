@@ -136,7 +136,17 @@ def shell_run(
                 retries=retries - 1,
                 retry_delay=retry_delay,
             )
-        raise
+        from wexample_helpers.exception.shell_command_failed_exception import (
+            ShellCommandFailedException,
+        )
+
+        raise ShellCommandFailedException(
+            cmd=used_cmd,
+            returncode=e.returncode,
+            stderr=e.stderr,
+            stdout=e.stdout,
+            cause=e,
+        ) from e
 
 
 async def shell_run_async(
@@ -230,10 +240,16 @@ async def shell_run_async(
         stderr_text = None
 
     if check and rc != 0:
-        exc = subprocess.CalledProcessError(
-            rc, used_cmd, stdout=stdout_text, stderr=stderr_text
+        from wexample_helpers.exception.shell_command_failed_exception import (
+            ShellCommandFailedException,
         )
-        raise exc
+
+        raise ShellCommandFailedException(
+            cmd=used_cmd,
+            returncode=rc,
+            stderr=stderr_text,
+            stdout=stdout_text,
+        )
 
     return ShellResult(
         args=used_cmd,
@@ -346,7 +362,11 @@ async def shell_stream_async(
         await asyncio.gather(*tasks)
 
     if check and rc != 0:
-        raise subprocess.CalledProcessError(rc, used_cmd)
+        from wexample_helpers.exception.shell_command_failed_exception import (
+            ShellCommandFailedException,
+        )
+
+        raise ShellCommandFailedException(cmd=used_cmd, returncode=rc)
     return rc
 
 
