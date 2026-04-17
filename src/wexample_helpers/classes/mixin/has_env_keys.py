@@ -54,7 +54,7 @@ class HasEnvKeys(BaseClass):
             key: The environment variable key
             value: The value to set
         """
-        self.env_config[key] = value
+        self.set_env_parameters({key: value})
 
     def set_env_parameters(self, parameters: dict[str, str]) -> None:
         """
