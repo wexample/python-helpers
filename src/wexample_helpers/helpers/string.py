@@ -310,6 +310,14 @@ def string_to_title_case(text: str) -> str:
     return " ".join(w.capitalize() for w in _normalize(text))
 
 
+def string_random_token(length: int = 24) -> str:
+    import secrets
+    import string
+
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
 def string_truncate(text: str, limit: int) -> str:
     if len(text) > limit:
         return text[: limit - 3] + "..."
