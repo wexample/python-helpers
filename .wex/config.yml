@@ -4,4 +4,4 @@ domains: []
 global:
   name: helpers
   type: app
-  version: 6.4.0
+  version: 6.5.0
