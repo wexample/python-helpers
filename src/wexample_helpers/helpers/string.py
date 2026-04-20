@@ -188,6 +188,14 @@ def string_is_title_case(text: str) -> bool:
     return string_detect_case(text) == "title"
 
 
+def string_random_token(length: int = 24) -> str:
+    import secrets
+    import string
+
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
 def string_remove_prefix(string: str, prefix: str) -> str:
     """
     Remove a prefix from a string if it exists at the beginning.
@@ -308,14 +316,6 @@ def string_to_title_case(text: str) -> str:
     Convert text to Title Case (capitalize first letter of each word).
     """
     return " ".join(w.capitalize() for w in _normalize(text))
-
-
-def string_random_token(length: int = 24) -> str:
-    import secrets
-    import string
-
-    alphabet = string.ascii_letters + string.digits
-    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def string_truncate(text: str, limit: int) -> str:
