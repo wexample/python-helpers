@@ -82,6 +82,75 @@ def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
         os.chown(p, uid, gid)
 
 
+def file_merge_yaml(
+    src: PathOrString,
+    dst: PathOrString,
+    merge_keys: list[str],
+) -> None:
+    """Merge top-level keys of a YAML file into an existing one.
+
+    For each key in merge_keys, the entries from src are merged into dst
+    (src wins on conflicts). All other top-level keys in dst are preserved.
+    If dst does not exist it is created as a copy of src.
+    """
+    import yaml
+    from pathlib import Path
+
+    src, dst = Path(src), Path(dst)
+    incoming = yaml.safe_load(src.read_text()) or {}
+
+    if dst.exists():
+        existing = yaml.safe_load(dst.read_text()) or {}
+        for key in merge_keys:
+            if key in incoming:
+                existing.setdefault(key, {})
+                existing[key].update(incoming[key])
+        dst.write_text(yaml.dump(existing, default_flow_style=False, allow_unicode=True))
+    else:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text())
+
+
+def file_copytree_merge_yaml(
+    src: PathOrString,
+    dst: PathOrString,
+    merge_filenames: list[str],
+    merge_keys: list[str],
+) -> None:
+    """Copy a directory tree like file_copytree_as_real_user, but merge YAML files
+    whose name appears in merge_filenames instead of overwriting them.
+
+    All files are chowned to the real user (handles sudo context).
+    """
+    import shutil
+    from pathlib import Path
+
+    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+    src, dst = Path(src), Path(dst)
+
+    for src_file in src.rglob("*"):
+        if not src_file.is_file():
+            continue
+        rel = src_file.relative_to(src)
+        dst_file = dst / rel
+        dst_file.parent.mkdir(parents=True, exist_ok=True)
+
+        if src_file.name in merge_filenames:
+            file_merge_yaml(src_file, dst_file, merge_keys)
+        else:
+            shutil.copy2(src_file, dst_file)
+
+        os.chown(dst_file, uid, gid)
+
+    for p in dst.rglob("*"):
+        try:
+            os.chown(p, uid, gid)
+        except OSError:
+            pass
+
+
 def file_env_append_as_real_user(
     env_file: PathOrString, env_vars: dict[str, str]
 ) -> None:
