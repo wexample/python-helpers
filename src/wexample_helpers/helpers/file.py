@@ -82,35 +82,6 @@ def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
         os.chown(p, uid, gid)
 
 
-def file_merge_yaml(
-    src: PathOrString,
-    dst: PathOrString,
-    merge_keys: list[str],
-) -> None:
-    """Merge top-level keys of a YAML file into an existing one.
-
-    For each key in merge_keys, the entries from src are merged into dst
-    (src wins on conflicts). All other top-level keys in dst are preserved.
-    If dst does not exist it is created as a copy of src.
-    """
-    import yaml
-    from pathlib import Path
-
-    src, dst = Path(src), Path(dst)
-    incoming = yaml.safe_load(src.read_text()) or {}
-
-    if dst.exists():
-        existing = yaml.safe_load(dst.read_text()) or {}
-        for key in merge_keys:
-            if key in incoming:
-                existing.setdefault(key, {})
-                existing[key].update(incoming[key])
-        dst.write_text(yaml.dump(existing, default_flow_style=False, allow_unicode=True))
-    else:
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        dst.write_text(src.read_text())
-
-
 def file_copytree_merge_yaml(
     src: PathOrString,
     dst: PathOrString,
@@ -212,6 +183,38 @@ def file_list_subdirectories(path: PathOrString) -> list[str]:
         p.name for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")
     ]
     return sorted(subdirs)
+
+
+def file_merge_yaml(
+    src: PathOrString,
+    dst: PathOrString,
+    merge_keys: list[str],
+) -> None:
+    """Merge top-level keys of a YAML file into an existing one.
+
+    For each key in merge_keys, the entries from src are merged into dst
+    (src wins on conflicts). All other top-level keys in dst are preserved.
+    If dst does not exist it is created as a copy of src.
+    """
+    from pathlib import Path
+
+    import yaml
+
+    src, dst = Path(src), Path(dst)
+    incoming = yaml.safe_load(src.read_text()) or {}
+
+    if dst.exists():
+        existing = yaml.safe_load(dst.read_text()) or {}
+        for key in merge_keys:
+            if key in incoming:
+                existing.setdefault(key, {})
+                existing[key].update(incoming[key])
+        dst.write_text(
+            yaml.dump(existing, default_flow_style=False, allow_unicode=True)
+        )
+    else:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text())
 
 
 def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
