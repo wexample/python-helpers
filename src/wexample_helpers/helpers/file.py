@@ -87,6 +87,7 @@ def file_copytree_merge_yaml(
     dst: PathOrString,
     merge_filenames: list[str],
     merge_keys: list[str],
+    ignore_filenames: list[str] | None = None,
 ) -> None:
     """Copy a directory tree like file_copytree_as_real_user, but merge YAML files
     whose name appears in merge_filenames instead of overwriting them.
@@ -100,9 +101,12 @@ def file_copytree_merge_yaml(
 
     uid, gid = user_get_real_uid(), user_get_real_gid()
     src, dst = Path(src), Path(dst)
+    _ignore = set(ignore_filenames or [])
 
     for src_file in src.rglob("*"):
         if not src_file.is_file():
+            continue
+        if src_file.name in _ignore:
             continue
         rel = src_file.relative_to(src)
         dst_file = dst / rel
