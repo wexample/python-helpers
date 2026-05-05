@@ -52,16 +52,15 @@ def file_chown_as_real_user_if_sudo(path: PathOrString) -> None:
 
 
 def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
-    """Recursively set owner uid/gid on a path and all its entries."""
+    """Recursively set owner uid/gid on a path and all its entries. Symlinks are skipped."""
     from pathlib import Path
 
     p = Path(path)
     os.chown(p, uid, gid)
     for entry in p.rglob("*"):
-        try:
-            os.chown(entry, uid, gid)
-        except OSError:
-            pass
+        if entry.is_symlink():
+            continue
+        os.chown(entry, uid, gid)
 
 
 def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
