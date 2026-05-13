@@ -121,6 +121,7 @@ def shell_run(
         if retries > 0:
             if retry_message:
                 import sys
+
                 sys.stdout.write(retry_message + "\n")
                 sys.stdout.flush()
             time.sleep(retry_delay)
