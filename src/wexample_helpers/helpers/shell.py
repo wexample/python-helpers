@@ -35,6 +35,7 @@ def shell_run(
     elevate: bool = False,
     retries: int = 0,
     retry_delay: float = 5.0,
+    retry_message: str | None = None,
 ) -> ShellResult:
     """Run a command synchronously with a modern, explicit API.
 
@@ -118,6 +119,11 @@ def shell_run(
         e.stderr = getattr(e, "stderr", None)
         e.duration = end - start  # type: ignore[attr-defined]
         if retries > 0:
+            if retry_message:
+                import sys
+
+                sys.stdout.write(retry_message + "\n")
+                sys.stdout.flush()
             time.sleep(retry_delay)
             return shell_run(
                 cmd,
@@ -135,6 +141,7 @@ def shell_run(
                 elevate=elevate,
                 retries=retries - 1,
                 retry_delay=retry_delay,
+                retry_message=retry_message,
             )
         from wexample_helpers.exception.shell_command_failed_exception import (
             ShellCommandFailedException,
