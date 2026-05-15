@@ -70,6 +70,28 @@ def dict_has_item_by_path(
     return True
 
 
+def dict_flatten(
+    data: StringKeysMapping,
+    prefix: str = "",
+    separator: str = "_",
+    upper: bool = True,
+) -> StringKeysDict:
+    """Flatten a nested dict into a single-level dict.
+
+    `{"a": {"b": 1}}` → `{"A_B": 1}` with defaults (upper-cased, `_` separator).
+    Non-dict values are kept as-is; lists are not exploded.
+    """
+    result: StringKeysDict = {}
+    for k, v in data.items():
+        part = str(k).upper() if upper else str(k)
+        key = f"{prefix}{separator}{part}" if prefix else part
+        if isinstance(v, dict):
+            result.update(dict_flatten(v, key, separator=separator, upper=upper))
+        else:
+            result[key] = v
+    return result
+
+
 def dict_interpolate(value: Any, variables: StringKeysDict) -> Any:
     if isinstance(value, dict):
         return {k: dict_interpolate(v, variables) for k, v in value.items()}
