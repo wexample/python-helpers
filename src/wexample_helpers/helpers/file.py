@@ -125,7 +125,6 @@ def file_copytree_merge_yaml(
             pass
 
 
-
 def file_get_dir_size(path: PathOrString) -> int:
     """Return total byte size of all files under a directory, skipping unreadable entries."""
     from pathlib import Path
