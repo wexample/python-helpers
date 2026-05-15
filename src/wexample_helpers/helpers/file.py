@@ -125,20 +125,6 @@ def file_copytree_merge_yaml(
             pass
 
 
-def file_env_append_as_real_user(
-    env_file: PathOrString, env_vars: dict[str, str]
-) -> None:
-    """Append missing KEY=VALUE pairs to an .env file and chown it to the real user."""
-    from pathlib import Path
-
-    p = Path(env_file)
-    existing = p.read_text() if p.exists() else ""
-    new_lines = [f"{k}={v}" for k, v in env_vars.items() if f"{k}=" not in existing]
-    if new_lines:
-        p.write_text(existing.rstrip("\n") + "\n" + "\n".join(new_lines) + "\n")
-        file_chown_as_real_user(p)
-
-
 def file_get_dir_size(path: PathOrString) -> int:
     """Return total byte size of all files under a directory, skipping unreadable entries."""
     from pathlib import Path
