@@ -4,56 +4,78 @@ from typing import Any, Generic, TypeVar
 
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.private_field import private_field
-
-RegistrableType = TypeVar("RegistrableType")
-
 from wexample_helpers.decorator.base_class import base_class
+
+T = TypeVar("T")
 
 
 @base_class
-class Registry(Generic[RegistrableType]):
-    """Generic registry for managing any type of data."""
+class Registry(Generic[T]):
+    """Generic key/value registry for typed items.
 
-    container: Any = public_field(description="The service container")
+    The base Registry is tolerant: it accepts both classes and instances,
+    derives keys automatically when possible, and does not manage item
+    lifecycle. Use SingletonRegistry for auto-instantiation + init hooks,
+    or DiskPersistedRegistry for disk-backed state.
+    """
+
+    container: Any = public_field(
+        default=None, description="Optional container reference"
+    )
     _fail_if_missing: bool = private_field(
-        description="Define if missing item is fatal or not", default=False
+        default=False, description="Raise KeyError when a missing item is fetched"
     )
-    _items: dict[str, RegistrableType] | None = private_field(
-        description="The items of the registry", factory=dict
+    _items: dict[str, T] | None = private_field(
+        factory=dict, description="The items of the registry"
     )
 
-    def __init__(self, container: Any) -> None:
+    def __init__(self, container: Any = None) -> None:
         self._items = {}
         self.container = container
 
     def all_keys(self) -> list[str]:
         return list(self._items.keys())
 
-    def get(self, key: str, **kwargs) -> RegistrableType | None:
-        """
-        Retrieve an item by its key.
-        Additional kwargs can be used by child classes.
-        """
+    def get(self, key: str) -> T | None:
         item = self._items.get(key)
         self._raise_error_if_expected(key, item)
-
         return item
 
-    def get_all(self) -> dict[str, RegistrableType]:
-        """Get all items in the registry."""
+    def get_all(self) -> dict[str, T]:
         return self._items
 
     def has(self, key: str) -> bool:
-        """Check if an item exists in the registry."""
         return key in self._items
 
-    def register(self, key: str, item: RegistrableType) -> None:
-        """Register an item in the registry."""
+    def register(self, item: T, key: str | None = None) -> None:
+        """Register an item. Key is auto-derived if not provided.
+
+        Auto-derivation order:
+        1. item.get_registry_key() (Registrable Protocol)
+        2. item.get_snake_short_class_name() (existing wexample classes)
+        3. item.__name__ (raw classes)
+        4. type(item).__name__ (raw instances)
+        """
+        if key is None:
+            key = self._derive_key(item)
         self._items[key] = item
+
+    def register_many(self, items: list[T]) -> None:
+        for item in items:
+            self.register(item)
+
+    @staticmethod
+    def _derive_key(item: Any) -> str:
+        if hasattr(item, "get_registry_key"):
+            return item.get_registry_key()
+        if hasattr(item, "get_snake_short_class_name"):
+            return item.get_snake_short_class_name()
+        if isinstance(item, type):
+            return item.__name__
+        return type(item).__name__
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:
         if item is None and self._fail_if_missing:
-            available_keys = self.all_keys()
             raise KeyError(
-                f"Item not found in registry: {key}. Available keys: {available_keys}"
+                f"Item not found in registry: {key}. Available keys: {self.all_keys()}"
             )
