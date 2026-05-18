@@ -35,7 +35,10 @@ class DiskPersistedRegistry(Registry[T]):
         """True if the backing file exists on disk and has content."""
         if self._file is None:
             return False
-        return not self._file.get_local_file().is_empty()
+        try:
+            return not self._file.get_local_file().is_empty()
+        except FileNotFoundError:
+            return False
 
     def save(self) -> None:
         """Serialize current items to the backing file.
@@ -55,9 +58,12 @@ class DiskPersistedRegistry(Registry[T]):
 
         If item_class implements hydrate(data) (Registrable), instances are
         created from each payload entry. Otherwise raw entries are stored.
+        Missing file is treated as an empty payload (no-op).
         """
         if self._file is None:
             raise RuntimeError("No StructuredContentFile configured for persistence")
+        if not self.is_persisted():
+            return
         data = self._file.read_parsed() or {}
         for key, entry in data.items():
             if item_class is not None and hasattr(item_class, "hydrate"):
