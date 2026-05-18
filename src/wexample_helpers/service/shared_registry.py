@@ -15,6 +15,10 @@ T = TypeVar("T")
 class SharedRegistry(Registry[T]):
     """Registry exposing a per-class shared instance via shared().
 
+    Cooperative `__init__` (forwards through MRO via super()) so this class
+    can be combined with other Registry variants (e.g. DiskPersistedRegistry)
+    via multiple inheritance without dropping kwargs.
+
     Use this when a registry is meant to be globally accessible without
     threading an instance reference through call sites. Each subclass gets
     its own shared instance (the cache key is the concrete class, not
@@ -32,6 +36,9 @@ class SharedRegistry(Registry[T]):
         local = MyRegistry()
         local.register(item)
     """
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @classmethod
     def shared(cls) -> Self:
