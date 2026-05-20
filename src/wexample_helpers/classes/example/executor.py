@@ -61,8 +61,8 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
             key = self._build_example_key(path=path, root=examples_dir)
 
             examples_registry.register(
-                key=key,
                 item=example_class(path=path, executor=self),
+                key=key,
             )
 
     def execute(self) -> None:
