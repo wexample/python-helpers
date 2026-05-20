@@ -9,7 +9,12 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 R = TypeVar("R")
 
-PARALLEL_DEFAULT_MAX_WORKERS = 8
+PARALLEL_DEFAULT_MAX_WORKERS = 32
+"""Default thread pool size: matches Python's own ThreadPoolExecutor cap for
+I/O-bound work. Generous enough to saturate filesystem and subprocess I/O on
+typical machines, low enough to stay well below file descriptor and scheduler
+limits. Callers can override with ``max_workers=N`` for memory-constrained or
+interactive contexts."""
 
 
 def parallel_map(
