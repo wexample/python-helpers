@@ -34,6 +34,16 @@ class Registry(Generic[T]):
         self._items = {}
         self.container = container
 
+    @staticmethod
+    def _derive_key(item: Any) -> str:
+        if hasattr(item, "get_registry_key"):
+            return item.get_registry_key()
+        if hasattr(item, "get_snake_short_class_name"):
+            return item.get_snake_short_class_name()
+        if isinstance(item, type):
+            return item.__name__
+        return type(item).__name__
+
     def all_keys(self) -> list[str]:
         return list(self._items.keys())
 
@@ -64,16 +74,6 @@ class Registry(Generic[T]):
     def register_many(self, items: list[T]) -> None:
         for item in items:
             self.register(item)
-
-    @staticmethod
-    def _derive_key(item: Any) -> str:
-        if hasattr(item, "get_registry_key"):
-            return item.get_registry_key()
-        if hasattr(item, "get_snake_short_class_name"):
-            return item.get_snake_short_class_name()
-        if isinstance(item, type):
-            return item.__name__
-        return type(item).__name__
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:
         if item is None and self._fail_if_missing:

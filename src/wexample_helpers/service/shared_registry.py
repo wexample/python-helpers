@@ -41,14 +41,14 @@ class SharedRegistry(Registry[T]):
         super().__init__(*args, **kwargs)
 
     @classmethod
+    def reset_shared(cls) -> None:
+        """Drop the per-class shared instance (useful for tests)."""
+        if "_shared_instance" in cls.__dict__:
+            delattr(cls, "_shared_instance")
+
+    @classmethod
     def shared(cls) -> Self:
         """Return the per-class shared instance, lazily created on first call."""
         if "_shared_instance" not in cls.__dict__:
             cls._shared_instance = cls()
         return cls._shared_instance
-
-    @classmethod
-    def reset_shared(cls) -> None:
-        """Drop the per-class shared instance (useful for tests)."""
-        if "_shared_instance" in cls.__dict__:
-            delattr(cls, "_shared_instance")

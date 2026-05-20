@@ -17,6 +17,29 @@ limits. Callers can override with ``max_workers=N`` for memory-constrained or
 interactive contexts."""
 
 
+def parallel_for_each(
+    items: Iterable[T],
+    fn: Callable[[T], object],
+    *,
+    max_workers: int = PARALLEL_DEFAULT_MAX_WORKERS,
+) -> None:
+    """Like ``parallel_map`` but discards return values.
+
+    Exceptions still propagate (the underlying ``executor.map`` is fully consumed
+    before exit).
+    """
+    items_list = list(items)
+    if not items_list:
+        return
+    if len(items_list) == 1:
+        fn(items_list[0])
+        return
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        for _ in executor.map(fn, items_list):
+            pass
+
+
 def parallel_map(
     items: Iterable[T],
     fn: Callable[[T], R],
@@ -39,26 +62,3 @@ def parallel_map(
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         return list(executor.map(fn, items_list))
-
-
-def parallel_for_each(
-    items: Iterable[T],
-    fn: Callable[[T], object],
-    *,
-    max_workers: int = PARALLEL_DEFAULT_MAX_WORKERS,
-) -> None:
-    """Like ``parallel_map`` but discards return values.
-
-    Exceptions still propagate (the underlying ``executor.map`` is fully consumed
-    before exit).
-    """
-    items_list = list(items)
-    if not items_list:
-        return
-    if len(items_list) == 1:
-        fn(items_list[0])
-        return
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        for _ in executor.map(fn, items_list):
-            pass

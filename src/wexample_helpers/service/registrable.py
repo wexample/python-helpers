@@ -13,11 +13,6 @@ class Registrable(Protocol):
     """
 
     @classmethod
-    def get_registry_key(cls) -> str:
-        """Unique key under which this item is stored in the registry."""
-        ...
-
-    @classmethod
     def dependencies(cls) -> list[type[Registrable]]:
         """Other Registrable types that must be initialized before this one.
 
@@ -26,8 +21,9 @@ class Registrable(Protocol):
         """
         ...
 
-    def init_sync(self) -> None:
-        """Synchronous initialization hook. Called by Registry.init_all_sync()."""
+    @classmethod
+    def get_registry_key(cls) -> str:
+        """Unique key under which this item is stored in the registry."""
         ...
 
     async def init_async(self) -> None:
@@ -36,4 +32,8 @@ class Registrable(Protocol):
         Default implementation should call init_sync() in a thread (asyncio.to_thread)
         unless the item has a genuinely async init path (network, asyncio-native I/O).
         """
+        ...
+
+    def init_sync(self) -> None:
+        """Synchronous initialization hook. Called by Registry.init_all_sync()."""
         ...

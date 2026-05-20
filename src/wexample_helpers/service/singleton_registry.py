@@ -26,29 +26,17 @@ class SingletonRegistry(Registry[T]):
         super().__init__(container=container)
         self._classes = {}
 
-    def register(self, item: type[T], key: str | None = None) -> None:
-        """Register a class. Instance is created during init_all_*()."""
-        if not isinstance(item, type):
-            raise TypeError(
-                f"SingletonRegistry only accepts classes, got instance of {type(item).__name__}"
-            )
-        if key is None:
-            key = self._derive_key(item)
-        self._classes[key] = item
-
-    def get_class(self, key: str) -> type[T] | None:
-        return self._classes.get(key)
+    @staticmethod
+    def _get_deps(cls: Any) -> list[type]:
+        if hasattr(cls, "dependencies"):
+            return cls.dependencies() or []
+        return []
 
     def get_all_classes(self) -> dict[str, type[T]]:
         return self._classes
 
-    def init_all_sync(self) -> None:
-        """Instantiate all classes in topological order, calling init_sync()."""
-        for cls in self._resolve_order():
-            instance = self._instantiate(cls)
-            self._items[self._derive_key(cls)] = instance
-            if hasattr(instance, "init_sync"):
-                instance.init_sync()
+    def get_class(self, key: str) -> type[T] | None:
+        return self._classes.get(key)
 
     async def init_all_async(self) -> None:
         """Instantiate by topological layers; gather init_async within each layer."""
@@ -66,11 +54,53 @@ class SingletonRegistry(Registry[T]):
             if coros:
                 await asyncio.gather(*coros)
 
+    def init_all_sync(self) -> None:
+        """Instantiate all classes in topological order, calling init_sync()."""
+        for cls in self._resolve_order():
+            instance = self._instantiate(cls)
+            self._items[self._derive_key(cls)] = instance
+            if hasattr(instance, "init_sync"):
+                instance.init_sync()
+
+    def register(self, item: type[T], key: str | None = None) -> None:
+        """Register a class. Instance is created during init_all_*()."""
+        if not isinstance(item, type):
+            raise TypeError(
+                f"SingletonRegistry only accepts classes, got instance of {type(item).__name__}"
+            )
+        if key is None:
+            key = self._derive_key(item)
+        self._classes[key] = item
+
     def _instantiate(self, cls: type[T]) -> T:
         try:
             return cls(container=self.container)
         except TypeError:
             return cls()
+
+    def _resolve_layers(self) -> list[list[type[T]]]:
+        """Layered topological order: each layer can be initialized in parallel."""
+        depth: dict[str, int] = {}
+
+        def compute(cls: type[T]) -> int:
+            key = self._derive_key(cls)
+            if key in depth:
+                return depth[key]
+            d = 0
+            for dep in self._get_deps(cls):
+                dep_key = self._derive_key(dep)
+                if dep_key in self._classes:
+                    d = max(d, compute(self._classes[dep_key]) + 1)
+            depth[key] = d
+            return d
+
+        for cls in self._classes.values():
+            compute(cls)
+
+        layers: dict[int, list[type[T]]] = {}
+        for cls in self._classes.values():
+            layers.setdefault(depth[self._derive_key(cls)], []).append(cls)
+        return [layers[d] for d in sorted(layers)]
 
     def _resolve_order(self) -> list[type[T]]:
         """Flat topological sort: each class appears after its dependencies."""
@@ -97,33 +127,3 @@ class SingletonRegistry(Registry[T]):
         for cls in list(self._classes.values()):
             visit(cls)
         return ordered
-
-    def _resolve_layers(self) -> list[list[type[T]]]:
-        """Layered topological order: each layer can be initialized in parallel."""
-        depth: dict[str, int] = {}
-
-        def compute(cls: type[T]) -> int:
-            key = self._derive_key(cls)
-            if key in depth:
-                return depth[key]
-            d = 0
-            for dep in self._get_deps(cls):
-                dep_key = self._derive_key(dep)
-                if dep_key in self._classes:
-                    d = max(d, compute(self._classes[dep_key]) + 1)
-            depth[key] = d
-            return d
-
-        for cls in self._classes.values():
-            compute(cls)
-
-        layers: dict[int, list[type[T]]] = {}
-        for cls in self._classes.values():
-            layers.setdefault(depth[self._derive_key(cls)], []).append(cls)
-        return [layers[d] for d in sorted(layers)]
-
-    @staticmethod
-    def _get_deps(cls: Any) -> list[type]:
-        if hasattr(cls, "dependencies"):
-            return cls.dependencies() or []
-        return []

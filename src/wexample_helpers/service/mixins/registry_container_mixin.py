@@ -29,7 +29,9 @@ class RegistryContainerMixin(BaseClass):
             return self.set_registry(registry_name, registry_class_type)
         return self._registries[registry_name]
 
-    def register_item(self, registry_name: str, item: Any, key: str | None = None) -> Registry:
+    def register_item(
+        self, registry_name: str, item: Any, key: str | None = None
+    ) -> Registry:
         """Register an item in a specific registry. Key is auto-derived if omitted."""
         registry = self.get_registry(registry_name)
         registry.register(item, key=key)
