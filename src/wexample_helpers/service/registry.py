@@ -15,8 +15,9 @@ class Registry(Generic[T]):
 
     The base Registry is tolerant: it accepts both classes and instances,
     derives keys automatically when possible, and does not manage item
-    lifecycle. Use SingletonRegistry for auto-instantiation + init hooks,
-    or DiskPersistedRegistry for disk-backed state.
+    lifecycle. Use SingletonRegistry for auto-instantiation + init hooks.
+    For disk-backed state see DiskPersistedRegistry in wexample_filestate
+    (lives in filestate because it requires a StructuredContentFile).
     """
 
     container: Any = public_field(
