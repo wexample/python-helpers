@@ -31,7 +31,10 @@ class Registry(Generic[T]):
     )
 
     def __init__(self, container: Any = None) -> None:
+        # Custom __init__ bypasses attrs' auto-init, so we must seed every
+        # field declared via private_field/public_field with its default.
         self._items = {}
+        self._fail_if_missing = False
         self.container = container
 
     @staticmethod
