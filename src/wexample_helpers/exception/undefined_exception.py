@@ -1,56 +1,59 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any
+from typing import Any, ClassVar
+
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 
 
+@base_class
 class UndefinedException(Exception):
     """Base exception class for all application exceptions.
 
     Provides enhanced functionality including:
     - Unique error codes
-    - Structured error data using TypedDict
+    - Structured, serializable error data
     - Error chaining (cause/previous)
+    - Resolution suggestions (human-actionable hints)
     - Serialization support
     """
 
-    # Class-level error code, should be overridden by subclasses
-    error_code: str = "UNDEFINED_ERROR"
+    # Class-level error code, should be overridden by subclasses.
+    error_code: ClassVar[str] = "UNDEFINED_ERROR"
 
-    def __init__(
-        self,
-        message: str,
-        data: dict[str, Any] | None = None,
-        cause: Exception | None = None,
-        previous: Exception | None = None,
-    ) -> None:
-        self.message = message
-        self.data = data or {}
-        self.cause = cause
-        self.previous = previous
-        self.exception_id = str(uuid.uuid4())
-        super().__init__(self.message)
+    message: str = public_field(
+        description="Human-readable error message",
+    )
+    data: dict[str, Any] = public_field(
+        factory=dict,
+        description="Structured, serializable error data",
+    )
+    cause: Exception | None = public_field(
+        default=None,
+        description="Underlying exception that triggered this error",
+    )
+    previous: Exception | None = public_field(
+        default=None,
+        description="Previous exception in the chain",
+    )
+    suggestions: list[str] = public_field(
+        factory=list,
+        description="Human-actionable hints to help resolve the error",
+    )
+    exception_id: str = public_field(
+        init=False,
+        factory=lambda: str(uuid.uuid4()),
+        description="Unique identifier of this exception instance",
+    )
 
-    def __repr__(self) -> str:
-        """Return a detailed string representation of the exception."""
-        parts = [
-            f"{self.__class__.__name__}(",
-            f"  error_code={self.error_code!r}",
-            f"  message={self.message!r}",
-            f"  exception_id={self.exception_id!r}",
-        ]
-        if self.data:
-            parts.append(f"  data={self.data!r}")
-        if self.cause:
-            parts.append(f"  cause={self.cause!r}")
-        if self.previous:
-            parts.append(f"  previous={self.previous!r}")
-        parts.append(")")
-        return "\n".join(parts)
+    def __str__(self) -> str:
+        # auto_exc stores every field in self.args, so rely on the message only.
+        return self.message
 
     def to_dict(self) -> dict[str, Any]:
         """Convert exception to dictionary for serialization."""
-        result = {
+        result: dict[str, Any] = {
             "error_code": self.error_code,
             "message": self.message,
             "exception_id": self.exception_id,
@@ -58,6 +61,9 @@ class UndefinedException(Exception):
 
         if self.data:
             result["data"] = self.data
+
+        if self.suggestions:
+            result["suggestions"] = self.suggestions
 
         if self.cause:
             result["cause"] = str(self.cause)

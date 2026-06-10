@@ -22,6 +22,7 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
         cause: Exception | None = None,
         previous: Exception | None = None,
         message: str | None = None,
+        **kwargs,
     ) -> None:
         from wexample_helpers.exception.model.not_allowed_item_data import (
             NotAllowedItemData,
@@ -48,4 +49,5 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
             data=data,
             cause=cause,
             previous=previous,
+            **kwargs,
         )

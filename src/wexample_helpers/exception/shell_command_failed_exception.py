@@ -16,6 +16,7 @@ class ShellCommandFailedException(UndefinedException):
         stderr: str | None = None,
         stdout: str | None = None,
         cause: Exception | None = None,
+        **kwargs,
     ) -> None:
         self.cmd = cmd
         self.returncode = returncode
@@ -31,4 +32,5 @@ class ShellCommandFailedException(UndefinedException):
             message=f"Command exited with code {returncode}",
             data=data,
             cause=cause,
+            **kwargs,
         )

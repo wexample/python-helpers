@@ -20,6 +20,7 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
         cause: Exception | None = None,
         previous: Exception | None = None,
         message: str | None = None,
+        **kwargs,
     ) -> None:
         from wexample_helpers.helpers.string import string_truncate
         from wexample_helpers.helpers.type import type_to_name
@@ -43,4 +44,5 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
                 f"{string_truncate(str(variable_value), 1000)!r}. "
                 f"Allowed types: {types_str}."
             ),
+            **kwargs,
         )
