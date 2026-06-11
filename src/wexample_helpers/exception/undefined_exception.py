@@ -47,8 +47,9 @@ class UndefinedException(Exception):
         factory=lambda: str(uuid.uuid4()),
         description="Unique identifier of this exception instance",
     )
-    message: str = public_field(
-        description="Human-readable error message",
+    message: str | None = public_field(
+        default=None,
+        description="Explicit error message; when omitted, _build_message() is used",
     )
     previous: Exception | None = public_field(
         default=None,
@@ -61,7 +62,21 @@ class UndefinedException(Exception):
 
     def __str__(self) -> str:
         # auto_exc stores every field in self.args, so rely on the message only.
-        return self.message
+        return self.render_message()
+
+    def render_message(self) -> str:
+        """Return the explicit message if provided, else the derived one.
+
+        Computed lazily (not at init) so it never depends on attrs field
+        declaration order — which the repo's field-sorting linter reshuffles.
+        """
+        if self.message is not None:
+            return self.message
+        return self._build_message()
+
+    def _build_message(self) -> str:
+        """Override in subclasses to derive the message from their fields."""
+        return ""
 
     def collect_data(self) -> dict[str, Any]:
         """Return the structured payload: explicit ``data`` merged with every
@@ -83,7 +98,7 @@ class UndefinedException(Exception):
 
         result: dict[str, Any] = {
             "error_code": self.error_code,
-            "message": self.message,
+            "message": self.render_message(),
             "exception_id": self.exception_id,
         }
 
