@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from ...classes.field import public_field
 from ...decorator.base_class import base_class
 
 if TYPE_CHECKING:
@@ -10,7 +11,13 @@ if TYPE_CHECKING:
 
 @base_class
 class Service:
-    kernel: BaseKernel | None = None
+    # Backlink to the owning kernel: excluded from equality, otherwise the
+    # attrs generated __eq__ recurses forever (kernel -> service -> kernel).
+    kernel: BaseKernel | None = public_field(
+        default=None,
+        description="Owning kernel this service is attached to",
+        eq=False,
+    )
     name: str
 
     @property
