@@ -17,14 +17,13 @@ class NotAllowedItemException(UndefinedException, NotAllowedItemMixin):
     2. A required item was not provided at all
     """
 
+    allowed_values: list[str] = public_field(
+        factory=list, description="List of allowed values for this item type"
+    )
     error_code: ClassVar[str] = "NOT_ALLOWED_ITEM"
-
     item_type: str = public_field(description="Type of the offending item")
     item_value: str | None = public_field(
         default=None, description="Value of the item that is not allowed"
-    )
-    allowed_values: list[str] = public_field(
-        factory=list, description="List of allowed values for this item type"
     )
 
     def _build_message(self) -> str:

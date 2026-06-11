@@ -15,7 +15,6 @@ class MissingRequiredEnvVarError(UndefinedException):
     """Custom exception raised when required environment variables are missing."""
 
     error_code: ClassVar[str] = "MISSING_REQUIRED_ENV_VAR"
-
     missing_keys: StringsList = public_field(
         description="Names of the missing required environment variables"
     )

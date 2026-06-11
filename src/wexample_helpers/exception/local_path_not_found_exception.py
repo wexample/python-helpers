@@ -10,7 +10,6 @@ from wexample_helpers.exception.undefined_exception import UndefinedException
 @base_class
 class LocalPathNotFoundException(UndefinedException):
     error_code: ClassVar[str] = "LOCAL_PATH_NOT_FOUND"
-
     path: object = public_field(default=None, description="Offending file system path")
 
     def _build_message(self) -> str:

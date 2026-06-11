@@ -11,11 +11,10 @@ from wexample_helpers.exception.undefined_exception import UndefinedException
 class MultipleBaseModelInheritanceError(UndefinedException):
     """Exception raised when multiple inheritance of BaseModel is detected."""
 
-    error_code: ClassVar[str] = "MULTIPLE_BASE_MODEL_INHERITANCE"
-
     class_instance: Any = public_field(
         description="Class for which multiple BaseModel inheritance was detected"
     )
+    error_code: ClassVar[str] = "MULTIPLE_BASE_MODEL_INHERITANCE"
 
     def _build_message(self) -> str:
         return (
