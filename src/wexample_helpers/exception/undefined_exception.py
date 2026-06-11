@@ -32,19 +32,23 @@ class UndefinedException(Exception):
     - Serialization support
     """
 
-    # Class-level error code, should be overridden by subclasses.
-    error_code: ClassVar[str] = "UNDEFINED_ERROR"
-
-    message: str = public_field(
-        description="Human-readable error message",
+    cause: Exception | None = public_field(
+        default=None,
+        description="Underlying exception that triggered this error",
     )
     data: dict[str, Any] = public_field(
         factory=dict,
         description="Structured, serializable error data",
     )
-    cause: Exception | None = public_field(
-        default=None,
-        description="Underlying exception that triggered this error",
+    # Class-level error code, should be overridden by subclasses.
+    error_code: ClassVar[str] = "UNDEFINED_ERROR"
+    exception_id: str = public_field(
+        init=False,
+        factory=lambda: str(uuid.uuid4()),
+        description="Unique identifier of this exception instance",
+    )
+    message: str = public_field(
+        description="Human-readable error message",
     )
     previous: Exception | None = public_field(
         default=None,
@@ -53,11 +57,6 @@ class UndefinedException(Exception):
     suggestions: list[str] = public_field(
         factory=list,
         description="Human-actionable hints to help resolve the error",
-    )
-    exception_id: str = public_field(
-        init=False,
-        factory=lambda: str(uuid.uuid4()),
-        description="Unique identifier of this exception instance",
     )
 
     def __str__(self) -> str:
