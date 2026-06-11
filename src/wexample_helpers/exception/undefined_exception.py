@@ -64,22 +64,6 @@ class UndefinedException(Exception):
         # auto_exc stores every field in self.args, so rely on the message only.
         return self.render_message()
 
-    def render_message(self) -> str:
-        """Return the explicit message if provided, else the derived one.
-
-        Computed lazily (not at init) so it never depends on attrs field
-        declaration order — which the repo's field-sorting linter reshuffles.
-        Always read the message through this, never ``self.message`` directly
-        (which is None for subclasses that derive their message).
-        """
-        if self.message is not None:
-            return self.message
-        return self._build_message()
-
-    def _build_message(self) -> str:
-        """Override in subclasses to derive the message from their fields."""
-        return ""
-
     def collect_data(self) -> dict[str, Any]:
         """Return the structured payload: explicit ``data`` merged with every
         domain-specific public field declared by subclasses.
@@ -93,6 +77,18 @@ class UndefinedException(Exception):
                 continue
             data[field.name] = getattr(self, field.name)
         return data
+
+    def render_message(self) -> str:
+        """Return the explicit message if provided, else the derived one.
+
+        Computed lazily (not at init) so it never depends on attrs field
+        declaration order — which the repo's field-sorting linter reshuffles.
+        Always read the message through this, never ``self.message`` directly
+        (which is None for subclasses that derive their message).
+        """
+        if self.message is not None:
+            return self.message
+        return self._build_message()
 
     def to_dict(self) -> dict[str, Any]:
         """Convert exception to dictionary for serialization."""
@@ -119,3 +115,7 @@ class UndefinedException(Exception):
         """Add additional data to the exception."""
         self.data.update(kwargs)
         return self
+
+    def _build_message(self) -> str:
+        """Override in subclasses to derive the message from their fields."""
+        return ""
