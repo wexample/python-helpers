@@ -1,46 +1,52 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
+from attrs import Factory
+
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.exception.not_allowed_item_exception import (
     NotAllowedItemException,
 )
+from wexample_helpers.helpers.string import string_truncate
+from wexample_helpers.helpers.type import type_to_name
 
 
+@base_class
 class NotAllowedVariableTypeException(NotAllowedItemException):
     """A specific exception for bad variables types"""
 
-    error_code: str = "NOT_ALLOWED_VARIABLE_TYPE"
+    error_code: ClassVar[str] = "NOT_ALLOWED_VARIABLE_TYPE"
 
-    def __init__(
-        self,
-        variable_type: Any,
-        variable_value: Any,
-        allowed_types: list[Any] | None = None,
-        cause: Exception | None = None,
-        previous: Exception | None = None,
-        message: str | None = None,
-    ) -> None:
-        from wexample_helpers.helpers.string import string_truncate
-        from wexample_helpers.helpers.type import type_to_name
-
-        # Normalize variable_type for display
-        var_type_name = type_to_name(variable_type)
-
-        # Normalize allowed types for message and payload
-        allowed_types = allowed_types or []
-        allowed_type_names = [type_to_name(t) for t in allowed_types]
-        types_str = ", ".join(allowed_type_names) if allowed_type_names else "<none>"
-
-        super().__init__(
-            item_type="type",
-            item_value=var_type_name,
-            allowed_values=allowed_type_names,
-            cause=cause,
-            previous=previous,
-            message=(
-                f"{message or ''}Invalid variable type '{var_type_name}' for value "
-                f"{string_truncate(str(variable_value), 1000)!r}. "
-                f"Allowed types: {types_str}."
+    variable_type: Any = public_field(description="Type of the offending variable")
+    variable_value: Any = public_field(description="Value of the offending variable")
+    allowed_types: list[Any] = public_field(
+        factory=list, description="List of allowed types for the variable"
+    )
+    item_type: str = public_field(
+        default="type", description="Type of the offending item"
+    )
+    item_value: str | None = public_field(
+        default=Factory(lambda self: type_to_name(self.variable_type), takes_self=True),
+        description="Value of the item that is not allowed",
+    )
+    allowed_values: list[str] = public_field(
+        default=Factory(
+            lambda self: [type_to_name(t) for t in self.allowed_types],
+            takes_self=True,
+        ),
+        description="List of allowed values for this item type",
+    )
+    message: str = public_field(
+        default=Factory(
+            lambda self: (
+                f"Invalid variable type '{type_to_name(self.variable_type)}' for value "
+                f"{string_truncate(str(self.variable_value), 1000)!r}. "
+                f"Allowed types: "
+                f"{', '.join([type_to_name(t) for t in self.allowed_types]) if self.allowed_types else '<none>'}."
             ),
-        )
+            takes_self=True,
+        ),
+        description="Human-readable error message",
+    )
