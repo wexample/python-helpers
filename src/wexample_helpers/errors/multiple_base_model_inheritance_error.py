@@ -1,20 +1,30 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
+from attrs import Factory
+
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.exception.undefined_exception import UndefinedException
 
 
+@base_class
 class MultipleBaseModelInheritanceError(UndefinedException):
     """Exception raised when multiple inheritance of BaseModel is detected."""
 
-    error_code: str = "MULTIPLE_BASE_MODEL_INHERITANCE"
+    error_code: ClassVar[str] = "MULTIPLE_BASE_MODEL_INHERITANCE"
 
-    def __init__(self, class_instance: Any, **kwargs) -> None:
-        super().__init__(
-            message=(
+    class_instance: Any = public_field(
+        description="Class for which multiple BaseModel inheritance was detected"
+    )
+    message: str = public_field(
+        default=Factory(
+            lambda self: (
                 f"Multiple inheritance of BaseModel is not allowed in class "
-                f"'{class_instance.__name__}'."
+                f"'{self.class_instance.__name__}'."
             ),
-            **kwargs,
-        )
+            takes_self=True,
+        ),
+        description="Human-readable error message",
+    )

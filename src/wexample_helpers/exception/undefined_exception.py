@@ -3,8 +3,21 @@ from __future__ import annotations
 import uuid
 from typing import Any, ClassVar
 
+import attrs
+
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
+
+# Base fields serialized explicitly by to_dict(); every other public field is
+# considered domain-specific payload and merged into the "data" section.
+_BASE_FIELD_NAMES = {
+    "message",
+    "data",
+    "cause",
+    "previous",
+    "suggestions",
+    "exception_id",
+}
 
 
 @base_class
@@ -52,15 +65,25 @@ class UndefinedException(Exception):
         return self.message
 
     def to_dict(self) -> dict[str, Any]:
-        """Convert exception to dictionary for serialization."""
+        """Convert exception to dictionary for serialization.
+
+        Domain-specific public fields declared by subclasses are merged into the
+        ``data`` section, so no manual ``data={...}`` plumbing is required.
+        """
+        data = dict(self.data)
+        for field in attrs.fields(type(self)):
+            if field.name in _BASE_FIELD_NAMES or field.name.startswith("_"):
+                continue
+            data[field.name] = getattr(self, field.name)
+
         result: dict[str, Any] = {
             "error_code": self.error_code,
             "message": self.message,
             "exception_id": self.exception_id,
         }
 
-        if self.data:
-            result["data"] = self.data
+        if data:
+            result["data"] = data
 
         if self.suggestions:
             result["suggestions"] = self.suggestions
