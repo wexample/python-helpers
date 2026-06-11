@@ -17,21 +17,8 @@ from wexample_helpers.helpers.type import type_to_name
 class NotAllowedVariableTypeException(NotAllowedItemException):
     """A specific exception for bad variables types"""
 
-    error_code: ClassVar[str] = "NOT_ALLOWED_VARIABLE_TYPE"
-
-    variable_type: Any = public_field(description="Type of the offending variable")
-    variable_value: Any = public_field(description="Value of the offending variable")
     allowed_types: list[Any] = public_field(
         factory=list, description="List of allowed types for the variable"
-    )
-    item_type: str = public_field(
-        default="type", description="Type of the offending item"
-    )
-    item_value: str | None = public_field(
-        default=Factory(
-            lambda self: type_to_name(self.variable_type), takes_self=True
-        ),
-        description="Value of the item that is not allowed",
     )
     allowed_values: list[str] = public_field(
         default=Factory(
@@ -39,6 +26,14 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
             takes_self=True,
         ),
         description="List of allowed values for this item type",
+    )
+    error_code: ClassVar[str] = "NOT_ALLOWED_VARIABLE_TYPE"
+    item_type: str = public_field(
+        default="type", description="Type of the offending item"
+    )
+    item_value: str | None = public_field(
+        default=Factory(lambda self: type_to_name(self.variable_type), takes_self=True),
+        description="Value of the item that is not allowed",
     )
     message: str = public_field(
         default=Factory(
@@ -52,3 +47,5 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
         ),
         description="Human-readable error message",
     )
+    variable_type: Any = public_field(description="Type of the offending variable")
+    variable_value: Any = public_field(description="Value of the offending variable")
