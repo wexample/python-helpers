@@ -64,17 +64,23 @@ class UndefinedException(Exception):
         # auto_exc stores every field in self.args, so rely on the message only.
         return self.message
 
-    def to_dict(self) -> dict[str, Any]:
-        """Convert exception to dictionary for serialization.
+    def collect_data(self) -> dict[str, Any]:
+        """Return the structured payload: explicit ``data`` merged with every
+        domain-specific public field declared by subclasses.
 
-        Domain-specific public fields declared by subclasses are merged into the
-        ``data`` section, so no manual ``data={...}`` plumbing is required.
+        This lets subclasses expose their context as plain ``public_field``s
+        instead of hand-building a ``data={...}`` dict.
         """
         data = dict(self.data)
         for field in attrs.fields(type(self)):
             if field.name in _BASE_FIELD_NAMES or field.name.startswith("_"):
                 continue
             data[field.name] = getattr(self, field.name)
+        return data
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert exception to dictionary for serialization."""
+        data = self.collect_data()
 
         result: dict[str, Any] = {
             "error_code": self.error_code,

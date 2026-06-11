@@ -37,7 +37,7 @@ class WithPathMixin(BaseClass):
             exc = self._not_found_exc()
             if exc is None:
                 # Fallback to a generic not-found exception
-                raise LocalPathNotFoundException(self.path)
+                raise LocalPathNotFoundException(path=self.path)
             raise exc
 
     def _not_found_exc(self) -> Exception | None:

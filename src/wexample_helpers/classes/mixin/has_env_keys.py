@@ -103,4 +103,4 @@ class HasEnvKeys(BaseClass):
         missing_keys = self._get_missing_env_keys(self.get_expected_env_keys())
 
         if missing_keys:
-            raise MissingRequiredEnvVarError(missing_keys)
+            raise MissingRequiredEnvVarError(missing_keys=missing_keys)
