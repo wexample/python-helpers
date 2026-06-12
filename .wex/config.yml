@@ -4,16 +4,7 @@ domains: []
 global:
   name: helpers
   type: app
-  version: 16.0.1
-test:
-  coverage:
-    last_report:
-      commit_hash: 8ad0ba7f650fde0c5775722380d788f721a667e7
-      covered: 1314
-      excluded: 117
-      missing: 1888
-      percent: 41.0368519675203
-      total: 3202
+  version: 16.0.2
 wex:
   migration: 1
   version: 6.0.112
