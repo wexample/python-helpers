@@ -35,6 +35,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
 
         package_name = examples_dir.name
 
+        _example_class_type = self._get_example_class_type()
         for path in self._iter_example_files(examples_dir):
             class_name = string_to_pascal_case(path.stem)
             try:
@@ -51,7 +52,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
                 continue
 
             if not isinstance(example_class, type) or not issubclass(
-                example_class, self._get_example_class_type()
+                example_class, _example_class_type
             ):
                 self._print_log(
                     f'Bad example "{class_name}" in file: {cli_make_clickable_path(path)}'

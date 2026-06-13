@@ -25,22 +25,14 @@ class DebugTrace(AbstractDebug):
     def print(self, silent: bool = False):
         from wexample_helpers.helpers.trace import trace_format, trace_get_frames
 
-        if silent:
-            # Build text without printing
-            frames = trace_get_frames(
-                skip_frames=(1 if not self.show_internal else None),
-                path_style=self.path_style,
-                paths_map=self.paths_map,
-            )
-            return trace_format(frames)
-
-        # Print by formatting frames directly to honor truncate_stack and show_internal
         frames = trace_get_frames(
             skip_frames=(1 if not self.show_internal else None),
             path_style=self.path_style,
             paths_map=self.paths_map,
         )
         text = trace_format(frames)
+        if silent:
+            return text
         if text:
             print(text)
         return ""

@@ -74,7 +74,7 @@ def directory_get_base_name(path: PathOrString) -> str:
     from pathlib import Path
 
     p = Path(path)
-    return os.path.basename(os.path.normpath(os.fspath(p)))
+    return os.path.basename(os.path.normpath(p))
 
 
 def directory_get_parent_path(path: PathOrString) -> str:
@@ -82,7 +82,7 @@ def directory_get_parent_path(path: PathOrString) -> str:
     from pathlib import Path
 
     p = Path(path)
-    parent = os.path.dirname(os.path.normpath(os.fspath(p)))
+    parent = os.path.dirname(os.path.normpath(p))
     return parent + os.sep if parent else os.sep
 
 
@@ -126,11 +126,12 @@ def directory_list_files(dir_path: PathOrString) -> list[str]:
 
     p = Path(dir_path)
     file_paths: list[str] = []
+    _append = file_paths.append
     for root, _, files in os.walk(p):
         for file in sorted(files):
             full_path = os.path.join(root, file)
             if os.path.isfile(full_path):
-                file_paths.append(full_path)
+                _append(full_path)
     return file_paths
 
 

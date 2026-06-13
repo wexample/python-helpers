@@ -11,7 +11,7 @@ def cli_argument_convert_value(value: str, target_type: type) -> Any:
     Convert an argument value to the target type.
     """
     if target_type == bool:
-        return value.lower() in ("true", "yes", "y", "1")
+        return value.lower() in {"true", "yes", "y", "1"}
     elif target_type == int:
         return int(value)
     elif target_type == float:

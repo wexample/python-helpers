@@ -55,22 +55,25 @@ class TraceCollector:
         current = traceback
         while current is not None:
             frame = current.tb_frame
+            f_code = frame.f_code
+            filename = f_code.co_filename
             code = None
-            if frame.f_code.co_filename != "<string>":
+            if filename != "<string>":
                 try:
-                    with open(frame.f_code.co_filename) as f:
+                    with open(filename) as f:
                         lines = f.readlines()
-                        if 0 <= current.tb_lineno - 1 < len(lines):
-                            code = lines[current.tb_lineno - 1]
+                        lineno_idx = current.tb_lineno - 1
+                        if 0 <= lineno_idx < len(lines):
+                            code = lines[lineno_idx]
                 except (OSError, IndexError):
                     pass
 
-            is_internal = TraceCollector._is_internal_frame(frame.f_code.co_filename)
+            is_internal = TraceCollector._is_internal_frame(filename)
             frames.append(
                 ExceptionFrame(
-                    filename=frame.f_code.co_filename,
+                    filename=filename,
                     lineno=current.tb_lineno,
-                    function=frame.f_code.co_name,
+                    function=f_code.co_name,
                     code=code,
                     path_style=path_style,
                     paths_map=paths_map,

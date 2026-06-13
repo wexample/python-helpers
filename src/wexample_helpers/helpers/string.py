@@ -101,13 +101,13 @@ def string_detect_case(text: str) -> str:
 
     # Check for mixed separators
     separators = sum(
-        [
+        (
             "_" in text,
             "-" in text,
             "." in text,
             "/" in text,
             bool(re.search(r"[a-z][A-Z]", text)),
-        ]
+        )
     )
 
     if separators > 1:

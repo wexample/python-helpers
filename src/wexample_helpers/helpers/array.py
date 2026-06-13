@@ -27,10 +27,10 @@ def array_replace_value(
 def array_sort_in_place(array: Iterable) -> None:
     try:
         # tomlkit array supports list protocol; rebuild sorted content
-        items = [str(x) for x in list(array)]
+        items = [str(x) for x in array]
         items.sort()
         # Clear and re-append to preserve tomlkit node type
-        while len(array):
+        while array:
             array.pop()  # type: ignore[attr-defined]
         for it in items:
             array.append(it)  # type: ignore[attr-defined]

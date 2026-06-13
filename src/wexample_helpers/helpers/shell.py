@@ -337,11 +337,7 @@ async def shell_stream_async(
             line = await stream.readline()
             if not line:
                 break
-            if text:
-                s = line.decode(encoding, errors)
-            else:
-                # Represent raw bytes in a safe way if text=False
-                s = line.decode(encoding, errors)
+            s = line.decode(encoding, errors)
             writer(s)
 
     def _stdout_writer(s: str) -> None:

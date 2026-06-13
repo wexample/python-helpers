@@ -58,8 +58,9 @@ class AbstractAttemptManager(Generic[T]):
     def run(self) -> T:
         last_error: Exception | None = None
         last_message: str = ""
+        max_attempts = self.max_attempts
 
-        for attempt in range(1, self.max_attempts + 1):
+        for attempt in range(1, max_attempts + 1):
             outcome = self._attempt(attempt)
 
             if outcome.success:
@@ -69,14 +70,14 @@ class AbstractAttemptManager(Generic[T]):
 
             last_error, last_message = outcome.error, outcome.message
 
-            if attempt >= self.max_attempts or not outcome.should_retry:
+            if attempt >= max_attempts or not outcome.should_retry:
                 break
 
             delay = self._get_delay_seconds(attempt)
             if self.on_retry_callback:
                 self.on_retry_callback(
                     attempt,
-                    self.max_attempts,
+                    max_attempts,
                     delay,
                     outcome.error,
                     outcome.message,

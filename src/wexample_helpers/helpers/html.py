@@ -14,15 +14,15 @@ def html_split_prompt_parts(prompt_body: str) -> list[str]:
     parts = [part for part in parts if part.strip()]
     result = []
 
-    if not len(parts):
+    if not parts:
         return []
 
-    temp = parts[0]
+    temp_parts = [parts[0]]
     for part in parts[1:]:
         if "<" in part and ">" in part:
-            temp += part
+            temp_parts.append(part)
         else:
-            result.append(temp)
-            temp = part
-    result.append(temp)
+            result.append("".join(temp_parts))
+            temp_parts = [part]
+    result.append("".join(temp_parts))
     return result

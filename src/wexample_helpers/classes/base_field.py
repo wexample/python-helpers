@@ -36,7 +36,7 @@ class BaseField:
         """Convert to attrs field with proper metadata and validation."""
         from attrs import field
 
-        attrs_params = [
+        attrs_params = frozenset([
             "init",
             "repr",
             "eq",
@@ -49,7 +49,7 @@ class BaseField:
             "type",
             "factory",
             "converter",
-        ]
+        ])
 
         metadata = {
             "description": self.description,
@@ -121,6 +121,6 @@ class BaseField:
         """Get expected prefix based on visibility."""
         from wexample_helpers.enums.field_visibility import FieldVisibility
 
-        if self.visibility in [FieldVisibility.PRIVATE, FieldVisibility.PROTECTED]:
+        if self.visibility in {FieldVisibility.PRIVATE, FieldVisibility.PROTECTED}:
             return "_"
         return None

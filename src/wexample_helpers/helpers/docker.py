@@ -77,7 +77,8 @@ def docker_exec(
     cmd = ["docker", "exec"]
     if user:
         cmd += ["--user", user]
-    cmd += [container_name] + command
+    cmd.append(container_name)
+    cmd.extend(command)
     try:
         result = shell_run(cmd=cmd, capture=True)
     except subprocess.CalledProcessError as e:

@@ -38,6 +38,8 @@ class BaseClass:
         # Import here to avoid circular imports
         from wexample_helpers.classes.base_field import BaseField
 
+        valid_field_type_names = {base.__name__ for base in [*BaseField.__subclasses__(), BaseField]}
+
         # Get all class attributes (including inherited ones)
         for name, value in cls.__dict__.items():
             # Skip special attributes, methods, and uppercase constants
@@ -58,10 +60,7 @@ class BaseClass:
                     field_type = metadata.get("field_type")
 
                     # If it has field_type metadata, it should be a BaseField subclass
-                    if field_type and not any(
-                        field_type == base.__name__
-                        for base in BaseField.__subclasses__() + [BaseField]
-                    ):
+                    if field_type and field_type not in valid_field_type_names:
                         raise TypeError(
                             f"Field '{name}' in class '{cls.__name__}' must use a BaseField subclass. "
                             f"Found field_type: {field_type}"

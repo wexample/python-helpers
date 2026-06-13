@@ -203,7 +203,7 @@ def test_dict_has_depth_3_miss(benchmark):
 
 def test_dict_set_depth_1(benchmark):
     def _set():
-        d = dict(_SHALLOW_DICT)
+        d = _SHALLOW_DICT.copy()
         dict_set_item_by_path(d, "name", "updated")
 
     benchmark(_set)

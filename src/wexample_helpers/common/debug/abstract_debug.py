@@ -154,8 +154,9 @@ class AbstractDebug:
                     lines.append(self._format_attribute_value(name, value, indent))
 
             if "bases" in data:
+                child_indent = indent + "    "
                 for base in data["bases"]:
-                    lines.extend(self._render_data(base, indent + "    "))
+                    lines.extend(self._render_data(base, child_indent))
             return lines
 
         if "instance_of" in data:
@@ -183,17 +184,19 @@ class AbstractDebug:
             lines.append(
                 f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['elements'])} elements):"
             )
+            child_indent = indent + "    "
             for i, element in enumerate(data["elements"]):
                 lines.append(f"{indent}  {Colors.BRIGHT}[{i}]{Colors.RESET} →")
-                lines.extend(self._render_data(element, indent + "    "))
+                lines.extend(self._render_data(element, child_indent))
 
         elif "items" in data:
             lines.append(
                 f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):"
             )
+            child_indent = indent + "    "
             for item in data["items"]:
                 key_inline = self._inline_data(item["key"])
                 lines.append(f"{indent}  {Colors.BRIGHT}{key_inline}{Colors.RESET} →")
-                lines.extend(self._render_data(item["value"], indent + "    "))
+                lines.extend(self._render_data(item["value"], child_indent))
 
         return lines

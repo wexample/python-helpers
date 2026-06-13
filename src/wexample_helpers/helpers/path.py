@@ -16,12 +16,12 @@ def path_rebase(
 
         → "/var/www/html/src/test.php"
     """
-    root_src = str(Path(root_src).resolve())
-    path_src = str(Path(path_src).resolve())
-    root_dest = str(Path(root_dest).resolve())
+    root_src = Path(root_src).resolve()
+    path_src = Path(path_src).resolve()
+    root_dest = Path(root_dest).resolve()
 
     # Compute the relative path from the original root
-    relative_path = Path(path_src).resolve().relative_to(root_src)
+    relative_path = path_src.relative_to(root_src)
 
     # Append it to the new root
-    return str(Path(root_dest) / relative_path)
+    return str(root_dest / relative_path)

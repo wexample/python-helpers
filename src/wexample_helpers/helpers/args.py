@@ -63,8 +63,6 @@ def args_parse_list(arg: str) -> StringsList:
     if not isinstance(arg_list, list):
         return []
 
-    assert isinstance(arg_list, list)
-
     return cast(StringsList, arg_list)
 
 

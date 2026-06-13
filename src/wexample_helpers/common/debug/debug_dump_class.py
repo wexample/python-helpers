@@ -78,10 +78,11 @@ class DebugDumpClass(AbstractDebug):
             result["attributes"] = attrs
 
         # Collect base classes
-        bases = []
-        for base in getattr(cls_obj, "__bases__", ()):
-            if base is not object:
-                bases.append(self._collect_hierarchy(base, seen.copy()))
+        bases = [
+            self._collect_hierarchy(base, seen.copy())
+            for base in getattr(cls_obj, "__bases__", ())
+            if base is not object
+        ]
         if bases:
             result["bases"] = bases
 

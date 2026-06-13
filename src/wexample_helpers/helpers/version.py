@@ -74,14 +74,14 @@ def version_increment(
     elif type == UPGRADE_TYPE_MINOR:
         version_dict["minor"] = int(version_dict["minor"]) + increment
     # Any of pre-build version
-    elif type in [
+    elif type in {
         UPGRADE_TYPE_ALPHA,
         UPGRADE_TYPE_BETA,
         UPGRADE_TYPE_DEV,
         UPGRADE_TYPE_RC,
         UPGRADE_TYPE_NIGHTLY,
         UPGRADE_TYPE_SNAPSHOT,
-    ]:
+    }:
         version_dict["pre_build_type"] = type
         version_dict["pre_build_number"] = increment
 

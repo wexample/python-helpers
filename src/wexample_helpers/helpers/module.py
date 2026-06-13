@@ -100,9 +100,9 @@ def module_build_fqmn_from_paths(
     file_path: pathlib.Path, package_root: pathlib.Path, package_name: str | None = None
 ) -> str:
     rel = file_path.resolve().relative_to(package_root.resolve())
-    parts = list(rel.with_suffix("").parts)
+    parts = rel.with_suffix("").parts
     if package_name:
-        parts = [package_name] + parts
+        return ".".join((package_name, *parts))
     return ".".join(parts)
 
 
@@ -160,8 +160,9 @@ def module_load_class_from_file(file_path: pathlib.Path, class_name: str) -> typ
     if not file_path.exists():
         raise FileNotFoundError(f"Module file not found: {file_path}")
 
-    module_name = f"wex_dynamic_{abs(hash(str(file_path)))}"
-    spec = importlib.util.spec_from_file_location(module_name, str(file_path))
+    file_path_str = str(file_path)
+    module_name = f"wex_dynamic_{abs(hash(file_path_str))}"
+    spec = importlib.util.spec_from_file_location(module_name, file_path_str)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot create a spec for module: {file_path}")
 

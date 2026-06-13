@@ -61,11 +61,7 @@ def ansi_truncate_visible(text: str, max_width: int) -> str:
     current = 0
     for ch in plain:
 
-        w = wcwidth(ch)
-        if w is None:
-            w = 0
-        if w < 0:
-            w = 0
+        w = max(wcwidth(ch) or 0, 0)
         if current + w > max_width:
             break
         out_chars.append(ch)

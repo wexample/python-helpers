@@ -44,7 +44,7 @@ class DebugDump(AbstractDebug):
         seen.add(obj_id)
 
         # Handle different types of objects
-        if isinstance(obj, (str, int, float, bool)):
+        if isinstance(obj, (str, int, float)):
             return {"type": type(obj).__name__, "value": repr(obj)}
         elif isinstance(obj, datetime):
             return {"type": "datetime", "value": obj.isoformat()}

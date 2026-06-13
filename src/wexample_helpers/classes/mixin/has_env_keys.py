@@ -75,11 +75,7 @@ class HasEnvKeys(BaseClass):
         """Check for missing environment variables in both os.environ and _env_values."""
         import os
 
-        missing = []
-        for key in required_keys:
-            if not os.environ.get(key) and key not in self.env_config:
-                missing.append(key)
-        return missing
+        return [key for key in required_keys if not os.environ.get(key) and key not in self.env_config]
 
     def _init_env(self, env_dict: dict[str, str]) -> None:
         """

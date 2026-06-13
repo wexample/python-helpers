@@ -35,7 +35,6 @@ class DebugBreakpoint(AbstractDebug):
             # In silent mode, do not start pdb; return the helper text instead
             return text
 
-        if text:
-            print(text)
+        print(text)
         pdb.set_trace()
         return ""

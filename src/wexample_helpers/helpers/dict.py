@@ -18,6 +18,7 @@ DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 _INTERP_VAR_PATTERN = re.compile(r"\$\{([^}]+)\}")
 _PRIMITIVE_TYPES = (str, int, float, bool, bytes, type(None))
+_SORT_BY_VALUE = lambda item: item[1]
 
 
 def dict_flatten(
@@ -177,5 +178,5 @@ def dict_sort_values(
     dictionary: StringKeysMapping, key: Any | None = None
 ) -> StringKeysDict:
     return {
-        k: v for k, v in sorted(dictionary.items(), key=key or (lambda item: item[1]))
+        k: v for k, v in sorted(dictionary.items(), key=key or _SORT_BY_VALUE)
     }

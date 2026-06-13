@@ -73,9 +73,10 @@ class UndefinedException(Exception):
         """
         data = dict(self.data)
         for field in attrs.fields(type(self)):
-            if field.name in _BASE_FIELD_NAMES or field.name.startswith("_"):
+            name = field.name
+            if name in _BASE_FIELD_NAMES or name.startswith("_"):
                 continue
-            data[field.name] = getattr(self, field.name)
+            data[name] = getattr(self, name)
         return data
 
     def render_message(self) -> str:

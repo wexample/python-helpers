@@ -31,10 +31,11 @@ def file_change_mode_recursive(
     :param follow_symlinks: If False, skip symlinked directories.
     """
     file_change_mode(path, mode)
-    if os.path.isdir(str(path)) and (follow_symlinks or not os.path.islink(str(path))):
-        for item in os.listdir(str(path)):
+    path_str = str(path)
+    if os.path.isdir(path_str) and (follow_symlinks or not os.path.islink(path_str)):
+        for item in os.listdir(path_str):
             file_change_mode_recursive(
-                os.path.join(str(path), item), mode, follow_symlinks
+                os.path.join(path_str, item), mode, follow_symlinks
             )
 
 
@@ -190,7 +191,8 @@ def file_merge_yaml(
     import yaml
 
     src, dst = Path(src), Path(dst)
-    incoming = yaml.safe_load(src.read_text()) or {}
+    src_text = src.read_text()
+    incoming = yaml.safe_load(src_text) or {}
 
     if dst.exists():
         existing = yaml.safe_load(dst.read_text()) or {}
@@ -203,7 +205,7 @@ def file_merge_yaml(
         )
     else:
         dst.parent.mkdir(parents=True, exist_ok=True)
-        dst.write_text(src.read_text())
+        dst.write_text(src_text)
 
 
 def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:

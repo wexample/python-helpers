@@ -78,17 +78,14 @@ class ExceptionHandler:
                 if rule.truncate_stack_count is not None:
                     return min(rule.truncate_stack_count, len(frames))
 
+                truncate_after_module = rule.truncate_after_module
+                truncate_after_file = rule.truncate_after_file
                 for i, frame in enumerate(frames):
                     filename = frame.filename
 
-                    if (
-                        rule.truncate_after_module
-                        and rule.truncate_after_module in filename
-                    ):
+                    if truncate_after_module and truncate_after_module in filename:
                         return i + 1
 
-                    if rule.truncate_after_file and filename.endswith(
-                        rule.truncate_after_file
-                    ):
+                    if truncate_after_file and filename.endswith(truncate_after_file):
                         return i + 1
         return -1
