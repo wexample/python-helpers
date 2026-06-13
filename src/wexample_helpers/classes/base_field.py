@@ -36,20 +36,22 @@ class BaseField:
         """Convert to attrs field with proper metadata and validation."""
         from attrs import field
 
-        attrs_params = frozenset([
-            "init",
-            "repr",
-            "eq",
-            "order",
-            "hash",
-            "compare",
-            "kw_only",
-            "on_setattr",
-            "alias",
-            "type",
-            "factory",
-            "converter",
-        ])
+        attrs_params = frozenset(
+            [
+                "init",
+                "repr",
+                "eq",
+                "order",
+                "hash",
+                "compare",
+                "kw_only",
+                "on_setattr",
+                "alias",
+                "type",
+                "factory",
+                "converter",
+            ]
+        )
 
         metadata = {
             "description": self.description,

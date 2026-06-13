@@ -38,7 +38,9 @@ class BaseClass:
         # Import here to avoid circular imports
         from wexample_helpers.classes.base_field import BaseField
 
-        valid_field_type_names = {base.__name__ for base in [*BaseField.__subclasses__(), BaseField]}
+        valid_field_type_names = {
+            base.__name__ for base in [*BaseField.__subclasses__(), BaseField]
+        }
 
         # Get all class attributes (including inherited ones)
         for name, value in cls.__dict__.items():

@@ -177,6 +177,4 @@ def dict_set_item_by_path(
 def dict_sort_values(
     dictionary: StringKeysMapping, key: Any | None = None
 ) -> StringKeysDict:
-    return {
-        k: v for k, v in sorted(dictionary.items(), key=key or _SORT_BY_VALUE)
-    }
+    return {k: v for k, v in sorted(dictionary.items(), key=key or _SORT_BY_VALUE)}

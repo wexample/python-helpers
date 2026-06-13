@@ -1,6 +1,13 @@
 from __future__ import annotations
 
 
+def test_trace_format_returns_string() -> None:
+    from wexample_helpers.helpers.trace import trace_format, trace_get_frames
+
+    result = trace_format(trace_get_frames())
+    assert isinstance(result, str)
+
+
 def test_trace_get_frames_returns_list() -> None:
     from wexample_helpers.helpers.trace import trace_get_frames
 
@@ -19,13 +26,6 @@ def test_trace_get_traceback_frames_returns_list() -> None:
 
     assert isinstance(frames, list)
     assert len(frames) > 0
-
-
-def test_trace_format_returns_string() -> None:
-    from wexample_helpers.helpers.trace import trace_format, trace_get_frames
-
-    result = trace_format(trace_get_frames())
-    assert isinstance(result, str)
 
 
 def test_trace_inheritance_stack_prints_mro(capsys) -> None:

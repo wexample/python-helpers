@@ -8,7 +8,7 @@ from wexample_helpers.const.types import (
 )
 
 if TYPE_CHECKING:
-    from wexample_helpers.const.types import StringsList, VersionDescriptor
+    from wexample_helpers.const.types import VersionDescriptor
 
 _VERSION_KEYS_TO_CHECK = [
     "major",

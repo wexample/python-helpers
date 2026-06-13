@@ -48,7 +48,9 @@ class RegistryContainerMixin(BaseClass):
     def set_registry(
         self, name: str, registry_class_type: type[Registry] | None = None
     ) -> Registry:
-        registry = (registry_class_type or self._get_registry_class_type())(container=self)
+        registry = (registry_class_type or self._get_registry_class_type())(
+            container=self
+        )
         self._registries[name] = registry
         return registry
 

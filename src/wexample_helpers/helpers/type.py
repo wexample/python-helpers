@@ -128,8 +128,7 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
             return False
         # Validate each item in the tuple recursively
         return all(
-            type_generic_value_is_valid(item, arg)
-            for item, arg in zip(value, args)
+            type_generic_value_is_valid(item, arg) for item, arg in zip(value, args)
         )
 
     elif origin is Any:
