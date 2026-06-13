@@ -10,19 +10,20 @@ from wexample_helpers.const.types import (
 if TYPE_CHECKING:
     from wexample_helpers.const.types import StringsList, VersionDescriptor
 
+_VERSION_KEYS_TO_CHECK = [
+    "major",
+    "intermediate",
+    "minor",
+    "pre_build_type",
+    "pre_build_number",
+]
+_VERSION_PATTERN = re.compile(r"(\d+)?\.?(\d+)?\.?(\d+)?([-.+].*)?")
+
 
 def is_greater_than(
     first: VersionDescriptor, second: VersionDescriptor, true_if_equal: bool = False
 ) -> bool:
-    keys_to_check: StringsList = [
-        "major",
-        "intermediate",
-        "minor",
-        "pre_build_type",
-        "pre_build_number",
-    ]
-
-    for key in keys_to_check:
+    for key in _VERSION_KEYS_TO_CHECK:
         first_value = first.get(key, None)
         second_value = second.get(key, None)
 
@@ -101,7 +102,7 @@ def version_join(version: VersionDescriptor, add_build: bool | str = False) -> s
         else:
             import datetime
 
-            output += f"+build." + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            output += f"+build.{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
 
     return output
 
@@ -135,7 +136,7 @@ def version_parse(version: str) -> VersionDescriptor | None:
             if part and not part.isdigit():
                 return None
 
-        match = re.match(r"(\d+)?\.?(\d+)?\.?(\d+)?([-.+].*)?", version)
+        match = _VERSION_PATTERN.match(version)
         if not match:
             return None
 

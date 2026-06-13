@@ -130,7 +130,6 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
         return all(
             type_generic_value_is_valid(item, arg)
             for item, arg in zip(value, args)
-            if args
         )
 
     elif origin is Any:
@@ -381,7 +380,7 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
     optional_keys = getattr(typed_dict_type, "__optional_keys__", set())
 
     # Check for missing required keys
-    missing_keys = required_keys - set(value.keys())
+    missing_keys = required_keys - value.keys()
     if missing_keys:
         raise NotAllowedVariableTypeException(
             variable_type=f"dict missing keys: {missing_keys}",
@@ -391,7 +390,7 @@ def _validate_typed_dict(value: dict, typed_dict_type: Any) -> None:
 
     # Check for unexpected keys
     allowed_keys = required_keys | optional_keys
-    unexpected_keys = set(value.keys()) - allowed_keys
+    unexpected_keys = value.keys() - allowed_keys
     if unexpected_keys:
         raise NotAllowedVariableTypeException(
             variable_type=f"dict with unexpected keys: {unexpected_keys}",

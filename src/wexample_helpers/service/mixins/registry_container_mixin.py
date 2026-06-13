@@ -40,17 +40,17 @@ class RegistryContainerMixin(BaseClass):
     def register_items(self, registry_name: str, items: list[Any]) -> Registry:
         """Register multiple items at once in a specific registry."""
         registry = self.get_registry(registry_name)
+        _register = registry.register
         for item in items:
-            registry.register(item)
+            _register(item)
         return registry
 
     def set_registry(
         self, name: str, registry_class_type: type[Registry] | None = None
     ) -> Registry:
-        self._registries[name] = (
-            registry_class_type or self._get_registry_class_type()
-        )(container=self)
-        return self._registries[name]
+        registry = (registry_class_type or self._get_registry_class_type())(container=self)
+        self._registries[name] = registry
+        return registry
 
     def _get_registry_class_type(self) -> type[Registry]:
         """Get the type of registry to use. Must be overridden by child classes."""

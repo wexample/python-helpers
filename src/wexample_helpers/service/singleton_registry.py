@@ -124,6 +124,6 @@ class SingletonRegistry(Registry[T]):
             visited.add(key)
             ordered.append(cls)
 
-        for cls in list(self._classes.values()):
+        for cls in self._classes.values():
             visit(cls)
         return ordered

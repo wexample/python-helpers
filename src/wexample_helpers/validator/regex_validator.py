@@ -47,7 +47,7 @@ class RegexValidator(AbstractValidator):
             return False
 
         return any(
-            compiled_pattern.match(value) is not None
+            compiled_pattern.match(value)
             for compiled_pattern in self._compiled_patterns
         )
 
