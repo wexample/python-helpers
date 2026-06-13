@@ -263,7 +263,7 @@ async def shell_run_async(
         returncode=rc,
         stdout=stdout_text,
         stderr=stderr_text,
-        cwd=Path(cwd),
+        cwd=Path(cwd) if cwd else None,
         duration=end - start,
         start_time=start,
         end_time=end,
