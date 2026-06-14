@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_env_keys.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:42:41+00:00",
+  "last_rev": "03946c5129351f6320b4c79b552ae92685b93387",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted env_get/env_config out of comprehension, direct dict assign in set_env_parameter, fixed `not in` membership test",
+  "in_progress": null
+}

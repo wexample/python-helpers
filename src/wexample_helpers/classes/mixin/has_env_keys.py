@@ -28,7 +28,7 @@ class HasEnvKeys(BaseClass):
     def get_env_parameter(self, key: str, default: str | None = UNSET) -> Any:
         from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
 
-        if not key in self.env_config:
+        if key not in self.env_config:
             if default is not UNSET:
                 return default
 
@@ -54,7 +54,7 @@ class HasEnvKeys(BaseClass):
             key: The environment variable key
             value: The value to set
         """
-        self.set_env_parameters({key: value})
+        self.env_config[key] = value
 
     def set_env_parameters(self, parameters: dict[str, str]) -> None:
         """
@@ -75,10 +75,12 @@ class HasEnvKeys(BaseClass):
         """Check for missing environment variables in both os.environ and _env_values."""
         import os
 
+        env_get = os.environ.get
+        env_config = self.env_config
         return [
             key
             for key in required_keys
-            if not os.environ.get(key) and key not in self.env_config
+            if not env_get(key) and key not in env_config
         ]
 
     def _init_env(self, env_dict: dict[str, str]) -> None:
