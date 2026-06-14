@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from wexample_helpers.classes.mixin.has_env_keys import HasEnvKeys
 from wexample_helpers.decorator.base_class import base_class
 
@@ -15,8 +17,10 @@ class HasEnvKeysFile(HasEnvKeys):
         Args:
             file_path: Path to the .env file
         """
-        from dotenv import dotenv_values, load_dotenv
+        from dotenv import dotenv_values
 
-        load_dotenv(file_path)
-        self.env_config.update(dotenv_values(file_path))
+        values = dotenv_values(file_path)
+        for key, val in values.items():
+            os.environ.setdefault(key, val)
+        self.env_config.update(values)
         self._validate_env_keys()

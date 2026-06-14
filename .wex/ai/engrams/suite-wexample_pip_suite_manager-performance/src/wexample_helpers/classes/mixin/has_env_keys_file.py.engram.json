@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_env_keys_file.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:43:41+00:00",
+  "last_rev": "b9dae7e8cafa5eec70b232596fa66a774ad16ac6",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "parse .env file once via dotenv_values; replace load_dotenv double-read with os.environ.setdefault loop preserving non-override semantics",
+  "in_progress": null
+}
