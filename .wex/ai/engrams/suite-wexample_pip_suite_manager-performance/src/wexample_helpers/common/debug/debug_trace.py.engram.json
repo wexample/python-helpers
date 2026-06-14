@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/debug/debug_trace.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:56:16+00:00",
+  "last_rev": "1c2a32afa2fcfc4a4753e3307dba0f1a28d9c199",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted trace imports to module level and fixed skip_frames misplaced from trace_get_frames to trace_format",
+  "in_progress": null
+}

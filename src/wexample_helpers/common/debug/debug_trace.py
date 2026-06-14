@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+from wexample_helpers.helpers.trace import trace_format, trace_get_frames
 
 
 class DebugTrace(AbstractDebug):
@@ -23,14 +24,11 @@ class DebugTrace(AbstractDebug):
         pass
 
     def print(self, silent: bool = False):
-        from wexample_helpers.helpers.trace import trace_format, trace_get_frames
-
         frames = trace_get_frames(
-            skip_frames=(1 if not self.show_internal else None),
             path_style=self.path_style,
             paths_map=self.paths_map,
         )
-        text = trace_format(frames)
+        text = trace_format(frames, skip_frames=(None if self.show_internal else 1))
         if silent:
             return text
         if text:
