@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/serializable_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:48:58+00:00",
+  "last_rev": "92c2bd6c3fd0748b952269ebf5eb251a6804abf2",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed unused TypeVar `T` and its import to eliminate dead module-level code",
+  "in_progress": null
+}
