@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_simple_repr_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:45:55+00:00",
+  "last_rev": "e6a48190f815278bae0df5ea269ca275244cc78c",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replaced f\"{self.__class__.__name__}\" with type(self).__name__ — eliminates f-string overhead and uses faster C-level type() over __class__ attr lookup",
+  "in_progress": null
+}
