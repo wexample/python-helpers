@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/not_allowed_variable_type_exception.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:05:48+00:00",
+  "last_rev": "b3ff318d59006498ad8261c001b2ce3b6f03a7ce",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted `self.allowed_types` and `type_to_name` to locals in `_build_message` to eliminate repeated LOAD_ATTR/LOAD_GLOBAL",
+  "in_progress": null
+}

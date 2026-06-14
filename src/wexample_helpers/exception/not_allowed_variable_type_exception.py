@@ -26,13 +26,15 @@ class NotAllowedVariableTypeException(NotAllowedItemException):
     variable_value: Any = public_field(description="Value of the offending variable")
 
     def _build_message(self) -> str:
+        allowed_types = self.allowed_types
+        _type_to_name = type_to_name
         types_str = (
-            ", ".join(type_to_name(t) for t in self.allowed_types)
-            if self.allowed_types
+            ", ".join(_type_to_name(t) for t in allowed_types)
+            if allowed_types
             else "<none>"
         )
         return (
-            f"Invalid variable type '{type_to_name(self.variable_type)}' for value "
+            f"Invalid variable type '{_type_to_name(self.variable_type)}' for value "
             f"{string_truncate(str(self.variable_value), 1000)!r}. "
             f"Allowed types: {types_str}."
         )
