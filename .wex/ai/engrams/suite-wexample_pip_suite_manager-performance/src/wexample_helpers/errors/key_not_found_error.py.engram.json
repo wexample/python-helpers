@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/errors/key_not_found_error.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:02:08+00:00",
+  "last_rev": "c30be6c9d85898ea5f8eb07f954f043a8245fb4d",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed dead self.key/self.available_keys assignments; replaced list repr with join in message",
+  "in_progress": null
+}
