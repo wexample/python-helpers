@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/mixin/not_allowed_item_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:04:33+00:00",
+  "last_rev": "3ac72a6a5ee86a71f8779fc060ab34125a6e87b5",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "eliminated intermediate `output` variable and `+=` string concat in format_not_allowed_item_message via early returns",
+  "in_progress": null
+}

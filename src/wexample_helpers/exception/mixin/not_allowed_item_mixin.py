@@ -23,18 +23,15 @@ class NotAllowedItemMixin:
         Returns:
             A formatted error message
         """
-        if item_value is None:
-            output = f"No {item_type} was provided."
-        else:
-            output = f"The {item_type} '{item_value}' is not allowed."
-
+        prefix = (
+            f"No {item_type} was provided."
+            if item_value is None
+            else f"The {item_type} '{item_value}' is not allowed."
+        )
         if allowed_values:
             values_str = "', '".join(allowed_values)
-            output += f" Allowed values are: '{values_str}'."
-        else:
-            output += " No suggested allowed values available."
-
-        return output
+            return f"{prefix} Allowed values are: '{values_str}'."
+        return f"{prefix} No suggested allowed values available."
 
     @staticmethod
     def get_not_allowed_item_data(
