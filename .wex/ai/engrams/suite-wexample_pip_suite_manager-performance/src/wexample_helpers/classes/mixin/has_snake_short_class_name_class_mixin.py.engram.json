@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_snake_short_class_name_class_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:46:28+00:00",
+  "last_rev": "4471f13e7d2a19d1dee1f7719bdfbf0bac595c19",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "early-return before deferred import in get_snake_class_name_suffix to skip sys.modules lookup when suffix is None",
+  "in_progress": null
+}
