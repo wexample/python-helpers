@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_short_class_name_class_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:45:19+00:00",
+  "last_rev": "3cbac150c8d1cfdcd38467084a82d1321032fa58",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted suffix-None early return before short_name binding; pre-computed suffix_len to avoid redundant len() call on matched branch",
+  "in_progress": null
+}

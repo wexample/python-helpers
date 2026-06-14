@@ -12,10 +12,11 @@ class HasShortClassNameClassMixin:
 
     @classmethod
     def get_short_class_name(cls) -> str:
-        short_name = cls.__name__
         suffix = cls.get_class_name_suffix()
-
-        if suffix is not None and short_name.endswith(suffix):
-            return short_name[: -len(suffix)]
-
+        if suffix is None:
+            return cls.__name__
+        short_name = cls.__name__
+        suffix_len = len(suffix)
+        if short_name.endswith(suffix):
+            return short_name[:-suffix_len]
         return short_name
