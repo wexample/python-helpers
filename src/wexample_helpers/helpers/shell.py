@@ -91,23 +91,44 @@ def shell_run(
 
     start = time.monotonic()
     try:
-        completed = subprocess.run(
+        # start_new_session puts the child (and its descendants) in a fresh
+        # process group: the terminal's Ctrl+C no longer reaches them
+        # automatically, so we relay SIGTERM → SIGKILL to the whole PG below.
+        # Without this isolation a KeyboardInterrupt from the user would reach
+        # our parent loop but leave grand-children alive while the parent
+        # stayed stuck on communicate().
+        # NOTE: this handles the SEQUENTIAL case (one child at a time). For
+        # parallel spawns (parallel_map etc.) we'd need a kernel-level registry
+        # of active PGIDs with a global SIGINT handler that fans out the kill —
+        # out of scope here.
+        proc = subprocess.Popen(
             used_cmd,  # type: ignore[arg-type]
             stdout=stdout,
             stderr=stderr,
             text=text if capture else False,
             encoding=encoding if (capture and text) else None,
             errors=errors if (capture and text) else None,
-            timeout=timeout,
-            check=check,
+            start_new_session=True,
             **popen_kwargs,
         )
+        try:
+            stdout_data, stderr_data = proc.communicate(timeout=timeout)
+        except KeyboardInterrupt:
+            _terminate_process_group(proc)
+            raise
+        except subprocess.TimeoutExpired:
+            _terminate_process_group(proc)
+            raise
         end = time.monotonic()
+        if check and proc.returncode != 0:
+            raise subprocess.CalledProcessError(
+                proc.returncode, used_cmd, output=stdout_data, stderr=stderr_data
+            )
         return ShellResult(
             args=used_cmd,
-            returncode=completed.returncode,
-            stdout=completed.stdout if capture else None,
-            stderr=completed.stderr if capture else None,
+            returncode=proc.returncode,
+            stdout=stdout_data if capture else None,
+            stderr=stderr_data if capture else None,
             cwd=Path(cwd) if cwd else None,
             duration=end - start,
             start_time=start,
@@ -376,6 +397,37 @@ async def shell_stream_async(
 def shell_which(cmd: str) -> str | None:
     """Return full path to executable or None if not found (shutil.which wrapper)."""
     return shutil.which(cmd)
+
+
+def _terminate_process_group(proc: subprocess.Popen) -> None:
+    """Send SIGTERM to the child's process group, escalate to SIGKILL after 2s.
+
+    Used to clean up children spawned with start_new_session=True when the
+    parent is interrupted: the whole descendant tree shares one PGID so a
+    single killpg() reaches grand-children too.
+    """
+    import os
+    import signal
+
+    try:
+        pgid = os.getpgid(proc.pid)
+    except ProcessLookupError:
+        return
+    try:
+        os.killpg(pgid, signal.SIGTERM)
+    except (ProcessLookupError, PermissionError):
+        return
+    try:
+        proc.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(pgid, signal.SIGKILL)
+        except (ProcessLookupError, PermissionError):
+            pass
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
 
 
 def _shell_apply_sudo(
