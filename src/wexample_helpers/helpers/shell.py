@@ -90,6 +90,11 @@ def shell_run(
             stderr = None
 
     start = time.monotonic()
+    # Snapshot TTY state when the child inherits our stdio: an interactive
+    # child (Anthropic SDK / rich / prompt_toolkit / vim…) may put the TTY in
+    # raw / no-echo mode, and if we SIGKILL it before its cleanup runs the
+    # parent shell is left unusable (curseur clignote, pas d'écho).
+    saved_tty = _save_tty_state() if inherit_stdio else None
     try:
         # start_new_session puts the child (and its descendants) in a fresh
         # process group: the terminal's Ctrl+C no longer reaches them
@@ -175,6 +180,8 @@ def shell_run(
             stdout=e.stdout,
             cause=e,
         ) from e
+    finally:
+        _restore_tty_state(saved_tty)
 
 
 async def shell_run_async(
@@ -397,6 +404,37 @@ async def shell_stream_async(
 def shell_which(cmd: str) -> str | None:
     """Return full path to executable or None if not found (shutil.which wrapper)."""
     return shutil.which(cmd)
+
+
+def _save_tty_state() -> Any:
+    """Snapshot stdin TTY attributes (termios). Returns None on non-Unix or
+    when stdin is not a TTY — caller must accept None as 'no restore needed'.
+    """
+    if not sys.stdin.isatty():
+        return None
+    try:
+        import termios
+    except ImportError:
+        return None
+    try:
+        return termios.tcgetattr(sys.stdin.fileno())
+    except (OSError, ValueError):
+        return None
+
+
+def _restore_tty_state(saved: Any) -> None:
+    """Restore stdin TTY attributes captured by _save_tty_state(). No-op if
+    `saved` is None or the platform doesn't support termios."""
+    if saved is None or not sys.stdin.isatty():
+        return
+    try:
+        import termios
+    except ImportError:
+        return
+    try:
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, saved)
+    except (OSError, ValueError):
+        pass
 
 
 def _terminate_process_group(proc: subprocess.Popen) -> None:
