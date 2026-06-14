@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/errors/missing_required_env_var_error.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:02:42+00:00",
+  "last_rev": "2281da7550f2f7f93348387e19dbc183176e65a4",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "exception class with trivial join; no hot path, already optimal with lazy annotations and TYPE_CHECKING guard",
+  "in_progress": null
+}
