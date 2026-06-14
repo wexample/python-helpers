@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import io
+import logging
+from contextlib import contextmanager
+
 
 class HasLogHandler:
     def _handle_logs(self, logger_name, callback):
@@ -10,9 +14,6 @@ class HasLogHandler:
             logger_name: Name of the logger to capture
             callback: Function to call with each log line
         """
-        import io
-        import logging
-        from contextlib import contextmanager
 
         @contextmanager
         def log_handler() -> None:
@@ -35,7 +36,7 @@ class HasLogHandler:
                 # Process captured logs
                 log_output = log_capture.getvalue()
                 if log_output:
-                    for line in log_output.strip().split("\n"):
+                    for line in log_output.splitlines():
                         if line:
                             callback(line)
 

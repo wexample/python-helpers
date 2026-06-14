@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/has_log_handler.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:44:15+00:00",
+  "last_rev": "e590a69a0cf59aa77a93741a87fa2a81beefd6e8",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted io/logging/contextmanager imports to module level; replaced strip().split(\"\\n\") with splitlines()",
+  "in_progress": null
+}
