@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/shell_command_failed_exception.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:06:11+00:00",
+  "last_rev": "e49f037919896d3104b6fce52f6f68863e850ec5",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only field declarations and a single trivial f-string method; no hot path or repeated computation to optimize",
+  "in_progress": null
+}
