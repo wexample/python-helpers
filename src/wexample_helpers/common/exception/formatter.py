@@ -11,6 +11,9 @@ if TYPE_CHECKING:
 class TraceFormatter:
     """Formats a sequence of ExceptionFrame objects into a human-readable string."""
 
+    # Hoisted constant — computed once at class definition time.
+    _SEPARATOR: str = "=" * 50
+
     def format(
         self, frames: Iterable[ExceptionFrame], skip_frames: int | None = 1
     ) -> str:
@@ -21,16 +24,16 @@ class TraceFormatter:
             skip_frames: If an int, filter internal frames and show count.
                         If None, show all frames including internals.
         """
-        frames_list = list(frames)
-
         if skip_frames is None:
-            # Show all frames including internals
-            result = "\n".join(str(frame) for frame in frames_list)
-            # Add note about trace collector being excluded
-            result += "\n\n" + "=" * 50 + "\n"
-            result += "Note: TraceCollector.from_stack() excluded from trace"
-            return result
+            # Show all frames including internals; single pass — no list needed.
+            return (
+                "\n".join(str(frame) for frame in frames)
+                + f"\n\n{self._SEPARATOR}\n"
+                + "Note: TraceCollector.from_stack() excluded from trace"
+            )
 
+        # Materialize only when we need len for skipped-count accounting.
+        frames_list = list(frames)
         # Filter out internal frames
         filtered_frames = [frame for frame in frames_list if not frame.is_internal]
         skipped_count = len(frames_list) - len(filtered_frames)

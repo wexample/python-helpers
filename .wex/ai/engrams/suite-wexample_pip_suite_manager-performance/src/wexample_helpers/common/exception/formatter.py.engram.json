@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/exception/formatter.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:57:59+00:00",
+  "last_rev": "00fe6bf47b2e421b96af363b97c392e7b6eef966",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted `\"=\"*50` to class constant, deferred `list(frames)` past None fast-path, collapsed two `+=` string ops into one expression",
+  "in_progress": null
+}
