@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/mixin/printable_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:48:22+00:00",
+  "last_rev": "b6c2abc4ad3b8d03326ed9b68f359e67f6700bb0",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached DebugDumpClass in module-level sentinel to avoid repeated import machinery on every __str__ call",
+  "in_progress": null
+}
