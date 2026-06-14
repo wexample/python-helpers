@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/field.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:41:28+00:00",
+  "last_rev": "653017fe569442e5c1660b9225df0638f439e594",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate `Callable` import inside TYPE_CHECKING block (already imported at top level for runtime use)",
+  "in_progress": null
+}

@@ -8,8 +8,6 @@ import attrs
 from wexample_helpers.classes.base_field import BaseField
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
