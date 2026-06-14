@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/debug/abstract_debug.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:51:19+00:00",
+  "last_rev": "38b5e974490188c15e5af9f6848864a5df058b8e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "eliminated 6 redundant dict lookups: hoisted data.get(\"type\") in _inline_data, replaced data['type'] with data_type in 3 _render_data elif branches, and replaced membership-test+access pairs for \"instance_of\" and \"dump_location\" with single .get() calls",
+  "in_progress": null
+}

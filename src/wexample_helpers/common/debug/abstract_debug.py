@@ -115,12 +115,12 @@ class AbstractDebug:
         if "value" in data:
             return data["value"]
         # Class/instance labels
-        if data.get("type") == "class" and "name" in data:
+        t = data.get("type")
+        if t == "class" and "name" in data:
             return data["name"]
         if "instance_of" in data:
             return data["instance_of"]
         # Fallback to type name
-        t = data.get("type")
         return t if t is not None else str(data)
 
     def _render_data(self, data: dict, indent: str = "") -> list[str]:
@@ -159,10 +159,11 @@ class AbstractDebug:
                     lines.extend(self._render_data(base, child_indent))
             return lines
 
-        if "instance_of" in data:
-            lines.append(self._format_instance_name(data["instance_of"], indent))
-            if "dump_location" in data:
-                location = data["dump_location"]
+        instance_of = data.get("instance_of")
+        if instance_of is not None:
+            lines.append(self._format_instance_name(instance_of, indent))
+            location = data.get("dump_location")
+            if location is not None:
                 lines.append(
                     self._format_file_path(location["file"], location["line"], indent)
                 )
@@ -177,12 +178,12 @@ class AbstractDebug:
 
         elif "value" in data:
             lines.append(
-                f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}"
+                f"{indent}{Colors.BLUE}{data_type}{Colors.RESET}: {Colors.GREEN}{data['value']}{Colors.RESET}"
             )
 
         elif "elements" in data:
             lines.append(
-                f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['elements'])} elements):"
+                f"{indent}{Colors.BLUE}{data_type}{Colors.RESET} ({len(data['elements'])} elements):"
             )
             child_indent = indent + "    "
             for i, element in enumerate(data["elements"]):
@@ -191,7 +192,7 @@ class AbstractDebug:
 
         elif "items" in data:
             lines.append(
-                f"{indent}{Colors.BLUE}{data['type']}{Colors.RESET} ({len(data['items'])} elements):"
+                f"{indent}{Colors.BLUE}{data_type}{Colors.RESET} ({len(data['items'])} elements):"
             )
             child_indent = indent + "    "
             for item in data["items"]:
