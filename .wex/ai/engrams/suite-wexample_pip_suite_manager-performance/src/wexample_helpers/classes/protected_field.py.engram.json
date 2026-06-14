@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/protected_field.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:49:51+00:00",
+  "last_rev": "1a251e06be20bf2976fce8167516703822cac407",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate `Callable` import inside TYPE_CHECKING guard (already imported at top level)",
+  "in_progress": null
+}
