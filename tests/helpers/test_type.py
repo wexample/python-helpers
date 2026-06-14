@@ -226,7 +226,7 @@ class TestHelperType(AbstractTestHelpers):
                 ([1, 2, 3], Union[list[int], set[int]]),
                 ({"key": "value"}, Union[dict[str, str], NoneType]),
                 (None, Union[dict[str, str], NoneType]),
-                (123, Union[Optional[int], NoneType]),
+                (123, Union[int | None, NoneType]),
                 (TestClassB(), Union[TestClassA, TestClassB]),
                 (TestClassB(), Union[TestClassA, str]),
                 (TestClassB, Union[type[TestClassA], type[TestClassB]]),
