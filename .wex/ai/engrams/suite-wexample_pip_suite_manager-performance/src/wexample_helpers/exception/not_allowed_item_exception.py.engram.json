@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/not_allowed_item_exception.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:05:10+00:00",
+  "last_rev": "bbe667a3f6d97ccd15ea1acd2636813bb40442af",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "exception cold path; single-line `_build_message` with no loops or repeated lookups — nothing to optimize",
+  "in_progress": null
+}
