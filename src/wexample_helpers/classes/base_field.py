@@ -6,13 +6,28 @@ from typing import TYPE_CHECKING, Any
 import attrs
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from wexample_helpers.enums.field_visibility import FieldVisibility
 
 
 class BaseField:
     """Base class for all field types."""
+
+    _ATTRS_PARAMS: frozenset = frozenset(
+        {
+            "init",
+            "repr",
+            "eq",
+            "order",
+            "hash",
+            "compare",
+            "kw_only",
+            "on_setattr",
+            "alias",
+            "type",
+            "factory",
+            "converter",
+        }
+    )
 
     def __init__(
         self,
@@ -34,24 +49,7 @@ class BaseField:
 
     def to_attrs_field(self) -> Any:
         """Convert to attrs field with proper metadata and validation."""
-        from attrs import field
-
-        attrs_params = frozenset(
-            [
-                "init",
-                "repr",
-                "eq",
-                "order",
-                "hash",
-                "compare",
-                "kw_only",
-                "on_setattr",
-                "alias",
-                "type",
-                "factory",
-                "converter",
-            ]
-        )
+        attrs_params = self._ATTRS_PARAMS
 
         metadata = {
             "description": self.description,
@@ -78,7 +76,7 @@ class BaseField:
         if validators:
             field_kwargs["validator"] = validators
 
-        return field(**field_kwargs)
+        return attrs.field(**field_kwargs)
 
     def _build_validators(self) -> Callable | None:
         """Build combined validator function."""
@@ -96,6 +94,9 @@ class BaseField:
 
         if not validators:
             return None
+
+        if len(validators) == 1:
+            return validators[0]
 
         def combined_validator(instance, attribute, value):
             for v in validators:

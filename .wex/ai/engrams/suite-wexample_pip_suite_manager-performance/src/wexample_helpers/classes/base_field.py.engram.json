@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/base_field.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:39:50+00:00",
+  "last_rev": "086972f8bf5c7f478062f40879ad9c8c05baeb34",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted attrs_params frozenset to class constant, removed duplicate Callable import, replaced lazy field import with attrs.field, short-circuit single-validator case",
+  "in_progress": null
+}
