@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/enums/error_truncate_rule.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:00:19+00:00",
+  "last_rev": "5d9be07a889d9df9e757171fb6660b8df5b57460",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "added __slots__ to ErrorTruncateRule to eliminate __dict__ and speed up attribute access",
+  "in_progress": null
+}

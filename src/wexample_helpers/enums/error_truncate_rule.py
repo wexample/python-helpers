@@ -4,6 +4,8 @@ from enum import Enum
 
 
 class ErrorTruncateRule:
+    __slots__ = ("truncate_after_module", "truncate_after_file", "truncate_stack_count")
+
     def __init__(
         self,
         truncate_after_module: str | None = None,
