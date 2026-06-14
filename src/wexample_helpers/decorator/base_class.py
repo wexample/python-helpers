@@ -1,12 +1,8 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
 import attrs
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 
 def base_class(_cls: type | None = None, *, slots: bool = False) -> Callable:

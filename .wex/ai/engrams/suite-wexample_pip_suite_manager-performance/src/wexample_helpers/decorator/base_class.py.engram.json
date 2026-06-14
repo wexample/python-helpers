@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/decorator/base_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:59:42+00:00",
+  "last_rev": "931f4170b0c9a99d60b71162bc398d4968f70263",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate Callable import inside dead TYPE_CHECKING block",
+  "in_progress": null
+}
