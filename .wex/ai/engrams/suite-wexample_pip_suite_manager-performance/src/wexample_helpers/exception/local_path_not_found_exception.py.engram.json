@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/local_path_not_found_exception.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:03:46+00:00",
+  "last_rev": "c1abd8fdc3bfbc678672bb42550ff07f8837e5d3",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "pure class definition with trivial f-string in _build_message; no hot path, loops, or hoistable invariants",
+  "in_progress": null
+}
