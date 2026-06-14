@@ -4,6 +4,15 @@ import pdb
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 
+_PDB_HELP_TEXT = "\n".join((
+    "Commands:",
+    "  p variable  : Print variable",
+    "  n          : Next line",
+    "  c          : Continue execution",
+    "  q          : Quit",
+    "  h          : Help (more commands)",
+))
+
 
 class DebugBreakpoint(AbstractDebug):
     def __init__(self, message: str | None = None) -> None:
@@ -15,21 +24,11 @@ class DebugBreakpoint(AbstractDebug):
         pass
 
     def print(self, silent: bool = False):
-        lines = []
-        if self.message:
-            lines.append(f"\n Debug breakpoint: {self.message}")
-        lines.extend(
-            [
-                "Commands:",
-                "  p variable  : Print variable",
-                "  n          : Next line",
-                "  c          : Continue execution",
-                "  q          : Quit",
-                "  h          : Help (more commands)",
-            ]
+        text = (
+            f"\n Debug breakpoint: {self.message}\n{_PDB_HELP_TEXT}"
+            if self.message
+            else _PDB_HELP_TEXT
         )
-
-        text = "\n".join(lines)
 
         if silent:
             # In silent mode, do not start pdb; return the helper text instead

@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/debug/debug_breakpoint.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:52:13+00:00",
+  "last_rev": "c05fa85f1e989afcb263df2e8dbd68a544ca0e4d",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted static pdb help text to module-level constant, eliminating list+join allocation on every print() call",
+  "in_progress": null
+}
