@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/base_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:38:57+00:00",
+  "last_rev": "ec429e4448eb0b5fc52edbb6a647841d59dadbb4",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed always-True hasattr guard (dead elif), replaced str(type()) with module attr check, tuple over list for subclass set, frozenset for O(1) _filter_kwargs membership",
+  "in_progress": null
+}
