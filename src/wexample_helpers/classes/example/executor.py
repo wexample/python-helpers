@@ -94,14 +94,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         for path in sorted(root.rglob("*.py")):
             if not path.is_file():
                 continue
-            if path.name in {"__init__.py", "__main__.py"}:
-                continue
             if path.name.startswith("_"):
-                continue
-            # avoid reprocessing files outside the root via symlinks
-            try:
-                path.relative_to(root)
-            except ValueError:
                 continue
             files.append(path)
         return files

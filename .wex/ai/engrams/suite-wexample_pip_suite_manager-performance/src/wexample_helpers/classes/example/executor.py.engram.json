@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/example/executor.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:40:59+00:00",
+  "last_rev": "41d37704ec1a62a9936921a439b2e825bf0a1aa4",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant __init__/__main__ set check and dead relative_to try/except in _iter_example_files",
+  "in_progress": null
+}
