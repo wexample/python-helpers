@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/exception/frame.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:58:30+00:00",
+  "last_rev": "9f0ba53cb7a9e6d01162e28bc0ef802b0918e3a6",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant DebugPathStyle import inside get_formatted_path (already imported at module level)",
+  "in_progress": null
+}
