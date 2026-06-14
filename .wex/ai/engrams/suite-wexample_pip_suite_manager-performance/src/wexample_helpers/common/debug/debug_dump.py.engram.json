@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/debug/debug_dump.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:54:26+00:00",
+  "last_rev": "8353dbcccc823147287a33860be950adbe86d75d",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted datetime import to module level and replaced seen.copy() per-element with shared-set backtracking via try/finally",
+  "in_progress": null
+}
