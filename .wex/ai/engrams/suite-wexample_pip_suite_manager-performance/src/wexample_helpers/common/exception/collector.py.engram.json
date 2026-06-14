@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/exception/collector.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:57:12+00:00",
+  "last_rev": "d4dc7a10f10b2efeb53be4fa7a113b7159c33d1e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replaced per-frame full-file reads with linecache in from_traceback; avoided join allocation for single-element code_context in from_stack",
+  "in_progress": null
+}

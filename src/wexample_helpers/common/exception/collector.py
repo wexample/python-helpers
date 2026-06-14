@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import linecache
 from typing import TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
@@ -26,8 +27,9 @@ class TraceCollector:
         # Skip only from_stack itself (frame 0)
         for frame in inspect.stack()[1:]:
             is_internal = TraceCollector._is_internal_frame(frame.filename)
-            # Join all code context lines if available
-            code = "".join(frame.code_context) if frame.code_context else None
+            # inspect.stack() defaults to context=1, so code_context is at most
+            # a 1-element list — index directly instead of allocating a join.
+            code = frame.code_context[0] if frame.code_context else None
             frames.append(
                 ExceptionFrame(
                     filename=frame.filename,
@@ -57,16 +59,12 @@ class TraceCollector:
             frame = current.tb_frame
             f_code = frame.f_code
             filename = f_code.co_filename
-            code = None
-            if filename != "<string>":
-                try:
-                    with open(filename) as f:
-                        lines = f.readlines()
-                        lineno_idx = current.tb_lineno - 1
-                        if 0 <= lineno_idx < len(lines):
-                            code = lines[lineno_idx]
-                except (OSError, IndexError):
-                    pass
+            # linecache caches file contents keyed by filename, so repeated
+            # frames from the same file are served from memory rather than
+            # triggering a fresh full-file read each time.  It also handles
+            # synthetic filenames (e.g. "<string>") and missing files
+            # gracefully by returning "".
+            code = linecache.getline(filename, current.tb_lineno) or None
 
             is_internal = TraceCollector._is_internal_frame(filename)
             frames.append(
