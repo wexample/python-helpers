@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/private_field.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:49:33+00:00",
+  "last_rev": "7bc2ed69cd7ad24924b8f74a61aa49f259eaf635",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate `Callable` import from TYPE_CHECKING block (already imported at module level)",
+  "in_progress": null
+}
