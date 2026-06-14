@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/abstract_method.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:37:22+00:00",
+  "last_rev": "7d524bda6ecfa0ecdd16c7c619b3e05a7186473e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "use type() builtin over .__class__ lookup; set __isabstract__ on wrapper directly instead of mutating func",
+  "in_progress": null
+}
