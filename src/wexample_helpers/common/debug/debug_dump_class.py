@@ -15,9 +15,6 @@ class DebugDumpClass(AbstractDebug):
     def collect_data(self) -> None:
         self.data = self._collect_hierarchy(self.cls)
 
-    def print(self, silent: bool = False):
-        return super().print(silent=silent)
-
     def _collect_hierarchy(self, cls: Any, seen: set[int] | None = None) -> dict:
         if seen is None:
             seen = set()
@@ -25,12 +22,15 @@ class DebugDumpClass(AbstractDebug):
         # Normalize input to a class object if an instance is provided
         cls_obj = cls if inspect.isclass(cls) else cls.__class__
 
+        # Cache the class name once; used both in the circular sentinel and result dict
+        cls_name = getattr(cls_obj, "__name__", str(cls_obj))
+
         # Use id-based tracking to avoid hash issues
         key = id(cls_obj)
         if key in seen:
             return {
                 "type": "circular",
-                "name": getattr(cls_obj, "__name__", str(cls_obj)),
+                "name": cls_name,
             }
         seen.add(key)
 
@@ -42,7 +42,7 @@ class DebugDumpClass(AbstractDebug):
 
         result = {
             "type": "class",
-            "name": getattr(cls_obj, "__name__", str(cls_obj)),
+            "name": cls_name,
             "module": getattr(cls_obj, "__module__", "<unknown>"),
             "depth": self.depth,
             "source_file": source_file,

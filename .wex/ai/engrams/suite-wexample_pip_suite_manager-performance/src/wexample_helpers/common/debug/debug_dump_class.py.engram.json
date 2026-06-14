@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/common/debug/debug_dump_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T19:55:15+00:00",
+  "last_rev": "8070a5730093a4d52aed14640050799b0b0d8b5e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant print delegation and hoisted cls_name out of duplicate getattr calls in _collect_hierarchy",
+  "in_progress": null
+}
