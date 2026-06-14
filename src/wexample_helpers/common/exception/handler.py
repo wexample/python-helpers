@@ -10,6 +10,11 @@ if TYPE_CHECKING:
     from wexample_helpers.common.exception.formatter import TraceFormatter
 
 
+def _is_dunder(name: str) -> bool:
+    """Return True if *name* is a dunder identifier (e.g. ``__init__``)."""
+    return len(name) >= 4 and name.startswith("__") and name.endswith("__")
+
+
 class ExceptionHandler:
     """High-level API to format exceptions with truncation rules and path handling."""
 
@@ -57,11 +62,13 @@ class ExceptionHandler:
         if hide_magic_frames and frames:
             # Trim trailing dunder frames (names starting and ending with '__') so the
             # last displayed frame points to user code call site rather than internals.
-            def _is_dunder(name: str) -> bool:
-                return len(name) >= 4 and name.startswith("__") and name.endswith("__")
-
-            while frames and _is_dunder(frames[-1].function):
-                frames = frames[:-1]
+            # Track the cutoff index and slice once rather than copying the list each
+            # iteration.
+            end = len(frames)
+            while end > 0 and _is_dunder(frames[end - 1].function):
+                end -= 1
+            if end != len(frames):
+                frames = frames[:end]
 
         return f"{self.formatter.format(frames)}\n{type(error).__name__}: {error}"
 
@@ -80,6 +87,8 @@ class ExceptionHandler:
 
                 truncate_after_module = rule.truncate_after_module
                 truncate_after_file = rule.truncate_after_file
+                if truncate_after_module is None and truncate_after_file is None:
+                    continue
                 for i, frame in enumerate(frames):
                     filename = frame.filename
 
