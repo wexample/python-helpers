@@ -17,7 +17,4 @@ class MultipleBaseModelInheritanceError(UndefinedException):
     error_code: ClassVar[str] = "MULTIPLE_BASE_MODEL_INHERITANCE"
 
     def _build_message(self) -> str:
-        return (
-            f"Multiple inheritance of BaseModel is not allowed in class "
-            f"'{self.class_instance.__name__}'."
-        )
+        return f"Multiple inheritance of BaseModel is not allowed in class '{self.class_instance.__name__}'."

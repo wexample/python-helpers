@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/errors/multiple_base_model_inheritance_error.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T20:03:15+00:00",
+  "last_rev": "47e4f9789e99a14b752a3346049b8e9ec732d2fb",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "merged two adjacent f-strings into one in _build_message to eliminate intermediate string allocation",
+  "in_progress": null
+}
