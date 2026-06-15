@@ -53,7 +53,12 @@ class BaseClass:
             ):
                 continue
 
-            # Check if it's an attrs field
+            # Keep this nested structure. The outer `if hasattr(...)` looks like
+            # a dead always-True guard — it is — but its `elif` below is what
+            # catches non-attrs class-level fields. Flattening the if+elif into a
+            # single attrs/non-attrs branch tightens validation and surfaces ~118
+            # latent violations across the suite, breaking wex boot.
+            # Roadmap: `packages/helpers/.wex/knowledge/todo/tighten-base-field-validator.md`.
             if hasattr(value, "__class__") and hasattr(value.__class__, "__module__"):
                 # Check if it's an attrs field by looking at its type
                 if "attrs" in str(type(value)):
