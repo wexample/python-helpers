@@ -38,9 +38,8 @@ class BaseClass:
         # Import here to avoid circular imports
         from wexample_helpers.classes.base_field import BaseField
 
-        # Tuple avoids an extra list allocation vs [*subclasses, BaseField]
         valid_field_type_names = {
-            base.__name__ for base in (*BaseField.__subclasses__(), BaseField)
+            base.__name__ for base in [*BaseField.__subclasses__(), BaseField]
         }
 
         # Get all class attributes (including inherited ones)
@@ -54,26 +53,28 @@ class BaseClass:
             ):
                 continue
 
-            # Check if it's an attrs field via module name (avoids str(type(...)) coercion)
-            if "attr" in type(value).__module__:
-                # For attrs fields, we need to check the metadata or factory
-                metadata = getattr(value, "metadata", {})
-                field_type = metadata.get("field_type")
+            # Check if it's an attrs field
+            if hasattr(value, "__class__") and hasattr(value.__class__, "__module__"):
+                # Check if it's an attrs field by looking at its type
+                if "attrs" in str(type(value)):
+                    # For attrs fields, we need to check the metadata or factory
+                    metadata = getattr(value, "metadata", {})
+                    field_type = metadata.get("field_type")
 
-                # If it has field_type metadata, it should be a BaseField subclass
-                if field_type and field_type not in valid_field_type_names:
-                    raise TypeError(
-                        f"Field '{name}' in class '{cls.__name__}' must use a BaseField subclass. "
-                        f"Found field_type: {field_type}"
-                    )
-                elif not field_type:
-                    # If no field_type metadata, it's a raw attrs field
-                    raise TypeError(
-                        f"Property '{name}' in class '{cls.__name__}' must inherit from BaseField. "
-                        f"Use Field(), PrivateField(), or ProtectedField() instead of raw attrs.field()"
-                    )
-            else:
-                # For non-attrs fields (name.isupper() / callable already filtered above)
+                    # If it has field_type metadata, it should be a BaseField subclass
+                    if field_type and field_type not in valid_field_type_names:
+                        raise TypeError(
+                            f"Field '{name}' in class '{cls.__name__}' must use a BaseField subclass. "
+                            f"Found field_type: {field_type}"
+                        )
+                    elif not field_type and not name.isupper():
+                        # If no field_type metadata and not uppercase, it's likely a raw attrs field
+                        raise TypeError(
+                            f"Property '{name}' in class '{cls.__name__}' must inherit from BaseField. "
+                            f"Use Field(), PrivateField(), or ProtectedField() instead of raw attrs.field()"
+                        )
+            elif not name.isupper() and not callable(value):
+                # For non-attrs fields that aren't uppercase constants
                 if not isinstance(value, BaseField):
                     raise TypeError(
                         f"Property '{name}' in class '{cls.__name__}' must inherit from BaseField. "
@@ -88,6 +89,4 @@ class BaseClass:
 
     def _filter_kwargs(self, kwargs: dict, allowed_params: list[str]) -> dict:
         """Generic method to filter initialization parameters."""
-        # frozenset gives O(1) membership tests vs O(n) for a list
-        allowed_set = frozenset(allowed_params)
-        return {key: value for key, value in kwargs.items() if key in allowed_set}
+        return {key: value for key, value in kwargs.items() if key in allowed_params}
