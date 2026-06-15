@@ -406,22 +406,6 @@ def shell_which(cmd: str) -> str | None:
     return shutil.which(cmd)
 
 
-def _save_tty_state() -> Any:
-    """Snapshot stdin TTY attributes (termios). Returns None on non-Unix or
-    when stdin is not a TTY — caller must accept None as 'no restore needed'.
-    """
-    if not sys.stdin.isatty():
-        return None
-    try:
-        import termios
-    except ImportError:
-        return None
-    try:
-        return termios.tcgetattr(sys.stdin.fileno())
-    except (OSError, ValueError):
-        return None
-
-
 def _restore_tty_state(saved: Any) -> None:
     """Restore stdin TTY attributes captured by _save_tty_state(). No-op if
     `saved` is None or the platform doesn't support termios."""
@@ -437,35 +421,20 @@ def _restore_tty_state(saved: Any) -> None:
         pass
 
 
-def _terminate_process_group(proc: subprocess.Popen) -> None:
-    """Send SIGTERM to the child's process group, escalate to SIGKILL after 2s.
-
-    Used to clean up children spawned with start_new_session=True when the
-    parent is interrupted: the whole descendant tree shares one PGID so a
-    single killpg() reaches grand-children too.
+def _save_tty_state() -> Any:
+    """Snapshot stdin TTY attributes (termios). Returns None on non-Unix or
+    when stdin is not a TTY — caller must accept None as 'no restore needed'.
     """
-    import os
-    import signal
-
+    if not sys.stdin.isatty():
+        return None
     try:
-        pgid = os.getpgid(proc.pid)
-    except ProcessLookupError:
-        return
+        import termios
+    except ImportError:
+        return None
     try:
-        os.killpg(pgid, signal.SIGTERM)
-    except (ProcessLookupError, PermissionError):
-        return
-    try:
-        proc.wait(timeout=2)
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(pgid, signal.SIGKILL)
-        except (ProcessLookupError, PermissionError):
-            pass
-        try:
-            proc.wait(timeout=2)
-        except subprocess.TimeoutExpired:
-            pass
+        return termios.tcgetattr(sys.stdin.fileno())
+    except (OSError, ValueError):
+        return None
 
 
 def _shell_apply_sudo(
@@ -497,3 +466,34 @@ def _shell_apply_sudo(
         elif elevate:
             prefix += ["--"]
         return prefix + (shell_split_cmd(cmd) if isinstance(cmd, str) else list(cmd))
+
+
+def _terminate_process_group(proc: subprocess.Popen) -> None:
+    """Send SIGTERM to the child's process group, escalate to SIGKILL after 2s.
+
+    Used to clean up children spawned with start_new_session=True when the
+    parent is interrupted: the whole descendant tree shares one PGID so a
+    single killpg() reaches grand-children too.
+    """
+    import os
+    import signal
+
+    try:
+        pgid = os.getpgid(proc.pid)
+    except ProcessLookupError:
+        return
+    try:
+        os.killpg(pgid, signal.SIGTERM)
+    except (ProcessLookupError, PermissionError):
+        return
+    try:
+        proc.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(pgid, signal.SIGKILL)
+        except (ProcessLookupError, PermissionError):
+            pass
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
