@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/mixins/private_fields_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:34:55+00:00",
+  "last_rev": "9c248a68c464e4d0653eade4646a552bd310bc24",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only field declarations and trivial dict ops; no hot path to optimize",
+  "in_progress": null
+}
