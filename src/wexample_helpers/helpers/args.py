@@ -3,14 +3,15 @@ from __future__ import annotations
 import ast
 import inspect
 import re
+from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any, cast
+
+from wexample_helpers.const.types import BasicValue, Scalar, StringsList
 
 if TYPE_CHECKING:
     from wexample_helpers.const.types import (
         AnyCallable,
-        BasicValue,
         StringKeysDict,
-        StringsList,
     )
 
 
@@ -28,8 +29,6 @@ def args_is_basic_value(value: Any) -> bool:
     """
     Check if the value is compatible with basic YAML types
     """
-    from wexample_helpers.const.types import Scalar
-
     if isinstance(value, Scalar):
         return True
 
@@ -56,8 +55,6 @@ def args_parse_dict(arg: str) -> StringKeysDict:
 
 
 def args_parse_list(arg: str) -> StringsList:
-    from wexample_helpers.const.types import StringsList
-
     arg_list = args_parse_one(arg, [])
 
     if not isinstance(arg_list, list):
@@ -74,8 +71,6 @@ def args_parse_list_or_strings_list(arg: str) -> StringsList:
 
 
 def args_parse_one(argument: str, default: Any | None = None) -> BasicValue:
-    from wexample_helpers.const.types import BasicValue
-
     if argument is None or argument == "":
         return default
 
@@ -133,8 +128,6 @@ def args_shift_one(
 
 
 def args_split_arg_array(arg: str | Iterable[str], separator: str = ",") -> StringsList:
-    from collections.abc import Iterable
-
     if not arg:
         return []
 
