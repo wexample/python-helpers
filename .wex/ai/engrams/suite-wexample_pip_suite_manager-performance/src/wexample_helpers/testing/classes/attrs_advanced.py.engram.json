@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_advanced.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:26:40+00:00",
+  "last_rev": "b05ae510f5dabc4e60515f4cf6644528664a4cd9",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant deferred `from datetime import datetime` inside `age` property — already imported at module scope",
+  "in_progress": null
+}

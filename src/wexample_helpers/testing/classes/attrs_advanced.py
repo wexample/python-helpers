@@ -56,8 +56,6 @@ class AttrsAdvanced(BaseClass):
     # Note: range validation is handled by attrs validators and rounding by the converter above.
     @property
     def age(self) -> timedelta:
-        from datetime import datetime
-
         return datetime.now() - self._created_at
 
     @property
