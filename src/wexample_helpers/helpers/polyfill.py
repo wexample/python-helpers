@@ -38,13 +38,13 @@ def polyfill_register_global(
         polyfill_register_global([AbstractKernel, Kernel])
         polyfill_register_global((AbstractKernel, Kernel))
     """
-    import inspect
-
     # Convert single class to list
     if not isinstance(classes, (list, tuple)):
         classes = [classes]
 
     if context is None:
+        import inspect
+
         caller_frame = inspect.currentframe().f_back
         if caller_frame is None:
             raise RuntimeError("Unable to find calling frame")

@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/polyfill.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:06:22+00:00",
+  "last_rev": "2276cdd055374e6815342cc62faec84f97624e43",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "moved `import inspect` inside `if context is None:` branch to skip sys.modules lookup when context is provided",
+  "in_progress": null
+}
