@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/plugin/runtest_makereport.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:35:34+00:00",
+  "last_rev": "21dbc39a9f115afd7446a3087941b817150870a9",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted ExceptionHandler and DebugPathStyle imports out of per-call hook body to module level",
+  "in_progress": null
+}
