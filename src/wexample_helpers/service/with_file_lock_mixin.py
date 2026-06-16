@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
@@ -23,9 +24,15 @@ class WithFileLockMixin:
         """Acquire an exclusive cross-process lock for the duration of the block."""
         import fcntl
 
-        lock_path = self._get_lock_path()
-        lock_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(lock_path, "w") as f:
+        # _cached_lock_path is a cached_property: path computed once per instance.
+        lock_path = self._cached_lock_path
+        # Guard mkdir with a per-instance flag so the stat+mkdir syscall is
+        # issued only on the very first acquisition, not on every call.
+        if not self.__dict__.get("_lock_parent_ensured"):
+            lock_path.parent.mkdir(parents=True, exist_ok=True)
+            self.__dict__["_lock_parent_ensured"] = True
+        # "a" avoids the O_TRUNC truncation overhead that "w" incurs on every open.
+        with open(lock_path, "a") as f:
             fcntl.flock(f, fcntl.LOCK_EX)
             try:
                 yield
@@ -33,6 +40,11 @@ class WithFileLockMixin:
                 # OS releases the lock when the fd closes; explicit unlock
                 # is documented for clarity but not strictly required.
                 fcntl.flock(f, fcntl.LOCK_UN)
+
+    @functools.cached_property
+    def _cached_lock_path(self) -> Path:
+        """Lock-file path, computed once per instance via _get_lock_path()."""
+        return self._get_lock_path()
 
     def _get_lock_path(self) -> Path:
         """Return the path to the lock file.

@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/with_file_lock_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:25:22+00:00",
+  "last_rev": "b58f9408bcd6317b024101186097cdca17b8a85b",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached lock path via cached_property + guarded mkdir with per-instance flag + open mode \"w\"→\"a\" to skip O_TRUNC",
+  "in_progress": null
+}
