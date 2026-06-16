@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/singleton_registry.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:23:51+00:00",
+  "last_rev": "9cb0480a216f14cfd11f00efc3279bf4bf96f8ce",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replaced hasattr+access with getattr in _get_deps/init_sync/init_async; cached self._classes and self._derive_key as locals in _resolve_layers/_resolve_order",
+  "in_progress": null
+}

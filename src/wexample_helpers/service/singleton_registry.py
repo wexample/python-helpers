@@ -28,8 +28,9 @@ class SingletonRegistry(Registry[T]):
 
     @staticmethod
     def _get_deps(cls: Any) -> list[type]:
-        if hasattr(cls, "dependencies"):
-            return cls.dependencies() or []
+        deps_fn = getattr(cls, "dependencies", None)
+        if deps_fn is not None:
+            return deps_fn() or []
         return []
 
     def get_all_classes(self) -> dict[str, type[T]]:
@@ -49,7 +50,8 @@ class SingletonRegistry(Registry[T]):
                 self._items[self._derive_key(cls)] = instance
                 instances.append(instance)
             coros = [
-                inst.init_async() for inst in instances if hasattr(inst, "init_async")
+                m() for inst in instances
+                if (m := getattr(inst, "init_async", None)) is not None
             ]
             if coros:
                 await asyncio.gather(*coros)
@@ -59,8 +61,9 @@ class SingletonRegistry(Registry[T]):
         for cls in self._resolve_order():
             instance = self._instantiate(cls)
             self._items[self._derive_key(cls)] = instance
-            if hasattr(instance, "init_sync"):
-                instance.init_sync()
+            init_sync = getattr(instance, "init_sync", None)
+            if init_sync is not None:
+                init_sync()
 
     def register(self, item: type[T], key: str | None = None) -> None:
         """Register a class. Instance is created during init_all_*()."""
@@ -80,36 +83,40 @@ class SingletonRegistry(Registry[T]):
 
     def _resolve_layers(self) -> list[list[type[T]]]:
         """Layered topological order: each layer can be initialized in parallel."""
+        classes = self._classes
+        derive_key = self._derive_key
         depth: dict[str, int] = {}
 
         def compute(cls: type[T]) -> int:
-            key = self._derive_key(cls)
+            key = derive_key(cls)
             if key in depth:
                 return depth[key]
             d = 0
             for dep in self._get_deps(cls):
-                dep_key = self._derive_key(dep)
-                if dep_key in self._classes:
-                    d = max(d, compute(self._classes[dep_key]) + 1)
+                dep_key = derive_key(dep)
+                if dep_key in classes:
+                    d = max(d, compute(classes[dep_key]) + 1)
             depth[key] = d
             return d
 
-        for cls in self._classes.values():
+        for cls in classes.values():
             compute(cls)
 
         layers: dict[int, list[type[T]]] = {}
-        for cls in self._classes.values():
-            layers.setdefault(depth[self._derive_key(cls)], []).append(cls)
+        for cls in classes.values():
+            layers.setdefault(depth[derive_key(cls)], []).append(cls)
         return [layers[d] for d in sorted(layers)]
 
     def _resolve_order(self) -> list[type[T]]:
         """Flat topological sort: each class appears after its dependencies."""
+        classes = self._classes
+        derive_key = self._derive_key
         ordered: list[type[T]] = []
         visited: set[str] = set()
         visiting: set[str] = set()
 
         def visit(cls: type[T]) -> None:
-            key = self._derive_key(cls)
+            key = derive_key(cls)
             if key in visited:
                 return
             if key in visiting:
@@ -117,13 +124,13 @@ class SingletonRegistry(Registry[T]):
                 raise ValueError(f"Cyclic dependency detected: {chain}")
             visiting.add(key)
             for dep in self._get_deps(cls):
-                dep_key = self._derive_key(dep)
-                if dep_key in self._classes:
-                    visit(self._classes[dep_key])
+                dep_key = derive_key(dep)
+                if dep_key in classes:
+                    visit(classes[dep_key])
             visiting.discard(key)
             visited.add(key)
             ordered.append(cls)
 
-        for cls in self._classes.values():
+        for cls in classes.values():
             visit(cls)
         return ordered
