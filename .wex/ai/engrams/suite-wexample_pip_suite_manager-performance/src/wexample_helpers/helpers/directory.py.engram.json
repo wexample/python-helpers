@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/directory.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:55:17+00:00",
+  "last_rev": "0f91036aed496a2bcc4d57943646eda40844df5e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "eliminated redundant Path wrapping in 7 functions; scandir with cached DirEntry replaces listdir+2×stat in directory_empty_dir",
+  "in_progress": null
+}
