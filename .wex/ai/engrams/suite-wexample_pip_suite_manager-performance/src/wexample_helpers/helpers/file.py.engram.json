@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/file.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:59:07+00:00",
+  "last_rev": "57a9873eba6e3270408fd112aedffddf8598fac7",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cache str(path) in file_change_mode, hoist path_str in recursive variant, cache uid/gid in file_write_as_real_user, convert merge_filenames list to set in file_copytree_merge_yaml",
+  "in_progress": null
+}

@@ -14,8 +14,9 @@ def file_change_mode(path: PathOrString, mode: int) -> None:
     Change file permissions for a path, ignoring symlinks and missing files.
     """
     try:
-        if not os.path.islink(str(path)):
-            os.chmod(str(path), mode)
+        path_str = str(path)
+        if not os.path.islink(path_str):
+            os.chmod(path_str, mode)
     except FileNotFoundError:
         pass
 
@@ -30,8 +31,8 @@ def file_change_mode_recursive(
     :param mode: Permission bits to apply.
     :param follow_symlinks: If False, skip symlinked directories.
     """
-    file_change_mode(path, mode)
     path_str = str(path)
+    file_change_mode(path_str, mode)
     if os.path.isdir(path_str) and (follow_symlinks or not os.path.islink(path_str)):
         for item in os.listdir(path_str):
             file_change_mode_recursive(
@@ -101,6 +102,7 @@ def file_copytree_merge_yaml(
 
     uid, gid = user_get_real_uid(), user_get_real_gid()
     src, dst = Path(src), Path(dst)
+    _merge = set(merge_filenames)
     _ignore = set(ignore_filenames or [])
 
     for src_file in src.rglob("*"):
@@ -112,7 +114,7 @@ def file_copytree_merge_yaml(
         dst_file = dst / rel
         dst_file.parent.mkdir(parents=True, exist_ok=True)
 
-        if src_file.name in merge_filenames:
+        if src_file.name in _merge:
             file_merge_yaml(src_file, dst_file, merge_keys)
         else:
             shutil.copy2(src_file, dst_file)
@@ -344,7 +346,8 @@ def file_write_as_real_user(
     p = Path(file_path)
     p.write_text(content, encoding=encoding)
     os.chmod(p, mode)
-    os.chown(p, user_get_real_uid(), user_get_real_gid())
+    uid, gid = user_get_real_uid(), user_get_real_gid()
+    os.chown(p, uid, gid)
 
 
 def file_write_ensure(
