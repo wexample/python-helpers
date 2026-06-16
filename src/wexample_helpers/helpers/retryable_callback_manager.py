@@ -37,7 +37,10 @@ class RetryableCallbackManager(AbstractAttemptManager[T]):
             result = self.callback()
         except Exception as exc:
             message = self._format_exception_message(exc)
-            should_retry = self._should_retry(exc, message, attempt, self.max_attempts)
+            cb = self.should_retry_callback
+            should_retry = (
+                cb(exc, message, attempt, self.max_attempts) if cb is not None else False
+            )
             return AttemptOutcome(
                 success=False,
                 value=None,
@@ -55,14 +58,3 @@ class RetryableCallbackManager(AbstractAttemptManager[T]):
         if last_error is None:
             raise RuntimeError("RetryableCallbackManager exhausted without an error.")
         raise last_error
-
-    def _should_retry(
-        self,
-        exc: Exception,
-        message: str,
-        attempt: int,
-        max_attempts: int,
-    ) -> bool:
-        if self.should_retry_callback:
-            return self.should_retry_callback(exc, message, attempt, max_attempts)
-        return False

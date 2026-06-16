@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/retryable_callback_manager.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:08:34+00:00",
+  "last_rev": "1e0be9d18d9eac2958643db30fc7721aec744cd4",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "inlined _should_retry into _attempt: eliminated method-call frame, cached should_retry_callback as local cb (one lookup instead of two), switched to explicit is-not-None check",
+  "in_progress": null
+}
