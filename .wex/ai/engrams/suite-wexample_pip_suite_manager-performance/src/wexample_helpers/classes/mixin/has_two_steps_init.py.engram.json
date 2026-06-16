@@ -2,10 +2,10 @@
   "engram_version": 1,
   "source_key": "src/wexample_helpers/classes/mixin/has_two_steps_init.py",
   "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
-  "last_visited_at": "2026-06-14T19:47:33+00:00",
-  "last_rev": "b0af21b65e719c49d0926f586780dfc8826036f4",
+  "last_visited_at": "2026-06-16T07:40:45+00:00",
+  "last_rev": "8a98192b282ed672c455847ffa3552bdbeaf0697",
   "last_decision": "skip",
   "kinds": [],
-  "notes": "single trivial setter method with no hot path; both imports are runtime-required; nothing to optimize",
+  "notes": "only a class-level field declaration and a two-line setup() method; no loops, repeated lookups, or hoistable invariants",
   "in_progress": null
 }
