@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/classes/base_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:40:25+00:00",
+  "last_rev": "82f49ac6679cd427003284d1b53b8cbdebcd8781",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "drop empty TYPE_CHECKING block, avoid temp list in valid_field_type_names, set-ify allowed_params in _filter_kwargs for O(1) lookup",
+  "in_progress": null
+}

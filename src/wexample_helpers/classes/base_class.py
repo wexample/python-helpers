@@ -1,12 +1,9 @@
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, NoReturn
+from typing import NoReturn
 
 from wexample_helpers.decorator.base_class import base_class
-
-if TYPE_CHECKING:
-    pass
 
 
 @base_class
@@ -38,9 +35,8 @@ class BaseClass:
         # Import here to avoid circular imports
         from wexample_helpers.classes.base_field import BaseField
 
-        valid_field_type_names = {
-            base.__name__ for base in [*BaseField.__subclasses__(), BaseField]
-        }
+        valid_field_type_names = {base.__name__ for base in BaseField.__subclasses__()}
+        valid_field_type_names.add(BaseField.__name__)
 
         # Get all class attributes (including inherited ones)
         for name, value in cls.__dict__.items():
@@ -94,4 +90,5 @@ class BaseClass:
 
     def _filter_kwargs(self, kwargs: dict, allowed_params: list[str]) -> dict:
         """Generic method to filter initialization parameters."""
-        return {key: value for key, value in kwargs.items() if key in allowed_params}
+        allowed = set(allowed_params)
+        return {key: value for key, value in kwargs.items() if key in allowed}
