@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/array.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:49:06+00:00",
+  "last_rev": "3e808684612cfd5f14490d849be1ee0c79a06a8e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "eliminated redundant early return inside array_swap if-branch, unifying to single return at end",
+  "in_progress": null
+}

@@ -42,9 +42,6 @@ def array_sort_in_place(array: Iterable) -> None:
 def array_swap(two_items_array: list[Any], do_swap: bool) -> list[Any]:
     if do_swap:
         two_items_array.reverse()
-
-        return two_items_array
-
     return two_items_array
 
 
