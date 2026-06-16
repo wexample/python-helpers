@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/ansi.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:44:18+00:00",
+  "last_rev": "16623b3f5846f3692835b7249129ee4dd63bc4c8",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "ansi_truncate_visible: single-pass loop eliminating double ansi_strip_invisible + double iteration; removed redundant `or 0`; ansi_strip_osc: drop temp var; ansi_strip_invisible: positional args",
+  "in_progress": null
+}
