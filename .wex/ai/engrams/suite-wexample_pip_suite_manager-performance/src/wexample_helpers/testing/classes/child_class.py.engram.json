@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/child_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:30:51+00:00",
+  "last_rev": "afe9bc52546d56e178ad624cbb0ef9316c823cba",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "trivial testing stub — two-line __init__ and single f-string method, no hot path or invariant to hoist",
+  "in_progress": null
+}
