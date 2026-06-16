@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/user.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:14:54+00:00",
+  "last_rev": "9c54ee3acb24ab1675cff7983c488cf4f9b2f732",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only single-line env lookups + OS syscalls, no hot path or invariant to optimize",
+  "in_progress": null
+}
