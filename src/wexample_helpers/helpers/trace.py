@@ -57,10 +57,11 @@ def trace_get_traceback_frames(
 
 
 def trace_inheritance_stack(obj) -> None:
-    print("Class inheritance stack:")
-
-    for cls in obj.__class__.mro():
-        print(f"  ↳ {cls.__module__}.{cls.__name__}")
+    mro = type(obj).mro()
+    lines = ["Class inheritance stack:"] + [
+        f"  ↳ {cls.__module__}.{cls.__name__}" for cls in mro
+    ]
+    print("\n".join(lines))
 
 
 def trace_print(

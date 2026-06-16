@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/trace.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:12:48+00:00",
+  "last_rev": "0672b19e7e59906b6a9bac921bb215cf57cc7dd4",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "batch N print() calls in trace_inheritance_stack into one; use type(obj) over obj.__class__",
+  "in_progress": null
+}
