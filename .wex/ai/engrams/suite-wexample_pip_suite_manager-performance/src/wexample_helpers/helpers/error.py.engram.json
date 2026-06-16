@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/error.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:57:56+00:00",
+  "last_rev": "769af7c8ccae4563744f4d9464d9cc4f68122b88",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached ExceptionHandler singleton to avoid per-call construction; removed duplicate/incorrect TraceFrame import; dropped stale print comment",
+  "in_progress": null
+}
