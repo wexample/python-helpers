@@ -2,10 +2,10 @@
   "engram_version": 1,
   "source_key": "src/wexample_helpers/helpers/string.py",
   "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
-  "last_visited_at": "2026-06-16T08:11:35+00:00",
-  "last_rev": "3b3b6b3e1273128971f23c468872be14125161df",
+  "last_visited_at": "2026-06-16T18:48:10+00:00",
+  "last_rev": "20aa637b593a1f89a430a520f992e06ce71e131d",
   "last_decision": "edit",
   "kinds": [],
-  "notes": "pre-compiled 13 regex patterns at module level, cached string_convert_case_map(), hoisted alphabet constant out of string_random_token",
+  "notes": "hoisted secrets import and lorem base to module level; cached string_detect_case and _normalize (returns tuple); eliminated double-strip in string_detect_case",
   "in_progress": null
 }

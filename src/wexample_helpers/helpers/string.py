@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import secrets
 import string as _string
 from collections.abc import Callable
 from functools import cache, lru_cache
@@ -24,6 +25,16 @@ _RE_NORM_UPPER = re.compile(r"([A-Z]+)([A-Z][a-z])")
 
 # Alphabet constant for string_random_token
 _RANDOM_TOKEN_ALPHABET = _string.ascii_letters + _string.digits
+
+# Lorem ipsum base text and its length for string_generate_lorem_ipsum
+_LOREM_BASE = (
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
+    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+)
+_LOREM_BASE_LEN = len(_LOREM_BASE)
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
@@ -91,6 +102,7 @@ def string_convert_case_map() -> dict[str, Callable[[str], str]]:
     }
 
 
+@lru_cache(maxsize=512)
 def string_detect_case(text: str) -> str:
     """
     Detect the case format of a string.
@@ -98,10 +110,9 @@ def string_detect_case(text: str) -> str:
     :param text: The string to analyze
     :return: One of: 'snake', 'kebab', 'camel', 'pascal', 'constant', 'title', 'dot', 'path', 'mixed', 'unknown'
     """
-    if not text or not text.strip():
-        return "unknown"
-
     text = text.strip()
+    if not text:
+        return "unknown"
 
     # Check for specific patterns
     if _RE_DETECT_CONSTANT.match(text):
@@ -146,15 +157,7 @@ def string_generate_lorem_ipsum(length: int = 100) -> str:
     if length <= 0:
         return ""
 
-    base = (
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    )
-
-    text = (base + " ") * ((length // (len(base) + 1)) + 1)
+    text = (_LOREM_BASE + " ") * ((length // (_LOREM_BASE_LEN + 1)) + 1)
 
     cut = text[:length].rstrip()
 
@@ -211,8 +214,6 @@ def string_is_title_case(text: str) -> bool:
 
 
 def string_random_token(length: int = 24) -> str:
-    import secrets
-
     return "".join(secrets.choice(_RANDOM_TOKEN_ALPHABET) for _ in range(length))
 
 
@@ -344,9 +345,10 @@ def string_truncate(text: str, limit: int) -> str:
     return text
 
 
-def _normalize(value: str) -> list[str]:
+@lru_cache(maxsize=512)
+def _normalize(value: str) -> tuple[str, ...]:
     """
-    Convert any string into a normalized list of lowercase words.
+    Convert any string into a normalized tuple of lowercase words.
     Handles:
     - camelCase / PascalCase
     - snake_case
@@ -357,7 +359,7 @@ def _normalize(value: str) -> list[str]:
     """
 
     if not value:
-        return []
+        return ()
 
     # Trim whitespace
     value = value.strip()
@@ -371,8 +373,5 @@ def _normalize(value: str) -> list[str]:
     # Split multiple caps like "JSONParser" → "JSON Parser"
     value = _RE_NORM_UPPER.sub(r"\1 \2", value)
 
-    # Normalize spaces
-    parts = value.lower().split()
-
-    # Remove empty segments
-    return [p for p in parts if p]
+    # Normalize spaces and remove empty segments
+    return tuple(value.lower().split())
