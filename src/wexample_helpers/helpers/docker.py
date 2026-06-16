@@ -1,6 +1,8 @@
 # docker_helpers.py
 from __future__ import annotations
 
+import hashlib
+import subprocess
 from pathlib import Path
 
 from wexample_helpers.helpers.shell import shell_run
@@ -39,8 +41,6 @@ def docker_build_name_from_path(
     Returns:
         A unique and reproducible container name.
     """
-    import hashlib
-
     root_path = str(Path(root_path).resolve())
     path_hash = hashlib.md5(root_path.encode()).hexdigest()[:8]
     return f"{prefix}-{image_name}-{path_hash}"
@@ -72,8 +72,6 @@ def docker_exec(
         command: Command to execute
         user: Optional user specification (e.g., "1000:1000" or "username")
     """
-    import subprocess
-
     cmd = ["docker", "exec"]
     if user:
         cmd += ["--user", user]

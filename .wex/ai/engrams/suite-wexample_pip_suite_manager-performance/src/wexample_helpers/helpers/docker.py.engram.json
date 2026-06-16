@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/docker.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:56:13+00:00",
+  "last_rev": "19c32c4466d17ddd0d79f3efda4b6d48ec6ed51e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted deferred `import hashlib` and `import subprocess` to module level to avoid per-call import machinery overhead",
+  "in_progress": null
+}
