@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/html.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:59:44+00:00",
+  "last_rev": "424ca6db356b01dce40a87a58cd5c33bcb69c00e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted two regex patterns to module-level compiled constants, eliminating per-call recompilation in html_remove_tags and html_split_prompt_parts",
+  "in_progress": null
+}
