@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/multiple_child.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:32:14+00:00",
+  "last_rev": "5976b649c1b6dd001b214b8928c4dd1c2421cfe0",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "test fixture only — simple __init__ assignments and one f-string method, no hot path",
+  "in_progress": null
+}
