@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import copy
+import operator
 import re
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 if TYPE_CHECKING:
@@ -18,7 +20,7 @@ DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 _INTERP_VAR_PATTERN = re.compile(r"\$\{([^}]+)\}")
 _PRIMITIVE_TYPES = (str, int, float, bool, bytes, type(None))
-_SORT_BY_VALUE = lambda item: item[1]
+_SORT_BY_VALUE = operator.itemgetter(1)
 
 
 def dict_flatten(
@@ -58,8 +60,6 @@ def dict_get_item_by_path(
     default: Any | None = None,
     separator: str = DICT_PATH_SEPARATOR_DEFAULT,
 ) -> Any:
-    from collections.abc import Mapping, Sequence
-
     for k in key.split(separator):
         if isinstance(data, Mapping) and k in data:
             data = data[k]
@@ -122,10 +122,10 @@ def dict_merge(*dicts: StringKeysMapping) -> StringKeysDict:
         for key, value in dictionary.items():
             if (
                 key in result
-                and isinstance(result[key], dict)
+                and isinstance(_cur := result[key], dict)
                 and isinstance(value, dict)
             ):
-                result[key] = dict_merge(result[key], value)
+                result[key] = dict_merge(_cur, value)
             elif isinstance(value, _PRIMITIVE_TYPES):
                 result[key] = value
             else:
@@ -149,11 +149,9 @@ def dict_set_item_by_path(
     value: Any,
     when_exist: str = DICT_ITEM_EXISTS_ACTION_REPLACE,
 ) -> None:
-    from wexample_helpers.const.types import StringsList
-
     # Allow pre-split to escape non-separator dots, like in file names.
     if isinstance(key, list):
-        keys = cast(StringsList, key)
+        keys = cast("StringsList", key)
     else:
         keys = key.split(".")
 

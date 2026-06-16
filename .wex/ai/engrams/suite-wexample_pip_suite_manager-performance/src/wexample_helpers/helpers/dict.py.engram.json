@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/dict.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:52:59+00:00",
+  "last_rev": "0ee5b621d0038c129b90f7902d3cd6b73535c13b",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted Mapping/Sequence imports to module level, replaced lambda with operator.itemgetter(1), cached result[key] with walrus op in dict_merge, removed per-call StringsList import using forward-ref cast",
+  "in_progress": null
+}
