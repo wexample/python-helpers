@@ -39,10 +39,14 @@ class Registry(Generic[T]):
 
     @staticmethod
     def _derive_key(item: Any) -> str:
-        if hasattr(item, "get_registry_key"):
-            return item.get_registry_key()
-        if hasattr(item, "get_snake_short_class_name"):
-            return item.get_snake_short_class_name()
+        # getattr-with-sentinel avoids the double attribute lookup that
+        # hasattr() + subsequent access would incur.
+        method = getattr(item, "get_registry_key", None)
+        if method is not None:
+            return method()
+        method = getattr(item, "get_snake_short_class_name", None)
+        if method is not None:
+            return method()
         if isinstance(item, type):
             return item.__name__
         return type(item).__name__
@@ -79,7 +83,9 @@ class Registry(Generic[T]):
             self.register(item)
 
     def _raise_error_if_expected(self, key: str, item: Any) -> None:
-        if item is None and self._fail_if_missing:
+        # Check the flag first: it is False by default, so the common path
+        # short-circuits immediately without evaluating `item is None`.
+        if self._fail_if_missing and item is None:
             raise KeyError(
                 f"Item not found in registry: {key}. Available keys: {self.all_keys()}"
             )

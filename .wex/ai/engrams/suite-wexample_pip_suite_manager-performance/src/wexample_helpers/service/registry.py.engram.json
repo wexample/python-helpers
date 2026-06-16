@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/registry.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:18:43+00:00",
+  "last_rev": "1fc48663ac2da6ba6b90e91c6f160cfd3b8596fb",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replaced hasattr+access double-lookup with getattr-sentinel in _derive_key; swapped _raise_error_if_expected condition to check cheap bool flag before `item is None`",
+  "in_progress": null
+}
