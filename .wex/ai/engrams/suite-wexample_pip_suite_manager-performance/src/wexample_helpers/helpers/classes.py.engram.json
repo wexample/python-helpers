@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/classes.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:49:36+00:00",
+  "last_rev": "771e68fd1212e3b8b44390e918315ef155ecd496",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted `import inspect` to module level and replaced `instance.__class__` with `type(instance)` for faster per-call dispatch",
+  "in_progress": null
+}
