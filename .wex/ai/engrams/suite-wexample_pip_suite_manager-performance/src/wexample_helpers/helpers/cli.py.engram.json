@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/cli.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:50:21+00:00",
+  "last_rev": "23cdea07dd7c4f0c4b59ab6e021bf315cb52c854",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted bool frozenset and type-dispatch dict out of cli_argument_convert_value hot path",
+  "in_progress": null
+}
