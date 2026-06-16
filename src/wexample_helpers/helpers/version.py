@@ -24,8 +24,8 @@ def is_greater_than(
     first: VersionDescriptor, second: VersionDescriptor, true_if_equal: bool = False
 ) -> bool:
     for key in _VERSION_KEYS_TO_CHECK:
-        first_value = first.get(key, None)
-        second_value = second.get(key, None)
+        first_value = first.get(key)
+        second_value = second.get(key)
 
         if first_value is not None and second_value is None:
             return False
@@ -112,9 +112,13 @@ def version_parse(version: str) -> VersionDescriptor | None:
     pre_build_type: str | None = None
 
     try:
+        # Split once; reuse parts to avoid a second split on "-"
+        _dash_parts = version.split("-", 1)
+        base_version_str = _dash_parts[0]
+
         # Handle 1.0.0-beta.1+build.1234
-        if "-" in version:
-            base_version, pre_build = version.split("-")
+        if len(_dash_parts) > 1:
+            pre_build = _dash_parts[1]
 
             if "." in pre_build:
                 pre_build_parts = pre_build.split(".")
@@ -131,7 +135,7 @@ def version_parse(version: str) -> VersionDescriptor | None:
                         int(pre_build_parts[1]) if pre_build_parts[1] else None
                     )
 
-        base_parts = version.split("-")[0].split(".")
+        base_parts = base_version_str.split(".")
         for part in base_parts:
             if part and not part.isdigit():
                 return None

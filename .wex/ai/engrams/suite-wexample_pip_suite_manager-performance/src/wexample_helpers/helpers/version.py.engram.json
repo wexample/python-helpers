@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/version.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:16:32+00:00",
+  "last_rev": "72ad8fab3977fb2478d9322c322ec3d0bf465754",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant None default in dict.get calls; hoisted version.split(\"-\") to avoid double split in version_parse",
+  "in_progress": null
+}
