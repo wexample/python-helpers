@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, TypeVar
 
@@ -35,9 +36,8 @@ def parallel_for_each(
         fn(items_list[0])
         return
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        for _ in executor.map(fn, items_list):
-            pass
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(items_list))) as executor:
+        deque(executor.map(fn, items_list), maxlen=0)
 
 
 def parallel_map(
@@ -60,5 +60,5 @@ def parallel_map(
     if len(items_list) == 1:
         return [fn(items_list[0])]
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(items_list))) as executor:
         return list(executor.map(fn, items_list))

@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/parallel.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:03:37+00:00",
+  "last_rev": "80d694a35d376c2036fc18a684f95a5058d02b66",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "drain parallel_for_each via deque(maxlen=0) and clamp max_workers to len(items) in both functions",
+  "in_progress": null
+}
