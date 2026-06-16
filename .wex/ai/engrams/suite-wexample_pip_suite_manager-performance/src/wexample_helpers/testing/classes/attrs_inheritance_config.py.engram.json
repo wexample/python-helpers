@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_inheritance_config.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:29:06+00:00",
+  "last_rev": "f8e4ecf5d2e43b636688c100194cb6ed995b328b",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "simple data-container class with no hot path; only operation is value.lower() in setter, already optimal",
+  "in_progress": null
+}
