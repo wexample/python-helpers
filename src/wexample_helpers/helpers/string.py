@@ -1,8 +1,29 @@
 from __future__ import annotations
 
 import re
+import string as _string
 from collections.abc import Callable
 from functools import lru_cache
+
+# Pre-compiled regex patterns for string_detect_case
+_RE_DETECT_CONSTANT = re.compile(r"^[A-Z][A-Z0-9_]*$")
+_RE_DETECT_SNAKE = re.compile(r"^[a-z][a-z0-9]*(_[a-z0-9]+)*$")
+_RE_DETECT_KEBAB = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
+_RE_DETECT_DOT = re.compile(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$")
+_RE_DETECT_PATH = re.compile(r"^[a-z][a-z0-9]*(/[a-z0-9]+)*$")
+_RE_DETECT_CAMEL_FULL = re.compile(r"^[a-z][a-zA-Z0-9]*$")
+_RE_DETECT_CAMEL_UPPER = re.compile(r"[A-Z]")
+_RE_DETECT_PASCAL = re.compile(r"^[A-Z][a-zA-Z0-9]*$")
+_RE_DETECT_TITLE = re.compile(r"^[A-Z][a-z]+(\s[A-Z][a-z]+)*$")
+_RE_DETECT_MIXED = re.compile(r"[a-z][A-Z]")
+
+# Pre-compiled regex patterns for _normalize
+_RE_NORM_SEP = re.compile(r"[^A-Za-z0-9]+")
+_RE_NORM_CAMEL = re.compile(r"([a-z0-9])([A-Z])")
+_RE_NORM_UPPER = re.compile(r"([A-Z]+)([A-Z][a-z])")
+
+# Alphabet constant for string_random_token
+_RANDOM_TOKEN_ALPHABET = _string.ascii_letters + _string.digits
 
 
 def string_append_missing_lines(lines: list[str], content: str) -> str:
@@ -56,6 +77,7 @@ def string_convert_case(text: str, to_format: str) -> str:
     return converters[to_format](text)
 
 
+@lru_cache(maxsize=None)
 def string_convert_case_map() -> dict[str, Callable[[str], str]]:
     return {
         "snake": string_to_snake_case,
@@ -82,21 +104,21 @@ def string_detect_case(text: str) -> str:
     text = text.strip()
 
     # Check for specific patterns
-    if re.match(r"^[A-Z][A-Z0-9_]*$", text):
+    if _RE_DETECT_CONSTANT.match(text):
         return "constant"
-    if re.match(r"^[a-z][a-z0-9]*(_[a-z0-9]+)*$", text):
+    if _RE_DETECT_SNAKE.match(text):
         return "snake"
-    if re.match(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$", text):
+    if _RE_DETECT_KEBAB.match(text):
         return "kebab"
-    if re.match(r"^[a-z][a-z0-9]*(\.[a-z0-9]+)*$", text):
+    if _RE_DETECT_DOT.match(text):
         return "dot"
-    if re.match(r"^[a-z][a-z0-9]*(/[a-z0-9]+)*$", text):
+    if _RE_DETECT_PATH.match(text):
         return "path"
-    if re.match(r"^[a-z][a-zA-Z0-9]*$", text) and re.search(r"[A-Z]", text):
+    if _RE_DETECT_CAMEL_FULL.match(text) and _RE_DETECT_CAMEL_UPPER.search(text):
         return "camel"
-    if re.match(r"^[A-Z][a-zA-Z0-9]*$", text):
+    if _RE_DETECT_PASCAL.match(text):
         return "pascal"
-    if re.match(r"^[A-Z][a-z]+(\s[A-Z][a-z]+)*$", text):
+    if _RE_DETECT_TITLE.match(text):
         return "title"
 
     # Check for mixed separators
@@ -106,7 +128,7 @@ def string_detect_case(text: str) -> str:
             "-" in text,
             "." in text,
             "/" in text,
-            bool(re.search(r"[a-z][A-Z]", text)),
+            bool(_RE_DETECT_MIXED.search(text)),
         )
     )
 
@@ -190,10 +212,8 @@ def string_is_title_case(text: str) -> bool:
 
 def string_random_token(length: int = 24) -> str:
     import secrets
-    import string
 
-    alphabet = string.ascii_letters + string.digits
-    return "".join(secrets.choice(alphabet) for _ in range(length))
+    return "".join(secrets.choice(_RANDOM_TOKEN_ALPHABET) for _ in range(length))
 
 
 def string_remove_prefix(string: str, prefix: str) -> str:
@@ -343,13 +363,13 @@ def _normalize(value: str) -> list[str]:
     value = value.strip()
 
     # Replace all non-alphanumeric separators with space
-    value = re.sub(r"[^A-Za-z0-9]+", " ", value)
+    value = _RE_NORM_SEP.sub(" ", value)
 
     # Split camelCase / PascalCase
-    value = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", value)
+    value = _RE_NORM_CAMEL.sub(r"\1 \2", value)
 
     # Split multiple caps like "JSONParser" → "JSON Parser"
-    value = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", value)
+    value = _RE_NORM_UPPER.sub(r"\1 \2", value)
 
     # Normalize spaces
     parts = value.lower().split()

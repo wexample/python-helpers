@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/string.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:11:35+00:00",
+  "last_rev": "3b3b6b3e1273128971f23c468872be14125161df",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "pre-compiled 13 regex patterns at module level, cached string_convert_case_map(), hoisted alphabet constant out of string_random_token",
+  "in_progress": null
+}
