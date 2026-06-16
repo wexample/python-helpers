@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/abstract_test_helpers.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:26:07+00:00",
+  "last_rev": "12dd9d1dc975dd241136ed1065f5f4175407d15d",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted deferred imports to module level and replaced `or []` with `or ()` singleton",
+  "in_progress": null
+}
