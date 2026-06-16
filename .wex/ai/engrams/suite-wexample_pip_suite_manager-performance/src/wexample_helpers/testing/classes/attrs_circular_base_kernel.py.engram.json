@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_circular_base_kernel.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:27:47+00:00",
+  "last_rev": "4105773de977ddcdc211cb94957156d233adcb57",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "test-only setup class; all methods called at most once per instantiation, no loops or repeated computations to optimize",
+  "in_progress": null
+}
