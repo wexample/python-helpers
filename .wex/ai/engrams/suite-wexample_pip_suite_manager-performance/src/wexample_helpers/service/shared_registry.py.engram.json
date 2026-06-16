@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/shared_registry.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:21:42+00:00",
+  "last_rev": "3a533e9e9959782ff7a3e5165a40669fb1197a25",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "shared(): single dict lookup via try/except replaces two-step in+attr access; drop no-op __init__ pass-through",
+  "in_progress": null
+}
