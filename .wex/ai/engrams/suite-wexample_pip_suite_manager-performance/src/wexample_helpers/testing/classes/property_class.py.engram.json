@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/property_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:33:25+00:00",
+  "last_rev": "0f00178497e3da089c73445c508f9107a7d44fd7",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "added __slots__ to PropertyClass to eliminate __dict__ overhead and speed up _value attribute access",
+  "in_progress": null
+}

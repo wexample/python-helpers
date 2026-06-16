@@ -2,6 +2,8 @@ from __future__ import annotations
 
 
 class PropertyClass:
+    __slots__ = ("_value",)
+
     def __init__(self) -> None:
         self._value = None
 
