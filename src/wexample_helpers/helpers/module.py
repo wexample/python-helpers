@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import hashlib
+import inspect
+import os
 import pathlib
 import sys
 from typing import TYPE_CHECKING, Any
@@ -19,15 +22,14 @@ def ensure_sys_path(path: pathlib.Path) -> None:
 
 def module_are_same(a: Any, b: Any) -> bool:
     """Determine if two class definition are the same class definition"""
-    import hashlib
-    import inspect
-    import os
-    import sys
-
     if a is b:
         return True
 
     if not isinstance(a, type) or not isinstance(b, type):
+        return False
+
+    # All comparison paths require equal qualnames — check cheaply before I/O
+    if getattr(a, "__qualname__", None) != getattr(b, "__qualname__", None):
         return False
 
     def class_signature(
@@ -109,8 +111,6 @@ def module_build_fqmn_from_paths(
 def module_collect_classes(
     module, base_class: type | None = None, skip_prefixes: list[str] | None = None
 ) -> dict[str, type]:
-    import inspect
-
     """
     Collects non-abstract classes from a module, optionally filtering by base class and prefix.
 

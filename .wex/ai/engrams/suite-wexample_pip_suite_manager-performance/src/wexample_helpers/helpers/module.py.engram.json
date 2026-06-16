@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/module.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:02:51+00:00",
+  "last_rev": "21412c09fe037ba96b2f35ad832968c197fcfcf3",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted hashlib/inspect/os to top-level, added qualname early-exit in module_are_same, fixed misplaced docstring in module_collect_classes",
+  "in_progress": null
+}
