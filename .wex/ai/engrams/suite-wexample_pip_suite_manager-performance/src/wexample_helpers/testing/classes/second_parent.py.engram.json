@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/second_parent.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:33:55+00:00",
+  "last_rev": "3591fec7370cff6966203c15ed03866e237c7adc",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only a test fixture with one attribute assignment and one f-string return; no hot path or optimizable logic",
+  "in_progress": null
+}
