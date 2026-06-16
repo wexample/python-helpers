@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/jinja.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:00:29+00:00",
+  "last_rev": "3f25be5c3249aa3f43c26da92b4007ff73e912a9",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "drop redundant str(p) in FileSystemLoader — Jinja2 3.x accepts os.PathLike directly",
+  "in_progress": null
+}

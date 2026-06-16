@@ -33,7 +33,7 @@ def render_template(
 
     paths = [p for p in (search_paths or []) if p.is_dir()]
     env = Environment(
-        loader=ChoiceLoader([FileSystemLoader(str(p)) for p in paths]),
+        loader=ChoiceLoader([FileSystemLoader(p) for p in paths]),
         keep_trailing_newline=True,
         autoescape=False,
     )
