@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/shell.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:09:49+00:00",
+  "last_rev": "bb190a46c5d1f7c0a5a7bc5ac73a51f843f5db2f",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate runtime imports (Mapping/Sequence/PathOrString already in TYPE_CHECKING), dropped redundant `import sys` in retry block, hoisted stdout/stderr writer selection out of per-line streaming hot path",
+  "in_progress": null
+}

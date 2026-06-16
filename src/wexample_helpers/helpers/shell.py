@@ -6,10 +6,7 @@ import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
-
-from wexample_helpers.const.types import PathOrString
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
@@ -146,8 +143,6 @@ def shell_run(
         e.duration = end - start  # type: ignore[attr-defined]
         if retries > 0:
             if retry_message:
-                import sys
-
                 sys.stdout.write(retry_message + "\n")
                 sys.stdout.flush()
             time.sleep(retry_delay)
@@ -368,17 +363,17 @@ async def shell_stream_async(
             s = line.decode(encoding, errors)
             writer(s)
 
-    def _stdout_writer(s: str) -> None:
-        if on_stdout is not None:
-            on_stdout(s)
-        else:
+    if on_stdout is not None:
+        _stdout_writer = on_stdout
+    else:
+        def _stdout_writer(s: str) -> None:
             sys.stdout.write(s)
             sys.stdout.flush()
 
-    def _stderr_writer(s: str) -> None:
-        if on_stderr is not None:
-            on_stderr(s)
-        else:
+    if on_stderr is not None:
+        _stderr_writer = on_stderr
+    else:
+        def _stderr_writer(s: str) -> None:
             sys.stderr.write(s)
             sys.stderr.flush()
 
