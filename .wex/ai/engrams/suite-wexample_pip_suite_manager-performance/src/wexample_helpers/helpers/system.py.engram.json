@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/system.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:12:09+00:00",
+  "last_rev": "7f92db29791945c5d42c43389950f6e402f73f71",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted sys and Path imports to module level, removing per-call import overhead and TYPE_CHECKING guard",
+  "in_progress": null
+}
