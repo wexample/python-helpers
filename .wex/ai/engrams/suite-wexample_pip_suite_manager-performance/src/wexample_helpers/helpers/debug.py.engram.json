@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/debug.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:51:18+00:00",
+  "last_rev": "001be9e1e3817b5273561efc2b94e4c6119e3f95",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted `import time` and `_DEBUG_TIMERS` dict from module bottom to top-level, added type annotation",
+  "in_progress": null
+}

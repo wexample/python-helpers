@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import time
 from typing import Any
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
+
+_DEBUG_TIMERS: dict[str, float] = {}
 
 
 def dd(*args, **kwargs) -> None:
@@ -108,8 +111,3 @@ def debug_trace_and_die(
 
 def dt(*args, **kwargs) -> None:
     debug_trace_and_die(*args, **kwargs)
-
-
-import time
-
-_DEBUG_TIMERS = {}
