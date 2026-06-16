@@ -14,15 +14,6 @@ if TYPE_CHECKING:
 _handler = None
 
 
-def _get_handler():
-    global _handler
-    if _handler is None:
-        from wexample_helpers.common.exception.handler import ExceptionHandler
-
-        _handler = ExceptionHandler()
-    return _handler
-
-
 def error_format(
     error: Exception | None = None,
     path_style: DebugPathStyle = DebugPathStyle.FULL,
@@ -39,3 +30,12 @@ def error_get_truncate_index(frames: list[TraceFrame], error: Exception) -> int:
     """Returns the index where to truncate the trace based on error type. Returns -1 if no truncation needed."""
     # Delegate to ExceptionHandler internals to avoid duplication, but keep public API.
     return _get_handler()._get_truncate_index(frames, error)  # type: ignore[attr-defined]
+
+
+def _get_handler() -> ExceptionHandler:
+    global _handler
+    if _handler is None:
+        from wexample_helpers.common.exception.handler import ExceptionHandler
+
+        _handler = ExceptionHandler()
+    return _handler

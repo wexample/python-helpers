@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import string as _string
 from collections.abc import Callable
-from functools import lru_cache
+from functools import cache, lru_cache
 
 # Pre-compiled regex patterns for string_detect_case
 _RE_DETECT_CONSTANT = re.compile(r"^[A-Z][A-Z0-9_]*$")
@@ -77,7 +77,7 @@ def string_convert_case(text: str, to_format: str) -> str:
     return converters[to_format](text)
 
 
-@lru_cache(maxsize=None)
+@cache
 def string_convert_case_map() -> dict[str, Callable[[str], str]]:
     return {
         "snake": string_to_snake_case,
