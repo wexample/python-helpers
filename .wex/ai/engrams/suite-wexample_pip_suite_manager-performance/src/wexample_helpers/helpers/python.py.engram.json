@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/python.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:07:24+00:00",
+  "last_rev": "467afba2ed0c5f67907257b62356de34fa77ac8a",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted regex to module-level compiled constants, cached __annotations__ via getattr, short-circuit second regex search",
+  "in_progress": null
+}
