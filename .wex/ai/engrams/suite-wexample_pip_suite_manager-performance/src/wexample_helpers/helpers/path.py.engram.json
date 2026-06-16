@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/path.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:04:40+00:00",
+  "last_rev": "8678614a995fa172eef7f1f12e71d3016cd892ea",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "dropped root_dest.resolve() syscall and inlined single-use relative_path local in path_rebase",
+  "in_progress": null
+}

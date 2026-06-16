@@ -18,10 +18,5 @@ def path_rebase(
     """
     root_src = Path(root_src).resolve()
     path_src = Path(path_src).resolve()
-    root_dest = Path(root_dest).resolve()
 
-    # Compute the relative path from the original root
-    relative_path = path_src.relative_to(root_src)
-
-    # Append it to the new root
-    return str(root_dest / relative_path)
+    return str(Path(root_dest) / path_src.relative_to(root_src))
