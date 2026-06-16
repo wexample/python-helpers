@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/json.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:01:23+00:00",
+  "last_rev": "b96a58c8ab3cde8be0369b62aba8b136287b62ce",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "drop os.path.exists syscall via EAFP in json_load_if_valid; narrow bare except to ValueError/JSONDecodeError; fix any→Any annotation",
+  "in_progress": null
+}
