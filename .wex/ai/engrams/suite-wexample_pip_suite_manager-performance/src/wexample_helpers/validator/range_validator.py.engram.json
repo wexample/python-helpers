@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/validator/range_validator.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:37:16+00:00",
+  "last_rev": "a4b8616ba35afa55033e92e8e5ff455c60a34dd8",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached self.min_value/self.max_value to locals in validate and _get_default_error_message to cut repeated attribute lookups",
+  "in_progress": null
+}

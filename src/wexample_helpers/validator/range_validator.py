@@ -31,22 +31,24 @@ class RangeValidator(AbstractValidator):
         if not isinstance(value, (int, float)):
             return False
 
-        if self.min_value is not None and value < self.min_value:
+        min_value = self.min_value
+        if min_value is not None and value < min_value:
             return False
 
-        if self.max_value is not None and value > self.max_value:
+        max_value = self.max_value
+        if max_value is not None and value > max_value:
             return False
 
         return True
 
     def _get_default_error_message(self, value: Any) -> str:
-        if self.min_value is not None and self.max_value is not None:
-            return (
-                f"Value {value} must be between {self.min_value} and {self.max_value}"
-            )
-        elif self.min_value is not None:
-            return f"Value {value} must be at least {self.min_value}"
-        elif self.max_value is not None:
-            return f"Value {value} must be at most {self.max_value}"
+        min_value = self.min_value
+        max_value = self.max_value
+        if min_value is not None and max_value is not None:
+            return f"Value {value} must be between {min_value} and {max_value}"
+        elif min_value is not None:
+            return f"Value {value} must be at least {min_value}"
+        elif max_value is not None:
+            return f"Value {value} must be at most {max_value}"
         else:
             return f"Value {value} is invalid"
