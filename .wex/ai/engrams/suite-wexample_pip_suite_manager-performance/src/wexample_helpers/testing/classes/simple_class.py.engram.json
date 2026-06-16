@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/simple_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:34:27+00:00",
+  "last_rev": "b554a4db15432fcc75d8dd2bc59826d02ac1be8c",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "trivial stub: single __init__ with one attribute assignment, no hot path or optimizable patterns",
+  "in_progress": null
+}
