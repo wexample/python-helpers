@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_circular_service.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:28:26+00:00",
+  "last_rev": "86804df49ff4b8284fe28a5b1432c2300ab2ec99",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replace k.__class__.__name__ with type(k).__name__ to avoid descriptor lookup in advanced_kernel",
+  "in_progress": null
+}

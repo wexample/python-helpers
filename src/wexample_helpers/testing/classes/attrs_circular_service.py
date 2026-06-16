@@ -24,7 +24,7 @@ class Service:
     def advanced_kernel(self) -> AdvancedKernel | None:
         # Only available when attached to an AdvancedKernel
         k = self.kernel
-        if k is not None and k.__class__.__name__ == "AdvancedKernel":
+        if k is not None and type(k).__name__ == "AdvancedKernel":
             # Avoid direct import to keep circular hints safe at runtime
             return k  # type: ignore[return-value]
         return None
