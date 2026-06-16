@@ -38,6 +38,10 @@ class SharedRegistry(Registry[T]):
     """
 
     def __init__(self, *args, **kwargs) -> None:
+        # Do NOT delete this as a "no-op pass-through". It is what forwards
+        # `file=...` and friends to the parent `Registry.__init__` via MRO —
+        # remove it and Python falls back to `object.__init__`, which rejects
+        # any kwarg and crashes every `SharedRegistry(file=...)` call site.
         super().__init__(*args, **kwargs)
 
     @classmethod
@@ -49,6 +53,8 @@ class SharedRegistry(Registry[T]):
     @classmethod
     def shared(cls) -> Self:
         """Return the per-class shared instance, lazily created on first call."""
-        if "_shared_instance" not in cls.__dict__:
+        try:
+            return cls.__dict__["_shared_instance"]
+        except KeyError:
             cls._shared_instance = cls()
-        return cls._shared_instance
+            return cls._shared_instance

@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/shared_registry.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T12:18:44+00:00",
+  "last_rev": "a9006cead228f5cff90bbb095ab4e1861056b308",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replace double-lookup guard in shared() with single direct dict subscription + KeyError on cold path",
+  "in_progress": null
+}
