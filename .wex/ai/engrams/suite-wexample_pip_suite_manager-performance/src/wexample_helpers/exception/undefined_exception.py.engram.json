@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/exception/undefined_exception.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:41:53+00:00",
+  "last_rev": "ec200ad12b78e51b068e32963fde1197d517213f",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "frozenset for _BASE_FIELD_NAMES constant; {**self.data} fast-path copy in collect_data",
+  "in_progress": null
+}

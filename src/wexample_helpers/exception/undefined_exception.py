@@ -10,14 +10,14 @@ from wexample_helpers.decorator.base_class import base_class
 
 # Base fields serialized explicitly by to_dict(); every other public field is
 # considered domain-specific payload and merged into the "data" section.
-_BASE_FIELD_NAMES = {
+_BASE_FIELD_NAMES: frozenset[str] = frozenset({
     "message",
     "data",
     "cause",
     "previous",
     "suggestions",
     "exception_id",
-}
+})
 
 
 @base_class
@@ -71,7 +71,7 @@ class UndefinedException(Exception):
         This lets subclasses expose their context as plain ``public_field``s
         instead of hand-building a ``data={...}`` dict.
         """
-        data = dict(self.data)
+        data = {**self.data}
         for field in attrs.fields(type(self)):
             name = field.name
             if name in _BASE_FIELD_NAMES or name.startswith("_"):
