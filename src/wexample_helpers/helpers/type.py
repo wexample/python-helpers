@@ -13,6 +13,9 @@ from typing import (
 if TYPE_CHECKING:
     from types import UnionType
 
+# Module-level constant: avoids re-allocating this set on every type_is_generic() call.
+_GENERIC_TYPES: frozenset = frozenset({list, dict, tuple, Union})
+
 
 def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> bool:
     """Helper to recursively validate parameter types for generics like Dict, List, Set, Tuple, and Union."""
@@ -47,10 +50,6 @@ def type_generic_value_is_valid(value: Any, allowed_type: type | UnionType) -> b
 
         # If we had TypedDict errors and value is dict, raise specific error
         if typed_dict_errors and isinstance(value, dict):
-            from wexample_helpers.exception.not_allowed_variable_type_exception import (
-                NotAllowedVariableTypeException,
-            )
-
             raise NotAllowedVariableTypeException(
                 variable_type=f"dict validation failed: {'; '.join(typed_dict_errors)}",
                 variable_value=value,
@@ -205,14 +204,11 @@ def type_is_compatible(actual_type: type, allowed_type: type) -> bool:
 
 def type_is_generic(type_value: Any) -> bool:
     """Detects if a given type is a generic type like List, Dict, Union"""
-    # Set of known generic types for quick membership testing
-    generic_types = {list, dict, tuple, Union}
-
     # Extract the base type of type_value using get_origin, or use type_value itself if get_origin is None
     type_value = get_origin(type_value) or type_value
 
-    # Check if type_value is a known generic type
-    return type_value in generic_types
+    # Check if type_value is a known generic type (uses module-level frozenset to avoid per-call allocation)
+    return type_value in _GENERIC_TYPES
 
 
 def type_is_isinstance(value: Any, allowed_type: Any) -> bool:

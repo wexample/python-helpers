@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/type.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:14:19+00:00",
+  "last_rev": "40d191b09da1307688aa68de7af80b328d2308cf",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted _GENERIC_TYPES frozenset to module level and removed duplicate NotAllowedVariableTypeException import in type_generic_value_is_valid",
+  "in_progress": null
+}
