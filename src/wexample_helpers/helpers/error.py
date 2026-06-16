@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cache
 from typing import TYPE_CHECKING
 
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
@@ -8,10 +9,6 @@ if TYPE_CHECKING:
     # Backward-compat type alias to new frame class; TraceFrame is not exported
     # separately from frame.py, so keep only the aliased import.
     from wexample_helpers.common.exception.frame import ExceptionFrame as TraceFrame
-
-# Module-level singleton — ExceptionHandler and its TraceFormatter are stateless;
-# reusing one instance eliminates per-call constructor overhead.
-_handler = None
 
 
 def error_format(
@@ -32,10 +29,11 @@ def error_get_truncate_index(frames: list[TraceFrame], error: Exception) -> int:
     return _get_handler()._get_truncate_index(frames, error)  # type: ignore[attr-defined]
 
 
-def _get_handler() -> ExceptionHandler:
-    global _handler
-    if _handler is None:
-        from wexample_helpers.common.exception.handler import ExceptionHandler
+@cache
+def _get_handler():
+    # @cache (C-level) replaces the manual global+None-check pattern;
+    # ExceptionHandler and its TraceFormatter are stateless so a single
+    # instance is safe to reuse across all callers.
+    from wexample_helpers.common.exception.handler import ExceptionHandler
 
-        _handler = ExceptionHandler()
-    return _handler
+    return ExceptionHandler()
