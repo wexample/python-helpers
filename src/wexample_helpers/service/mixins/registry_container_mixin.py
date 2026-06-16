@@ -25,9 +25,10 @@ class RegistryContainerMixin(BaseClass):
     ) -> Registry:
         """Get a registry by its name."""
         registry_name = f"_{name}_registry"
-        if registry_name not in self._registries:
+        registry = self._registries.get(registry_name)
+        if registry is None:
             return self.set_registry(registry_name, registry_class_type)
-        return self._registries[registry_name]
+        return registry
 
     def register_item(
         self, registry_name: str, item: Any, key: str | None = None

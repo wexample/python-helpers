@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/service/mixins/registry_container_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:17:50+00:00",
+  "last_rev": "97990890021572e82ef754d4c7c59bca10faa571",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replace double dict lookup (in + getitem) with single .get() in get_registry hot path",
+  "in_progress": null
+}
