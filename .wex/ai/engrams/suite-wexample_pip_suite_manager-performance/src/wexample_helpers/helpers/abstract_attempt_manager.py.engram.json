@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/abstract_attempt_manager.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T07:43:08+00:00",
+  "last_rev": "6c5d14fcbd00973fc6c8859ded00aa2f9cf55a8f",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted on_success/retry/error callbacks out of run loop; replaced join+strip in _format_exception_message with direct branching",
+  "in_progress": null
+}

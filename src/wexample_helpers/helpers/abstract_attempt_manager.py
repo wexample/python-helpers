@@ -59,13 +59,16 @@ class AbstractAttemptManager(Generic[T]):
         last_error: Exception | None = None
         last_message: str = ""
         max_attempts = self.max_attempts
+        on_success_callback = self.on_success_callback
+        on_retry_callback = self.on_retry_callback
+        on_error_callback = self.on_error_callback
 
         for attempt in range(1, max_attempts + 1):
             outcome = self._attempt(attempt)
 
             if outcome.success:
-                if self.on_success_callback:
-                    self.on_success_callback(attempt)
+                if on_success_callback:
+                    on_success_callback(attempt)
                 return outcome.value  # type: ignore[return-value]
 
             last_error, last_message = outcome.error, outcome.message
@@ -74,8 +77,8 @@ class AbstractAttemptManager(Generic[T]):
                 break
 
             delay = self._get_delay_seconds(attempt)
-            if self.on_retry_callback:
-                self.on_retry_callback(
+            if on_retry_callback:
+                on_retry_callback(
                     attempt,
                     max_attempts,
                     delay,
@@ -84,8 +87,8 @@ class AbstractAttemptManager(Generic[T]):
                 )
             time.sleep(delay)
 
-        if last_error is not None and self.on_error_callback:
-            self.on_error_callback(last_error, last_message)
+        if last_error is not None and on_error_callback:
+            on_error_callback(last_error, last_message)
 
         self._handle_exhaustion(last_error, last_message)
         # Defensive: _handle_exhaustion must raise.
@@ -95,10 +98,11 @@ class AbstractAttemptManager(Generic[T]):
         raise NotImplementedError
 
     def _format_exception_message(self, exc: Exception) -> str:
-        stderr = getattr(exc, "stderr", None) or ""
-        stdout = getattr(exc, "stdout", None) or ""
-        combined = "\n".join([stderr.strip(), stdout.strip()]).strip()
-        return combined or str(exc)
+        stderr = (getattr(exc, "stderr", None) or "").strip()
+        stdout = (getattr(exc, "stdout", None) or "").strip()
+        if stderr and stdout:
+            return f"{stderr}\n{stdout}"
+        return stderr or stdout or str(exc)
 
     def _get_delay_seconds(self, attempt: int) -> int:
         if self.delay_seconds_callback is not None:
