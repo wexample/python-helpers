@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/parent_class.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:32:53+00:00",
+  "last_rev": "df36325217ca0efa6cc19102393f32ae5b740207",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "trivial testing fixture: two attribute assignments and one O(1) getter — no hot path to optimize",
+  "in_progress": null
+}
