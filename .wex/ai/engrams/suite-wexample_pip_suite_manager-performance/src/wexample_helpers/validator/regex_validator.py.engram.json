@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/validator/regex_validator.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:38:13+00:00",
+  "last_rev": "a610ddde28cdcf074627d9ce9775c9a8ade4b198",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "validate() already optimal: patterns pre-compiled once, lazy any()-generator short-circuits, early isinstance guard; no hot-path waste to remove",
+  "in_progress": null
+}
