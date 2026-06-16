@@ -25,7 +25,7 @@ class AbstractValidator(BaseClass):
         Returns:
             Error message string
         """
-        if self.error_message:
+        if self.error_message is not None:
             return self.error_message
         return self._get_default_error_message(value)
 

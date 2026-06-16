@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/validator/abstract_validator.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:36:14+00:00",
+  "last_rev": "8d59b36200be77246dac213f3140abb800831a0f",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "replace truthiness check with identity check (`is not None`) in get_error_message to avoid str.__bool__() call",
+  "in_progress": null
+}
