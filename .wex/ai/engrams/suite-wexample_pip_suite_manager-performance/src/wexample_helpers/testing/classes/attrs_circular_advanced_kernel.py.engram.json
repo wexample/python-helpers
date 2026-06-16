@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_circular_advanced_kernel.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:27:03+00:00",
+  "last_rev": "02a4f8fe752e507d43f3bf41e3bab428be2cadff",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "single field declaration + deferred import for circular-import safety; no hot path to optimize",
+  "in_progress": null
+}
