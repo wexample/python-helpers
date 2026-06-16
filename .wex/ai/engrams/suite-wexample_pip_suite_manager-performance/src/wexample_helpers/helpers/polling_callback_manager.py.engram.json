@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/helpers/polling_callback_manager.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:05:26+00:00",
+  "last_rev": "e5ac513739dca30a1e5f4970f07c142b800f0846",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached self.is_success_callback locally and dropped redundant bool() in _attempt hot path",
+  "in_progress": null
+}

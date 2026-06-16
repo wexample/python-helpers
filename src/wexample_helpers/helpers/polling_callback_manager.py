@@ -51,8 +51,9 @@ class PollingCallbackManager(AbstractAttemptManager[T]):
                 should_retry=True,
             )
 
-        if self.is_success_callback is not None:
-            success = bool(self.is_success_callback(result))
+        is_success_callback = self.is_success_callback
+        if is_success_callback is not None:
+            success = is_success_callback(result)
         else:
             success = result is not None
 
