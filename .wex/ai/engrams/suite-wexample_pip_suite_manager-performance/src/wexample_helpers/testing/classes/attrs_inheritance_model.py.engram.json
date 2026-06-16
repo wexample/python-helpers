@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_inheritance_model.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:30:34+00:00",
+  "last_rev": "6a7c6478027c107e275ec311af5846e5cdd86cad",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only static field declarations and a single-assignment post-init; no hot path to optimize",
+  "in_progress": null
+}
