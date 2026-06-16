@@ -10,19 +10,20 @@ class AttrsInheritanceMain(AttrsInheritanceConfig, AttrsInheritanceModel):
     """Main class demonstrating multiple inheritance with attrs and mixins."""
 
     def __init__(self, **data) -> None:
+        _get = data.get
         # Initialize attrs model first (it expects fields as kwargs)
         AttrsInheritanceModel.__init__(
             self,
-            name=data.get("name", ""),
-            tags=data.get("tags", []),
-            description=data.get("description"),
-            version=data.get("version", "1.0.0"),
-            enabled=data.get("enabled", True),
-            priority=data.get("priority", 0),
+            name=_get("name", ""),
+            tags=_get("tags", []),
+            description=_get("description"),
+            version=_get("version", "1.0.0"),
+            enabled=_get("enabled", True),
+            priority=_get("priority", 0),
         )
         # Then initialize config
         AttrsInheritanceConfig.__init__(
-            self, environment=data.get("environment", "development")
+            self, environment=_get("environment", "development")
         )
 
     def get_full_state(self) -> dict[str, Any]:

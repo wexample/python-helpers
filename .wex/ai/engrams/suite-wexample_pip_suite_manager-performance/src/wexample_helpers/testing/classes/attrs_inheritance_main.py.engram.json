@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/attrs_inheritance_main.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:29:56+00:00",
+  "last_rev": "a3f42cf37cff6b8425b02f245a48efe92f3da2a7",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted data.get to local _get in __init__, replacing 7 LOAD_ATTR with LOAD_FAST",
+  "in_progress": null
+}
