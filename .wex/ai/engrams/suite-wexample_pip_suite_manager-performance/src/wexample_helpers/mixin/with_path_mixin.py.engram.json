@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/mixin/with_path_mixin.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:17:13+00:00",
+  "last_rev": "cafdc51d9f849039fd8fe5bac9a7444658e4093a",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed redundant `from pathlib import Path` inside set_path; Path already imported at module level",
+  "in_progress": null
+}
