@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_helpers/testing/classes/first_parent.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-16T08:31:09+00:00",
+  "last_rev": "cf9e1e94a2659a4201b76d52d6f79835e081c2d4",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "trivial testing fixture with two one-liner methods, no hot path or optimization opportunity",
+  "in_progress": null
+}
