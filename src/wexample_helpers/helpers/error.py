@@ -30,7 +30,7 @@ def error_get_truncate_index(frames: list[TraceFrame], error: Exception) -> int:
 
 
 @cache
-def _get_handler():
+def _get_handler() -> ExceptionHandler:
     # @cache (C-level) replaces the manual global+None-check pattern;
     # ExceptionHandler and its TraceFormatter are stateless so a single
     # instance is safe to reuse across all callers.
