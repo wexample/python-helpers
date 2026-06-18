@@ -19,6 +19,7 @@ DICT_ITEM_EXISTS_ACTION_MERGE = "merge"
 DICT_ITEM_EXISTS_ACTION_REPLACE = "replace"
 
 _INTERP_VAR_PATTERN = re.compile(r"\$\{([^}]+)\}")
+_FULL_VAR_PATTERN = re.compile(r"^\s*\$\{([^}]+)\}\s*$")
 _PRIMITIVE_TYPES = (str, int, float, bool, bytes, type(None))
 _SORT_BY_VALUE = operator.itemgetter(1)
 
@@ -98,13 +99,46 @@ def dict_interpolate(value: Any, variables: StringKeysDict) -> Any:
         return {k: dict_interpolate(v, variables) for k, v in value.items()}
 
     if isinstance(value, list):
-        return [dict_interpolate(v, variables) for v in value]
+        out: list[Any] = []
+        for item in value:
+            interpolated = dict_interpolate(item, variables)
+            # List-splat: when a list entry is exactly `${VAR}` and VAR
+            # resolves to a list, flatten its contents into the surrounding
+            # list (mirrors `MASTER_APP_PATHS` behaviour in master configs).
+            # The check on the original item being a string ensures we don't
+            # flatten lists that were nested intentionally.
+            if isinstance(item, str) and isinstance(interpolated, list):
+                out.extend(interpolated)
+            else:
+                out.append(interpolated)
+        return out
 
     if isinstance(value, str):
-        return _INTERP_VAR_PATTERN.sub(
-            lambda m: variables.get(m.group(1), f"${{{m.group(1)}}}"),
-            value,
-        )
+        # Whole-string `${VAR}` returns the raw variable value (list, dict,
+        # scalar — caller decides how to use it). Mixed-content strings fall
+        # back to per-occurrence string substitution.
+        full_match = _FULL_VAR_PATTERN.match(value)
+        if full_match:
+            name = full_match.group(1)
+            if name in variables:
+                return variables[name]
+
+        def _inline_sub(m: "re.Match[str]") -> str:
+            name = m.group(1)
+            if name not in variables:
+                return m.group(0)
+            v = variables[name]
+            # Stringifying a list/dict mid-string almost always indicates a
+            # config mistake; refuse loudly so the user knows they should use
+            # the full `${VAR}` form to splat it instead.
+            if isinstance(v, (list, dict)):
+                raise ValueError(
+                    f"Cannot interpolate non-scalar variable ${{{name}}} inside "
+                    f"string {value!r}. Use it as the sole content of the entry."
+                )
+            return str(v)
+
+        return _INTERP_VAR_PATTERN.sub(_inline_sub, value)
 
     return value
 
