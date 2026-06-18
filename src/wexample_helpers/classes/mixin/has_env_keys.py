@@ -26,7 +26,7 @@ class HasEnvKeys(BaseClass):
     )
 
     def get_env_parameter(self, key: str, default: str | None = UNSET) -> Any:
-        from wexample_helpers.errors.key_not_found_error import KeyNotFoundError
+        from wexample_helpers.error.key_not_found_error import KeyNotFoundError
 
         if key not in self.env_config:
             if default is not UNSET:
@@ -98,7 +98,7 @@ class HasEnvKeys(BaseClass):
         Validates that all required environment variables are set.
         Raises MissingRequiredEnvVarError if any required variable is missing.
         """
-        from wexample_helpers.errors.missing_required_env_var_error import (
+        from wexample_helpers.error.missing_required_env_var_error import (
             MissingRequiredEnvVarError,
         )
 
