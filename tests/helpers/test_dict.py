@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 
 def test_dict_get_first_missing_key() -> None:
     from wexample_helpers.helpers.dict import dict_get_first_missing_key
@@ -25,6 +27,61 @@ def test_dict_has_item_by_path() -> None:
     assert dict_has_item_by_path(data, "a.b.c") is True
     assert dict_has_item_by_path(data, "a.b.d") is False
     assert dict_has_item_by_path(data, "x.y") is False
+
+
+def test_dict_interpolate_flattens_full_var_list_in_list() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate(["${L}", "x"], {"L": ["a", "b"]}) == ["a", "b", "x"]
+
+
+def test_dict_interpolate_full_var_returns_list_as_is() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate("${L}", {"L": [1, 2]}) == [1, 2]
+
+
+def test_dict_interpolate_full_var_returns_scalar() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate("${FOO}", {"FOO": "bar"}) == "bar"
+
+
+def test_dict_interpolate_inline_non_scalar_raises() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    with pytest.raises(ValueError, match="Cannot interpolate non-scalar variable"):
+        dict_interpolate("${L}/sub", {"L": [1, 2]})
+
+
+def test_dict_interpolate_inline_substitution() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate("${LOCAL}/wex", {"LOCAL": "/p"}) == "/p/wex"
+
+
+def test_dict_interpolate_inline_unknown_stays_literal() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate("a/${X}/b", {}) == "a/${X}/b"
+
+
+def test_dict_interpolate_passes_through_non_containers() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate(42, {}) == 42
+
+
+def test_dict_interpolate_recurses_into_dict() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate({"k": "${FOO}"}, {"FOO": "bar"}) == {"k": "bar"}
+
+
+def test_dict_interpolate_unknown_full_var_stays_literal() -> None:
+    from wexample_helpers.helpers.dict import dict_interpolate
+
+    assert dict_interpolate("${UNKNOWN}", {}) == "${UNKNOWN}"
 
 
 def test_dict_merge() -> None:

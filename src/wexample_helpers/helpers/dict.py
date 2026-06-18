@@ -123,7 +123,7 @@ def dict_interpolate(value: Any, variables: StringKeysDict) -> Any:
             if name in variables:
                 return variables[name]
 
-        def _inline_sub(m: "re.Match[str]") -> str:
+        def _inline_sub(m: re.Match[str]) -> str:
             name = m.group(1)
             if name not in variables:
                 return m.group(0)
