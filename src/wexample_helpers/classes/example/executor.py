@@ -11,7 +11,7 @@ from wexample_helpers.helper.module import (
 )
 from wexample_helpers.helper.string import string_to_pascal_case
 from wexample_helpers.mixin.with_entrypoint_path_mixin import WithEntrypointPathMixin
-from wexample_helpers.service.mixins.registry_container_mixin import (
+from wexample_helpers.service.mixin.registry_container_mixin import (
     RegistryContainerMixin,
 )
 
