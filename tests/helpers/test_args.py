@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 def test_args_convert_dict_to_snake_dict() -> None:
-    from wexample_helpers.helpers.args import args_convert_dict_to_snake_dict
+    from wexample_helpers.helper.args import args_convert_dict_to_snake_dict
 
     input_dict = {"camelCase": 1, "PascalCase": 2}
     result = args_convert_dict_to_snake_dict(input_dict)
@@ -10,7 +10,7 @@ def test_args_convert_dict_to_snake_dict() -> None:
 
 
 def test_args_in_function() -> None:
-    from wexample_helpers.helpers.args import args_in_function
+    from wexample_helpers.helper.args import args_in_function
 
     def test_func(arg1, arg2=None) -> None:
         pass
@@ -21,7 +21,7 @@ def test_args_in_function() -> None:
 
 
 def test_args_is_basic_value() -> None:
-    from wexample_helpers.helpers.args import args_is_basic_value
+    from wexample_helpers.helper.args import args_is_basic_value
 
     # Test simple types
     assert args_is_basic_value("string") is True
@@ -42,28 +42,28 @@ def test_args_is_basic_value() -> None:
 
 
 def test_args_parse_dict() -> None:
-    from wexample_helpers.helpers.args import args_parse_dict
+    from wexample_helpers.helper.args import args_parse_dict
 
     assert args_parse_dict('{"key": "value"}') == {"key": "value"}
     assert args_parse_dict("invalid") == {}
 
 
 def test_args_parse_list() -> None:
-    from wexample_helpers.helpers.args import args_parse_list
+    from wexample_helpers.helper.args import args_parse_list
 
     assert args_parse_list("[1, 2, 3]") == [1, 2, 3]
     assert args_parse_list("[a, b, c]") == []  # Invalid list returns empty
 
 
 def test_args_parse_list_or_strings_list() -> None:
-    from wexample_helpers.helpers.args import args_parse_list_or_strings_list
+    from wexample_helpers.helper.args import args_parse_list_or_strings_list
 
     assert args_parse_list_or_strings_list("[1, 2, 3]") == [1, 2, 3]
     assert args_parse_list_or_strings_list("a b c") == ["a", "b", "c"]
 
 
 def test_args_parse_one() -> None:
-    from wexample_helpers.helpers.args import args_parse_one
+    from wexample_helpers.helper.args import args_parse_one
 
     assert args_parse_one("123") == 123
     assert args_parse_one("true") == "true"  # String, not boolean
@@ -72,7 +72,7 @@ def test_args_parse_one() -> None:
 
 
 def test_args_push_one() -> None:
-    from wexample_helpers.helpers.args import args_push_one
+    from wexample_helpers.helper.args import args_push_one
 
     args = []
     args_push_one(args, "test", "value")
@@ -83,7 +83,7 @@ def test_args_push_one() -> None:
 
 
 def test_args_replace_one() -> None:
-    from wexample_helpers.helpers.args import args_replace_one
+    from wexample_helpers.helper.args import args_replace_one
 
     args = ["--test", "value", "--other", "data"]
     result = args_replace_one(args, "test", "new_value")
@@ -92,7 +92,7 @@ def test_args_replace_one() -> None:
 
 
 def test_args_shift_one() -> None:
-    from wexample_helpers.helpers.args import args_shift_one
+    from wexample_helpers.helper.args import args_shift_one
 
     args = ["--test", "value", "--flag"]
 
@@ -108,7 +108,7 @@ def test_args_shift_one() -> None:
 
 
 def test_args_split_arg_array() -> None:
-    from wexample_helpers.helpers.args import args_split_arg_array
+    from wexample_helpers.helper.args import args_split_arg_array
 
     # Test string input
     assert args_split_arg_array("a,b,c") == ["a", "b", "c"]
