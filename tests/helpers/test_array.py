@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 def test_array_replace_value() -> None:
-    from wexample_helpers.helpers.array import array_replace_value
+    from wexample_helpers.helper.array import array_replace_value
 
     # Test with numbers
     assert array_replace_value([1, 2, 1, 3], 1, 4) == [4, 2, 4, 3]
@@ -12,7 +12,7 @@ def test_array_replace_value() -> None:
 
 
 def test_array_swap() -> None:
-    from wexample_helpers.helpers.array import array_swap
+    from wexample_helpers.helper.array import array_swap
 
     # Test with numbers
     array = [1, 2]
@@ -25,7 +25,7 @@ def test_array_swap() -> None:
 
 
 def test_array_unique() -> None:
-    from wexample_helpers.helpers.array import array_unique
+    from wexample_helpers.helper.array import array_unique
 
     # Test with numbers
     assert sorted(array_unique([1, 2, 2, 3, 1])) == [1, 2, 3]
