@@ -12,7 +12,7 @@ Hot paths targeted:
 
 from __future__ import annotations
 
-from wexample_helpers.helpers.dict import (
+from wexample_helpers.helper.dict import (
     dict_get_item_by_path,
     dict_has_item_by_path,
     dict_interpolate,
