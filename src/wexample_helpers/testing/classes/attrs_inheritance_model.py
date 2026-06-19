@@ -3,8 +3,8 @@ from __future__ import annotations
 from ...classes.base_class import BaseClass
 from ...classes.field import public_field
 from ...decorator.base_class import base_class
-from ..mixins.private_fields_mixin import PrivateFieldsMixin
-from ..mixins.public_fields_mixin import PublicFieldsMixin
+from ..mixin.private_fields_mixin import PrivateFieldsMixin
+from ..mixin.public_fields_mixin import PublicFieldsMixin
 
 
 @base_class
