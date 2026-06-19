@@ -19,7 +19,7 @@ from wexample_helpers.helper.dict import (
     dict_merge,
     dict_set_item_by_path,
 )
-from wexample_helpers.helpers.string import (
+from wexample_helpers.helper.string import (
     _normalize,
     string_detect_case,
     string_remove_prefix,
@@ -263,7 +263,7 @@ def test_dict_interpolate_no_vars(benchmark):
 
 
 def test_type_validate_simple_str(benchmark):
-    from wexample_helpers.helpers.type import type_generic_value_is_valid
+    from wexample_helpers.helper.type import type_generic_value_is_valid
 
     benchmark(type_generic_value_is_valid, "hello", str)
 
@@ -272,7 +272,7 @@ def test_type_validate_union(benchmark):
     """Union[str, int] — iterates over args until match."""
     from typing import Union
 
-    from wexample_helpers.helpers.type import type_generic_value_is_valid
+    from wexample_helpers.helper.type import type_generic_value_is_valid
 
     benchmark(type_generic_value_is_valid, 42, Union[str, int])
 
@@ -281,12 +281,12 @@ def test_type_validate_optional(benchmark):
     """Optional[str] (= Union[str, None]) — common in attrs fields."""
     from typing import Optional
 
-    from wexample_helpers.helpers.type import type_generic_value_is_valid
+    from wexample_helpers.helper.type import type_generic_value_is_valid
 
     benchmark(type_generic_value_is_valid, "value", Optional[str])
 
 
 def test_type_validate_list_of_str(benchmark):
-    from wexample_helpers.helpers.type import type_generic_value_is_valid
+    from wexample_helpers.helper.type import type_generic_value_is_valid
 
     benchmark(type_generic_value_is_valid, ["a", "b", "c"], list[str])

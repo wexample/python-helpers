@@ -4,7 +4,7 @@ import json
 
 
 def test_json_load(tmp_path) -> None:
-    from wexample_helpers.helpers.json import json_load
+    from wexample_helpers.helper.json import json_load
 
     # Create test file
     test_file = tmp_path / "test.json"
@@ -32,7 +32,7 @@ def test_json_load(tmp_path) -> None:
 
 
 def test_json_load_if_valid(tmp_path) -> None:
-    from wexample_helpers.helpers.json import json_load_if_valid
+    from wexample_helpers.helper.json import json_load_if_valid
 
     # Create test files
     valid_json_file = tmp_path / "valid.json"
@@ -55,7 +55,7 @@ def test_json_load_if_valid(tmp_path) -> None:
 
 
 def test_json_parse_if_valid() -> None:
-    from wexample_helpers.helpers.json import json_parse_if_valid
+    from wexample_helpers.helper.json import json_parse_if_valid
 
     # Test valid JSON string
     assert json_parse_if_valid('{"key": "value"}') == {"key": "value"}

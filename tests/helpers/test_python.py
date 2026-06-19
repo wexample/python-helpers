@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 def test_python_get_return_type_from_annotations_missing_returns_none() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_annotations,
     )
 
@@ -13,7 +13,7 @@ def test_python_get_return_type_from_annotations_missing_returns_none() -> None:
 
 
 def test_python_get_return_type_from_annotations_named_type() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_annotations,
     )
 
@@ -26,7 +26,7 @@ def test_python_get_return_type_from_annotations_named_type() -> None:
 def test_python_get_return_type_from_annotations_typing_type() -> None:
     pass
 
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_annotations,
     )
 
@@ -39,7 +39,7 @@ def test_python_get_return_type_from_annotations_typing_type() -> None:
 
 
 def test_python_get_return_type_from_docstring_arrow() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_docstring,
     )
 
@@ -47,7 +47,7 @@ def test_python_get_return_type_from_docstring_arrow() -> None:
 
 
 def test_python_get_return_type_from_docstring_none_when_empty() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_docstring,
     )
 
@@ -56,7 +56,7 @@ def test_python_get_return_type_from_docstring_none_when_empty() -> None:
 
 
 def test_python_get_return_type_from_docstring_none_when_no_match() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_docstring,
     )
 
@@ -64,7 +64,7 @@ def test_python_get_return_type_from_docstring_none_when_no_match() -> None:
 
 
 def test_python_get_return_type_from_docstring_returns_keyword() -> None:
-    from wexample_helpers.helpers.python import (
+    from wexample_helpers.helper.python import (
         python_get_return_type_from_docstring,
     )
 

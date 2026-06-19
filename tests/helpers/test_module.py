@@ -16,7 +16,7 @@ class Beta:
 
 
 def test_ensure_sys_path_is_idempotent(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import ensure_sys_path
+    from wexample_helpers.helper.module import ensure_sys_path
 
     target = tmp_path / "some_dir"
     s = str(target)
@@ -30,7 +30,7 @@ def test_ensure_sys_path_is_idempotent(tmp_path: Path) -> None:
 
 
 def test_module_are_same_distinct_classes() -> None:
-    from wexample_helpers.helpers.module import module_are_same
+    from wexample_helpers.helper.module import module_are_same
 
     class Foo:
         pass
@@ -42,7 +42,7 @@ def test_module_are_same_distinct_classes() -> None:
 
 
 def test_module_are_same_identity() -> None:
-    from wexample_helpers.helpers.module import module_are_same
+    from wexample_helpers.helper.module import module_are_same
 
     class Foo:
         pass
@@ -51,13 +51,13 @@ def test_module_are_same_identity() -> None:
 
 
 def test_module_are_same_returns_false_for_non_types() -> None:
-    from wexample_helpers.helpers.module import module_are_same
+    from wexample_helpers.helper.module import module_are_same
 
     assert module_are_same(1, 2) is False
 
 
 def test_module_build_fqmn_from_paths_with_package_name(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import module_build_fqmn_from_paths
+    from wexample_helpers.helper.module import module_build_fqmn_from_paths
 
     file_path = tmp_path / "b" / "c.py"
     file_path.parent.mkdir(parents=True)
@@ -68,7 +68,7 @@ def test_module_build_fqmn_from_paths_with_package_name(tmp_path: Path) -> None:
 
 
 def test_module_build_fqmn_from_paths_without_package_name(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import module_build_fqmn_from_paths
+    from wexample_helpers.helper.module import module_build_fqmn_from_paths
 
     file_path = tmp_path / "b" / "c.py"
     file_path.parent.mkdir(parents=True)
@@ -79,7 +79,7 @@ def test_module_build_fqmn_from_paths_without_package_name(tmp_path: Path) -> No
 
 
 def test_module_collect_classes_returns_module_classes(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import (
+    from wexample_helpers.helper.module import (
         module_collect_classes,
         module_load_class_from_file,
     )
@@ -93,7 +93,7 @@ def test_module_collect_classes_returns_module_classes(tmp_path: Path) -> None:
 
 
 def test_module_get_distribution_map_returns_lowercase_keys() -> None:
-    from wexample_helpers.helpers.module import module_get_distribution_map
+    from wexample_helpers.helper.module import module_get_distribution_map
 
     result = module_get_distribution_map()
     assert isinstance(result, dict)
@@ -102,7 +102,7 @@ def test_module_get_distribution_map_returns_lowercase_keys() -> None:
 
 def test_module_get_path_returns_existing_path() -> None:
     import wexample_helpers
-    from wexample_helpers.helpers.module import module_get_path
+    from wexample_helpers.helper.module import module_get_path
 
     path = module_get_path(wexample_helpers)
     assert path.exists()
@@ -111,7 +111,7 @@ def test_module_get_path_returns_existing_path() -> None:
 def test_module_load_class_from_file_if_exist_returns_none_on_failure(
     tmp_path: Path,
 ) -> None:
-    from wexample_helpers.helpers.module import (
+    from wexample_helpers.helper.module import (
         module_load_class_from_file_if_exist,
     )
 
@@ -122,7 +122,7 @@ def test_module_load_class_from_file_if_exist_returns_none_on_failure(
 
 
 def test_module_load_class_from_file_loads_class(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import module_load_class_from_file
+    from wexample_helpers.helper.module import module_load_class_from_file
 
     file_path = _write_module(tmp_path)
     cls = module_load_class_from_file(file_path, "Alpha")
@@ -130,7 +130,7 @@ def test_module_load_class_from_file_loads_class(tmp_path: Path) -> None:
 
 
 def test_module_load_class_from_file_missing_class(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import module_load_class_from_file
+    from wexample_helpers.helper.module import module_load_class_from_file
 
     file_path = _write_module(tmp_path)
     with pytest.raises(ImportError, match=r"not found in module"):
@@ -138,7 +138,7 @@ def test_module_load_class_from_file_missing_class(tmp_path: Path) -> None:
 
 
 def test_module_load_class_from_file_missing_file(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.module import module_load_class_from_file
+    from wexample_helpers.helper.module import module_load_class_from_file
 
     with pytest.raises(FileNotFoundError, match=r"Module file not found"):
         module_load_class_from_file(tmp_path / "nope.py", "Alpha")

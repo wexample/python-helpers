@@ -5,7 +5,7 @@ import hashlib
 import subprocess
 from pathlib import Path
 
-from wexample_helpers.helpers.shell import shell_run
+from wexample_helpers.helper.shell import shell_run
 
 
 def docker_build_image(image_name: str, dockerfile_path: Path) -> None:

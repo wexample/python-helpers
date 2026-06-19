@@ -14,7 +14,7 @@ class TestHelperType(AbstractTestHelpers):
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
-        from wexample_helpers.helpers.type import type_validate_or_fail
+        from wexample_helpers.helper.type import type_validate_or_fail
 
         def annotated_ok() -> bool:
             return True
@@ -35,7 +35,7 @@ class TestHelperType(AbstractTestHelpers):
         type_validate_or_fail(no_annotations, Callable[..., Any])
 
     def test_empty_generics_are_accepted(self) -> None:
-        from wexample_helpers.helpers.type import type_validate_or_fail
+        from wexample_helpers.helper.type import type_validate_or_fail
 
         # Empty containers should validate for any inner type
         type_validate_or_fail([], list[int])
@@ -46,7 +46,7 @@ class TestHelperType(AbstractTestHelpers):
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
-        from wexample_helpers.helpers.type import (
+        from wexample_helpers.helper.type import (
             type_is_compatible,
             type_validate_or_fail,
         )
@@ -66,7 +66,7 @@ class TestHelperType(AbstractTestHelpers):
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
-        from wexample_helpers.helpers.type import type_validate_or_fail
+        from wexample_helpers.helper.type import type_validate_or_fail
 
         # Exact length required
         with pytest.raises(NotAllowedVariableTypeException):
@@ -75,7 +75,7 @@ class TestHelperType(AbstractTestHelpers):
     def test_type_is_compatibility(self) -> None:
         from collections.abc import Callable
 
-        from wexample_helpers.helpers.type import type_is_compatible
+        from wexample_helpers.helper.type import type_is_compatible
 
         success_cases = [
             (str, Any),
@@ -117,7 +117,7 @@ class TestHelperType(AbstractTestHelpers):
             ), f"Expected {actual_type} to be incompatible with {expected_type}"
 
     def test_type_is_generic(self) -> None:
-        from wexample_helpers.helpers.type import type_is_generic
+        from wexample_helpers.helper.type import type_is_generic
 
         # Types that should be detected as generic
         should_be_true = [
@@ -154,7 +154,7 @@ class TestHelperType(AbstractTestHelpers):
             ), f"{type_} should NOT be detected as a generic type"
 
     def test_type_to_name(self) -> None:
-        from wexample_helpers.helpers.type import type_to_name
+        from wexample_helpers.helper.type import type_to_name
 
         # Builtins
         assert type_to_name(int) == "int"

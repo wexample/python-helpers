@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def test_render_template_falls_back_to_second_path(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.jinja import render_template
+    from wexample_helpers.helper.jinja import render_template
 
     primary = tmp_path / "primary"
     fallback = tmp_path / "fallback"
@@ -17,7 +17,7 @@ def test_render_template_falls_back_to_second_path(tmp_path: Path) -> None:
 
 
 def test_render_template_first_search_path_wins(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.jinja import render_template
+    from wexample_helpers.helper.jinja import render_template
 
     primary = tmp_path / "primary"
     fallback = tmp_path / "fallback"
@@ -31,7 +31,7 @@ def test_render_template_first_search_path_wins(tmp_path: Path) -> None:
 
 
 def test_render_template_ignores_non_directory_paths(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.jinja import render_template
+    from wexample_helpers.helper.jinja import render_template
 
     real = tmp_path / "real"
     real.mkdir()
@@ -42,7 +42,7 @@ def test_render_template_ignores_non_directory_paths(tmp_path: Path) -> None:
 
 
 def test_render_template_renders_context(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.jinja import render_template
+    from wexample_helpers.helper.jinja import render_template
 
     (tmp_path / "greet.j2").write_text("Hello {{ name }}!")
     result = render_template("greet.j2", {"name": "World"}, [tmp_path])

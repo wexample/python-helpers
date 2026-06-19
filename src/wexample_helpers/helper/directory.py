@@ -16,7 +16,7 @@ AnyCallable = Callable[..., Any]
 
 def directory_aggregate_all_files(file_paths: list[PathOrString]) -> str:
     """Aggregate contents of the given list of file paths."""
-    from wexample_helpers.helpers.file import file_read
+    from wexample_helpers.helper.file import file_read
 
     return os.linesep.join(file_read(os.fspath(fp)) for fp in file_paths)
 

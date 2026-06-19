@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.helpers.module import (
+from wexample_helpers.helper.module import (
     module_load_class_from_file_with_package_root,
 )
-from wexample_helpers.helpers.string import string_to_pascal_case
+from wexample_helpers.helper.string import string_to_pascal_case
 from wexample_helpers.mixin.with_entrypoint_path_mixin import WithEntrypointPathMixin
 from wexample_helpers.service.mixins.registry_container_mixin import (
     RegistryContainerMixin,

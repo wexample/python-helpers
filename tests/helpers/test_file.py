@@ -26,7 +26,7 @@ def temp_file(temp_dir: Path) -> Generator[Path]:
 
 
 def test_file_change_mode(temp_file: Path) -> None:
-    from wexample_helpers.helpers.file import file_change_mode
+    from wexample_helpers.helper.file import file_change_mode
 
     mode = 0o644
     file_change_mode(str(temp_file), mode)
@@ -37,7 +37,7 @@ def test_file_change_mode(temp_file: Path) -> None:
 
 
 def test_file_change_mode_recursive(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_change_mode_recursive
+    from wexample_helpers.helper.file import file_change_mode_recursive
 
     # Create test structure
     subdir = temp_dir / "subdir"
@@ -54,7 +54,7 @@ def test_file_change_mode_recursive(temp_dir: Path) -> None:
 
 
 def test_file_get_directories(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_get_directories
+    from wexample_helpers.helper.file import file_get_directories
 
     # Create test structure
     dir1 = temp_dir / "dir1"
@@ -76,7 +76,7 @@ def test_file_get_directories(temp_dir: Path) -> None:
 
 
 def test_file_list_subdirectories(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_list_subdirectories
+    from wexample_helpers.helper.file import file_list_subdirectories
 
     # Create test directories
     (temp_dir / "dir1").mkdir()
@@ -89,7 +89,7 @@ def test_file_list_subdirectories(temp_dir: Path) -> None:
 
 
 def test_file_mode_conversions() -> None:
-    from wexample_helpers.helpers.file import (
+    from wexample_helpers.helper.file import (
         file_mode_num_to_octal,
         file_mode_octal_to_num,
     )
@@ -104,7 +104,7 @@ def test_file_mode_conversions() -> None:
 
 
 def test_file_path_mode_operations(temp_file: Path) -> None:
-    from wexample_helpers.helpers.file import (
+    from wexample_helpers.helper.file import (
         file_path_get_mode_num,
         file_path_get_octal_mode,
     )
@@ -116,7 +116,7 @@ def test_file_path_mode_operations(temp_file: Path) -> None:
 
 
 def test_file_read_write(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_read, file_write
+    from wexample_helpers.helper.file import file_read, file_write
 
     file_path = temp_dir / "test.txt"
     content = "Hello, World!"
@@ -130,7 +130,7 @@ def test_file_read_write(temp_dir: Path) -> None:
 
 
 def test_file_remove_if_exists(temp_file: Path) -> None:
-    from wexample_helpers.helpers.file import file_remove_if_exists
+    from wexample_helpers.helper.file import file_remove_if_exists
 
     assert temp_file.exists()
     file_remove_if_exists(str(temp_file))
@@ -143,7 +143,7 @@ def test_file_remove_if_exists(temp_file: Path) -> None:
 def test_file_resolve_path() -> None:
     from pathlib import Path
 
-    from wexample_helpers.helpers.file import file_resolve_path
+    from wexample_helpers.helper.file import file_resolve_path
 
     path_str = "/test/path"
     path_obj = Path("/test/path")
@@ -153,7 +153,7 @@ def test_file_resolve_path() -> None:
 
 
 def test_file_touch(temp_dir: Path) -> None:
-    from wexample_helpers.helpers.file import file_touch
+    from wexample_helpers.helper.file import file_touch
 
     file_path = temp_dir / "touch_test.txt"
     file_touch(str(file_path))
@@ -162,7 +162,7 @@ def test_file_touch(temp_dir: Path) -> None:
 
 
 def test_file_validate_mode_octal() -> None:
-    from wexample_helpers.helpers.file import file_validate_mode_octal
+    from wexample_helpers.helper.file import file_validate_mode_octal
 
     assert file_validate_mode_octal("644")
     assert file_validate_mode_octal("755")
@@ -172,7 +172,7 @@ def test_file_validate_mode_octal() -> None:
 
 
 def test_file_validate_mode_octal_or_fail() -> None:
-    from wexample_helpers.helpers.file import file_validate_mode_octal_or_fail
+    from wexample_helpers.helper.file import file_validate_mode_octal_or_fail
 
     assert file_validate_mode_octal_or_fail("644")
 

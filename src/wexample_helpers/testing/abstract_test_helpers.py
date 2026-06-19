@@ -7,7 +7,7 @@ import pytest
 from wexample_helpers.exception.not_allowed_variable_type_exception import (
     NotAllowedVariableTypeException,
 )
-from wexample_helpers.helpers.type import type_validate_or_fail
+from wexample_helpers.helper.type import type_validate_or_fail
 
 
 class AbstractTestHelpers:

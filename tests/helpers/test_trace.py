@@ -2,14 +2,14 @@ from __future__ import annotations
 
 
 def test_trace_format_returns_string() -> None:
-    from wexample_helpers.helpers.trace import trace_format, trace_get_frames
+    from wexample_helpers.helper.trace import trace_format, trace_get_frames
 
     result = trace_format(trace_get_frames())
     assert isinstance(result, str)
 
 
 def test_trace_get_frames_returns_list() -> None:
-    from wexample_helpers.helpers.trace import trace_get_frames
+    from wexample_helpers.helper.trace import trace_get_frames
 
     frames = trace_get_frames()
     assert isinstance(frames, list)
@@ -17,7 +17,7 @@ def test_trace_get_frames_returns_list() -> None:
 
 
 def test_trace_get_traceback_frames_returns_list() -> None:
-    from wexample_helpers.helpers.trace import trace_get_traceback_frames
+    from wexample_helpers.helper.trace import trace_get_traceback_frames
 
     try:
         raise ValueError("boom")
@@ -29,7 +29,7 @@ def test_trace_get_traceback_frames_returns_list() -> None:
 
 
 def test_trace_inheritance_stack_prints_mro(capsys) -> None:
-    from wexample_helpers.helpers.trace import trace_inheritance_stack
+    from wexample_helpers.helper.trace import trace_inheritance_stack
 
     class A:
         pass
@@ -45,7 +45,7 @@ def test_trace_inheritance_stack_prints_mro(capsys) -> None:
 
 
 def test_trace_print_outputs(capsys) -> None:
-    from wexample_helpers.helpers.trace import trace_print
+    from wexample_helpers.helper.trace import trace_print
 
     trace_print()
     captured = capsys.readouterr()

@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def test_path_rebase_accepts_string_arguments(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.path import path_rebase
+    from wexample_helpers.helper.path import path_rebase
 
     root_src = tmp_path / "a"
     root_dest = tmp_path / "b"
@@ -19,7 +19,7 @@ def test_path_rebase_accepts_string_arguments(tmp_path: Path) -> None:
 
 
 def test_path_rebase_moves_path_to_new_root(tmp_path: Path) -> None:
-    from wexample_helpers.helpers.path import path_rebase
+    from wexample_helpers.helper.path import path_rebase
 
     root_src = tmp_path / "project"
     root_dest = tmp_path / "html"

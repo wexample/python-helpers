@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 def args_convert_dict_to_snake_dict(input_dict: dict[str, Any]) -> dict[str, Any]:
-    from wexample_helpers.helpers.string import string_to_snake_case
+    from wexample_helpers.helper.string import string_to_snake_case
 
     return {string_to_snake_case(key): value for key, value in input_dict.items()}
 

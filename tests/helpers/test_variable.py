@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 def test_copy_shallow_dict_returns_new_dict() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     original = {"a": 1}
     copy = copy_shallow(original)
@@ -12,7 +12,7 @@ def test_copy_shallow_dict_returns_new_dict() -> None:
 
 
 def test_copy_shallow_immutable_returns_same_object() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     assert copy_shallow(42) == 42
     assert copy_shallow("hello") == "hello"
@@ -20,7 +20,7 @@ def test_copy_shallow_immutable_returns_same_object() -> None:
 
 
 def test_copy_shallow_is_shallow_not_deep() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     inner = [1, 2]
     original = [inner]
@@ -30,7 +30,7 @@ def test_copy_shallow_is_shallow_not_deep() -> None:
 
 
 def test_copy_shallow_list_returns_new_list() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     original = [1, 2, 3]
     copy = copy_shallow(original)
@@ -40,7 +40,7 @@ def test_copy_shallow_list_returns_new_list() -> None:
 
 
 def test_copy_shallow_set_returns_new_set() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     original = {1, 2, 3}
     copy = copy_shallow(original)
@@ -50,7 +50,7 @@ def test_copy_shallow_set_returns_new_set() -> None:
 
 
 def test_copy_shallow_tuple_returns_equal_tuple() -> None:
-    from wexample_helpers.helpers.variable import copy_shallow
+    from wexample_helpers.helper.variable import copy_shallow
 
     original = (1, 2, 3)
     copy = copy_shallow(original)

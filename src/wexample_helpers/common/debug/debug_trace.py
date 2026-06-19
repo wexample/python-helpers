@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from wexample_helpers.common.debug.abstract_debug import AbstractDebug
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
-from wexample_helpers.helpers.trace import trace_format, trace_get_frames
+from wexample_helpers.helper.trace import trace_format, trace_get_frames
 
 
 class DebugTrace(AbstractDebug):

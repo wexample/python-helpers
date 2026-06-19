@@ -15,12 +15,12 @@ class HasSnakeShortClassNameClassMixin(HasShortClassNameClassMixin):
         suffix = cls.get_class_name_suffix()
         if suffix is None:
             return None
-        from wexample_helpers.helpers.string import string_to_snake_case
+        from wexample_helpers.helper.string import string_to_snake_case
 
         return string_to_snake_case(suffix)
 
     @classmethod
     def get_snake_short_class_name(cls) -> str:
-        from wexample_helpers.helpers.string import string_to_snake_case
+        from wexample_helpers.helper.string import string_to_snake_case
 
         return string_to_snake_case(cls.get_short_class_name())

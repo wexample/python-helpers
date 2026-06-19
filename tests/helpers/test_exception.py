@@ -13,7 +13,7 @@ sys.path.insert(0, HELPERS_PATH)
 
 def test_error_format_contains_exception_and_frames() -> None:
     from wexample_helpers.enums.debug_path_style import DebugPathStyle
-    from wexample_helpers.helpers.error import error_format
+    from wexample_helpers.helper.error import error_format
 
     try:
         _raise_nested()

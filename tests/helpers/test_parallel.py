@@ -7,13 +7,13 @@ import pytest
 
 
 def test_parallel_for_each_empty() -> None:
-    from wexample_helpers.helpers.parallel import parallel_for_each
+    from wexample_helpers.helper.parallel import parallel_for_each
 
     parallel_for_each([], lambda _: None)
 
 
 def test_parallel_for_each_runs_all() -> None:
-    from wexample_helpers.helpers.parallel import parallel_for_each
+    from wexample_helpers.helper.parallel import parallel_for_each
 
     seen: list[int] = []
     lock = threading.Lock()
@@ -27,7 +27,7 @@ def test_parallel_for_each_runs_all() -> None:
 
 
 def test_parallel_map_actually_parallel() -> None:
-    from wexample_helpers.helpers.parallel import parallel_map
+    from wexample_helpers.helper.parallel import parallel_map
 
     items = [0.1] * 5
 
@@ -44,20 +44,20 @@ def test_parallel_map_actually_parallel() -> None:
 
 
 def test_parallel_map_empty() -> None:
-    from wexample_helpers.helpers.parallel import parallel_map
+    from wexample_helpers.helper.parallel import parallel_map
 
     assert parallel_map([], lambda x: x) == []
 
 
 def test_parallel_map_preserves_order() -> None:
-    from wexample_helpers.helpers.parallel import parallel_map
+    from wexample_helpers.helper.parallel import parallel_map
 
     result = parallel_map([5, 1, 3, 2, 4], lambda x: x * 10)
     assert result == [50, 10, 30, 20, 40]
 
 
 def test_parallel_map_propagates_exception() -> None:
-    from wexample_helpers.helpers.parallel import parallel_map
+    from wexample_helpers.helper.parallel import parallel_map
 
     def boom(x: int) -> int:
         if x == 3:
@@ -69,7 +69,7 @@ def test_parallel_map_propagates_exception() -> None:
 
 
 def test_parallel_map_single_item_no_pool() -> None:
-    from wexample_helpers.helpers.parallel import parallel_map
+    from wexample_helpers.helper.parallel import parallel_map
 
     main_thread = threading.get_ident()
     seen: list[int] = []

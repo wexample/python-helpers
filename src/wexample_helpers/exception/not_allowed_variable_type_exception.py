@@ -7,8 +7,8 @@ from wexample_helpers.decorator.base_class import base_class
 from wexample_helpers.exception.not_allowed_item_exception import (
     NotAllowedItemException,
 )
-from wexample_helpers.helpers.string import string_truncate
-from wexample_helpers.helpers.type import type_to_name
+from wexample_helpers.helper.string import string_truncate
+from wexample_helpers.helper.type import type_to_name
 
 
 @base_class

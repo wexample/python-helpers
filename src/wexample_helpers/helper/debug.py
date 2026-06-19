@@ -69,7 +69,7 @@ def debug_trace(
         skip_frames: If an int, skip this many frames from the top and filter internal frames.
                     If None, show all frames including internals.
     """
-    from wexample_helpers.helpers.trace import trace_print
+    from wexample_helpers.helper.trace import trace_print
 
     if data is not None:
         debug_dump(data)

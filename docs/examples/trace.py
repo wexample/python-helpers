@@ -1,4 +1,4 @@
-from wexample_helpers.helpers.trace import trace_print
+from wexample_helpers.helper.trace import trace_print
 from wexample_helpers.enums.debug_path_style import DebugPathStyle
 
 

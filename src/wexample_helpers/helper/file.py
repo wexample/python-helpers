@@ -42,7 +42,7 @@ def file_change_mode_recursive(
 
 def file_chown_as_real_user(path: PathOrString) -> None:
     """Chown a path to the real user (handles sudo context)."""
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+    from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     os.chown(path, user_get_real_uid(), user_get_real_gid())
 
@@ -70,7 +70,7 @@ def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:
     import shutil
     from pathlib import Path
 
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+    from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     uid, gid = user_get_real_uid(), user_get_real_gid()
 
@@ -98,7 +98,7 @@ def file_copytree_merge_yaml(
     import shutil
     from pathlib import Path
 
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+    from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     uid, gid = user_get_real_uid(), user_get_real_gid()
     src, dst = Path(src), Path(dst)
@@ -214,7 +214,7 @@ def file_mkdir_as_real_user(path: PathOrString, mode: int = 0o755) -> None:
     """Create directory (and parents) and chown all newly created dirs to the real user."""
     from pathlib import Path
 
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+    from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     p = Path(path)
 
@@ -341,7 +341,7 @@ def file_write_as_real_user(
     """Write content to file and chown it to the real user (handles sudo context)."""
     from pathlib import Path
 
-    from wexample_helpers.helpers.user import user_get_real_gid, user_get_real_uid
+    from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     p = Path(file_path)
     p.write_text(content, encoding=encoding)

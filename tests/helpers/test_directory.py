@@ -18,7 +18,7 @@ def temp_dir() -> None:
 
 
 def test_directory_aggregate_all_files(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_aggregate_all_files
+    from wexample_helpers.helper.directory import directory_aggregate_all_files
 
     # Create test files with known content
     files = [
@@ -38,7 +38,7 @@ def test_directory_aggregate_all_files(temp_dir) -> None:
 
 
 def test_directory_aggregate_all_files_from_dir(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import (
+    from wexample_helpers.helper.directory import (
         directory_aggregate_all_files_from_dir,
     )
 
@@ -58,7 +58,7 @@ def test_directory_aggregate_all_files_from_dir(temp_dir) -> None:
 
 
 def test_directory_empty_dir(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_empty_dir
+    from wexample_helpers.helper.directory import directory_empty_dir
 
     # Create test files and subdirectories
     test_file = os.path.join(temp_dir, "test.txt")
@@ -77,7 +77,7 @@ def test_directory_empty_dir(temp_dir) -> None:
 
 
 def test_directory_execute_inside(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_execute_inside
+    from wexample_helpers.helper.directory import directory_execute_inside
 
     original_dir = os.getcwd()
 
@@ -87,7 +87,7 @@ def test_directory_execute_inside(temp_dir) -> None:
 
 
 def test_directory_get_base_name() -> None:
-    from wexample_helpers.helpers.directory import directory_get_base_name
+    from wexample_helpers.helper.directory import directory_get_base_name
 
     assert directory_get_base_name("/path/to/dir/") == "dir"
     assert directory_get_base_name("/path/to/dir") == "dir"
@@ -95,7 +95,7 @@ def test_directory_get_base_name() -> None:
 
 
 def test_directory_get_parent_path() -> None:
-    from wexample_helpers.helpers.directory import directory_get_parent_path
+    from wexample_helpers.helper.directory import directory_get_parent_path
 
     assert directory_get_parent_path("/path/to/dir/") == "/path/to/"
     assert directory_get_parent_path("/path/to/dir") == "/path/to/"
@@ -105,7 +105,7 @@ def test_directory_get_parent_path() -> None:
 
 
 def test_directory_list_files(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_list_files
+    from wexample_helpers.helper.directory import directory_list_files
 
     # Create test files in different subdirectories
     os.makedirs(os.path.join(temp_dir, "dir1"))
@@ -132,7 +132,7 @@ def test_directory_list_files(temp_dir) -> None:
 
 
 def test_directory_remove_tree_if_exists(temp_dir) -> None:
-    from wexample_helpers.helpers.directory import directory_remove_tree_if_exists
+    from wexample_helpers.helper.directory import directory_remove_tree_if_exists
 
     # Create a test file in the temp directory
     test_file = os.path.join(temp_dir, "test.txt")
