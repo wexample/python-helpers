@@ -5,7 +5,7 @@ from typing import TypeVar
 
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.helpers.abstract_attempt_manager import (
+from wexample_helpers.helper.abstract_attempt_manager import (
     AbstractAttemptManager,
     AttemptOutcome,
 )
