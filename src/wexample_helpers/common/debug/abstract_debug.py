@@ -76,7 +76,7 @@ class AbstractDebug:
     def _format_file_path(self, path: str, line: int = None, indent: str = "") -> str:
         """Format file path with optional line number."""
         from wexample_helpers.const.colors import Colors
-        from wexample_helpers.helpers.cli import cli_make_clickable_path
+        from wexample_helpers.helper.cli import cli_make_clickable_path
 
         rel_path = self._get_relative_path(path)
         clickable_path = cli_make_clickable_path(path, short_title=rel_path)

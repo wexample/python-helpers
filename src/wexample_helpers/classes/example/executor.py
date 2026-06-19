@@ -31,7 +31,7 @@ class Executor(WithEntrypointPathMixin, RegistryContainerMixin):
         self._normalise_filters()
         examples_registry = self.get_registry("examples")
         examples_dir = Path(self.entrypoint_path).parent.resolve()
-        from wexample_helpers.helpers.cli import cli_make_clickable_path
+        from wexample_helpers.helper.cli import cli_make_clickable_path
 
         package_name = examples_dir.name
 
