@@ -53,16 +53,34 @@ def file_chown_as_real_user_if_sudo(path: PathOrString) -> None:
         file_chown_as_real_user(path)
 
 
-def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
-    """Recursively set owner uid/gid on a path and all its entries. Symlinks are skipped."""
+def file_tree_owned_by(path: PathOrString, uid: int) -> bool:
+    """Return True when the path and every entry under it belong to uid.
+
+    Symlinks are checked themselves (lstat), not their target.
+    """
     from pathlib import Path
 
     p = Path(path)
-    os.chown(p, uid, gid)
+    if p.lstat().st_uid != uid:
+        return False
     for entry in p.rglob("*"):
-        if entry.is_symlink():
-            continue
-        os.chown(entry, uid, gid)
+        if entry.lstat().st_uid != uid:
+            return False
+    return True
+
+
+def file_chown_recursive(path: PathOrString, uid: int, gid: int) -> None:
+    """Recursively set owner uid/gid on a path and all its entries.
+
+    Symlinks are chowned themselves (not their target), so broken links
+    are handled too — same semantics as `chown -h`.
+    """
+    from pathlib import Path
+
+    p = Path(path)
+    os.chown(p, uid, gid, follow_symlinks=False)
+    for entry in p.rglob("*"):
+        os.chown(entry, uid, gid, follow_symlinks=False)
 
 
 def file_copytree_as_real_user(src: PathOrString, dst: PathOrString) -> None:

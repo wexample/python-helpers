@@ -1,6 +1,6 @@
 # helpers
 
-Version: 18.0.0
+Version: 19.0.0
 
 Some python basic helpers and constants.
 
