@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import subprocess
 from pathlib import Path
 
@@ -60,6 +61,27 @@ def docker_container_is_running(container_name: str) -> bool:
         cmd=["docker", "ps", "-q", "-f", f"name={container_name}"], capture=True
     )
     return bool(result.stdout.strip())
+
+
+def docker_container_mounts(container_name: str) -> dict[str, str]:
+    """Return the host → container mount mapping of a container.
+
+    Empty when the container does not exist or declares no bind mount.
+    """
+    result = shell_run(
+        cmd=["docker", "inspect", "--format", "{{json .Mounts}}", container_name],
+        capture=True,
+        check=False,
+    )
+
+    if result.returncode != 0 or not result.stdout.strip():
+        return {}
+
+    return {
+        mount["Source"]: mount["Destination"]
+        for mount in json.loads(result.stdout)
+        if mount.get("Source") and mount.get("Destination")
+    }
 
 
 def docker_exec(
