@@ -356,12 +356,13 @@ def file_write(file_path: PathOrString, content: str, encoding: str = "utf-8") -
 def file_write_as_real_user(
     file_path: PathOrString, content: str, mode: int = 0o644, encoding: str = "utf-8"
 ) -> None:
-    """Write content to file and chown it to the real user (handles sudo context)."""
+    """Write content to file (creating parents) and chown it to the real user (handles sudo context)."""
     from pathlib import Path
 
     from wexample_helpers.helper.user import user_get_real_gid, user_get_real_uid
 
     p = Path(file_path)
+    file_mkdir_as_real_user(p.parent)
     p.write_text(content, encoding=encoding)
     os.chmod(p, mode)
     uid, gid = user_get_real_uid(), user_get_real_gid()
