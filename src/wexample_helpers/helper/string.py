@@ -23,6 +23,9 @@ _RE_NORM_SEP = re.compile(r"[^A-Za-z0-9]+")
 _RE_NORM_CAMEL = re.compile(r"([a-z0-9])([A-Z])")
 _RE_NORM_UPPER = re.compile(r"([A-Z]+)([A-Z][a-z])")
 
+# CSI sequences (colors, styles) and OSC 8 hyperlinks, for string_strip_ansi
+_RE_ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;?]*[a-zA-Z]|\x1b\]8;;[^\x1b]*\x1b\\")
+
 # Alphabet constant for string_random_token
 _RANDOM_TOKEN_ALPHABET = _string.ascii_letters + _string.digits
 
@@ -268,6 +271,15 @@ def string_replace_params(text: str, params: dict) -> str:
     for key, value in params.items():
         result = result.replace(f"%{key}%", str(value))
     return result
+
+
+def string_strip_ansi(text: str) -> str:
+    """Remove ANSI escape sequences (colors, styles, hyperlinks) from a string.
+
+    For text that was rendered for a terminal but is about to be compared,
+    parsed or stored, where the escape bytes are invisible noise that silently
+    breaks equality."""
+    return _RE_ANSI_ESCAPE.sub("", text)
 
 
 @lru_cache(maxsize=512)
