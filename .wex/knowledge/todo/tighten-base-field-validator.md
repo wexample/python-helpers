@@ -5,8 +5,8 @@
 
 ## Symptom
 
-Le validator a actuellement un dead-code path qui **silencieusement tolère**
-les déclarations de champs nues sur des descendants de `BaseClass`:
+The validator currently has a dead-code path that **silently tolerates**
+bare field declarations on descendants of `BaseClass`:
 
 ```python
 @base_class
@@ -15,15 +15,15 @@ class Foo(BaseClass):
     is_setup: bool = False    # ← devrait raise, passe en silence
 ```
 
-Une tentative de "nettoyage du dead elif" (perf commit `5d39d0c`, revert par
-`c83bc1c` le 2026-06-15) a fait fire le validator comme prévu… mais a
-révélé **118 violations latentes** à travers les packages, dont une
-poignée bloquent l'import de `wex` complètement. Trop volumineux pour fixer
-à chaud, le revert a restauré le statu quo permissif.
+An attempt to "clean up the dead elif" (perf commit `5d39d0c`, reverted by
+`c83bc1c` on 2026-06-15) fired the validator as expected… but revealed
+**118 latent violations** across packages, a handful of which block the
+import of `wex` entirely. Too large to fix on the spot, the revert restored
+the permissive status quo.
 
-## Scan d'inventaire
+## Inventory scan
 
-Script AST pour lister les violations:
+AST script to list the violations:
 
 ```python
 import ast
@@ -75,47 +75,44 @@ def scan(path):
     return out
 ```
 
-Au 2026-06-15: **118 violations**, dont:
+As of 2026-06-15: **118 violations**, including:
 
-- **~13 caches du perf agent** (`_options_cache`, `_allowed_options_cache`,
-  `_raw_value_type_cache`) — pas des vraies violations, des MRO leaks à
-  **revert** séparément (voir ticket distinct sur les caches perf).
-- **~10 `error_code: str = "..."`** sur des exceptions —
-  devraient être `ClassVar[str]` (constantes de classe, pas instance
-  fields).
-- **~70 instance fields** sur des classes pseudocode / configs / testing —
-  à wrapper avec `public_field`/`private_field`.
-- **~20 candidats false positives** (classes qui n'héritent pas
-  effectivement de `BaseClass` mais matchent au grep AST naïf).
+- **~13 perf-agent caches** (`_options_cache`, `_allowed_options_cache`,
+  `_raw_value_type_cache`) — not real violations, MRO leaks to
+  **revert** separately (see the separate ticket on perf caches).
+- **~10 `error_code: str = "..."`** on exceptions —
+  should be `ClassVar[str]` (class constants, not instance fields).
+- **~70 instance fields** on pseudocode / config / testing classes —
+  to be wrapped with `public_field`/`private_field`.
+- **~20 false-positive candidates** (classes that do not actually inherit
+  from `BaseClass` but match the naive AST grep).
 
 ## Suggested direction
 
-Trois étapes, à faire dans cet ordre:
+Three steps, in this order:
 
-1. **Affiner le scanner** pour ne lister que les classes effectivement
-   descendantes de `BaseClass` (construire le graphe d'héritage transitif
-   via AST, ou via import et `mro()` sur un environnement de test). Élimine
-   les false positives, donne le vrai périmètre.
-2. **Catégoriser et corriger** chaque vraie violation:
-   - `error_code` et autres constantes → `ClassVar[type] = value`
-   - Caches perf → revert le commit perf concerné
-   - Instance fields → wrapper `public_field` / `private_field`
-3. **Réappliquer** le revert de `c83bc1c` (qui rétablit le validator
-   strict). Soit via un cherry-pick, soit en faisant le `revert du revert`,
-   soit en réécrivant proprement la branche `_validate_field_types`.
+1. **Refine the scanner** to list only classes that are genuine descendants
+   of `BaseClass` (build the transitive inheritance graph via AST, or via
+   import and `mro()` in a test environment). Eliminates false positives,
+   gives the true scope.
+2. **Categorise and fix** each real violation:
+   - `error_code` and other constants → `ClassVar[type] = value`
+   - Perf caches → revert the relevant perf commit
+   - Instance fields → wrap with `public_field` / `private_field`
+3. **Re-apply** the revert of `c83bc1c` (which restores the strict
+   validator). Either via cherry-pick, via a revert-of-the-revert, or by
+   cleanly rewriting the `_validate_field_types` branch.
 
-À étudier: faut-il assouplir le validator pour les classes mixin pures
-(non `@base_class`) qui se retrouvent dans le MRO d'un `BaseClass`? Le
-fix `abstract_local_item_path.py` (`98fd117`) suggère que ces cas
-existent et que la règle "tout champ doit être un BaseField" est trop
-restrictive pour eux.
+To investigate: should the validator be relaxed for pure mixin classes
+(non `@base_class`) that end up in the MRO of a `BaseClass`? The fix in
+`abstract_local_item_path.py` (`98fd117`) suggests these cases exist and
+that the rule "every field must be a BaseField" is too restrictive for them.
 
-## État actuel
+## Current state
 
-- Validator: **permissif** (5d39d0c reverted via c83bc1c)
-- Fix follow-ups gardés: `dd7b91f`, `328e2cf`, `98fd117` — ils sont
-  toujours corrects (le wrapper est valide même avec validator permissif),
-  juste plus *obligatoires*.
-- Bug structurel `get_allowed_options_registry` (commit `fc6e8a0`):
-  **fixé en place** dans `wexample_config`, n'est pas concerné par ce
-  ticket.
+- Validator: **permissive** (5d39d0c reverted via c83bc1c)
+- Follow-up fixes kept: `dd7b91f`, `328e2cf`, `98fd117` — they are
+  still correct (the wrapper is valid even with a permissive validator),
+  just no longer *mandatory*.
+- Structural bug `get_allowed_options_registry` (commit `fc6e8a0`):
+  **fixed in place** in `wexample_config`, not in scope for this ticket.
